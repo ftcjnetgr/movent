@@ -1,0 +1,18 @@
+'use client';
+
+import {useEffect,useMemo,useState} from 'react';
+import {supabase} from '../../lib/supabase';
+
+type Row={id:string;assignment_no:string;schedule_day_name:string;schedule_category:string;schedule_route:string;std:string;sta:string;status:string;plat_number:string;executor_nik:string;created_at:string;accepted_at:string|null;departed_at:string|null;arrived_at:string|null;completed_at:string|null};
+
+function mins(t:string|null){if(!t)return null;const d=new Date(t);return d.getHours()*60+d.getMinutes()}
+function fmt(t:string|null){return t?new Date(t).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'—'}
+function diff(std:string,actual:string|null){if(!actual)return null;const [h,m]=std.split(':').map(Number);const p=h*60+m;const a=mins(actual)!;return a-p}
+
+export default function ControllerPage(){
+ const [rows,setRows]=useState<Row[]>([]);const [loading,setLoading]=useState(true);const [error,setError]=useState('');
+ useEffect(()=>{load();const timer=setInterval(load,30000);return()=>clearInterval(timer)},[]);
+ async function load(){setLoading(true);setError('');const {data,error}=await supabase.from('assignments').select('id,assignment_no,schedule_day_name,schedule_category,schedule_route,std,sta,status,plat_number,executor_nik,created_at,accepted_at,departed_at,arrived_at,completed_at').order('created_at',{ascending:false}).limit(1000);if(error)setError(error.message);else setRows((data||[]) as Row[]);setLoading(false)}
+ const summary=useMemo(()=>{const total=rows.length;const completed=rows.filter(r=>r.status==='COMPLETED').length;const active=rows.filter(r=>['ASSIGNED','CONFIRMED','IN_PROGRESS','ARRIVED'].includes(r.status)).length;const late=rows.filter(r=>{const x=diff(r.std,r.departed_at);return x!==null&&x>0}).length;return {total,completed,active,late}},[rows]);
+ return <div><div className="top"><div><div className="title">Monitoring</div><div className="muted">Plan vs Actual · monitoring operasional</div></div><button className="btn secondary" onClick={load} disabled={loading}>{loading?'Memuat…':'Refresh'}</button></div><div className="card" style={{marginBottom:16}}><div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:12}}><div><div className="muted">Total Plan</div><b style={{fontSize:24}}>{summary.total}</b></div><div><div className="muted">Aktif</div><b style={{fontSize:24}}>{summary.active}</b></div><div><div className="muted">Completed</div><b style={{fontSize:24}}>{summary.completed}</b></div><div><div className="muted">Depart Late</div><b style={{fontSize:24}}>{summary.late}</b></div></div></div>{error&&<div className="error" style={{marginBottom:12}}>{error}</div>}<div className="card"><div className="tablewrap"><table className="table"><thead><tr><th>Assignment</th><th>Plan</th><th>Actual</th><th>Fleet</th><th>Executor</th><th>Status</th><th>Gap Depart</th></tr></thead><tbody>{rows.map(r=>{const gap=diff(r.std,r.departed_at);return <tr key={r.id}><td><b>{r.assignment_no}</b><br/><span className="muted">{r.schedule_day_name} · {r.schedule_category}</span></td><td><div>{r.schedule_route}</div><span className="muted">STD {String(r.std).slice(0,5)} · STA {String(r.sta).slice(0,5)}</span></td><td><div>Confirm {fmt(r.accepted_at)}</div><div>Depart {fmt(r.departed_at)}</div><div>Arrive {fmt(r.arrived_at)}</div><div>Done {fmt(r.completed_at)}</div></td><td>{r.plat_number}</td><td>{r.executor_nik}</td><td><b>{r.status}</b></td><td>{gap===null?'—':gap>0?`+${gap}m`:`${gap}m`}</td></tr>})}</tbody></table></div>{!loading&&!rows.length&&<div className="muted" style={{padding:20,textAlign:'center'}}>Belum ada assignment.</div>}</div></div>
+}
