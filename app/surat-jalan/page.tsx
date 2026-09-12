@@ -9,125 +9,17 @@ type Product = { product: string; status: string };
 type SJProduct = { id: string; surat_jalan_id: string; product: string; qty: number | null; weight: number | null };
 
 export default function SuratJalanPage() {
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [sj, setSj] = useState<SJ[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [sjProducts, setSjProducts] = useState<SJProduct[]>([]);
-  const [assignmentId, setAssignmentId] = useState('');
-  const [nomorSj, setNomorSj] = useState('');
-  const [qty, setQty] = useState('');
-  const [weight, setWeight] = useState('');
-  const [product, setProduct] = useState('');
-  const [catatan, setCatatan] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [authorized, setAuthorized] = useState(false);
+  const [assignments, setAssignments] = useState<Assignment[]>([]); const [sj, setSj] = useState<SJ[]>([]); const [products, setProducts] = useState<Product[]>([]); const [sjProducts, setSjProducts] = useState<SJProduct[]>([]);
+  const [assignmentId, setAssignmentId] = useState(''); const [nomorSj, setNomorSj] = useState(''); const [qty, setQty] = useState(''); const [weight, setWeight] = useState(''); const [product, setProduct] = useState(''); const [catatan, setCatatan] = useState('');
+  const [loading, setLoading] = useState(true); const [busy, setBusy] = useState(false); const [message, setMessage] = useState(''); const [error, setError] = useState('');
 
-  useEffect(() => { load(); }, []);
-
-  async function load() {
-    setLoading(true); setError('');
-    const [a, s, p] = await Promise.all([
-      supabase.from('assignments').select('id,assignment_no,schedule_id,plat_number,executor_nik,start_point,destination,status').in('status', ['ASSIGNED','CONFIRMED','IN_PROGRESS','ARRIVED']).order('created_at', { ascending: false }),
-      supabase.from('surat_jalan').select('id,assignment_id,nomor_sj,qty,weight,catatan').order('created_at', { ascending: false }),
-      supabase.from('base_products').select('product,status').eq('status','Active').order('product')
-    ]);
-    if (a.error) setError(a.error.message);
-    if (s.error) setError(s.error.message);
-    if (p.error) setError(p.error.message);
-    setAssignments(a.data || []); setSj(s.data || []); setProducts(p.data || []);
-    const ids = (s.data || []).map((x: SJ) => x.id);
-    if (ids.length) {
-      const { data, error: pe } = await supabase.from('surat_jalan_products').select('id,surat_jalan_id,product,qty,weight').in('surat_jalan_id', ids).order('created_at');
-      if (pe) setError(pe.message);
-      setSjProducts(data || []);
-    } else setSjProducts([]);
-    setLoading(false);
-  }
-
-  async function createBundle() {
-    setBusy(true); setError(''); setMessage('');
-    if (!assignmentId || !nomorSj.trim() || !product || !qty || !weight) {
-      setError('Assignment, Nomor SJ, Product, Qty, dan Weight wajib diisi.'); setBusy(false); return;
-    }
-    const qtyValue = Number(qty);
-    const weightValue = Number(weight);
-    if (!Number.isFinite(qtyValue) || qtyValue < 0 || !Number.isFinite(weightValue) || weightValue < 0) {
-      setError('Qty dan Weight harus berupa angka yang valid.'); setBusy(false); return;
-    }
-
-    const { data: sjRow, error: sjError } = await supabase.from('surat_jalan').insert({
-      assignment_id: assignmentId,
-      nomor_sj: nomorSj.trim(),
-      qty: qtyValue,
-      weight: weightValue,
-      catatan: catatan.trim() || null
-    }).select('id').single();
-
-    if (sjError || !sjRow) {
-      setError(sjError?.message || 'Surat Jalan gagal dibuat.'); setBusy(false); return;
-    }
-
-    const { error: productError } = await supabase.from('surat_jalan_products').insert({
-      surat_jalan_id: sjRow.id,
-      product,
-      qty: qtyValue,
-      weight: weightValue
-    });
-
-    if (productError) {
-      await supabase.from('surat_jalan').delete().eq('id', sjRow.id);
-      setError(productError.message);
-      setBusy(false);
-      return;
-    }
-
-    setMessage('1 bendel Surat Jalan berhasil disimpan.');
-    setAssignmentId(''); setNomorSj(''); setQty(''); setWeight(''); setProduct(''); setCatatan('');
-    await load();
-    setBusy(false);
-  }
-
-  const assignmentName = (id: string) => {
-    const a = assignments.find(x => x.id === id);
-    return a ? `${a.assignment_no} · ${a.schedule_id} · ${a.plat_number}` : id;
-  };
-
-  const productFor = (id: string) => sjProducts.filter(p => p.surat_jalan_id === id);
-
-  return <main style={{maxWidth:1100,margin:'0 auto',padding:'32px 24px',fontFamily:'system-ui,sans-serif'}}>
-    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:22}}>
-      <div><h1 style={{margin:0,fontSize:28}}>Surat Jalan</h1><div style={{color:'#64748b',marginTop:5}}>1 bendel = Nomor SJ + Product + Qty + Weight + Catatan.</div></div>
-      <a href="/" style={{textDecoration:'none'}}>← Movent</a>
-    </div>
-    {error && <div style={{background:'#fee2e2',padding:12,borderRadius:8,marginBottom:14,color:'#991b1b'}}>{error}</div>}
-    {message && <div style={{background:'#dcfce7',padding:12,borderRadius:8,marginBottom:14,color:'#166534'}}>{message}</div>}
-
-    <section style={{border:'1px solid #e2e8f0',borderRadius:12,padding:20,marginBottom:18}}>
-      <h2 style={{fontSize:18,marginTop:0}}>Buat 1 Bendel Surat Jalan</h2>
-      <div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:12}}>
-        <label>Assignment<select value={assignmentId} onChange={e=>setAssignmentId(e.target.value)} style={input}><option value="">Pilih assignment…</option>{assignments.map(a=><option key={a.id} value={a.id}>{a.assignment_no} · {a.schedule_id} · {a.plat_number}</option>)}</select></label>
-        <label>Nomor SJ<input value={nomorSj} onChange={e=>setNomorSj(e.target.value)} style={input} placeholder="SJ-001"/></label>
-        <label>Qty<input type="number" min="0" step="any" value={qty} onChange={e=>setQty(e.target.value)} style={input}/></label>
-        <label>Weight<input type="number" min="0" step="any" value={weight} onChange={e=>setWeight(e.target.value)} style={input}/></label>
-      </div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 2fr',gap:12,marginTop:12}}>
-        <label>Product<select value={product} onChange={e=>setProduct(e.target.value)} style={input}><option value="">Pilih product…</option>{products.map(p=><option key={p.product} value={p.product}>{p.product}</option>)}</select></label>
-        <label>Catatan<textarea value={catatan} onChange={e=>setCatatan(e.target.value)} style={{...input,minHeight:42}} placeholder="Catatan (opsional)"/></label>
-      </div>
-      <button onClick={createBundle} disabled={busy} style={button}>{busy?'Menyimpan…':'Simpan Bendel Surat Jalan'}</button>
-    </section>
-
-    <section style={{border:'1px solid #e2e8f0',borderRadius:12,padding:20}}>
-      <h2 style={{fontSize:18,marginTop:0}}>Daftar Surat Jalan</h2>
-      {loading ? <div style={{color:'#64748b'}}>Memuat…</div> : <div style={{overflowX:'auto'}}><table style={{width:'100%',borderCollapse:'collapse'}}><thead><tr>{['Nomor SJ','Assignment','Product','Qty','Weight','Catatan'].map(h=><th key={h} style={th}>{h}</th>)}</tr></thead><tbody>{sj.map(x=>{const ps=productFor(x.id);return <tr key={x.id}><td style={td}><b>{x.nomor_sj}</b></td><td style={td}>{assignmentName(x.assignment_id)}</td><td style={td}>{ps.length ? ps.map(p=><div key={p.id}>{p.product}</div>) : '-'}</td><td style={td}>{x.qty ?? '-'}</td><td style={td}>{x.weight ?? '-'}</td><td style={td}>{x.catatan || '-'}</td></tr>})}{!sj.length&&<tr><td colSpan={6} style={{padding:20,textAlign:'center',color:'#64748b'}}>Belum ada Surat Jalan.</td></tr>}</tbody></table></div>}
-    </section>
-    <footer style={{marginTop:28,textAlign:'center',color:'#64748b',fontSize:13}}>Part of FTC Go Project<br/><b>Developed by Fleet Traffic Control</b></footer>
-  </main>;
+  useEffect(() => { supabase.auth.getSession().then(async ({data}) => { if (!data.session) { window.location.href='/'; return; } const {data:p}=await supabase.from('profiles').select('role,status,is_locked').eq('id',data.session.user.id).maybeSingle(); if (!p || p.status!=='Active' || p.is_locked || p.role==='Executor') { window.location.href='/'; return; } setAuthorized(true); }); }, []);
+  useEffect(() => { if (authorized) load(); }, [authorized]);
+  async function load() { setLoading(true); setError(''); const [a,s,p]=await Promise.all([supabase.from('assignments').select('id,assignment_no,schedule_id,plat_number,executor_nik,start_point,destination,status').in('status',['ASSIGNED','CONFIRMED','IN_PROGRESS','ARRIVED']).order('created_at',{ascending:false}),supabase.from('surat_jalan').select('id,assignment_id,nomor_sj,qty,weight,catatan').order('created_at',{ascending:false}),supabase.from('base_products').select('product,status').eq('status','Active').order('product')]); if(a.error)setError(a.error.message); if(s.error)setError(s.error.message); if(p.error)setError(p.error.message); setAssignments(a.data||[]);setSj(s.data||[]);setProducts(p.data||[]);const ids=(s.data||[]).map((x:SJ)=>x.id);if(ids.length){const {data,error:pe}=await supabase.from('surat_jalan_products').select('id,surat_jalan_id,product,qty,weight').in('surat_jalan_id',ids).order('created_at');if(pe)setError(pe.message);setSjProducts(data||[])}else setSjProducts([]);setLoading(false); }
+  async function createBundle(){setBusy(true);setError('');setMessage('');if(!assignmentId||!nomorSj.trim()||!product||!qty||!weight){setError('Assignment, Nomor SJ, Product, Qty, dan Weight wajib diisi.');setBusy(false);return}const qtyValue=Number(qty),weightValue=Number(weight);if(!Number.isFinite(qtyValue)||qtyValue<0||!Number.isFinite(weightValue)||weightValue<0){setError('Qty dan Weight harus berupa angka yang valid.');setBusy(false);return}const {data:sjRow,error:sjError}=await supabase.from('surat_jalan').insert({assignment_id:assignmentId,nomor_sj:nomorSj.trim(),qty:qtyValue,weight:weightValue,catatan:catatan.trim()||null}).select('id').single();if(sjError||!sjRow){setError(sjError?.message||'Surat Jalan gagal dibuat.');setBusy(false);return}const {error:productError}=await supabase.from('surat_jalan_products').insert({surat_jalan_id:sjRow.id,product,qty:qtyValue,weight:weightValue});if(productError){await supabase.from('surat_jalan').delete().eq('id',sjRow.id);setError(productError.message);setBusy(false);return}setMessage('1 bendel Surat Jalan berhasil disimpan.');setAssignmentId('');setNomorSj('');setQty('');setWeight('');setProduct('');setCatatan('');await load();setBusy(false)}
+  const assignmentName=(id:string)=>{const a=assignments.find(x=>x.id===id);return a?`${a.assignment_no} · ${a.schedule_id} · ${a.plat_number}`:id}; const productFor=(id:string)=>sjProducts.filter(p=>p.surat_jalan_id===id);
+  if(!authorized)return <div className="login">Memuat Movent…</div>;
+  return <main style={{maxWidth:1100,margin:'0 auto',padding:'32px 24px',fontFamily:'system-ui,sans-serif'}}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:22}}><div><h1 style={{margin:0,fontSize:28}}>Surat Jalan</h1><div style={{color:'#64748b',marginTop:5}}>1 bendel = Nomor SJ + Product + Qty + Weight + Catatan.</div></div><a href="/" style={{textDecoration:'none'}}>← Movent</a></div>{error&&<div style={{background:'#fee2e2',padding:12,borderRadius:8,marginBottom:14,color:'#991b1b'}}>{error}</div>}{message&&<div style={{background:'#dcfce7',padding:12,borderRadius:8,marginBottom:14,color:'#166534'}}>{message}</div>}<section style={{border:'1px solid #e2e8f0',borderRadius:12,padding:20,marginBottom:18}}><h2 style={{fontSize:18,marginTop:0}}>Buat 1 Bendel Surat Jalan</h2><div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:12}}><label>Assignment<select value={assignmentId} onChange={e=>setAssignmentId(e.target.value)} style={input}><option value="">Pilih assignment…</option>{assignments.map(a=><option key={a.id} value={a.id}>{a.assignment_no} · {a.schedule_id} · {a.plat_number}</option>)}</select></label><label>Nomor SJ<input value={nomorSj} onChange={e=>setNomorSj(e.target.value)} style={input} placeholder="SJ-001"/></label><label>Qty<input type="number" min="0" step="any" value={qty} onChange={e=>setQty(e.target.value)} style={input}/></label><label>Weight<input type="number" min="0" step="any" value={weight} onChange={e=>setWeight(e.target.value)} style={input}/></label></div><div style={{display:'grid',gridTemplateColumns:'1fr 2fr',gap:12,marginTop:12}}><label>Product<select value={product} onChange={e=>setProduct(e.target.value)} style={input}><option value="">Pilih product…</option>{products.map(p=><option key={p.product} value={p.product}>{p.product}</option>)}</select></label><label>Catatan<textarea value={catatan} onChange={e=>setCatatan(e.target.value)} style={{...input,minHeight:42}} placeholder="Catatan (opsional)"/></label></div><button onClick={createBundle} disabled={busy} style={button}>{busy?'Menyimpan…':'Simpan Bendel Surat Jalan'}</button></section><section style={{border:'1px solid #e2e8f0',borderRadius:12,padding:20}}><h2 style={{fontSize:18,marginTop:0}}>Daftar Surat Jalan</h2>{loading?<div style={{color:'#64748b'}}>Memuat…</div>:<div style={{overflowX:'auto'}}><table style={{width:'100%',borderCollapse:'collapse'}}><thead><tr>{['Nomor SJ','Assignment','Product','Qty','Weight','Catatan'].map(h=><th key={h} style={th}>{h}</th>)}</tr></thead><tbody>{sj.map(x=>{const ps=productFor(x.id);return <tr key={x.id}><td style={td}><b>{x.nomor_sj}</b></td><td style={td}>{assignmentName(x.assignment_id)}</td><td style={td}>{ps.length?ps.map(p=><div key={p.id}>{p.product}</div>):'-'}</td><td style={td}>{x.qty??'-'}</td><td style={td}>{x.weight??'-'}</td><td style={td}>{x.catatan||'-'}</td></tr>})}{!sj.length&&<tr><td colSpan={6} style={{padding:20,textAlign:'center',color:'#64748b'}}>Belum ada Surat Jalan.</td></tr>}</tbody></table></div>}</section><footer style={{marginTop:28,textAlign:'center',color:'#64748b',fontSize:13}}>Part of FTC Go Project<br/><b>Developed by Fleet Traffic Control</b></footer></main>;
 }
-
-const input: React.CSSProperties = { display:'block',width:'100%',boxSizing:'border-box',marginTop:6,padding:'9px 10px',border:'1px solid #cbd5e1',borderRadius:7,background:'white' };
-const button: React.CSSProperties = { marginTop:14,padding:'9px 14px',border:0,borderRadius:7,cursor:'pointer' };
-const th: React.CSSProperties = { textAlign:'left',padding:'10px 8px',borderBottom:'1px solid #e2e8f0',fontSize:13 };
-const td: React.CSSProperties = { padding:'10px 8px',borderBottom:'1px solid #f1f5f9',fontSize:14,verticalAlign:'top' };
+const input:React.CSSProperties={display:'block',width:'100%',boxSizing:'border-box',marginTop:6,padding:'9px 10px',border:'1px solid #cbd5e1',borderRadius:7,background:'white'};const button:React.CSSProperties={marginTop:14,padding:'9px 14px',border:0,borderRadius:7,cursor:'pointer'};const th:React.CSSProperties={textAlign:'left',padding:'10px 8px',borderBottom:'1px solid #e2e8f0',fontSize:13};const td:React.CSSProperties={padding:'10px 8px',borderBottom:'1px solid #f1f5f9',fontSize:14,verticalAlign:'top'};
