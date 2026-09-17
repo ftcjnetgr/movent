@@ -9,7 +9,7 @@ export default async function ExecutorTugasSayaPage() {
 
   let taskQuery = admin
     .from('tasks')
-    .select('transaction_id, task_type, status, start_point, destination, std, sta, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end, executor_snapshot, fleet_snapshot')
+    .select('transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end, arrived_at, executor_snapshot, fleet_snapshot')
     .not('status', 'in', '(Completed,Canceled)')
     .order('created_at', { ascending: false })
 
