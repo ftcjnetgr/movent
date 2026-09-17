@@ -1,0 +1,216 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+
+import { createAdminClient } from '@/lib/supabase/admin'
+import { getCurrentProfile } from '@/lib/server/profile'
+
+type State = { error?: string; success?: string; transactionId?: string }
+
+function todayTimestamp(time: string) {
+  const [hour, minute] = time.split(':').map(Number)
+  if (!Number.isInteger(hour) || !Number.isInteger(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) return null
+  const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
+  return `${date}T${time}:00+07:00`
+}
+
+async function activeExecutorAndFleet(admin: ReturnType<typeof createAdminClient>, executorNik: string, platNumber: string) {
+  const [{ data: executor }, { data: fleet }] = await Promise.all([
+    admin.from('executors').select('executor_nik, full_name, status').eq('executor_nik', executorNik).eq('status', 'Active').maybeSingle(),
+    admin.from('fleets').select('plat_number, fleet_type, status').eq('plat_number', platNumber).eq('status', 'Active').maybeSingle(),
+  ])
+  return { executor, fleet }
+}
+
+async function nextTransaction(admin: ReturnType<typeof createAdminClient>) {
+  const { data, error } = await admin.rpc('movent_next_transaction_id')
+  if (error || !data) return null
+  return data as string
+}
+
+export async function createDispatcherTaskAction(_state: State, formData: FormData): Promise<State> {
+  const profile = await getCurrentProfile()
+  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Akses tidak tersedia.' }
+
+  const taskType = String(formData.get('taskType') ?? '')
+  const ownership = String(formData.get('fleetOwnership') ?? '')
+  const admin = createAdminClient()
+
+  const executorNik = String(formData.get('executorNik') ?? '').trim()
+  if (!executorNik) return { error: 'Executor wajib dipilih.' }
+
+  if (taskType === 'Distribusi Mobil') {
+    const startPoint = String(formData.get('startPoint') ?? '').trim()
+    const destination = String(formData.get('destination') ?? '').trim()
+    const std = String(formData.get('std') ?? '').trim()
+    const sta = String(formData.get('sta') ?? '').trim()
+    const platNumber = String(formData.get('platNumber') ?? '').trim()
+    if (!startPoint || !destination || !std || !sta || !platNumber) return { error: 'Start Point, Destinasi, STD, STA, Executor, dan Armada wajib diisi.' }
+
+    const [startLocation, destinationLocation] = await Promise.all([
+      admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle(),
+      admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle(),
+    ])
+    if (!startLocation.data || !destinationLocation.data) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' }
+    const timestamps = [todayTimestamp(std), todayTimestamp(sta)]
+    if (!timestamps[0] || !timestamps[1]) return { error: 'STD atau STA belum benar.' }
+    const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
+    if (!executor || !fleet) return { error: 'Executor atau Armada tidak tersedia.' }
+    const transactionId = await nextTransaction(admin)
+    if (!transactionId) return { error: 'Transaction ID belum berhasil dibuat.' }
+
+    const { error } = await admin.from('tasks').insert({
+      transaction_id: transactionId,
+      source_type: 'Manual',
+      task_type: 'Distribusi Mobil',
+      status: 'Assigned',
+      created_by: profile.id,
+      assigned_by: profile.id,
+      executor_nik: executor.executor_nik,
+      executor_snapshot: executor,
+      fleet_snapshot: fleet,
+      start_point: startPoint,
+      start_point_snapshot: startLocation.data,
+      destination,
+      destination_snapshot: destinationLocation.data,
+      std: timestamps[0],
+      sta: timestamps[1],
+      assigned_at: new Date().toISOString(),
+    })
+    if (error) return { error: 'Tugas Distribusi Mobil belum berhasil dibuat.' }
+    revalidateTaskPaths()
+    return { success: `Tugas ${transactionId} berhasil dibuat.`, transactionId }
+  }
+
+  if (taskType === 'Supply' && ownership === 'TGR') {
+    const scheduleId = String(formData.get('scheduleId') ?? '').trim()
+    const platNumber = String(formData.get('platNumber') ?? '').trim()
+    if (!scheduleId || !platNumber) return { error: 'Schedule, Executor, dan Armada wajib dipilih.' }
+
+    const [{ data: schedule }, { executor, fleet }] = await Promise.all([
+      admin.from('schedules').select('*').eq('schedule_id', scheduleId).eq('status', 'Active').maybeSingle(),
+      activeExecutorAndFleet(admin, executorNik, platNumber),
+    ])
+    if (!schedule || !executor || !fleet) return { error: 'Schedule, Executor, atau Armada tidak tersedia.' }
+    const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
+    const std = `${date}T${schedule.std}+07:00`
+    const sta = `${date}T${schedule.sta}+07:00`
+    const transactionId = await nextTransaction(admin)
+    if (!transactionId) return { error: 'Transaction ID belum berhasil dibuat.' }
+
+    const { error } = await admin.from('tasks').insert({
+      transaction_id: transactionId,
+      source_type: 'Schedule',
+      task_type: 'Supply',
+      fleet_ownership: 'TGR',
+      status: 'Assigned',
+      created_by: profile.id,
+      assigned_by: profile.id,
+      executor_nik: executor.executor_nik,
+      executor_snapshot: executor,
+      fleet_snapshot: fleet,
+      schedule_id: schedule.schedule_id,
+      schedule_snapshot: schedule,
+      start_point: schedule.start_point,
+      start_point_snapshot: schedule,
+      destination: schedule.destination,
+      destination_snapshot: schedule,
+      std,
+      sta,
+      assigned_at: new Date().toISOString(),
+    })
+    if (error) return { error: 'Tugas Supply TGR belum berhasil dibuat.' }
+    revalidateTaskPaths()
+    return { success: `Tugas ${transactionId} berhasil dibuat.`, transactionId }
+  }
+
+  if (taskType === 'Supply' && ownership === 'Non-TGR') {
+    const startPoint = String(formData.get('startPoint') ?? '').trim()
+    const destination = String(formData.get('destination') ?? '').trim()
+    const std = String(formData.get('std') ?? '').trim()
+    const sta = String(formData.get('sta') ?? '').trim()
+    const externalExecutor = String(formData.get('externalExecutor') ?? '').trim()
+    const externalFleet = String(formData.get('externalFleet') ?? '').trim()
+    const sjNumber = String(formData.get('sjNumber') ?? '').trim()
+    const sjQty = Number(formData.get('sjQty'))
+    const sjWeight = Number(formData.get('sjWeight'))
+    const product = String(formData.get('product') ?? '').trim()
+    const sjNote = String(formData.get('sjNote') ?? '').trim()
+
+    if (!startPoint || !destination || !std || !sta || !externalExecutor || !externalFleet || !sjNumber || !product || !Number.isFinite(sjQty) || !Number.isFinite(sjWeight)) {
+      return { error: 'Semua data Supply Non-TGR wajib diisi.' }
+    }
+    const timestamps = [todayTimestamp(std), todayTimestamp(sta)]
+    if (!timestamps[0] || !timestamps[1]) return { error: 'STD atau STA belum benar.' }
+    const { data: productData } = await admin.from('products').select('product, status').eq('product', product).eq('status', 'Active').maybeSingle()
+    if (!productData) return { error: 'Produk tidak tersedia.' }
+    const transactionId = await nextTransaction(admin)
+    if (!transactionId) return { error: 'Transaction ID belum berhasil dibuat.' }
+
+    const { error } = await admin.from('tasks').insert({
+      transaction_id: transactionId,
+      source_type: 'Manual',
+      task_type: 'Supply',
+      fleet_ownership: 'Non-TGR',
+      status: 'Assigned',
+      created_by: profile.id,
+      assigned_by: profile.id,
+      external_executor: externalExecutor,
+      external_fleet: externalFleet,
+      start_point: startPoint,
+      destination,
+      std: timestamps[0],
+      sta: timestamps[1],
+      sj_number: sjNumber,
+      sj_qty: sjQty,
+      sj_weight: sjWeight,
+      product,
+      product_snapshot: productData,
+      sj_note: sjNote || null,
+      assigned_at: new Date().toISOString(),
+    })
+    if (error) return { error: 'Tugas Supply Non-TGR belum berhasil dibuat.' }
+    revalidateTaskPaths()
+    return { success: `Tugas ${transactionId} berhasil dibuat.`, transactionId }
+  }
+
+  return { error: 'Jenis tugas belum lengkap.' }
+}
+
+export async function cancelDispatcherTaskAction(formData: FormData) {
+  const profile = await getCurrentProfile()
+  const transactionId = String(formData.get('transactionId') ?? '').trim()
+  const note = String(formData.get('note') ?? '').trim()
+  if (!transactionId || !note) return { error: 'Transaction ID dan alasan pembatalan wajib diisi.' }
+
+  const admin = createAdminClient()
+  const { data: task } = await admin.from('tasks').select('id, status, created_by, fleet_ownership').eq('transaction_id', transactionId).maybeSingle()
+  if (!task) return { error: 'Tugas tidak ditemukan.' }
+  if (task.status !== 'Assigned') return { error: 'Tugas sudah diterima atau sudah tidak bisa dibatalkan.' }
+  if (task.fleet_ownership === 'Non-TGR') {
+    if (profile.role !== 'Super User') return { error: 'Tugas Armada Non-TGR hanya dapat dibatalkan oleh Super User.' }
+  } else if (profile.role !== 'Super User' && (profile.role !== 'Dispatcher' || task.created_by !== profile.id)) {
+    return { error: 'Akses tidak tersedia.' }
+  }
+
+  const { error } = await admin.from('tasks').update({
+    status: 'Canceled',
+    canceled_at: new Date().toISOString(),
+    canceled_from_status: 'Assigned',
+    cancellation_note: note,
+  }).eq('id', task.id).eq('status', 'Assigned')
+  if (error) return { error: 'Tugas belum berhasil dibatalkan.' }
+  revalidateTaskPaths()
+  redirect('/dispatcher/riwayat-penugasan')
+}
+
+function revalidateTaskPaths() {
+  revalidatePath('/dispatcher/beranda')
+  revalidatePath('/dispatcher/riwayat-penugasan')
+  revalidatePath('/dispatcher/armada-non-tgr')
+  revalidatePath('/dispatcher/timetable')
+  revalidatePath('/controller/beranda')
+  revalidatePath('/controller/timetable')
+  revalidatePath('/executor/tugas-saya')
+}
