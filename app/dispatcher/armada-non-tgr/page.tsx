@@ -1,0 +1,38 @@
+import AppShell from '@/components/app-shell'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { getCurrentProfile } from '@/lib/server/profile'
+
+export default async function ArmadaNonTgrPage() {
+  const profile = await getCurrentProfile()
+  const admin = createAdminClient()
+  const { data: tasks } = await admin
+    .from('tasks')
+    .select('transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, external_executor, external_fleet, sj_number, created_at')
+    .eq('fleet_ownership', 'Non-TGR')
+    .order('created_at', { ascending: false })
+
+  return (
+    <AppShell>
+      <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Armada Non-TGR</h1><p>Daftar tugas Armada Non-TGR yang dapat dilihat oleh seluruh Dispatcher.</p></div></div>
+      <section className="data-table-card">
+        <div className="table-wrap">
+          <table>
+            <thead><tr><th>Transaction ID</th><th>Rute</th><th>Executor Eksternal</th><th>Armada</th><th>STD</th><th>STA</th><th>Status</th></tr></thead>
+            <tbody>
+              {(tasks ?? []).map((task) => <tr key={task.transaction_id}>
+                <td><strong>{task.transaction_id}</strong></td>
+                <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
+                <td>{task.external_executor ?? '-'}</td>
+                <td>{task.external_fleet ?? '-'}</td>
+                <td>{task.std ? new Date(task.std).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) : '-'}</td>
+                <td>{task.sta ? new Date(task.sta).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) : '-'}</td>
+                <td><span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span></td>
+              </tr>)}
+              {!(tasks ?? []).length ? <tr><td colSpan={7}><div className="empty-state">Belum ada tugas Armada Non-TGR.</div></td></tr> : null}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </AppShell>
+  )
+}
