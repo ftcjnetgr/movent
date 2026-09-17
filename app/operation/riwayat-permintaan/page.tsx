@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import OperationExtraScheduleAlert from '@/components/operation-extra-schedule-alert'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelExtraScheduleAction } from '../request-extra-schedule/actions'
@@ -22,6 +23,15 @@ export default async function OperationHistoryPage() {
     .eq('requested_by', profile.id)
     .order('created_at', { ascending: false })
 
+  const alertRequests = (requests ?? [])
+    .filter((request) => request.status === 'Requested')
+    .map((request) => ({
+      transaction_id: request.transaction_id,
+      start_point: request.start_point,
+      destination: request.destination,
+      created_at: request.created_at,
+    }))
+
   return (
     <AppShell>
       <div className="page-heading">
@@ -31,6 +41,8 @@ export default async function OperationHistoryPage() {
           <p>Semua request Extra Schedule yang pernah kamu ajukan.</p>
         </div>
       </div>
+
+      <OperationExtraScheduleAlert requests={alertRequests} />
 
       <section className="data-table-card">
         <div className="table-wrap">
