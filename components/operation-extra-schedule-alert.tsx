@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type RequestItem = {
   transaction_id: string
@@ -18,12 +19,18 @@ function formatDuration(totalSeconds: number) {
 }
 
 export default function OperationExtraScheduleAlert({ requests }: { requests: RequestItem[] }) {
+  const router = useRouter()
   const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
     return () => window.clearInterval(timer)
   }, [])
+
+  useEffect(() => {
+    const refreshTimer = window.setInterval(() => router.refresh(), 5000)
+    return () => window.clearInterval(refreshTimer)
+  }, [router])
 
   const alerts = useMemo(() => requests.map((request) => {
     const created = new Date(request.created_at).getTime()
