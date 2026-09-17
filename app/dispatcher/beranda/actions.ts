@@ -37,16 +37,14 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
   const ownership = String(formData.get('fleetOwnership') ?? '')
   const admin = createAdminClient()
 
-  const executorNik = String(formData.get('executorNik') ?? '').trim()
-  if (!executorNik) return { error: 'Executor wajib dipilih.' }
-
   if (taskType === 'Distribusi Mobil') {
     const startPoint = String(formData.get('startPoint') ?? '').trim()
     const destination = String(formData.get('destination') ?? '').trim()
     const std = String(formData.get('std') ?? '').trim()
     const sta = String(formData.get('sta') ?? '').trim()
+    const executorNik = String(formData.get('executorNik') ?? '').trim()
     const platNumber = String(formData.get('platNumber') ?? '').trim()
-    if (!startPoint || !destination || !std || !sta || !platNumber) return { error: 'Start Point, Destinasi, STD, STA, Executor, dan Armada wajib diisi.' }
+    if (!startPoint || !destination || !std || !sta || !executorNik || !platNumber) return { error: 'Start Point, Destinasi, STD, STA, Executor, dan Armada wajib diisi.' }
 
     const [startLocation, destinationLocation] = await Promise.all([
       admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle(),
@@ -85,8 +83,9 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
 
   if (taskType === 'Supply' && ownership === 'TGR') {
     const scheduleId = String(formData.get('scheduleId') ?? '').trim()
+    const executorNik = String(formData.get('executorNik') ?? '').trim()
     const platNumber = String(formData.get('platNumber') ?? '').trim()
-    if (!scheduleId || !platNumber) return { error: 'Schedule, Executor, dan Armada wajib dipilih.' }
+    if (!scheduleId || !executorNik || !platNumber) return { error: 'Schedule, Executor, dan Armada wajib dipilih.' }
 
     const [{ data: schedule }, { executor, fleet }] = await Promise.all([
       admin.from('schedules').select('*').eq('schedule_id', scheduleId).eq('status', 'Active').maybeSingle(),
@@ -143,6 +142,9 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     }
     const timestamps = [todayTimestamp(std), todayTimestamp(sta)]
     if (!timestamps[0] || !timestamps[1]) return { error: 'STD atau STA belum benar.' }
+    const { data: startLocation } = await admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle()
+    const { data: destinationLocation } = await admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle()
+    if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' }
     const { data: productData } = await admin.from('products').select('product, status').eq('product', product).eq('status', 'Active').maybeSingle()
     if (!productData) return { error: 'Produk tidak tersedia.' }
     const transactionId = await nextTransaction(admin)
@@ -159,7 +161,9 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
       external_executor: externalExecutor,
       external_fleet: externalFleet,
       start_point: startPoint,
+      start_point_snapshot: startLocation,
       destination,
+      destination_snapshot: destinationLocation,
       std: timestamps[0],
       sta: timestamps[1],
       sj_number: sjNumber,
@@ -187,19 +191,22 @@ export async function cancelDispatcherTaskAction(formData: FormData) {
   const admin = createAdminClient()
   const { data: task } = await admin.from('tasks').select('id, status, created_by, fleet_ownership').eq('transaction_id', transactionId).maybeSingle()
   if (!task) return { error: 'Tugas tidak ditemukan.' }
-  if (task.status !== 'Assigned') return { error: 'Tugas sudah diterima atau sudah tidak bisa dibatalkan.' }
   if (task.fleet_ownership === 'Non-TGR') {
     if (profile.role !== 'Super User') return { error: 'Tugas Armada Non-TGR hanya dapat dibatalkan oleh Super User.' }
-  } else if (profile.role !== 'Super User' && (profile.role !== 'Dispatcher' || task.created_by !== profile.id)) {
-    return { error: 'Akses tidak tersedia.' }
+    if (!['Assigned', 'Driving'].includes(task.status)) return { error: 'Tugas sudah selesai atau tidak bisa dibatalkan.' }
+  } else {
+    if (task.status !== 'Assigned') return { error: 'Tugas sudah diterima atau sudah tidak bisa dibatalkan.' }
+    if (profile.role !== 'Super User' && (profile.role !== 'Dispatcher' || task.created_by !== profile.id)) {
+      return { error: 'Akses tidak tersedia.' }
+    }
   }
 
   const { error } = await admin.from('tasks').update({
     status: 'Canceled',
     canceled_at: new Date().toISOString(),
-    canceled_from_status: 'Assigned',
+    canceled_from_status: task.status,
     cancellation_note: note,
-  }).eq('id', task.id).eq('status', 'Assigned')
+  }).eq('id', task.id).eq('status', task.status)
   if (error) return { error: 'Tugas belum berhasil dibatalkan.' }
   revalidateTaskPaths()
   redirect('/dispatcher/riwayat-penugasan')
