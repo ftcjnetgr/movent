@@ -7,7 +7,7 @@ export default async function DispatcherAssignmentHistoryPage() {
   const admin = createAdminClient()
   const { data: tasks } = await admin
     .from('tasks')
-    .select('transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, created_at, executor_snapshot, fleet_snapshot')
+    .select('transaction_id, task_type, status, fleet_ownership, created_by, start_point, destination, std, sta, created_at, executor_snapshot, fleet_snapshot, external_executor, external_fleet')
     .order('created_at', { ascending: false })
 
   const visible = profile.role === 'Dispatcher'
@@ -26,8 +26,8 @@ export default async function DispatcherAssignmentHistoryPage() {
                 <td><strong>{task.transaction_id}</strong></td>
                 <td>{task.task_type}</td>
                 <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
-                <td>{task.executor_snapshot?.full_name ?? '-'}</td>
-                <td>{task.fleet_snapshot?.plat_number ?? task.fleet_ownership ?? '-'}</td>
+                <td>{task.executor_snapshot?.full_name ?? task.external_executor ?? '-'}</td>
+                <td>{task.fleet_snapshot?.plat_number ?? task.external_fleet ?? task.fleet_ownership ?? '-'}</td>
                 <td><span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span></td>
               </tr>)}
               {!visible.length ? <tr><td colSpan={6}><div className="empty-state">Belum ada riwayat penugasan.</div></td></tr> : null}
