@@ -1,6 +1,12 @@
 import AppShell from '@/components/app-shell'
+import TimetableView from '@/components/timetable-view'
+import { getCurrentProfile } from '@/lib/server/profile'
+import { getTimetableData } from '@/lib/server/timetable'
 
-export default function ControllerTimetablePage() {
+export default async function ControllerTimetablePage() {
+  const profile = await getCurrentProfile()
+  const data = await getTimetableData(profile)
+
   return (
     <AppShell>
       <div className="page-heading">
@@ -10,20 +16,7 @@ export default function ControllerTimetablePage() {
           <p>Rencanakan jadwal dari database dan pantau kondisi live.</p>
         </div>
       </div>
-      <div className="dashboard-tabs">
-        <a className="dashboard-tab" href="/controller/beranda">Tugas</a>
-        <a className="dashboard-tab active" href="/controller/timetable">Timetable</a>
-        <a className="dashboard-tab" href="/controller/ticketing-maintenance">Ticketing Maintenance</a>
-      </div>
-      <section className="section-block">
-        <div className="metric-grid">
-          <div className="metric-card"><span>By Database</span><strong>0</strong></div>
-          <div className="metric-card"><span>Live</span><strong>0</strong></div>
-          <div className="metric-card"><span>Unassigned</span><strong>0</strong></div>
-          <div className="metric-card"><span>Assigned</span><strong>0</strong></div>
-          <div className="metric-card"><span>Canceled</span><strong>0</strong></div>
-        </div>
-      </section>
+      <TimetableView date={data.date} schedules={data.schedules} tasks={data.tasks} taskBySchedule={data.taskBySchedule} />
     </AppShell>
   )
 }
