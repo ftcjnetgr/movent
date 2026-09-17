@@ -4,6 +4,7 @@ import { FormEvent, useState, useTransition } from 'react'
 
 import {
   acceptExtraScheduleAction,
+  confirmArrivalAction,
   confirmCompletedAction,
   confirmDrivingAction,
   saveOdometerEndAction,
@@ -15,6 +16,7 @@ type Task = {
   transaction_id: string
   task_type: string
   status: string
+  fleet_ownership: string | null
   start_point: string | null
   destination: string | null
   std: string | null
@@ -26,8 +28,13 @@ type Task = {
   sj_note: string | null
   odometer_start: number | null
   odometer_end: number | null
+  arrived_at: string | null
   executor_snapshot: { full_name?: string; executor_nik?: string } | null
   fleet_snapshot: { plat_number?: string; fleet_type?: string } | null
+}
+
+function requiresSj(task: Task) {
+  return task.task_type === 'Extra Schedule' || (task.task_type === 'Supply' && task.fleet_ownership === 'TGR')
 }
 
 export default function ExecutorTaskCard({ task, products }: { task: Task; products: string[] }) {
@@ -63,6 +70,11 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
     submit(confirmDrivingAction, event.currentTarget)
   }
 
+  function handleArrival(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    submit(confirmArrivalAction, event.currentTarget)
+  }
+
   function handleOdometerEnd(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     submit(saveOdometerEndAction, event.currentTarget)
@@ -72,6 +84,8 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
     event.preventDefault()
     submit(confirmCompletedAction, event.currentTarget)
   }
+
+  const needsSj = requiresSj(task)
 
   return (
     <article className="task-card">
@@ -99,7 +113,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Accepted' && !task.sj_number ? (
+      {task.status === 'Accepted' && needsSj && !task.sj_number ? (
         <form onSubmit={handleSj} className="data-form compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <div className="form-row">
@@ -118,7 +132,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Accepted' && task.sj_number && task.odometer_start === null ? (
+      {task.status === 'Accepted' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start === null ? (
         <form onSubmit={handleOdometerStart} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Awal<input name="odometerStart" type="number" min="0" step="any" required /></label>
@@ -126,14 +140,21 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Accepted' && task.sj_number && task.odometer_start !== null ? (
+      {task.status === 'Accepted' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start !== null ? (
         <form onSubmit={handleDriving}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <button type="submit" disabled={isPending}>Konfirmasi Berangkat</button>
         </form>
       ) : null}
 
-      {task.status === 'Driving' && task.odometer_end === null ? (
+      {task.status === 'Driving' && !task.arrived_at ? (
+        <form onSubmit={handleArrival}>
+          <input type="hidden" name="transactionId" value={task.transaction_id} />
+          <button type="submit" disabled={isPending}>Konfirmasi Datang</button>
+        </form>
+      ) : null}
+
+      {task.status === 'Driving' && task.arrived_at && task.odometer_end === null ? (
         <form onSubmit={handleOdometerEnd} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Akhir<input name="odometerEnd" type="number" min="0" step="any" required /></label>
@@ -141,10 +162,10 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Driving' && task.odometer_end !== null ? (
+      {task.status === 'Driving' && task.arrived_at && task.odometer_end !== null ? (
         <form onSubmit={handleComplete}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi Datang & Selesai</button>
+          <button type="submit" disabled={isPending}>Selesai</button>
         </form>
       ) : null}
     </article>
