@@ -7,6 +7,7 @@ type TaskRow = {
   source_type: string
   task_type: string
   created_by: string
+  fleet_ownership: string | null
   schedule_id: string | null
   std: string | null
   sta: string | null
@@ -25,6 +26,14 @@ type TicketRow = {
   in_progress_at: string | null
   completed_at: string | null
   canceled_at: string | null
+}
+
+type TaskAlert = {
+  kind: 'unassigned' | 'assigned'
+  scheduleId: string
+  transactionId?: string
+  status?: string
+  targetAt: Date
 }
 
 function jakartaDate(value: Date) {
@@ -58,7 +67,7 @@ export async function getDashboardData(profile: AppProfile) {
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
     admin
       .from('tasks')
-      .select('transaction_id, status, source_type, task_type, created_by, schedule_id, std, sta, assigned_at, accepted_at, driving_at, completed_at, canceled_at')
+      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, std, sta, assigned_at, accepted_at, driving_at, completed_at, canceled_at')
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
@@ -72,15 +81,19 @@ export async function getDashboardData(profile: AppProfile) {
 
   const all = (allTasks ?? []) as TaskRow[]
   const tasks = profile.role === 'Dispatcher'
-    ? all.filter((task) => task.created_by === profile.id || (task.task_type === 'Supply' && task.schedule_id === null))
+    ? all.filter((task) => task.created_by === profile.id || task.fleet_ownership === 'Non-TGR')
     : all
 
   const date = jakartaDate(new Date())
   const day = ((new Date(`${date}T12:00:00+07:00`).getUTCDay() + 6) % 7) + 1
   const now = new Date()
-  const taskBySchedule = new Map(tasks.filter((task) => task.schedule_id).map((task) => [task.schedule_id as string, task]))
+  const taskBySchedule = new Map(
+    tasks
+      .filter((task) => task.schedule_id && task.status !== 'Canceled')
+      .map((task) => [task.schedule_id as string, task]),
+  )
 
-  const unassignedAlerts = (schedules ?? [])
+  const unassignedAlerts: TaskAlert[] = (schedules ?? [])
     .filter((schedule) => schedule.schedule_day === day && !taskBySchedule.has(schedule.schedule_id))
     .map((schedule) => ({
       kind: 'unassigned' as const,
@@ -89,7 +102,7 @@ export async function getDashboardData(profile: AppProfile) {
     }))
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000)
 
-  const assignedAlerts = tasks
+  const assignedAlerts: TaskAlert[] = tasks
     .filter((task) => task.schedule_id && ['Assigned', 'Accepted', 'Driving'].includes(task.status) && task.sta)
     .map((task) => ({
       kind: 'assigned' as const,
