@@ -33,10 +33,38 @@ type Task = {
   sj_number: string | null
 }
 
+type SummaryFilter = 'all' | 'unassigned' | 'assigned' | 'canceled'
+
+function minutesValue(value: string | null) {
+  if (!value) return null
+  if (value.includes('T')) {
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return null
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Jakarta',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).formatToParts(date)
+    const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? 0)
+    const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? 0)
+    return hour * 60 + minute
+  }
+  const [hour, minute] = value.split(':').map(Number)
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null
+  return hour * 60 + minute
+}
+
 function timeValue(value: string | null) {
   if (!value) return '-'
-  const date = value.includes('T') ? new Date(value) : new Date(`1970-01-01T${value}`)
-  return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: value.includes('T') ? 'Asia/Jakarta' : 'UTC' })
+  const minutes = minutesValue(value)
+  if (minutes === null) return '-'
+  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
+}
+
+function statusClass(status: string | undefined) {
+  if (!status) return ''
+  return `status-${status.toLowerCase().replaceAll(' ', '-')}`
 }
 
 export default function TimetableView({
@@ -58,6 +86,7 @@ export default function TimetableView({
   const [origin, setOrigin] = useState('')
   const [destinationType, setDestinationType] = useState('')
   const [destination, setDestination] = useState('')
+  const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>('all')
 
   const options = useMemo(() => ({
     routes: [...new Set(schedules.map((item) => item.route))],
@@ -82,15 +111,50 @@ export default function TimetableView({
   }), [schedules, route, category, originType, origin, destinationType, destination, direction])
 
   const filteredTasks = useMemo(() => tasks.filter((task) => {
-    if (route || category || originType || origin || destinationType || destination) return true
+    if (direction === 'origin' && origin && task.start_point !== origin) return false
+    if (direction === 'origin' && originType) return true
+    if (direction === 'destination' && destination && task.destination !== destination) return false
+    if (direction === 'destination' && destinationType) return true
     return true
-  }).sort((a, b) => String(a.std ?? '').localeCompare(String(b.std ?? ''))), [tasks, route, category, originType, origin, destinationType, destination])
+  }).sort((a, b) => (minutesValue(a.std) ?? 9999) - (minutesValue(b.std) ?? 9999)), [tasks, direction, origin, originType, destination, destinationType])
 
-  const summary = {
-    unassigned: schedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
-    assigned: schedules.filter((item) => !!taskBySchedule[item.schedule_id] && taskBySchedule[item.schedule_id].status !== 'Canceled').length,
-    canceled: schedules.filter((item) => taskBySchedule[item.schedule_id]?.status === 'Canceled').length,
+  const summary = useMemo(() => ({
+    unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
+    assigned: filteredSchedules.filter((item) => {
+      const task = taskBySchedule[item.schedule_id]
+      return !!task && task.status !== 'Canceled'
+    }).length,
+    canceled: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status === 'Canceled').length,
+  }), [filteredSchedules, taskBySchedule])
+
+  const summaryMatch = (task: Task | undefined) => {
+    if (summaryFilter === 'all') return true
+    if (summaryFilter === 'canceled') return task?.status === 'Canceled'
+    if (summaryFilter === 'assigned') return !!task && task.status !== 'Canceled'
+    return !task
   }
+
+  const databaseGroups = useMemo(() => {
+    const groups = new Map<string, Schedule[]>()
+    for (const item of filteredSchedules) {
+      const key = direction === 'origin' ? item.start_point : item.destination
+      const items = groups.get(key) ?? []
+      items.push(item)
+      groups.set(key, items)
+    }
+    return [...groups.entries()]
+  }, [filteredSchedules, direction])
+
+  const liveGroups = useMemo(() => {
+    const groups = new Map<string, Task[]>()
+    for (const task of filteredTasks) {
+      const key = direction === 'origin' ? (task.start_point ?? '-') : (task.destination ?? '-')
+      const items = groups.get(key) ?? []
+      items.push(task)
+      groups.set(key, items)
+    }
+    return [...groups.entries()]
+  }, [filteredTasks, direction])
 
   return (
     <div>
@@ -107,9 +171,9 @@ export default function TimetableView({
           </div>
 
           <section className="metric-grid">
-            <div className="metric-card"><span>Unassigned</span><strong>{summary.unassigned}</strong></div>
-            <div className="metric-card"><span>Assigned</span><strong>{summary.assigned}</strong></div>
-            <div className="metric-card"><span>Canceled</span><strong>{summary.canceled}</strong></div>
+            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Unassigned</span><strong>{summary.unassigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Assigned</span><strong>{summary.assigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Canceled</span><strong>{summary.canceled}</strong></button>
           </section>
 
           <section className="section-block">
@@ -132,56 +196,74 @@ export default function TimetableView({
             </div>
           </section>
 
-          <section className="data-table-card section-block">
+          <section className="data-table-card section-block timetable-shell">
             <div className="section-heading"><div><h2>Plan Schedule</h2><p>{date}</p></div></div>
-            <div className="table-wrap">
-              <table>
-                <thead><tr><th>Trip</th><th>Route</th><th>Category</th><th>Origin</th><th>Destination</th><th>STD</th><th>STA</th><th>Status</th><th>Preview</th></tr></thead>
-                <tbody>
-                  {filteredSchedules.map((item) => {
-                    const task = taskBySchedule[item.schedule_id]
-                    return (
-                      <tr key={item.schedule_id} style={!task ? { opacity: 0.55 } : undefined}>
-                        <td>{item.trip}</td>
-                        <td>{item.route}</td>
-                        <td>{item.category}</td>
-                        <td>{item.start_point}</td>
-                        <td>{item.destination}</td>
-                        <td>{timeValue(item.std)}</td>
-                        <td>{timeValue(item.sta)}</td>
-                        <td>{task ? <span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span> : <span className="status-badge">Unassigned</span>}</td>
-                        <td>{task ? <details><summary className="link-button">Buka</summary><div className="muted" style={{ paddingTop: 8 }}>{task.transaction_id} • {task.executor_snapshot?.full_name ?? '-'} • {task.fleet_snapshot?.plat_number ?? '-'}</div></details> : <span className="muted">Tidak bisa dibuka</span>}</td>
-                      </tr>
-                    )
-                  })}
-                  {!filteredSchedules.length ? <tr><td colSpan={9}><div className="empty-state">Tidak ada schedule yang sesuai filter.</div></td></tr> : null}
-                </tbody>
-              </table>
+            <div className="timetable-scroll">
+              <div className="timetable-grid">
+                <div className="timetable-axis-label">{direction === 'origin' ? 'Start Point' : 'Destination'}</div>
+                <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
+                {databaseGroups.map(([group, items]) => (
+                  <div className="timetable-row" key={group}>
+                    <div className="timetable-group">{group}</div>
+                    <div className="timetable-track">
+                      {Array.from({ length: 25 }, (_, hour) => <span className="timetable-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
+                      {items.map((item) => {
+                        const task = taskBySchedule[item.schedule_id]
+                        const start = minutesValue(direction === 'origin' ? item.std : item.sta) ?? 0
+                        const dimmed = !summaryMatch(task)
+                        const left = `${(start / 1440) * 100}%`
+                        return (
+                          <div key={item.schedule_id} className={`timetable-item ${task ? statusClass(task.status) : 'unassigned'} ${dimmed ? 'faded' : ''}`} style={{ left }}>
+                            <div className="timetable-item-time">{direction === 'origin' ? timeValue(item.std) : timeValue(item.sta)}</div>
+                            <strong>{item.trip}</strong>
+                            <span>{direction === 'origin' ? item.destination : item.start_point}</span>
+                            <small>{item.route} · {item.category}</small>
+                            {task ? <details><summary>Preview</summary><div>{task.transaction_id}<br />{task.executor_snapshot?.full_name ?? '-'} · {task.fleet_snapshot?.plat_number ?? '-'}</div></details> : <small>Unassigned</small>}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
+                {!databaseGroups.length ? <div className="empty-state">Tidak ada schedule yang sesuai filter.</div> : null}
+              </div>
             </div>
           </section>
         </>
       ) : (
-        <section className="data-table-card section-block">
+        <section className="data-table-card section-block timetable-shell">
+          <div className="dashboard-tabs">
+            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>As Origin</button>
+            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>As Destination</button>
+          </div>
           <div className="section-heading"><div><h2>Live Timetable</h2><p>Seluruh transaksi yang sudah dibuat atau di-assign.</p></div></div>
-          <div className="table-wrap">
-            <table>
-              <thead><tr><th>Transaction ID</th><th>Jenis</th><th>Origin</th><th>Destination</th><th>STD</th><th>STA</th><th>Status</th><th>Armada</th></tr></thead>
-              <tbody>
-                {filteredTasks.map((task) => (
-                  <tr key={task.transaction_id}>
-                    <td><strong>{task.transaction_id}</strong></td>
-                    <td>{task.source_type === 'Extra Schedule' ? 'Extra Schedule' : task.task_type}</td>
-                    <td>{task.start_point ?? '-'}</td>
-                    <td>{task.destination ?? '-'}</td>
-                    <td>{timeValue(task.std)}</td>
-                    <td>{timeValue(task.sta)}</td>
-                    <td><span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span></td>
-                    <td>{task.fleet_snapshot?.plat_number ?? '-'}</td>
-                  </tr>
-                ))}
-                {!filteredTasks.length ? <tr><td colSpan={8}><div className="empty-state">Live Timetable masih kosong.</div></td></tr> : null}
-              </tbody>
-            </table>
+          <div className="timetable-scroll">
+            <div className="timetable-grid">
+              <div className="timetable-axis-label">{direction === 'origin' ? 'Start Point' : 'Destination'}</div>
+              <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
+              {liveGroups.map(([group, items]) => (
+                <div className="timetable-row" key={group}>
+                  <div className="timetable-group">{group}</div>
+                  <div className="timetable-track">
+                    {Array.from({ length: 25 }, (_, hour) => <span className="timetable-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
+                    {items.map((task) => {
+                      const start = minutesValue(direction === 'origin' ? task.std : task.sta)
+                      const left = `${((start ?? 0) / 1440) * 100}%`
+                      return (
+                        <div className={`timetable-item live-item ${statusClass(task.status)}`} key={task.transaction_id} style={{ left }}>
+                          <div className="timetable-item-time">{direction === 'origin' ? timeValue(task.std) : timeValue(task.sta)}</div>
+                          <strong>{task.transaction_id}</strong>
+                          <span>{direction === 'origin' ? task.destination ?? '-' : task.start_point ?? '-'}</span>
+                          <small>{task.source_type === 'Extra Schedule' ? 'Extra Schedule' : task.task_type} · {task.fleet_snapshot?.plat_number ?? '-'}</small>
+                          <details><summary>Preview</summary><div>{task.executor_snapshot?.full_name ?? task.executor_nik ?? '-'}</div></details>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
+              {!liveGroups.length ? <div className="empty-state">Live Timetable masih kosong.</div> : null}
+            </div>
           </div>
         </section>
       )}
