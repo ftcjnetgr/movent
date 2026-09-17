@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useEffect } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { createDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
 
 const initialState: { error?: string; success?: string; transactionId?: string } = {}
@@ -17,6 +17,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
   const [state, formAction, pending] = useActionState(createDispatcherTaskAction, initialState)
   const [taskType, setTaskType] = useState('Distribusi Mobil')
   const [ownership, setOwnership] = useState('TGR')
+  const usesInternalExecutor = taskType === 'Distribusi Mobil' || ownership === 'TGR'
 
   useEffect(() => {
     if (state.success) window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -72,16 +73,16 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             </div>
           ) : null}
 
-          <div className="form-row">
-            <label>Executor
-              <select name="executorNik" defaultValue="" required><option value="">Pilih Executor</option>{executors.map((executor) => <option key={executor.executor_nik} value={executor.executor_nik}>{executor.executor_nik} - {executor.full_name}</option>)}</select>
-            </label>
-            {taskType !== 'Supply' || ownership === 'TGR' ? (
+          {usesInternalExecutor ? (
+            <div className="form-row">
+              <label>Executor
+                <select name="executorNik" defaultValue="" required><option value="">Pilih Executor</option>{executors.map((executor) => <option key={executor.executor_nik} value={executor.executor_nik}>{executor.executor_nik} - {executor.full_name}</option>)}</select>
+              </label>
               <label>Armada
                 <select name="platNumber" defaultValue="" required><option value="">Pilih Armada</option>{fleets.map((fleet) => <option key={fleet.plat_number} value={fleet.plat_number}>{fleet.plat_number} - {fleet.fleet_type}</option>)}</select>
               </label>
-            ) : <div />}
-          </div>
+            </div>
+          ) : null}
 
           {taskType === 'Supply' && ownership === 'Non-TGR' ? (
             <>
@@ -111,5 +112,3 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
     </section>
   )
 }
-
-import { useState } from 'react'
