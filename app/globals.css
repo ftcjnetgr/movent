@@ -343,6 +343,17 @@ td select:focus {
   justify-content: space-between;
 }
 
+.summary-filter {
+  color: inherit;
+  text-align: left;
+  background: #fff;
+}
+
+.summary-filter.selected {
+  border-color: #111827;
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.08);
+}
+
 .metric-card span {
   color: #6f7681;
   font-size: 13px;
@@ -526,6 +537,146 @@ th {
 
 .button-link {
   margin-top: 14px;
+}
+
+.timetable-shell {
+  overflow: hidden;
+}
+
+.timetable-scroll {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.timetable-grid {
+  min-width: 1320px;
+}
+
+.timetable-axis-label {
+  width: 190px;
+  padding: 0 12px 10px;
+  color: #6f7681;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.timetable-hours {
+  margin-left: 190px;
+  height: 30px;
+  position: relative;
+  border-bottom: 1px solid #e6e9ee;
+}
+
+.timetable-hours span {
+  position: absolute;
+  transform: translateX(-50%);
+  top: 4px;
+  font-size: 11px;
+  color: #858c97;
+}
+
+.timetable-row {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  min-height: 138px;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.timetable-group {
+  padding: 16px 12px;
+  font-weight: 700;
+  border-right: 1px solid #edf0f3;
+  background: #fafbfc;
+}
+
+.timetable-track {
+  min-height: 138px;
+  position: relative;
+  background: #fff;
+}
+
+.timetable-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #f0f2f5;
+}
+
+.timetable-item {
+  position: absolute;
+  top: 12px;
+  width: 132px;
+  min-height: 112px;
+  padding: 10px;
+  border: 1px solid #dfe3e8;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  z-index: 2;
+}
+
+.timetable-item > strong,
+.timetable-item > span,
+.timetable-item > small {
+  display: block;
+  margin-top: 3px;
+}
+
+.timetable-item-time {
+  font-size: 11px;
+  font-weight: 800;
+  color: #6f7681;
+}
+
+.timetable-item span {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.timetable-item small {
+  font-size: 10px;
+  color: #747b86;
+}
+
+.timetable-item details {
+  margin-top: 8px;
+  font-size: 10px;
+}
+
+.timetable-item summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.timetable-item.unassigned {
+  background: #f1f3f5;
+  border-color: #d8dce1;
+}
+
+.timetable-item.faded {
+  opacity: 0.28;
+}
+
+.timetable-item.status-assigned {
+  background: #eef2ff;
+}
+
+.timetable-item.status-accepted {
+  background: #ecfeff;
+}
+
+.timetable-item.status-driving {
+  background: #fff7ed;
+}
+
+.timetable-item.status-completed {
+  background: #ecfdf3;
+}
+
+.timetable-item.status-canceled {
+  background: #fef2f2;
 }
 
 @media (max-width: 1024px) {
