@@ -1,0 +1,40 @@
+import { createAdminClient } from '@/lib/supabase/admin'
+import type { AppProfile } from '@/lib/server/profile'
+
+function jakartaNow() {
+  const now = new Date()
+  const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now)
+  const day = ((new Date(`${date}T12:00:00+07:00`).getUTCDay() + 6) % 7) + 1
+  return { date, day }
+}
+
+export async function getTimetableData(profile: AppProfile) {
+  const admin = createAdminClient()
+  const { date, day } = jakartaNow()
+
+  const [{ data: schedules }, { data: allTasks }] = await Promise.all([
+    admin
+      .from('schedules')
+      .select('schedule_id, trip, route, category, start_point, start_point_type, destination, destination_type, schedule_day, schedule_day_name, std, sta, status')
+      .eq('status', 'Active')
+      .eq('schedule_day', day)
+      .order('std'),
+    admin
+      .from('tasks')
+      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, sj_number')
+      .order('std'),
+  ])
+
+  const tasks = profile.role === 'Dispatcher'
+    ? (allTasks ?? []).filter((task) => task.created_by === profile.id || task.fleet_ownership === 'Non-TGR')
+    : (allTasks ?? [])
+
+  const taskBySchedule = new Map(tasks.filter((task) => task.schedule_id).map((task) => [task.schedule_id as string, task]))
+
+  return {
+    date,
+    schedules: schedules ?? [],
+    tasks,
+    taskBySchedule: Object.fromEntries(taskBySchedule),
+  }
+}
