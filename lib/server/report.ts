@@ -29,6 +29,15 @@ function endExclusiveIso(date: string) {
   return end.toISOString()
 }
 
+function formatReportDateTime(value: string | null) {
+  if (!value) return ''
+  return new Intl.DateTimeFormat('en-GB', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'Asia/Jakarta',
+  }).format(new Date(value))
+}
+
 export async function queryOperationalReport(filters: ReportFilters) {
   const admin = createAdminClient()
   const dateField = filters.type === 'STD' ? 'std' : filters.type === 'STA' ? 'sta' : 'canceled_at'
@@ -54,13 +63,13 @@ export async function queryOperationalReport(filters: ReportFilters) {
     'Status': task.status,
     'Start Point': task.start_point,
     'Destination': task.destination,
-    'STD': task.std,
-    'STA': task.sta,
+    'STD': formatReportDateTime(task.std),
+    'STA': formatReportDateTime(task.sta),
     'Executor NIK': task.executor_nik,
     'Executor Name': task.executor_snapshot?.full_name ?? '',
     'Fleet': task.fleet_snapshot?.plat_number ?? '',
     'Fleet Type': task.fleet_snapshot?.fleet_type ?? '',
-    'Canceled At': task.canceled_at,
+    'Canceled At': formatReportDateTime(task.canceled_at),
     'Cancellation Reason': task.cancellation_note,
   }))
 
