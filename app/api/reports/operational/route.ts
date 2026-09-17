@@ -32,8 +32,8 @@ export async function GET(request: NextRequest) {
 
   const fromDate = new Date(`${from}T00:00:00+07:00`)
   const toDate = new Date(`${to}T00:00:00+07:00`)
-  const days = (toDate.getTime() - fromDate.getTime()) / 86400000
-  if (days < 0 || days > 7) {
+  const daysInclusive = Math.floor((toDate.getTime() - fromDate.getTime()) / 86400000) + 1
+  if (daysInclusive < 1 || daysInclusive > 7) {
     return NextResponse.json({ error: 'Rentang waktu maksimal 7 hari.' }, { status: 400 })
   }
 
