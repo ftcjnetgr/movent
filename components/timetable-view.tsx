@@ -167,45 +167,45 @@ export default function TimetableView({
   return (
     <div>
       <div className="dashboard-tabs">
-        <button className={view === 'database' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('database')}>By Database</button>
+        <button className={view === 'database' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('database')}>Berdasarkan Database</button>
         <button className={view === 'live' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('live')}>Live</button>
       </div>
 
       {view === 'database' ? (
         <>
           <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>As Origin</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>As Destination</button>
+            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Sebagai Titik Mulai</button>
+            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Sebagai Destinasi</button>
           </div>
 
           <section className="metric-grid">
-            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Unassigned</span><strong>{summary.unassigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Assigned</span><strong>{summary.assigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Canceled</span><strong>{summary.canceled}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum Ditugaskan</span><strong>{summary.unassigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Ditugaskan</span><strong>{summary.assigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><strong>{summary.canceled}</strong></button>
           </section>
 
           <section className="section-block">
             <div className="data-form">
               <div className="form-row">
-                <label>Route<select value={route} onChange={(event) => setRoute(event.target.value)}><option value="">Semua</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                <label>Category<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="">Semua</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select></label>
+                <label >Rute<select value={route} onChange={(event) => setRoute(event.target.value)}><option value="">Semua</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select></label>
+                <label >Kategori<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="">Semua</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select></label>
               </div>
               {direction === 'origin' ? (
                 <div className="form-row">
-                  <label>Start Point Type<select value={originType} onChange={(event) => setOriginType(event.target.value)}><option value="">Semua</option>{options.originTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label>Start Point<select value={origin} onChange={(event) => setOrigin(event.target.value)}><option value="">Semua</option>{options.origins.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label >Jenis Titik Mulai<select value={originType} onChange={(event) => setOriginType(event.target.value)}><option value="">Semua</option>{options.originTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label >Titik Mulai<select value={origin} onChange={(event) => setOrigin(event.target.value)}><option value="">Semua</option>{options.origins.map((item) => <option key={item}>{item}</option>)}</select></label>
                 </div>
               ) : (
                 <div className="form-row">
-                  <label>Destination Type<select value={destinationType} onChange={(event) => setDestinationType(event.target.value)}><option value="">Semua</option>{options.destinationTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label>Destination<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{options.destinations.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label >Jenis Destinasi<select value={destinationType} onChange={(event) => setDestinationType(event.target.value)}><option value="">Semua</option>{options.destinationTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label >Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{options.destinations.map((item) => <option key={item}>{item}</option>)}</select></label>
                 </div>
               )}
             </div>
           </section>
 
           <section className="data-table-card section-block timetable-shell">
-            <div className="section-heading"><div><h2>Plan Schedule</h2><p>{date}</p></div></div>
+            <div className="section-heading"><div><h2>Rencana Schedule</h2><p>{date}</p></div></div>
             <div className="timetable-scroll">
               <div className="timetable-grid">
                 <div className="timetable-axis-label">{direction === 'origin' ? 'Start Point' : 'Destination'}</div>
@@ -226,7 +226,7 @@ export default function TimetableView({
                             <strong>{item.trip}</strong>
                             <span>{direction === 'origin' ? item.destination : item.start_point}</span>
                             <small>{item.route} · {item.category}</small>
-                            {task ? <details><summary>Preview</summary><div>{task.transaction_id}<br />{task.executor_snapshot?.full_name ?? '-'} · {task.fleet_snapshot?.plat_number ?? '-'}</div></details> : <small>Unassigned</small>}
+                            {task ? <details><summary>Pratinjau</summary><div>{task.transaction_id}<br />{task.executor_snapshot?.full_name ?? '-'} · {task.fleet_snapshot?.plat_number ?? '-'}</div></details> : <small>Belum Ditugaskan</small>}
                           </div>
                         )
                       })}
@@ -241,14 +241,14 @@ export default function TimetableView({
       ) : (
         <section className="data-table-card section-block timetable-shell">
           <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>As Origin</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>As Destination</button>
+            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Sebagai Titik Mulai</button>
+            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Sebagai Destinasi</button>
           </div>
-          <div className="section-heading"><div><h2>Live Timetable</h2><p>Seluruh transaksi yang sudah dibuat atau di-assign.</p></div></div>
+          <div className="section-heading"><div><h2>Timetable Langsung</h2><p>Seluruh transaksi yang sudah dibuat atau di-assign.</p></div></div>
           <section className="metric-grid">
-            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Unassigned</span><strong>{liveSummary.unassigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Assigned</span><strong>{liveSummary.assigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Canceled</span><strong>{liveSummary.canceled}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum Ditugaskan</span><strong>{liveSummary.unassigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Ditugaskan</span><strong>{liveSummary.assigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><strong>{liveSummary.canceled}</strong></button>
           </section>
           <div className="timetable-scroll">
             <div className="timetable-grid">
@@ -268,7 +268,7 @@ export default function TimetableView({
                           <strong>{task.transaction_id}</strong>
                           <span>{direction === 'origin' ? task.destination ?? '-' : task.start_point ?? '-'}</span>
                           <small>{task.source_type === 'Extra Schedule' ? 'Extra Schedule' : task.task_type} · {task.fleet_snapshot?.plat_number ?? '-'}</small>
-                          <details><summary>Preview</summary><div>{task.executor_snapshot?.full_name ?? task.executor_nik ?? '-'}</div></details>
+                          <details><summary>Pratinjau</summary><div>{task.executor_snapshot?.full_name ?? task.executor_nik ?? '-'}</div></details>
                         </div>
                       )
                     })}
