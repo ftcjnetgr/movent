@@ -50,5 +50,7 @@ export default async function DispatcherAssignmentHistoryPage() {
             </tbody>
           </table>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
