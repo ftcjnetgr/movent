@@ -125,6 +125,18 @@ const navByRole: Record<string, NavGroup[]> = {
     },
   ],
 }
+const superUserGroup: NavGroup = {
+  label: 'Pengaturan',
+  icon: 'report',
+  items: [
+    { label: 'Profil Super User', href: '/super-user/profil', icon: 'user' },
+    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    { label: 'Kelola Pengguna', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
+    { label: 'Kelola Database', href: '/super-user/pengelolaan-database', icon: 'report' },
+    { label: 'Kelola Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
+  ],
+}
+
 const modeRoutes: Record<string, string> = {
   Controller: '/controller/beranda',
   Dispatcher: '/dispatcher/beranda',
@@ -186,7 +198,8 @@ export default function AppShellClient({
   const currentRole =
     Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ??
     (profile.role === 'Super User' ? 'Controller' : profile.role)
-  const navGroups = navByRole[currentRole] ?? []
+  const baseNavGroups = navByRole[currentRole] ?? []
+  const navGroups = profile.role === 'Super User' ? [...baseNavGroups, superUserGroup] : baseNavGroups
   const activeGroup = navGroups.find((group) => group.items.some((item) => item.href === pathname))?.label ?? ''
   const [openGroups, setOpenGroups] = useState<string[]>([])
 
@@ -279,16 +292,6 @@ export default function AppShellClient({
           })}
         </nav>
 
-        {profile.role === 'Super User' ? (
-          <div className="super-menu">
-            <div className="super-title">Pengaturan</div>
-            <Link href="/super-user/profil" onClick={closeMobile}><span className="nav-icon"><Icon name="user" /></span><span className="nav-link-text">Profil Super User</span></Link>
-            <Link href="/ganti-password" onClick={closeMobile}><span className="nav-icon"><Icon name="lock" /></span><span className="nav-link-text">Ganti Kata Sandi</span></Link>
-            <Link href="/super-user/pengelolaan-pengguna" onClick={closeMobile}><span className="nav-icon"><Icon name="user" /></span><span className="nav-link-text">Kelola Pengguna</span></Link>
-            <Link href="/super-user/pengelolaan-database" onClick={closeMobile}><span className="nav-icon"><Icon name="report" /></span><span className="nav-link-text">Kelola Database</span></Link>
-            <Link href="/super-user/pengelolaan-transaksi" onClick={closeMobile}><span className="nav-icon"><Icon name="clipboard" /></span><span className="nav-link-text">Kelola Transaksi</span></Link>
-          </div>
-        ) : null}
 
         <div className="sidebar-footer">
           <div className="sidebar-user-avatar">{(profile.full_name || profile.username || 'U').slice(0, 1).toUpperCase()}</div>
