@@ -1265,3 +1265,29 @@ th {
     gap: 5px;
   }
 }
+
+
+.login-brand-logo {
+  display: block;
+  width: 182px;
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.login-visual-logo {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: 190px;
+  height: auto;
+  margin-bottom: 34px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+@media (max-width: 640px) {
+  .login-brand-logo {
+    width: 158px;
+  }
+}
