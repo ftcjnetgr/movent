@@ -2,5 +2,6 @@ import DispatcherExtraSchedulePage from '@/components/dispatcher-extra-schedule-
 
 export default function DispatcherExtraScheduleRoute() {
   return (
+    <>
     <DispatcherExtraSchedulePage />)
 }
