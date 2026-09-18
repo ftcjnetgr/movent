@@ -9,5 +9,7 @@ export default async function MaintainerTimetablePage() {
   return (
     <>
     <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Timetable</h1><p>Lihat plan schedule dan transaksi live operasional.</p></div></div>
-      <TimetableView date={data.date} schedules={data.schedules} tasks={data.tasks} taskBySchedule={data.taskBySchedule} />)
+      <TimetableView date={data.date} schedules={data.schedules} tasks={data.tasks} taskBySchedule={data.taskBySchedule} />
+    </>
+  )
 }
