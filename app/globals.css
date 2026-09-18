@@ -1809,3 +1809,98 @@ th {
     flex-direction: column;
   }
 }
+
+
+/* ===== movent professional erp layer ===== */
+:root {
+  --ui-bg: #f6f8fb;
+  --ui-surface: #ffffff;
+  --ui-surface-subtle: #f8fafc;
+  --ui-border: #e5eaf0;
+  --ui-border-strong: #d7dee8;
+  --ui-text: #172033;
+  --ui-muted: #6b7687;
+  --ui-primary: #175fd6;
+  --ui-primary-soft: #edf4ff;
+  --ui-radius: 14px;
+  --ui-shadow: 0 1px 2px rgba(16,24,40,.03), 0 8px 24px rgba(16,24,40,.045);
+}
+
+body { background: var(--ui-bg); color: var(--ui-text); }
+button, .button-link, .link-button { border-radius: 10px; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
+button:not(:disabled):hover, .button-link:hover, .link-button:hover { transform: translateY(-1px); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(23,95,214,.16); outline-offset: 1px; }
+
+.sidebar { background: #fff; border-right-color: var(--ui-border); padding: 20px 14px; gap: 18px; }
+.sidebar-top { padding: 2px 6px 10px; border-bottom: 1px solid #eef1f5; }
+.sidebar-caption { color: #8a95a5; font-size: 11px; }
+.nav-group-toggle { background: transparent; color: #596577; font-weight: 700; }
+.nav-group-toggle:hover { background: #f5f7fa; color: var(--ui-text); }
+.nav-group.has-active > .nav-group-toggle { color: var(--ui-text); background: #f5f7fa; }
+.nav-link.active { background: var(--ui-primary-soft); color: var(--ui-primary); box-shadow: inset 3px 0 0 var(--ui-primary); }
+.nav-link { color: #667286; }
+.sidebar-footer { border-top-color: #eef1f5; padding: 14px 6px 0; }
+.sidebar-user-avatar { background: var(--ui-primary-soft); color: var(--ui-primary); }
+
+.topbar { height: 68px; padding: 0 30px; border-bottom-color: var(--ui-border); box-shadow: 0 1px 0 rgba(16,24,40,.02); }
+.topbar-title { display: grid; gap: 2px; }
+.topbar-page { font-size: 15px; font-weight: 700; color: var(--ui-text); }
+.role-label { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8b96a7; }
+.topbar-user { padding: 7px 10px; border: 1px solid var(--ui-border); border-radius: 999px; background: #fafbfd; font-size: 12px; }
+.topbar-user-dot { width: 7px; height: 7px; border-radius: 999px; background: #22a06b; display: inline-block; margin-right: 7px; }
+
+.page-content { max-width: none; padding: 30px; }
+.page-heading { align-items: flex-end; margin-bottom: 22px; }
+.page-heading h1 { font-size: clamp(26px, 2.5vw, 34px); letter-spacing: -.035em; color: #142033; }
+.page-heading p { margin-top: 8px; font-size: 13px; }
+.eyebrow { font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #8792a3; }
+
+.dashboard-tabs { gap: 4px; padding: 4px; width: fit-content; max-width: 100%; border: 1px solid var(--ui-border); border-radius: 12px; background: #f8fafc; }
+.dashboard-tab { padding: 8px 13px; border-radius: 8px; background: transparent; color: #697588; font-size: 12px; font-weight: 700; }
+.dashboard-tab:hover { background: #eef2f7; color: var(--ui-text); }
+.dashboard-tab.active { background: #fff; color: var(--ui-text); box-shadow: 0 1px 3px rgba(16,24,40,.08); }
+
+.section-block { margin-top: 26px; }
+.section-heading { margin-bottom: 12px; }
+.section-heading h2 { font-size: 17px; letter-spacing: -.015em; }
+.section-heading p { margin-top: 5px; font-size: 12px; }
+.metric-grid { gap: 10px; grid-template-columns: repeat(4, minmax(0,1fr)); }
+.metric-card, .data-table-card, .task-card, .task-create-workspace { border-color: var(--ui-border); border-radius: var(--ui-radius); box-shadow: var(--ui-shadow); }
+.metric-card { min-height: 94px; padding: 16px; }
+.metric-card span { font-size: 11px; font-weight: 600; color: #788496; }
+.metric-card strong { margin-top: 9px; font-size: 25px; letter-spacing: -.025em; }
+.metric-card:hover { border-color: var(--ui-border-strong); }
+.alert-card { background: #fffaf0; border-color: #f0dfb4; }
+
+.data-form { gap: 12px; }
+.data-form label, .compact-form label { color: #465367; font-size: 12px; font-weight: 700; }
+.data-form input, .data-form select, .data-form textarea, .compact-form input, .compact-form select, .compact-form textarea, td select { min-height: 42px; border-color: var(--ui-border-strong); border-radius: 10px; padding: 9px 11px; color: var(--ui-text); background: #fff; }
+.data-form input::placeholder, .compact-form input::placeholder { color: #a0a9b7; }
+.data-form input:focus, .data-form select:focus, .data-form textarea:focus, .compact-form input:focus, .compact-form select:focus, .compact-form textarea:focus { border-color: #6d9fe8; box-shadow: 0 0 0 3px rgba(23,95,214,.08); }
+
+.task-list { gap: 12px; }
+.task-card { padding: 20px; gap: 15px; }
+.task-card h2 { font-size: 17px; letter-spacing: -.015em; }
+.task-summary-grid { gap: 0; }
+.task-summary-grid > div { padding: 10px 12px 10px 0; border-bottom: 1px solid #eef1f5; }
+.task-summary-grid span { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+.task-summary-grid strong { font-size: 13px; }
+.status-badge { border: 1px solid transparent; padding: 5px 9px; font-size: 10px; letter-spacing: .01em; }
+
+.data-table-card { padding: 0; }
+.data-table-card > .table-wrap { padding: 0 4px; }
+table { min-width: 760px; }
+th, td { padding: 13px 12px; border-bottom-color: #edf1f5; }
+th { background: #f8fafc; color: #697588; font-size: 10px; }
+tbody tr:hover { background: #fafcff; }
+
+.timetable-shell { box-shadow: var(--ui-shadow); }
+.timetable-item { border-radius: 10px; box-shadow: 0 3px 10px rgba(16,24,40,.06); }
+.timetable-item:hover { z-index: 4; box-shadow: 0 8px 22px rgba(16,24,40,.12); }
+
+.alert-modal { border-radius: 16px; box-shadow: 0 30px 80px rgba(15,23,42,.2); }
+.alert-detail-item { border-color: var(--ui-border); background: #fafbfd; }
+
+@media (min-width: 1100px) { .metric-grid { grid-template-columns: repeat(5, minmax(0,1fr)); } }
+@media (max-width: 1024px) { .page-content { padding: 22px; } .metric-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 640px) { .page-content { padding: 18px 14px; } .metric-grid { grid-template-columns: 1fr; } .topbar { padding: 0 14px; } .topbar-mode { max-width: 62vw; } .dashboard-tabs { width: 100%; overflow-x: auto; } }
