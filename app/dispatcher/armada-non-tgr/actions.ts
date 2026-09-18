@@ -22,12 +22,12 @@ function manualTimestamp(value: string) {
 
 export async function submitNonTgrDepartureAction(formData: FormData): Promise<Result> {
   const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const departure = String(formData.get('departure') ?? '').trim()
   const timestamp = manualTimestamp(departure)
-  if (!transactionId || !timestamp) return { error: 'Tanggal dan jam keberangkatan wajib diisi.' }
+  if (!transactionId || !timestamp) return { error: 'Tanggal dan jam keberangkatan perlu diisi dulu, ya.' }
 
   const admin = createAdminClient()
   const { data: task } = await admin
@@ -59,12 +59,12 @@ export async function submitNonTgrDepartureAction(formData: FormData): Promise<R
 
 export async function submitNonTgrArrivalAction(formData: FormData): Promise<Result> {
   const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const arrival = String(formData.get('arrival') ?? '').trim()
   const timestamp = manualTimestamp(arrival)
-  if (!transactionId || !timestamp) return { error: 'Tanggal dan jam kedatangan wajib diisi.' }
+  if (!transactionId || !timestamp) return { error: 'Tanggal dan jam kedatangan perlu diisi dulu, ya.' }
 
   const admin = createAdminClient()
   const { data: task } = await admin
