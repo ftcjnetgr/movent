@@ -62,7 +62,11 @@ export default function AppShellClient({
     <div className="app-shell">
       <aside className="sidebar">
         <div>
-          <div className="sidebar-brand">movent</div>
+          <img
+            src="/assets/branding/movent-dark.svg"
+            alt="MOVENT"
+            className="sidebar-brand-logo"
+          />
           <div className="sidebar-caption">Movement Management</div>
         </div>
 
