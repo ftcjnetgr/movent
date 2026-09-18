@@ -18,7 +18,7 @@ export default async function OperationHistoryPage() {
   const admin = createAdminClient()
   const { data: requests } = await admin
     .from('tasks')
-    .select('transaction_id, status, start_point, destination, std, sta, created_at, canceled_at, cancellation_note')
+    .select('transaction_id, status, start_point, destination, std, sta, created_at, canceled_at, cancellation_note, executor_snapshot, fleet_snapshot')
     .eq('source_type', 'Extra Schedule')
     .eq('requested_by', profile.id)
     .order('created_at', { ascending: false })
@@ -77,6 +77,8 @@ export default async function OperationHistoryPage() {
                         <div><span className="muted">STD</span><strong>{formatDateTime(request.std)}</strong></div>
                         <div><span className="muted">STA</span><strong>{formatDateTime(request.sta)}</strong></div>
                         <div><span className="muted">Status</span><strong>{request.status}</strong></div>
+                        <div><span className="muted">Executor</span><strong>{request.executor_snapshot?.executor_nik ?? '-'}{request.executor_snapshot?.full_name ? ' - ' + request.executor_snapshot.full_name : ''}</strong></div>
+                        <div><span className="muted">Armada</span><strong>{request.fleet_snapshot?.plat_number ?? '-'}{request.fleet_snapshot?.fleet_type ? ' - ' + request.fleet_snapshot.fleet_type : ''}</strong></div>
                         <div><span className="muted">Dibuat</span><strong>{formatDateTime(request.created_at)}</strong></div>
                         {request.cancellation_note ? (
                           <div><span className="muted">Catatan Pembatalan</span><strong>{request.cancellation_note}</strong></div>
