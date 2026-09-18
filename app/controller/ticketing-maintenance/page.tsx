@@ -19,7 +19,7 @@ export default async function ControllerTicketingMaintenancePage() {
       <section className="section-block">
         <div className="metric-grid">
           {Object.entries(data.ticketCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
-          <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlerts.length}</strong></div>
+          <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlertCount}</strong></div>
         </div>
       </section>
       <section className="section-block">
