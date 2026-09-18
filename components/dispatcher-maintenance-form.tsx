@@ -74,19 +74,19 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
     <section>
       <section className="section-grid two-column">
         <div className="metric-card">
-          <div className="card-title">Buat tiket</div>
+          <div className="card-title">Buat tiket maintenance</div>
           <form onSubmit={handleCreate} className="data-form">
-            <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceOptions} placeholder="Pilih Maintenance" required />
-            <SearchableMasterSelect label="Lokasi Keberadaan Armada" name="location" options={locationOptions} placeholder="Pilih Lokasi" required />
+            <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceOptions} placeholder="Pilih jenis maintenance" required />
+            <SearchableMasterSelect label="Lokasi Keberadaan Armada" name="location" options={locationOptions} placeholder="Pilih lokasi armada" required />
             <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih Armada" required />
             {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
             {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
-            <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Membuat tiket...' : 'Buat tiket'}</button>
+            <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Sedang membuat tiket...' : 'Buat tiket maintenance'}</button>
           </form>
         </div>
 
         <div className="metric-card">
-          <div className="card-title">Pratinjau tiket</div>
+          <div className="card-title">Pratinjau tiket maintenance</div>
           {state.preview ? (
             <>
               <h2>{state.preview.transactionId}</h2>
@@ -95,13 +95,13 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                 <div><span className="muted">Lokasi</span><strong>{state.preview.location}</strong></div>
                 <div><span className="muted">Armada</span><strong>{state.preview.platNumber}</strong></div>
               </div>
-              <p className="muted">Detail tiket siap dibagikan ke WhatsApp.</p>
+              <p className="muted">Tiketnya sudah siap dibagikan ke WhatsApp.</p>
               <a
                 className="button-link"
                 href={'https://wa.me/?text=' + encodeURIComponent(
                   [
                     'Tiket Maintenance MOVENT',
-                    'Transaction ID: ' + state.preview.transactionId,
+                    'ID Transaksi: ' + state.preview.transactionId,
                     'Daftar Maintenance: ' + state.preview.maintenanceList,
                     'Lokasi: ' + state.preview.location,
                     'Armada: ' + state.preview.platNumber,
@@ -114,17 +114,17 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
               </a>
             </>
           ) : (
-            <p className="muted">Pratinjau akan muncul setelah tiket berhasil dibuat.</p>
+            <p className="muted">Pratinjau bakal muncul setelah tiket berhasil dibuat.</p>
           )}
         </div>
       </section>
 
       <section className="data-table-card section-block">
-        <div className="section-heading"><div><h2>Tiket yang dibuat</h2><p>Ticketing yang masih tersimpan di riwayat pembuatan.</p></div></div>
+        <div className="section-heading"><div><h2>Tiket yang sudah dibuat</h2><p>Tiket yang masih tersimpan di riwayat pembuatan.</p></div></div>
         {cancelMessage ? <p className="form-success">{cancelMessage}</p> : null}
         <div className="table-wrap">
           <table>
-            <thead><tr><th>Transaction ID</th><th>Maintenance</th><th>Lokasi</th><th>Armada</th><th>Status</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>ID Transaksi</th><th>Maintenance</th><th>Lokasi</th><th>Armada</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody>
               {tickets.map((ticket) => (
                 <tr key={ticket.transaction_id}>
@@ -139,8 +139,8 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                         <summary className="link-button">Batalkan</summary>
                         <form onSubmit={handleCancel} className="compact-form" style={{marginTop:12}}>
                           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-                          <input name="note" placeholder="Alasan pembatalan" required />
-                          <button type="submit" disabled={isCancelPending}>Konfirmasi batal</button>
+                          <input name="note" placeholder="Tulis alasan pembatalan" required />
+                          <button type="submit" disabled={isCancelPending}>Ya, batalkan</button>
                         </form>
                       </details>
                     ) : ticket.status === 'Canceled' ? (
@@ -151,7 +151,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                   </td>
                 </tr>
               ))}
-              {!tickets.length ? <tr><td colSpan={6}><div className="empty-state">Belum ada tiket yang dibuat.</div></td></tr> : null}
+              {!tickets.length ? <tr><td colSpan={6}><div className="empty-state">Belum ada tiket yang dibuat untuk sekarang.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
