@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -22,8 +21,7 @@ export default async function MaintainerBerandaPage() {
   const data = await getDashboardData(profile)
 
   return (
-    <AppShell>
-      <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Beranda</h1><p>Pantau tugas dan ticketing maintenance armada.</p></div></div>
+    <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Beranda</h1><p>Pantau tugas dan ticketing maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab active" href="/maintainer/beranda">Tugas</a>
         <a className="dashboard-tab" href="/maintainer/timetable">Jadwal</a>
@@ -54,7 +52,5 @@ export default async function MaintainerBerandaPage() {
           {Object.entries(data.ticketCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
           <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlertCount}</strong></div>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
