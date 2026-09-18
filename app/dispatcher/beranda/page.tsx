@@ -72,6 +72,7 @@ export default async function DispatcherBerandaPage() {
   return (
     <>
       <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
+
       <div className="dashboard-tabs">
         <Link className="dashboard-tab active" href="/dispatcher/beranda">Tugas</Link>
         <Link className="dashboard-tab" href="/dispatcher/timetable">Jadwal</Link>
@@ -80,16 +81,14 @@ export default async function DispatcherBerandaPage() {
 
       <section className="section-block">
         <div className="metric-grid">
-          {Object.entries(dashboard.taskCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>)}
-          
+          {Object.entries(dashboard.taskCounts).map(([status, count]) => (
+            <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>
+          ))}
         </div>
       </section>
 
       <DashboardAlertList
-        taskAlerts={dashboard.taskAlerts.map((alert) => ({
-          ...alert,
-          targetAt: alert.targetAt.toISOString(),
-        }))}
+        taskAlerts={dashboard.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))}
         ticketAlerts={dashboard.ticketAlerts}
       />
 
@@ -123,8 +122,11 @@ export default async function DispatcherBerandaPage() {
 
       <section className="section-block">
         <div className="metric-grid">
-          {Object.entries(dashboard.ticketCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
+          {Object.entries(dashboard.ticketCounts).map(([status, count]) => (
+            <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>
+          ))}
         </div>
+      </section>
     </>
   )
 }
