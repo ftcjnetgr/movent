@@ -22,9 +22,12 @@ export default function SearchableMasterSelect({
   placeholder: string
   required?: boolean
   defaultValue?: string
+  value?: string
+  onValueChange?: (value: string) => void
 }) {
   const [query, setQuery] = useState('')
-  const [value, setValue] = useState(defaultValue)
+  const [internalValue, setInternalValue] = useState(defaultValue)
+  const selectedValue = value ?? internalValue
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase()
@@ -46,8 +49,12 @@ export default function SearchableMasterSelect({
       />
       <select
         name={name}
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
+        value={selectedValue}
+        onChange={(event) => {
+          const nextValue = event.target.value
+          setInternalValue(nextValue)
+          onValueChange?.(nextValue)
+        }}
         required={required}
       >
         <option value="">{placeholder}</option>
