@@ -22,6 +22,7 @@ export default async function ArmadaNonTgrPage() {
     .order('created_at', { ascending: false })
 
   return (
+    <>
     <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Armada Non-TGR</h1><p>Seluruh proses Armada Non-TGR dikerjakan oleh Dispatcher.</p></div></div>
       <section className="data-table-card">
         <div className="table-wrap">
