@@ -11,8 +11,8 @@ export default async function ControllerTimetablePage() {
     <div className="page-heading">
         <div>
           <span className="eyebrow">Controller</span>
-          <h1>Timetable</h1>
-          <p>Rencanakan jadwal dari database dan pantau kondisi live.</p>
+          <h1>Jadwal</h1>
+          <p>Pantau jadwal dari database dan kondisi transaksi.</p>
         </div>
       </div>
       <TimetableView date={data.date} schedules={data.schedules} tasks={data.tasks} taskBySchedule={data.taskBySchedule} />
