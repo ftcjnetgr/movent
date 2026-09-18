@@ -2,11 +2,13 @@
 
 import { useActionState } from 'react'
 import { createExtraScheduleAction } from '@/app/operation/request-extra-schedule/actions'
+import SearchableMasterSelect from '@/components/searchable-master-select'
 
 const initialState: { error?: string; success?: string } = {}
 
 export default function OperationRequestExtraScheduleForm({ locations }: { locations: string[] }) {
   const [state, formAction, pending] = useActionState(createExtraScheduleAction, initialState)
+  const locationOptions = locations.map((location) => ({ value: location, label: location, searchText: location }))
 
   return (
     <form action={formAction} className="data-form">
