@@ -103,7 +103,11 @@ export async function loginAction(
       }
     }
 
-    return { error: 'Username atau kata sandi salah. Coba lagi, ya.' }
+    const diagnostic = signInError
+      ? `Login diagnostic: ${signInError.code ?? 'no_code'} | ${signInError.status ?? 'no_status'} | ${signInError.message}`
+      : 'Login diagnostic: Auth berhasil tetapi user tidak dikembalikan.'
+
+    return { error: diagnostic }
   }
 
   await admin
