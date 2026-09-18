@@ -112,11 +112,13 @@ export default function TimetableView({
 
   const filteredTasks = useMemo(() => tasks.filter((task) => {
     if (direction === 'origin' && origin && task.start_point !== origin) return false
-    if (direction === 'origin' && originType) return true
     if (direction === 'destination' && destination && task.destination !== destination) return false
-    if (direction === 'destination' && destinationType) return true
     return true
-  }).sort((a, b) => (minutesValue(a.std) ?? 9999) - (minutesValue(b.std) ?? 9999)), [tasks, direction, origin, originType, destination, destinationType])
+  }).sort((a, b) => {
+    const aTime = direction === 'origin' ? minutesValue(a.std) : minutesValue(a.sta)
+    const bTime = direction === 'origin' ? minutesValue(b.std) : minutesValue(b.sta)
+    return (aTime ?? 9999) - (bTime ?? 9999)
+  }), [tasks, direction, origin, destination])
 
   const summary = useMemo(() => ({
     unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
