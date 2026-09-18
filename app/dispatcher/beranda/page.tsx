@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import DispatcherCreateTask from '@/components/dispatcher-create-task'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -56,6 +57,9 @@ export default async function DispatcherBerandaPage() {
           <div className="metric-card"><span>Cycle Canceled</span><strong>{dashboard.averages.canceledCycle === null ? '-' : `${Math.round(dashboard.averages.canceledCycle)} m`}</strong></div>
         </div>
       </section>
+
+      <TaskDurationVisualization rows={dashboard.taskDurations} />
+      <TicketDurationVisualization rows={dashboard.ticketDurations} />
 
       <section className="section-block">
         <div className="metric-grid">
