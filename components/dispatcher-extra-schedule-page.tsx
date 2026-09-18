@@ -54,7 +54,7 @@ export default function DispatcherExtraSchedulePage() {
   }
 
   return (
-    <div className="page-heading">
+    <div>
         <div>
           <span className="eyebrow">Dispatcher</span>
           <h1>Extra Schedule</h1>
@@ -109,5 +109,6 @@ export default function DispatcherExtraSchedulePage() {
           </div>
         ) : null}
       </section>
+    </div>
   )
 }
