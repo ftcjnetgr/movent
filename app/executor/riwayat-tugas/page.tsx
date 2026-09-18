@@ -24,6 +24,7 @@ export default async function ExecutorHistoryPage() {
   const { data: tasks } = await query
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Executor</span>
