@@ -14,16 +14,17 @@ export type AppProfile = {
 
 export const getCurrentProfile = cache(async (): Promise<AppProfile> => {
   const supabase = await createClient()
-  const { data: userData, error: userError } = await supabase.auth.getUser()
+  const { data: claimsData, error: claimsError } = await supabase.auth.getClaims()
+  const userId = claimsData?.claims?.sub
 
-  if (userError || !userData.user) {
+  if (claimsError || !userId || typeof userId !== 'string') {
     redirect('/login')
   }
 
   const { data: profile, error: profileError } = await supabase
     .from('user_profiles')
     .select('id, username, full_name, nik, role, status')
-    .eq('auth_user_id', userData.user.id)
+    .eq('auth_user_id', userId)
     .maybeSingle()
 
   if (profileError || !profile || profile.status === 'Locked') {
