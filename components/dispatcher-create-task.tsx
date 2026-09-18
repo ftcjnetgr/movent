@@ -102,7 +102,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
   return (
     <section className="section-block">
-      <div className="section-heading"><div><h2>Buat Tugas</h2><p>Mulai penugasan dari sini sesuai jenis flow.</p></div></div>
+      <div className="section-heading"><div><h2>Buat Tugas</h2><p>Mulai penugasan dari sini sesuai alurnya.</p></div></div>
       <div className="metric-card">
         <form action={formAction} className="data-form">
           <div className="form-row">
@@ -127,15 +127,15 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
               label="Jadwal"
               name="scheduleId"
               options={scheduleOptions}
-              placeholder="Pilih Jadwal"
+              placeholder="Pilih jadwal"
               required
             />
           ) : null}
 
           {taskType === 'Supply' && ownership === 'Non-TGR' ? (
             <div className="form-row">
-              <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih Titik Mulai" required />
-              <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih Destinasi" required />
+              <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
+              <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
             </div>
           ) : taskType === 'Distribusi Mobil' ? (
             <div className="form-row">
@@ -153,8 +153,8 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
           {usesInternalExecutor ? (
             <div className="form-row">
-              <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih Executor" required />
-              <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih Armada" required />
+              <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
+              <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
             </div>
           ) : null}
 
@@ -170,16 +170,16 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
                 <label>Berat<input name="sjWeight" type="number" step="any" min="0" required /></label>
               </div>
               <div className="form-row">
-                <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih Produk" required />
-                <label>Catatan SJ<textarea name="sjNote" rows={2} /></label>
+                <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih produk" required />
+                <label>Catatan<textarea name="sjNote" rows={2} /></label>
               </div>
             </>
           ) : null}
 
-          {taskType === 'Supply' && ownership === 'TGR' ? <p className="muted">STD dan STA mengikuti Jadwal yang dipilih.</p> : null}
+          {taskType === 'Supply' && ownership === 'TGR' ? <p className="muted">STD dan STA otomatis mengikuti jadwal yang kamu pilih.</p> : null}
           {state.preview ? (
         <div className="metric-card section-block">
-          <div className="card-title">Pratinjau SJ</div>
+          <div className="card-title">Pratinjau surat jalan</div>
           <div className="task-summary-grid">
             <div><span>ID Transaksi</span><strong>{state.preview.transactionId}</strong></div>
             <div><span>Titik Mulai</span><strong>{state.preview.startPoint}</strong></div>
@@ -201,7 +201,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
       {state.error ? <p className="form-error">{state.error}</p> : null}
           {state.success ? <p className="form-success">{state.success}</p> : null}
-          <button type="submit" disabled={pending}>{pending ? 'Membuat tugas...' : 'Buat tugas'}</button>
+          <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
         </form>
       </div>
     </section>
