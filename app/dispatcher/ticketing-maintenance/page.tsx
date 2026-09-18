@@ -22,7 +22,7 @@ export default async function DispatcherTicketingMaintenancePage() {
           <div className="metric-card alert-card"><span>Peringatan</span><strong>{data.ticketPeringatanCount}</strong></div>
         </div>
       </section>
-      <DashboardPeringatanList ticketPeringatans={data.ticketPeringatans} />
+      <DashboardPeringatanList ticketAlerts={data.ticketAlerts} />
 
       <TicketDurationVisualization rows={data.ticketDurations} />
     </AppShell>
