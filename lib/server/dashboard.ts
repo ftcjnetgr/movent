@@ -117,14 +117,14 @@ export async function getDashboardData(profile: AppProfile) {
   const day = ((new Date(date + 'T12:00:00+07:00').getUTCDay() + 6) % 7) + 1
   const now = new Date()
 
-  const allTaskBySchedule = new Map(
+  const usedScheduleIds = new Set(
     all
-      .filter((task) => task.schedule_id && task.status !== 'Canceled')
-      .map((task) => [task.schedule_id as string, task]),
+      .map((task) => task.schedule_id)
+      .filter((scheduleId): scheduleId is string => Boolean(scheduleId)),
   )
 
   const unassignedAlerts: TaskAlert[] = (schedules ?? [])
-    .filter((schedule) => schedule.schedule_day === day && !allTaskBySchedule.has(schedule.schedule_id))
+    .filter((schedule) => schedule.schedule_day === day && !usedScheduleIds.has(schedule.schedule_id))
     .map((schedule) => ({
       kind: 'unassigned' as const,
       scheduleId: schedule.schedule_id,
