@@ -103,17 +103,7 @@ export default async function ControllerBerandaPage() {
           {Object.entries(data.ticketCounts).map(([status, count]) => (
             <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>
           ))}
-          <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlertCount}</strong></div>
         </div>
-        <div className="metric-grid">
-          <div className="metric-card"><span>Created → Accepted</span><strong>{formatMinutes(data.ticketAverages.createdAccepted)}</strong></div>
-          <div className="metric-card"><span>Accepted → In Progress</span><strong>{formatMinutes(data.ticketAverages.acceptedInProgress)}</strong></div>
-          <div className="metric-card"><span>In Progress → Completed</span><strong>{formatMinutes(data.ticketAverages.inProgressCompleted)}</strong></div>
-          <div className="metric-card"><span>Cycle Completed</span><strong>{formatMinutes(data.ticketAverages.completedCycle)}</strong></div>
-          <div className="metric-card"><span>Cycle Canceled</span><strong>{formatMinutes(data.ticketAverages.canceledCycle)}</strong></div>
-        </div>
-
-      </section>
     </>
   )
 }
