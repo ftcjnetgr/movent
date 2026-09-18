@@ -225,7 +225,7 @@ export default function AppShellClient({
   }
 
   return (
-    <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'sidebar-mobile-open' : ''} ${navigating ? 'is-navigating' : ''}`}>
+    <div className={`app-shell role-${currentRole.toLowerCase().replace(/[^a-z0-9]+/g, '-')} ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'sidebar-mobile-open' : ''} ${navigating ? 'is-navigating' : ''}`}>
       {navigating ? <div className="route-progress" aria-label="Memuat halaman" /> : null}
 
       <aside className="sidebar">
