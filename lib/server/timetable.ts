@@ -25,9 +25,13 @@ export async function getTimetableData(profile: AppProfile) {
       .order('std'),
   ])
 
+  const visibleTasks = (allTasks ?? []).filter((task) =>
+    task.source_type !== 'Extra Schedule' || task.status !== 'Requested'
+  )
+
   const tasks = profile.role === 'Dispatcher'
-    ? (allTasks ?? []).filter((task) => task.created_by === profile.id || task.fleet_ownership === 'Non-TGR')
-    : (allTasks ?? [])
+    ? visibleTasks.filter((task) => task.created_by === profile.id || task.fleet_ownership === 'Non-TGR')
+    : visibleTasks
 
   const taskBySchedule = new Map(tasks.filter((task) => task.schedule_id).map((task) => [task.schedule_id as string, task]))
 
