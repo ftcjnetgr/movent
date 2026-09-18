@@ -22,14 +22,43 @@ function statusLabel(status: string) {
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
-  const [{ data: locations }, { data: schedules }, { data: executors }, { data: fleets }, { data: products }, dashboard] = await Promise.all([
+  const [{ data: locations }, { data: schedules }, { data: executors }, { data: fleets }, { data: products }] = await Promise.all([
     admin.from('locations').select('location').eq('status', 'Active').order('location'),
     admin.from('schedules').select('schedule_id, route, category, start_point, destination, std, sta, trip').eq('status', 'Active').order('schedule_day').order('std'),
     admin.from('executors').select('executor_nik, full_name').eq('status', 'Active').order('full_name'),
     admin.from('fleets').select('plat_number, fleet_type').eq('status', 'Active').order('plat_number'),
     admin.from('products').select('product').eq('status', 'Active').order('product'),
-    getDashboardData(profile),
   ])
+
+  const emptyDashboard = {
+    taskCounts: { Assigned: 0, Accepted: 0, Driving: 0, Completed: 0 },
+    ticketCounts: { Created: 0, Accepted: 0, 'In Progress': 0, Completed: 0 },
+    taskAlerts: [] as Awaited<ReturnType<typeof getDashboardData>>['taskAlerts'],
+    ticketAlerts: [] as Awaited<ReturnType<typeof getDashboardData>>['ticketAlerts'],
+    ticketAlertCount: 0,
+    taskDurations: [] as Awaited<ReturnType<typeof getDashboardData>>['taskDurations'],
+    ticketDurations: [] as Awaited<ReturnType<typeof getDashboardData>>['ticketDurations'],
+    averages: {
+      assignedAccepted: null,
+      acceptedDriving: null,
+      drivingCompleted: null,
+      completedCycle: null,
+      canceledCycle: null,
+    },
+    taskAveragesNonTgr: {
+      assignedDriving: null,
+      drivingCompleted: null,
+      completedCycle: null,
+      canceledCycle: null,
+    },
+  }
+
+  let dashboard = emptyDashboard
+  try {
+    dashboard = await getDashboardData(profile)
+  } catch (error) {
+    console.error('Dispatcher dashboard data failed:', error)
+  }
 
   return (
     <>
@@ -48,7 +77,12 @@ export default async function DispatcherBerandaPage() {
       </section>
 
       <DashboardAlertList
-        taskAlerts={dashboard.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))}
+        taskAlerts={dashboard.taskAlerts.map((alert) => {
+          const targetAt = alert.targetAt instanceof Date && !Number.isNaN(alert.targetAt.getTime())
+            ? alert.targetAt.toISOString()
+            : new Date().toISOString()
+          return { ...alert, targetAt }
+        })}
         ticketAlerts={dashboard.ticketAlerts}
       />
 
