@@ -36,5 +36,7 @@ export default async function RequestExtraSchedulePage() {
             <div><strong>Selesai</strong><span>Semua proses jadwal tambahan sudah selesai.</span></div>
           </div>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
