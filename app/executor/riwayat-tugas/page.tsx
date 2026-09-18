@@ -53,5 +53,7 @@ export default async function ExecutorHistoryPage() {
             </tbody>
           </table>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
