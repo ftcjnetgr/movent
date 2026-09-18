@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { addMasterRowAction, deleteMasterRowAction, importMasterDatabaseAction, updateMasterRowAction } from './actions'
@@ -62,8 +61,7 @@ export default async function DatabaseManagementPage({
   const { data: rows } = await rowsQuery.limit(50)
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
           <h1>Kelola Database</h1>
@@ -152,7 +150,5 @@ export default async function DatabaseManagementPage({
             </tbody>
           </table>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
