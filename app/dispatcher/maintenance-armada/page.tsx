@@ -21,6 +21,7 @@ export default async function DispatcherMaintenanceArmadaPage() {
   ])
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Dispatcher</span>
