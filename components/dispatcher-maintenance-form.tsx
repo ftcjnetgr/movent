@@ -7,7 +7,7 @@ import {
 } from '@/app/dispatcher/maintenance-armada/actions'
 import SearchableMasterSelect from '@/components/searchable-master-select'
 
-const initialState: {
+type MaintenanceFormState = {
   error?: string
   success?: string
   transactionId?: string
@@ -17,7 +17,9 @@ const initialState: {
     location: string
     platNumber: string
   }
-} = {}
+}
+
+const initialState: MaintenanceFormState = {}
 
 type Ticket = {
   transaction_id: string
@@ -38,7 +40,7 @@ type Props = {
 }
 
 export default function DispatcherMaintenanceForm({ maintenanceLists, locations, fleets, tickets }: Props) {
-  const [state, formAction, pending] = useActionState(createMaintenanceTicketAction, initialState)
+  const [state, formAction, pending] = useActionState<MaintenanceFormState, FormData>(createMaintenanceTicketAction, initialState)
   const [cancelMessage, setCancelMessage] = useState('')
   const [isCancelPending, startCancelTransition] = useTransition()
   const maintenanceOptions = maintenanceLists.map((item) => ({ value: item, label: item, searchText: item }))
