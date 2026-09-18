@@ -23,13 +23,13 @@ export default async function MaintainerTicketMaintenancePage() {
         <div>
           <span className="eyebrow">Maintainer</span>
           <h1>Tiket Maintenance</h1>
-          <p>Terima dan proses tiket maintenance armada.</p>
+          <p>Terima lalu kerjakan tiket maintenance armada.</p>
         </div>
       </div>
 
       <section className="task-list">
         {visible.map((ticket) => <MaintainerTicketCard key={ticket.transaction_id} ticket={ticket} />)}
-        {visible.length === 0 ? <div className="metric-card"><span>Tidak ada tiket aktif</span><strong>0</strong><p>Tiket baru akan muncul di sini saat Dispatcher membuat tiket.</p></div> : null}
+        {visible.length === 0 ? <div className="metric-card"><span>Belum ada tiket aktif</span><strong>0</strong><p>Tiket baru bakal muncul di sini setelah Dispatcher membuatnya.</p></div> : null}
       </section>
     </AppShell>
   )
