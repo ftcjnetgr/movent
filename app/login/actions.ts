@@ -46,22 +46,36 @@ export async function loginAction(
 
   let authUserId = profile.auth_user_id as string | null
 
-  if (!authUserId && profile.must_change_password && password === '123456') {
-    const { data: createdAuth, error: createAuthError } = await admin.auth.admin.createUser({
-      email: profile.email,
-      password: '123456',
-      email_confirm: true,
-    })
+  if (password === '123456' && profile.must_change_password) {
+    if (authUserId) {
+      const { error: resetAuthError } = await admin.auth.admin.updateUserById(authUserId, {
+        password: '123456',
+      })
 
-    if (createAuthError || !createdAuth.user) {
-      return { error: 'Akun kamu belum siap untuk masuk. Hubungi Super User, ya.' }
+      if (resetAuthError) {
+        return { error: 'Akun kamu belum siap untuk masuk. Hubungi Super User, ya.' }
+      }
+    } else {
+      const { data: createdAuth, error: createAuthError } = await admin.auth.admin.createUser({
+        email: profile.email,
+        password: '123456',
+        email_confirm: true,
+      })
+
+      if (createAuthError || !createdAuth.user) {
+        return { error: 'Akun kamu belum siap untuk masuk. Hubungi Super User, ya.' }
+      }
+
+      authUserId = createdAuth.user.id
+      const { error: linkError } = await admin
+        .from('user_profiles')
+        .update({ auth_user_id: authUserId })
+        .eq('id', profile.id)
+
+      if (linkError) {
+        return { error: 'Akun kamu belum siap untuk masuk. Hubungi Super User, ya.' }
+      }
     }
-
-    authUserId = createdAuth.user.id
-    await admin
-      .from('user_profiles')
-      .update({ auth_user_id: authUserId })
-      .eq('id', profile.id)
   }
 
   const supabase = await createClient()
