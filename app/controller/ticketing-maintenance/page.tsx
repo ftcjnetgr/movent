@@ -1,14 +1,7 @@
 import AppShell from '@/components/app-shell'
+import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
-
-function deadlineLabel(status: string, value: string | null) {
-  if (!value) return '-'
-  const threshold = status === 'Created' ? 3 * 60 : status === 'Accepted' ? 24 * 60 : 72 * 60
-  const elapsed = (Date.now() - new Date(value).getTime()) / 60000
-  if (elapsed < threshold) return `Countdown ${Math.round(threshold - elapsed)} m`
-  return `Count After ${Math.round(elapsed - threshold)} m`
-}
 
 export default async function ControllerTicketingMaintenancePage() {
   const profile = await getCurrentProfile()
@@ -37,17 +30,7 @@ export default async function ControllerTicketingMaintenancePage() {
           <div className="metric-card"><span>Cycle Canceled</span><strong>{data.ticketAverages.canceledCycle === null ? '-' : `${Math.round(data.ticketAverages.canceledCycle)} m`}</strong></div>
         </div>
       </section>
-      <section className="section-block">
-        <div className="alert-list">
-          {data.ticketAlerts.map((ticket) => (
-            <div className="alert-item" key={ticket.transaction_id}>
-              <div><strong>{ticket.transaction_id}</strong><span>Status {ticket.status}</span></div>
-              <b>{ticket.status === 'Created' ? deadlineLabel(ticket.status, ticket.created_at) : ticket.status === 'Accepted' ? deadlineLabel(ticket.status, ticket.accepted_at) : deadlineLabel(ticket.status, ticket.in_progress_at)}</b>
-            </div>
-          ))}
-          {!data.ticketAlerts.length ? <div className="empty-state">Belum ada alert ticketing.</div> : null}
-        </div>
-      </section>
+      <DashboardAlertList ticketAlerts={data.ticketAlerts} />
     </AppShell>
   )
 }
