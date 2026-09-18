@@ -55,7 +55,7 @@ export default function AppShellClient({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith(`/${role.toLowerCase()}`)) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
+  const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
   const nav = navByRole[currentRole] ?? []
 
   return (
@@ -90,6 +90,8 @@ export default function AppShellClient({
         {profile.role === 'Super User' ? (
           <div className="super-menu">
             <div className="super-title">Super User</div>
+            <Link href="/super-user/profil">Profil Super User</Link>
+            <Link href="/ganti-password">Ganti Password</Link>
             <Link href="/super-user/pengelolaan-pengguna">Pengelolaan Pengguna</Link>
             <Link href="/super-user/pengelolaan-database">Pengelolaan Database</Link>
           </div>
