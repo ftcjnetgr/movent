@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import DispatcherMaintenanceForm from '@/components/dispatcher-maintenance-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -22,8 +21,7 @@ export default async function DispatcherMaintenanceArmadaPage() {
   ])
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Dispatcher</span>
           <h1>Daftar Maintenance Armada</h1>
@@ -35,7 +33,5 @@ export default async function DispatcherMaintenanceArmadaPage() {
         locations={(locations ?? []).map((item) => item.location)}
         fleets={fleets ?? []}
         tickets={tickets ?? []}
-      />
-    </AppShell>
-  )
+      />)
 }
