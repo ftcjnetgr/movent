@@ -3,6 +3,16 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { submitNonTgrArrivalAction, submitNonTgrDepartureAction } from './actions'
 
+async function submitNonTgrDepartureFormAction(formData: FormData) {
+  'use server'
+  await submitNonTgrDepartureAction(formData)
+}
+
+async function submitNonTgrArrivalFormAction(formData: FormData) {
+  'use server'
+  await submitNonTgrArrivalAction(formData)
+}
+
 export default async function ArmadaNonTgrPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
@@ -30,14 +40,14 @@ export default async function ArmadaNonTgrPage() {
                 <td><span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span></td>
                 <td>
                   {task.status === 'Assigned' ? (
-                    <form action={submitNonTgrDepartureAction} className="compact-form">
+                    <form action={submitNonTgrDepartureFormAction} className="compact-form">
                       <input type="hidden" name="transactionId" value={task.transaction_id} />
                       <label>Berangkat<input name="departure" type="datetime-local" required /></label>
                       <button type="submit">Submit keberangkatan</button>
                     </form>
                   ) : null}
                   {task.status === 'Driving' ? (
-                    <form action={submitNonTgrArrivalAction} className="compact-form">
+                    <form action={submitNonTgrArrivalFormAction} className="compact-form">
                       <input type="hidden" name="transactionId" value={task.transaction_id} />
                       <label>Datang<input name="arrival" type="datetime-local" required /></label>
                       <button type="submit">Submit kedatangan</button>
