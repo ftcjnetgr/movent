@@ -37,6 +37,7 @@ export default async function OperasionalHistoryPage() {
     }))
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Operasional</span>
