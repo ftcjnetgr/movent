@@ -89,5 +89,7 @@ export default async function SuperUserTransactionManagementPage() {
             </tbody>
           </table>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
