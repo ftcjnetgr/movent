@@ -47,7 +47,7 @@ async function nextTransaction(admin: ReturnType<typeof createAdminClient>) {
 
 export async function createDispatcherTaskAction(_state: State, formData: FormData): Promise<State> {
   const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const taskType = String(formData.get('taskType') ?? '')
   const ownership = String(formData.get('fleetOwnership') ?? '')
@@ -60,7 +60,7 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     const sta = String(formData.get('sta') ?? '').trim()
     const executorNik = String(formData.get('executorNik') ?? '').trim()
     const platNumber = String(formData.get('platNumber') ?? '').trim()
-    if (!startPoint || !destination || !std || !sta || !executorNik || !platNumber) return { error: 'Start Point, Destinasi, STD, STA, Executor, dan Armada wajib diisi.' }
+    if (!startPoint || !destination || !std || !sta || !executorNik || !platNumber) return { error: 'Start Point, Destinasi, STD, STA, Executor, dan Armada perlu diisi dulu, ya.' }
 
     const [startLocation, destinationLocation] = await Promise.all([
       admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle(),
@@ -70,9 +70,9 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     const timestamps = [todayTimestamp(std), todayTimestamp(sta)]
     if (!timestamps[0] || !timestamps[1]) return { error: 'STD atau STA belum benar.' }
     const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
-    if (!executor || !fleet) return { error: 'Executor atau Armada tidak tersedia.' }
+    if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
     const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'Transaction ID belum berhasil dibuat.' }
+    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
 
     const { error } = await admin.from('tasks').insert({
       transaction_id: transactionId,
@@ -101,18 +101,18 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     const scheduleId = String(formData.get('scheduleId') ?? '').trim()
     const executorNik = String(formData.get('executorNik') ?? '').trim()
     const platNumber = String(formData.get('platNumber') ?? '').trim()
-    if (!scheduleId || !executorNik || !platNumber) return { error: 'Schedule, Executor, dan Armada wajib dipilih.' }
+    if (!scheduleId || !executorNik || !platNumber) return { error: 'Schedule, Executor, dan Armada perlu dipilih dulu, ya.' }
 
     const [{ data: schedule }, { executor, fleet }] = await Promise.all([
       admin.from('schedules').select('*').eq('schedule_id', scheduleId).eq('status', 'Active').maybeSingle(),
       activeExecutorAndFleet(admin, executorNik, platNumber),
     ])
-    if (!schedule || !executor || !fleet) return { error: 'Schedule, Executor, atau Armada tidak tersedia.' }
+    if (!schedule || !executor || !fleet) return { error: 'Schedule, Executor, atau Armada belum tersedia.' }
     const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
     const std = `${date}T${schedule.std}+07:00`
     const sta = `${date}T${schedule.sta}+07:00`
     const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'Transaction ID belum berhasil dibuat.' }
+    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
 
     const { error } = await admin.from('tasks').insert({
       transaction_id: transactionId,
@@ -154,7 +154,7 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     const sjNote = String(formData.get('sjNote') ?? '').trim()
 
     if (!startPoint || !destination || !std || !sta || !externalExecutor || !externalFleet || !sjNumber || !product || !Number.isFinite(sjQty) || !Number.isFinite(sjWeight)) {
-      return { error: 'Semua data Supply Non-TGR wajib diisi.' }
+      return { error: 'Semua data Supply Non-TGR perlu diisi dulu, ya.' }
     }
     const timestamps = [todayTimestamp(std), todayTimestamp(sta)]
     if (!timestamps[0] || !timestamps[1]) return { error: 'STD atau STA belum benar.' }
@@ -162,9 +162,9 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     const { data: destinationLocation } = await admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle()
     if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' }
     const { data: productData } = await admin.from('products').select('product, status').eq('product', product).eq('status', 'Active').maybeSingle()
-    if (!productData) return { error: 'Produk tidak tersedia.' }
+    if (!productData) return { error: 'Produk belum tersedia.' }
     const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'Transaction ID belum berhasil dibuat.' }
+    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
 
     const { error } = await admin.from('tasks').insert({
       transaction_id: transactionId,
@@ -210,25 +210,25 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     }
   }
 
-  return { error: 'Jenis tugas belum lengkap.' }
+  return { error: 'Jenis tugasnya belum lengkap. Coba cek lagi, ya.' }
 }
 
 export async function cancelDispatcherTaskAction(formData: FormData) {
   const profile = await getCurrentProfile()
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const note = String(formData.get('note') ?? '').trim()
-  if (!transactionId || !note) return { error: 'Transaction ID dan alasan pembatalan wajib diisi.' }
+  if (!transactionId || !note) return { error: 'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.' }
 
   const admin = createAdminClient()
   const { data: task } = await admin.from('tasks').select('id, status, created_by, fleet_ownership').eq('transaction_id', transactionId).maybeSingle()
-  if (!task) return { error: 'Tugas tidak ditemukan.' }
+  if (!task) return { error: 'Tugas nggak ditemukan.' }
   if (task.fleet_ownership === 'Non-TGR') {
     if (profile.role !== 'Super User') return { error: 'Tugas Armada Non-TGR hanya dapat dibatalkan oleh Super User.' }
     if (!['Assigned', 'Driving'].includes(task.status)) return { error: 'Tugas sudah selesai atau tidak bisa dibatalkan.' }
   } else {
-    if (task.status !== 'Assigned') return { error: 'Tugas sudah diterima atau sudah tidak bisa dibatalkan.' }
+    if (task.status !== 'Assigned') return { error: 'Tugas sudah diterima atau memang sudah nggak bisa dibatalkan.' }
     if (profile.role !== 'Super User' && (profile.role !== 'Dispatcher' || task.created_by !== profile.id)) {
-      return { error: 'Akses tidak tersedia.' }
+      return { error: 'Kamu belum punya akses ke bagian ini.' }
     }
   }
 
@@ -238,7 +238,7 @@ export async function cancelDispatcherTaskAction(formData: FormData) {
     canceled_from_status: task.status,
     cancellation_note: note,
   }).eq('id', task.id).eq('status', task.status)
-  if (error) return { error: 'Tugas belum berhasil dibatalkan.' }
+  if (error) return { error: 'Tugas belum berhasil dibatalkan. Coba lagi, ya.' }
   revalidateTaskPaths()
   redirect('/dispatcher/riwayat-penugasan')
 }
