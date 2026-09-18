@@ -19,15 +19,15 @@ export async function changePasswordAction(_state: { error?: string }, formData:
   const confirmPassword = String(formData.get('confirmPassword') ?? '')
 
   if (newPassword.length < 6) {
-    return { error: 'Password baru minimal 6 karakter.' }
+    return { error: 'Kata sandi baru minimal 6 karakter, ya.' }
   }
 
   if (newPassword === '123456') {
-    return { error: 'Password baru tidak boleh menggunakan password default 123456.' }
+    return { error: 'Kata sandi baru nggak boleh sama dengan kata sandi bawaan 123456.' }
   }
 
   if (newPassword !== confirmPassword) {
-    return { error: 'Konfirmasi password belum sama.' }
+    return { error: 'Kedua kata sandi belum sama. Coba cek lagi, ya.' }
   }
 
   const supabase = await createClient()
@@ -51,7 +51,7 @@ export async function changePasswordAction(_state: { error?: string }, formData:
   const { error: passwordError } = await supabase.auth.updateUser({ password: newPassword })
 
   if (passwordError) {
-    return { error: 'Password belum berhasil diubah. Coba lagi.' }
+    return { error: 'Password belum berhasil diubah. Coba lagi, ya.' }
   }
 
   await admin
