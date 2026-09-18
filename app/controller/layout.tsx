@@ -1,6 +1,7 @@
+import AppShell from '@/components/app-shell'
 import { requireRole } from '@/lib/server/role-guard'
 
 export default async function ControllerLayout({ children }: { children: React.ReactNode }) {
-  await requireRole('Controller')
-  return children
+  const profile = await requireRole('Controller')
+  return <AppShell profile={profile}>{children}</AppShell>
 }
