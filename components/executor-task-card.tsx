@@ -104,7 +104,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         'Catatan: ' + (task.sj_note ?? '-')
       )
     }
-    return lines.join('\\n')
+    return lines.join('\n')
   }
 
   function handleShare() {
