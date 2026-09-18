@@ -147,6 +147,12 @@ export default function TimetableView({
     return [...groups.entries()]
   }, [filteredSchedules, direction])
 
+  const liveSummary = useMemo(() => ({
+    unassigned: 0,
+    assigned: filteredTasks.filter((task) => task.status !== 'Canceled').length,
+    canceled: filteredTasks.filter((task) => task.status === 'Canceled').length,
+  }), [filteredTasks])
+
   const liveGroups = useMemo(() => {
     const groups = new Map<string, Task[]>()
     for (const task of filteredTasks) {
@@ -239,6 +245,11 @@ export default function TimetableView({
             <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>As Destination</button>
           </div>
           <div className="section-heading"><div><h2>Live Timetable</h2><p>Seluruh transaksi yang sudah dibuat atau di-assign.</p></div></div>
+          <section className="metric-grid">
+            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Unassigned</span><strong>{liveSummary.unassigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Assigned</span><strong>{liveSummary.assigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Canceled</span><strong>{liveSummary.canceled}</strong></button>
+          </section>
           <div className="timetable-scroll">
             <div className="timetable-grid">
               <div className="timetable-axis-label">{direction === 'origin' ? 'Start Point' : 'Destination'}</div>
@@ -252,7 +263,7 @@ export default function TimetableView({
                       const start = minutesValue(direction === 'origin' ? task.std : task.sta)
                       const left = `${((start ?? 0) / 1440) * 100}%`
                       return (
-                        <div className={`timetable-item live-item ${statusClass(task.status)}`} key={task.transaction_id} style={{ left }}>
+                        <div className={`timetable-item live-item ${statusClass(task.status)} ${summaryFilter !== 'all' && !summaryMatch(task) ? 'faded' : ''}`} key={task.transaction_id} style={{ left }}>
                           <div className="timetable-item-time">{direction === 'origin' ? timeValue(task.std) : timeValue(task.sta)}</div>
                           <strong>{task.transaction_id}</strong>
                           <span>{direction === 'origin' ? task.destination ?? '-' : task.start_point ?? '-'}</span>
