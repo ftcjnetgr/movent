@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import ExecutorTaskCard from '@/components/executor-task-card'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -23,8 +22,7 @@ export default async function ExecutorTugasSayaPage() {
   ])
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Executor</span>
           <h1>Tugas Saya</h1>
@@ -43,7 +41,5 @@ export default async function ExecutorTugasSayaPage() {
             <p>Tugas Completed masuk ke Riwayat Tugas. Tugas Dibatalkan tidak masuk ke daftar aktif.</p>
           </div>
         ) : null}
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
