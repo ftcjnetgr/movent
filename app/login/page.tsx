@@ -15,11 +15,11 @@ export default function LoginPage() {
         <div className="login-panel login-panel-form">
           <div className="login-form-inner">
             <div className="login-brand-wrap">
-              <span className="login-brand-mark" aria-hidden="true">
-                <span className="login-brand-mark-blue" />
-                <span className="login-brand-mark-orange" />
-              </span>
-              <span className="login-brand">movent</span>
+              <img
+                src="/assets/branding/movent-dark.svg"
+                alt="MOVENT"
+                className="login-brand-logo"
+              />
             </div>
 
             <div className="login-heading">
@@ -76,6 +76,12 @@ export default function LoginPage() {
         <aside className="login-panel login-panel-visual" aria-hidden="true">
           <div className="login-visual-glow login-visual-glow-one" />
           <div className="login-visual-glow login-visual-glow-two" />
+
+          <img
+            src="/assets/branding/movent-light.svg"
+            alt=""
+            className="login-visual-logo"
+          />
 
           <div className="login-visual-copy">
             <span className="eyebrow login-visual-eyebrow">operational control</span>
