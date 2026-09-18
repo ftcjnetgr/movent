@@ -93,7 +93,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
   function shareText() {
     const lines = [
       'MOVENT - Tugas',
-      'Transaction ID: ' + task.transaction_id,
+      'ID Transaksi: ' + task.transaction_id,
       'Jenis: ' + task.task_type,
       'Rute: ' + (task.start_point ?? '-') + ' → ' + (task.destination ?? '-'),
     ]
@@ -154,7 +154,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
 
       {needsSj && task.sj_number ? (
         <div className="metric-card section-block">
-          <div className="card-title">Pratinjau SJ</div>
+          <div className="card-title">Pratinjau surat jalan</div>
           <div className="task-summary-grid">
             <div><span>Transaction ID</span><strong>{task.transaction_id}</strong></div>
             <div><span>Nomor SJ</span><strong>{task.sj_number}</strong></div>
@@ -172,11 +172,11 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
 
       {!needsSj && task.odometer_start !== null ? (
         <div className="metric-card section-block">
-          <div className="card-title">Pratinjau Tugas</div>
+          <div className="card-title">Pratinjau tugas</div>
           <div className="task-summary-grid">
             <div><span>Transaction ID</span><strong>{task.transaction_id}</strong></div>
             <div><span>Jenis</span><strong>{task.task_type}</strong></div>
-            <div><span>Start Point</span><strong>{task.start_point ?? '-'}</strong></div>
+            <div><span>Titik Mulai</span><strong>{task.start_point ?? '-'}</strong></div>
             <div><span>Destinasi</span><strong>{task.destination ?? '-'}</strong></div>
           </div>
           <button type="button" className="secondary-button" onClick={handleShare}>Bagikan ke WhatsApp</button>
@@ -186,7 +186,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
       {task.status === 'Assigned' ? (
         <form onSubmit={handleAccept}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi menerima</button>
+          <button type="submit" disabled={isPending}>Terima tugas</button>
         </form>
       ) : null}
 
@@ -200,7 +200,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
           </div>
           <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih Produk" required />
           <label>Catatan<textarea name="note" rows={3} /></label>
-          <button type="submit" disabled={isPending}>Submit SJ</button>
+          <button type="submit" disabled={isPending}>Kirim surat jalan</button>
         </form>
       ) : null}
 
@@ -208,21 +208,21 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         <form onSubmit={handleOdometerStart} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Awal<input name="odometerStart" type="number" min="0" step="any" required /></label>
-          <button type="submit" disabled={isPending}>Simpan Odometer Awal</button>
+          <button type="submit" disabled={isPending}>Simpan odometer awal</button>
         </form>
       ) : null}
 
       {task.status === 'Accepted' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start !== null ? (
         <form onSubmit={handleDriving}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi Berangkat</button>
+          <button type="submit" disabled={isPending}>Konfirmasi berangkat</button>
         </form>
       ) : null}
 
       {task.status === 'Driving' && !task.arrived_at ? (
         <form onSubmit={handleArrival}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi Datang</button>
+          <button type="submit" disabled={isPending}>Konfirmasi datang</button>
         </form>
       ) : null}
 
@@ -230,7 +230,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         <form onSubmit={handleOdometerEnd} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Akhir<input name="odometerEnd" type="number" min="0" step="any" required /></label>
-          <button type="submit" disabled={isPending}>Simpan Odometer Akhir</button>
+          <button type="submit" disabled={isPending}>Simpan odometer akhir</button>
         </form>
       ) : null}
 
