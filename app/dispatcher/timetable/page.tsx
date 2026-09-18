@@ -8,7 +8,7 @@ export default async function DispatcherTimetablePage() {
 
   return (
     <>
-    <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Timetable</h1><p>Plan schedule dan pantau transaksi yang berjalan.</p></div></div>
+    <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Jadwal</h1><p>Pantau jadwal dan transaksi yang berjalan.</p></div></div>
       <TimetableView date={data.date} schedules={data.schedules} tasks={data.tasks} taskBySchedule={data.taskBySchedule} />
     </>
   )
