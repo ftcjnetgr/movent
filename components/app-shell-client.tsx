@@ -251,7 +251,7 @@ export default function AppShellClient({
       {navigating ? <div className="route-progress" aria-label="Memuat halaman" /> : null}
       <aside className="sidebar">
         <div className="sidebar-top">
-          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(event) => { event.preventDefault(); navigateTo(href) }}>
+          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(event) => { event.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}>
             <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
             <div className="sidebar-caption">Manajemen Pergerakan</div>
           </Link>
@@ -340,7 +340,7 @@ export default function AppShellClient({
                 <span className="topbar-mode-label">Mode</span>
                 <div className="topbar-mode-links">
                   {Object.entries(modeRoutes).map(([role, href]) => (
-                    <Link key={role} className={currentRole === role ? 'topbar-mode-link active' : 'topbar-mode-link'} href={href} onClick={closeMobile}>
+                    <Link key={role} className={currentRole === role ? 'topbar-mode-link active' : 'topbar-mode-link'} href={href} onClick={(event) => { event.preventDefault(); navigateTo(href) }}>
                       {role}
                     </Link>
                   ))}
