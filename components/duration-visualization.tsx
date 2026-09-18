@@ -63,7 +63,7 @@ export function TaskDurationVisualization({ rows }: { rows: TaskDurationRow[] })
     <section className="section-block">
       <div className="section-heading">
         <div>
-          <h2>Durasi & Cycle Time per Transaksi</h2>
+          <h2>Durasi & Waktu Siklus per Transaksi</h2>
           <p>Visualisasi durasi proses berdasarkan penanda waktu setiap transaksi.</p>
         </div>
       </div>
@@ -75,13 +75,13 @@ export function TaskDurationVisualization({ rows }: { rows: TaskDurationRow[] })
                 <th>Transaction ID</th>
                 <th>Jenis</th>
                 <th>Status</th>
-                <th>Assigned → Accepted</th>
-                <th>Accepted → Driving</th>
-                <th>Driving → Completed</th>
-                <th>Assigned → Driving</th>
-                <th>Cycle Completed</th>
-                <th>From Previous → Canceled</th>
-                <th>Cycle Canceled</th>
+                <th>Ditugaskan → Diterima</th>
+                <th>Diterima → Berangkat</th>
+                <th>Berangkat → Selesai</th>
+                <th>Ditugaskan → Berangkat</th>
+                <th>Waktu Siklus Selesai</th>
+                <th>Status Sebelumnya → Dibatalkan</th>
+                <th>Waktu Siklus Dibatalkan</th>
               </tr>
             </thead>
             <tbody>
@@ -122,7 +122,7 @@ export function TicketDurationVisualization({ rows }: { rows: TicketDurationRow[
     <section className="section-block">
       <div className="section-heading">
         <div>
-          <h2>Durasi & Cycle Time Ticketing per Transaksi</h2>
+          <h2>Durasi & Waktu Siklus Ticketing per Transaksi</h2>
           <p>Visualisasi durasi proses maintenance berdasarkan penanda waktu.</p>
         </div>
       </div>
@@ -133,12 +133,12 @@ export function TicketDurationVisualization({ rows }: { rows: TicketDurationRow[
               <tr>
                 <th>Transaction ID</th>
                 <th>Status</th>
-                <th>Created → Accepted</th>
-                <th>Accepted → In Progress</th>
-                <th>In Progress → Completed</th>
-                <th>Cycle Completed</th>
-                <th>Created → Canceled</th>
-                <th>Cycle Canceled</th>
+                <th>Dibuat → Diterima</th>
+                <th>Diterima → Dalam Pengerjaan</th>
+                <th>Dalam Pengerjaan → Selesai</th>
+                <th>Waktu Siklus Selesai</th>
+                <th>Dibuat → Dibatalkan</th>
+                <th>Waktu Siklus Dibatalkan</th>
               </tr>
             </thead>
             <tbody>
