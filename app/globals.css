@@ -360,6 +360,33 @@ td select:focus {
   color: #242831;
 }
 
+.route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 9999;
+  overflow: hidden;
+  background: var(--ui-primary-soft);
+}
+
+.route-progress::after {
+  content: "";
+  position: absolute;
+  left: -35%;
+  top: 0;
+  width: 35%;
+  height: 100%;
+  background: var(--ui-primary);
+  animation: route-progress 1s ease-in-out infinite;
+}
+
+@keyframes route-progress {
+  0% { left: -35%; }
+  100% { left: 100%; }
+}
+
 .topbar-actions {
   display: flex;
   align-items: center;
