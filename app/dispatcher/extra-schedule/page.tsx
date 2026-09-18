@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import AppShell from '@/components/app-shell'
+import SearchableMasterSelect from '@/components/searchable-master-select'
 import { assignExtraScheduleAction } from './actions'
 
 export default function DispatcherExtraSchedulePage() {
@@ -14,6 +15,16 @@ export default function DispatcherExtraSchedulePage() {
   const [selectedFleet, setSelectedFleet] = useState<Record<string, string>>({})
   const [feedback, setFeedback] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
+  const executorOptions = useMemo(() => data.executors.map((executor) => ({
+    value: executor.executor_nik,
+    label: executor.executor_nik + ' - ' + executor.full_name,
+    searchText: executor.executor_nik + ' ' + executor.full_name,
+  })), [data.executors])
+  const fleetOptions = useMemo(() => data.fleets.map((fleet) => ({
+    value: fleet.plat_number,
+    label: fleet.plat_number + ' - ' + fleet.fleet_type,
+    searchText: fleet.plat_number + ' ' + fleet.fleet_type,
+  })), [data.fleets])
 
   useEffect(() => {
     fetch('/api/dispatcher/extra-schedule').then(async (res) => {
@@ -70,16 +81,24 @@ export default function DispatcherExtraSchedulePage() {
                     <td>{request.std ? new Date(request.std).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) : '-'}</td>
                     <td>{request.sta ? new Date(request.sta).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) : '-'}</td>
                     <td>
-                      <select value={selectedExecutor[request.transaction_id] ?? ''} onChange={(e) => setSelectedExecutor((current) => ({ ...current, [request.transaction_id]: e.target.value }))}>
-                        <option value="">Pilih Executor</option>
-                        {data.executors.map((executor) => <option key={executor.executor_nik} value={executor.executor_nik}>{executor.executor_nik} - {executor.full_name}</option>)}
-                      </select>
+                      <SearchableMasterSelect
+                        label="Executor"
+                        name={'executor-' + request.transaction_id}
+                        options={executorOptions}
+                        placeholder="Pilih Executor"
+                        value={selectedExecutor[request.transaction_id] ?? ''}
+                        onValueChange={(value) => setSelectedExecutor((current) => ({ ...current, [request.transaction_id]: value }))}
+                      />
                     </td>
                     <td>
-                      <select value={selectedFleet[request.transaction_id] ?? ''} onChange={(e) => setSelectedFleet((current) => ({ ...current, [request.transaction_id]: e.target.value }))}>
-                        <option value="">Pilih Armada</option>
-                        {data.fleets.map((fleet) => <option key={fleet.plat_number} value={fleet.plat_number}>{fleet.plat_number} - {fleet.fleet_type}</option>)}
-                      </select>
+                      <SearchableMasterSelect
+                        label="Armada"
+                        name={'fleet-' + request.transaction_id}
+                        options={fleetOptions}
+                        placeholder="Pilih Armada"
+                        value={selectedFleet[request.transaction_id] ?? ''}
+                        onValueChange={(value) => setSelectedFleet((current) => ({ ...current, [request.transaction_id]: value }))}
+                      />
                     </td>
                     <td>
                       <button type="button" onClick={() => assign(request.transaction_id)}>Assign</button>
