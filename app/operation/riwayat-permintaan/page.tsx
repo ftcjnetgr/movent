@@ -68,8 +68,24 @@ export default async function OperationHistoryPage() {
                   <td><span className={`status-badge status-${String(request.status).toLowerCase().replaceAll(' ', '-')}`}>{request.status}</span></td>
                   <td>{formatDateTime(request.created_at)}</td>
                   <td>
+                    <details>
+                      <summary className="link-button">Preview</summary>
+                      <div className="metric-card compact-form" style={{marginTop:12}}>
+                        <div><span className="muted">Transaction ID</span><strong>{request.transaction_id}</strong></div>
+                        <div><span className="muted">Start Point</span><strong>{request.start_point ?? '-'}</strong></div>
+                        <div><span className="muted">Destinasi</span><strong>{request.destination ?? '-'}</strong></div>
+                        <div><span className="muted">STD</span><strong>{formatDateTime(request.std)}</strong></div>
+                        <div><span className="muted">STA</span><strong>{formatDateTime(request.sta)}</strong></div>
+                        <div><span className="muted">Status</span><strong>{request.status}</strong></div>
+                        <div><span className="muted">Dibuat</span><strong>{formatDateTime(request.created_at)}</strong></div>
+                        {request.cancellation_note ? (
+                          <div><span className="muted">Catatan Pembatalan</span><strong>{request.cancellation_note}</strong></div>
+                        ) : null}
+                      </div>
+                    </details>
+
                     {request.status === 'Requested' ? (
-                      <details>
+                      <details style={{marginTop:8}}>
                         <summary className="link-button">Batalkan</summary>
                         <form action={cancelExtraScheduleAction} className="compact-form">
                           <input type="hidden" name="transactionId" value={request.transaction_id} />
@@ -77,11 +93,7 @@ export default async function OperationHistoryPage() {
                           <button type="submit">Konfirmasi batal</button>
                         </form>
                       </details>
-                    ) : request.status === 'Canceled' ? (
-                      <span className="muted">{request.cancellation_note}</span>
-                    ) : (
-                      <span className="muted">Preview</span>
-                    )}
+                    ) : null}
                   </td>
                 </tr>
               ))}
