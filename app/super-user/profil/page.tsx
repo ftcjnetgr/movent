@@ -19,7 +19,7 @@ export default async function SuperUserProfilePage() {
         <div>
           <span className="eyebrow">Super User</span>
           <h1>Profil</h1>
-          <p>Informasi profil Super User yang sedang login.</p>
+          <p>Ini informasi profil kamu yang sedang login.</p>
         </div>
       </div>
       <section className="section-grid two-column">
