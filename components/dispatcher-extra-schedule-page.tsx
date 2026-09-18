@@ -37,11 +37,11 @@ export default function DispatcherExtraSchedulePage() {
     const executorNik = selectedExecutor[transactionId]
     const platNumber = selectedFleet[transactionId]
     if (!executorNik || !platNumber) {
-      setFeedback((current) => ({ ...current, [transactionId]: 'Executor dan Armada wajib dipilih.' }))
+      setFeedback((current) => ({ ...current, [transactionId]: 'Executor dan armada perlu dipilih dulu, ya.' }))
       return
     }
 
-    setFeedback((current) => ({ ...current, [transactionId]: 'Menyelesaikan assignment...' }))
+    setFeedback((current) => ({ ...current, [transactionId]: 'Sedang menugaskan...' }))
     const formData = new FormData()
     formData.set('transactionId', transactionId)
     formData.set('executorNik', executorNik)
@@ -57,18 +57,18 @@ export default function DispatcherExtraSchedulePage() {
     <div>
       <div className="page-heading">
           <span className="eyebrow">Dispatcher</span>
-          <h1>Extra Schedule</h1>
-          <p>Terima request dari Operation, lalu assign Executor dan Armada.</p>
+          <h1>Jadwal Tambahan</h1>
+          <p>Terima permintaan dari Operasional, lalu pilih executor dan armada.</p>
         </div>
 
       <section className="data-table-card">
-        {loading ? <div className="empty-state">Memuat request...</div> : null}
-        {!loading && data.requests.length === 0 ? <div className="empty-state">Belum ada request Extra Schedule yang menunggu assignment.</div> : null}
+        {loading ? <div className="empty-state">Lagi memuat permintaan...</div> : null}
+        {!loading && data.requests.length === 0 ? <div className="empty-state">Belum ada request Jadwal Tambahan yang menunggu assignment.</div> : null}
         {!loading && data.requests.length > 0 ? (
           <div className="table-wrap">
             <table>
               <thead>
-                <tr><th>Transaction ID</th><th>Rute</th><th>STD</th><th>STA</th><th>Executor</th><th>Armada</th><th>Aksi</th></tr>
+                <tr><th>ID Transaksi</th><th>Rute</th><th>STD</th><th>STA</th><th>Executor</th><th>Armada</th><th>Aksi</th></tr>
               </thead>
               <tbody>
                 {data.requests.map((request) => (
@@ -82,7 +82,7 @@ export default function DispatcherExtraSchedulePage() {
                         label="Executor"
                         name={'executor-' + request.transaction_id}
                         options={executorOptions}
-                        placeholder="Pilih Executor"
+                        placeholder="Pilih executor"
                         value={selectedExecutor[request.transaction_id] ?? ''}
                         onValueChange={(value) => setSelectedExecutor((current) => ({ ...current, [request.transaction_id]: value }))}
                       />
@@ -92,13 +92,13 @@ export default function DispatcherExtraSchedulePage() {
                         label="Armada"
                         name={'fleet-' + request.transaction_id}
                         options={fleetOptions}
-                        placeholder="Pilih Armada"
+                        placeholder="Pilih armada"
                         value={selectedFleet[request.transaction_id] ?? ''}
                         onValueChange={(value) => setSelectedFleet((current) => ({ ...current, [request.transaction_id]: value }))}
                       />
                     </td>
                     <td>
-                      <button type="button" onClick={() => assign(request.transaction_id)}>Assign</button>
+                      <button type="button" onClick={() => assign(request.transaction_id)}>Tugaskan</button>
                       {feedback[request.transaction_id] ? <div className="inline-feedback">{feedback[request.transaction_id]}</div> : null}
                     </td>
                   </tr>
