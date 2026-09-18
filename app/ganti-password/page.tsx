@@ -13,8 +13,8 @@ export default function ChangePasswordPage() {
     <main className="login-page">
       <section className="login-card">
         <div className="login-brand">movent</div>
-        <h1>Bikin password baru</h1>
-        <p className="login-subtitle">Password default kamu cuma sementara. Ganti dulu sebelum lanjut.</p>
+        <h1>Buat kata sandi baru</h1>
+        <p className="login-subtitle">Kata sandi bawaan cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
 
         <form action={formAction} className="login-form">
           <label>
@@ -23,20 +23,20 @@ export default function ChangePasswordPage() {
           </label>
 
           <label>
-            Ulangi password baru
+            Ulangi kata sandi baru
             <input name="confirmPassword" type="password" autoComplete="new-password" />
           </label>
 
           {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
 
           <button type="submit" disabled={pending}>
-            {pending ? 'Menyimpan...' : 'Simpan password'}
+            {pending ? 'Menyimpan...' : 'Simpan kata sandi'}
           </button>
         </form>
 
         <div className="login-footer">
-          <span>Minimal 6 karakter</span>
-          <span>123456 tidak bisa dipakai lagi</span>
+          <span>Minimal 6 karakter, ya</span>
+          <span>Kata sandi bawaan nggak bisa dipakai lagi.</span>
         </div>
       </section>
     </main>
