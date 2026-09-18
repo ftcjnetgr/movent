@@ -793,9 +793,12 @@ th {
 }
 
 .login-brand-wrap {
+  width: 182px;
+  height: 42px;
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
+  overflow: hidden;
 }
 
 .login-brand-mark {
@@ -1277,6 +1280,11 @@ th {
 
 
 @media (max-width: 640px) {
+  .login-brand-wrap {
+    width: 158px;
+    height: 37px;
+  }
+
   .login-brand-logo {
     width: 158px;
   }
