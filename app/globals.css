@@ -2465,3 +2465,66 @@ tbody tr:hover { background: #fafcff; }
     gap: 12px;
   }
 }
+
+
+/* ===== mobile-first role surfaces ===== */
+@media (max-width: 1024px) {
+  .role-dispatcher .page-content,
+  .role-executor .page-content,
+  .role-operation .page-content {
+    padding: 20px 16px 32px;
+  }
+
+  .role-dispatcher .section-grid,
+  .role-executor .section-grid,
+  .role-operation .section-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .role-dispatcher .metric-grid,
+  .role-executor .metric-grid,
+  .role-operation .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .role-dispatcher .page-heading,
+  .role-executor .page-heading,
+  .role-operation .page-heading {
+    margin-bottom: 20px;
+  }
+
+  .role-dispatcher .page-heading h1,
+  .role-executor .page-heading h1,
+  .role-operation .page-heading h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .role-dispatcher .page-content,
+  .role-executor .page-content,
+  .role-operation .page-content {
+    padding: 16px 12px 28px;
+  }
+
+  .role-dispatcher .metric-grid,
+  .role-executor .metric-grid,
+  .role-operation .metric-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .role-dispatcher .page-heading h1,
+  .role-executor .page-heading h1,
+  .role-operation .page-heading h1 {
+    font-size: 24px;
+  }
+
+  .role-operation .metric-card {
+    padding: 16px;
+  }
+
+  .role-operation .compact-form {
+    gap: 12px;
+  }
+}
