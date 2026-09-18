@@ -16,7 +16,7 @@ export default function LoginPage() {
           <div className="login-form-inner">
             <div className="login-brand-wrap">
               <img
-                src="/assets/branding/movent-light.svg"
+                src="/assets/branding/movent-dark.svg"
                 alt="MOVENT"
                 className="login-brand-logo"
               />
