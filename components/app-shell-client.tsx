@@ -9,138 +9,66 @@ type NavGroup = { label: string; icon: string; items: NavItem[] }
 
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
-    {
-      label: 'Monitoring',
-      icon: 'home',
-      items: [
-        { label: 'Beranda', href: '/controller/beranda', icon: 'home' },
-        { label: 'Jadwal', href: '/controller/timetable', icon: 'calendar' },
-        { label: 'Tiket Maintenance', href: '/controller/ticketing-maintenance', icon: 'ticket' },
-      ],
-    },
-    {
-      label: 'Laporan',
-      icon: 'report',
-      items: [
-        { label: 'Tarik Laporan', href: '/controller/penarikan-report', icon: 'report' },
-      ],
-    },
-    {
-      label: 'Akun',
-      icon: 'user',
-      items: [
-        { label: 'Profil', href: '/controller/profil', icon: 'user' },
-        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
-      ],
-    },
+    { label: 'Monitoring', icon: 'home', items: [
+      { label: 'Beranda', href: '/controller/beranda', icon: 'home' },
+    ]},
+    { label: 'Laporan', icon: 'report', items: [
+      { label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' },
+    ]},
+    { label: 'Akun', icon: 'user', items: [
+      { label: 'Profil', href: '/controller/profil', icon: 'user' },
+      { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    ]},
   ],
   Dispatcher: [
-    {
-      label: 'Penugasan',
-      icon: 'clipboard',
-      items: [
-        { label: 'Beranda', href: '/dispatcher/beranda', icon: 'home' },
-        { label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' },
-        { label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule', icon: 'calendar' },
-        { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
-      ],
-    },
-    {
-      label: 'Maintenance',
-      icon: 'wrench',
-      items: [
-        { label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
-        { label: 'Tiket Maintenance', href: '/dispatcher/ticketing-maintenance', icon: 'ticket' },
-      ],
-    },
-    {
-      label: 'Akun',
-      icon: 'user',
-      items: [
-        { label: 'Profil', href: '/dispatcher/profil', icon: 'user' },
-        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
-      ],
-    },
-  ],
-  Operation: [
-    {
-      label: 'Jadwal Tambahan',
-      icon: 'calendar',
-      items: [
-        { label: 'Permintaan Jadwal Tambahan', href: '/operation/request-extra-schedule', icon: 'calendar' },
-        { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan', icon: 'history' },
-      ],
-    },
-    {
-      label: 'Akun',
-      icon: 'user',
-      items: [
-        { label: 'Profil', href: '/operation/profil', icon: 'user' },
-        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
-      ],
-    },
+    { label: 'Penugasan', icon: 'clipboard', items: [
+      { label: 'Beranda', href: '/dispatcher/beranda', icon: 'home' },
+      { label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' },
+      { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
+    ]},
+    { label: 'Maintenance', icon: 'wrench', items: [
+      { label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
+    ]},
+    { label: 'Akun', icon: 'user', items: [
+      { label: 'Profil', href: '/dispatcher/profil', icon: 'user' },
+      { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    ]},
   ],
   Executor: [
-    {
-      label: 'Tugas',
-      icon: 'clipboard',
-      items: [
-        { label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' },
-        { label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' },
-      ],
-    },
-    {
-      label: 'Akun',
-      icon: 'user',
-      items: [
-        { label: 'Profil', href: '/executor/profil', icon: 'user' },
-        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
-      ],
-    },
+    { label: 'Tugas', icon: 'clipboard', items: [
+      { label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' },
+      { label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' },
+    ]},
+    { label: 'Akun', icon: 'user', items: [
+      { label: 'Profil', href: '/executor/profil', icon: 'user' },
+      { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    ]},
   ],
   Maintainer: [
-    {
-      label: 'Operasional',
-      icon: 'home',
-      items: [
-        { label: 'Beranda', href: '/maintainer/beranda', icon: 'home' },
-        { label: 'Jadwal', href: '/maintainer/timetable', icon: 'calendar' },
-      ],
-    },
-    {
-      label: 'Maintenance',
-      icon: 'wrench',
-      items: [
-        { label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'ticket' },
-        { label: 'Dashboard Maintenance', href: '/maintainer/ticketing-maintenance', icon: 'report' },
-      ],
-    },
-    {
-      label: 'Akun',
-      icon: 'user',
-      items: [
-        { label: 'Profil', href: '/maintainer/profil', icon: 'user' },
-        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
-      ],
-    },
+    { label: 'Operasional', icon: 'home', items: [
+      { label: 'Beranda', href: '/maintainer/beranda', icon: 'home' },
+    ]},
+    { label: 'Maintenance', icon: 'wrench', items: [
+      { label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'ticket' },
+    ]},
+    { label: 'Akun', icon: 'user', items: [
+      { label: 'Profil', href: '/maintainer/profil', icon: 'user' },
+      { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    ]},
   ],
 }
+
 const superUserGroup: NavGroup = {
-  label: 'Pengaturan',
+  label: 'Pengaturan Super User',
   icon: 'report',
   items: [
-    { label: 'Profil Super User', href: '/super-user/profil', icon: 'user' },
-    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
     { label: 'Kelola Pengguna', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
     { label: 'Kelola Database', href: '/super-user/pengelolaan-database', icon: 'report' },
-    { label: 'Kelola Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
   ],
 }
 
 const modeRoutes: Record<string, string> = {
   Controller: '/controller/beranda',
-  Dispatcher: '/dispatcher/beranda',
-  Operation: '/operation/request-extra-schedule',
   Executor: '/executor/tugas-saya',
   Maintainer: '/maintainer/beranda',
 }
@@ -204,6 +132,11 @@ export default function AppShellClient({
   const navGroups = profile.role === 'Super User' ? [...baseNavGroups, superUserGroup] : baseNavGroups
   const activeGroup = navGroups.find((group) => group.items.some((item) => item.href === pathname))?.label ?? ''
   const [openGroups, setOpenGroups] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!activeGroup) return
+    setOpenGroups((current) => current.includes(activeGroup) ? current : [...current, activeGroup])
+  }, [activeGroup])
 
   useEffect(() => {
     try {
