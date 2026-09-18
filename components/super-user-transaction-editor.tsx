@@ -54,7 +54,7 @@ export function SuperUserTaskEditor({ task, locations, executors, fleets, schedu
         <form action={formAction} className="data-form compact-form" style={{marginTop:12}}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           {isSchedule ? (
-            <SearchableMasterSelect label="Schedule" name="scheduleId" options={schedules} defaultValue={task.schedule_id ?? ''} required />
+            <SearchableMasterSelect label="Schedule" name="scheduleId" options={schedules} placeholder="Pilih Schedule" defaultValue={task.schedule_id ?? ''} required />
           ) : (
             <div className="form-row">
               <label>Titik Mulai<input name="startPoint" defaultValue={task.start_point ?? ''} required /></label>
@@ -74,8 +74,8 @@ export function SuperUserTaskEditor({ task, locations, executors, fleets, schedu
             </div>
           ) : (
             <div className="form-row">
-              <SearchableMasterSelect label="Executor" name="executorNik" options={executors} defaultValue={task.executor_nik ?? ''} required />
-              <SearchableMasterSelect label="Armada" name="platNumber" options={fleets} defaultValue={task.fleet_snapshot?.plat_number ?? ''} required />
+              <SearchableMasterSelect label="Executor" name="executorNik" options={executors} placeholder="Pilih Executor" defaultValue={task.executor_nik ?? ''} required />
+              <SearchableMasterSelect label="Armada" name="platNumber" options={fleets} placeholder="Pilih Armada" defaultValue={task.fleet_snapshot?.plat_number ?? ''} required />
             </div>
           )}
           <div className="form-row">
@@ -84,7 +84,7 @@ export function SuperUserTaskEditor({ task, locations, executors, fleets, schedu
             <label>Berat<input name="sjWeight" type="number" min="0" step="any" defaultValue={task.sj_weight ?? ''} /></label>
           </div>
           <div className="form-row">
-            <SearchableMasterSelect label="Produk" name="product" options={products} defaultValue={task.product ?? ''} />
+            <SearchableMasterSelect label="Produk" name="product" options={products} placeholder="Pilih Produk" defaultValue={task.product ?? ''} />
             <label>Odometer Awal<input name="odometerStart" type="number" min="0" step="any" defaultValue={task.odometer_start ?? ''} /></label>
             <label>Odometer Akhir<input name="odometerEnd" type="number" min="0" step="any" defaultValue={task.odometer_end ?? ''} /></label>
           </div>
@@ -106,9 +106,9 @@ export function SuperUserTicketEditor({ ticket, maintenanceLists, locations, fle
       {ticket.status === 'Completed' ? <p className="muted">Ticketing Completed sudah immutable.</p> : (
         <form action={formAction} className="data-form compact-form" style={{marginTop:12}}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceLists} defaultValue={ticket.maintenance_list ?? ''} required />
-          <SearchableMasterSelect label="Lokasi" name="location" options={locations} defaultValue={ticket.location ?? ''} required />
-          <SearchableMasterSelect label="Armada" name="platNumber" options={fleets} defaultValue={ticket.fleet_plat_number ?? ''} required />
+          <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceLists} placeholder="Pilih Maintenance" defaultValue={ticket.maintenance_list ?? ''} required />
+          <SearchableMasterSelect label="Lokasi" name="location" options={locations} placeholder="Pilih Lokasi" defaultValue={ticket.location ?? ''} required />
+          <SearchableMasterSelect label="Armada" name="platNumber" options={fleets} placeholder="Pilih Armada" defaultValue={ticket.fleet_plat_number ?? ''} required />
           {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
           {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
           <button type="submit" disabled={pending}>{pending ? 'Menyimpan...' : 'Simpan perubahan'}</button>
