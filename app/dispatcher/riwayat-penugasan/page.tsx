@@ -1,6 +1,7 @@
 import AppShell from '@/components/app-shell'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
+import { cancelDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
 
 export default async function DispatcherAssignmentHistoryPage() {
   const profile = await getCurrentProfile()
@@ -20,17 +21,28 @@ export default async function DispatcherAssignmentHistoryPage() {
       <section className="data-table-card">
         <div className="table-wrap">
           <table>
-            <thead><tr><th>Transaction ID</th><th>Jenis</th><th>Rute</th><th>Executor</th><th>Armada</th><th>Status</th></tr></thead>
+            <thead><tr><th>Transaction ID</th><th>Jenis</th><th>Rute</th><th>Executor</th><th>Armada</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody>
-              {visible.map((task) => <tr key={task.transaction_id}>
-                <td><strong>{task.transaction_id}</strong></td>
-                <td>{task.task_type}</td>
-                <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
-                <td>{task.executor_snapshot?.full_name ?? task.external_executor ?? '-'}</td>
-                <td>{task.fleet_snapshot?.plat_number ?? task.external_fleet ?? task.fleet_ownership ?? '-'}</td>
-                <td><span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span></td>
-              </tr>)}
-              {!visible.length ? <tr><td colSpan={6}><div className="empty-state">Belum ada riwayat penugasan.</div></td></tr> : null}
+              {visible.map((task) => (
+                <tr key={task.transaction_id}>
+                  <td><strong>{task.transaction_id}</strong></td>
+                  <td>{task.task_type}</td>
+                  <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
+                  <td>{task.executor_snapshot?.full_name ?? task.external_executor ?? '-'}</td>
+                  <td>{task.fleet_snapshot?.plat_number ?? task.external_fleet ?? task.fleet_ownership ?? '-'}</td>
+                  <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{task.status}</span></td>
+                  <td>
+                    {task.fleet_ownership === 'Non-TGR'
+                      ? (profile.role === 'Super User' && task.status !== 'Completed' && task.status !== 'Canceled' ? (
+                          <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
+                        ) : <span className="muted">-</span>)
+                      : (task.status === 'Assigned' && (profile.role === 'Super User' || task.created_by === profile.id) ? (
+                          <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
+                        ) : <span className="muted">-</span>)}
+                  </td>
+                </tr>
+              ))}
+              {!visible.length ? <tr><td colSpan={7}><div className="empty-state">Belum ada riwayat penugasan.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
