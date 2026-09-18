@@ -80,5 +80,7 @@ export default async function UserManagementPage() {
             </tbody>
           </table>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
