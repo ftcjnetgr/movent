@@ -54,6 +54,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
   const [state, setState] = useState<MaintenanceFormState>(initialState)
   const [isCreatePending, startCreateTransition] = useTransition()
   const [cancelMessage, setCancelMessage] = useState('')
+  const [showCreate, setShowCreate] = useState(false)
   const [isCancelPending, startCancelTransition] = useTransition()
   const maintenanceOptions = maintenanceLists.map((item) => ({ value: item, label: item, searchText: item }))
   const locationOptions = locations.map((item) => ({ value: item, label: item, searchText: item }))
@@ -85,15 +86,23 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
     <section>
       <section className="section-grid two-column">
         <div className="metric-card">
-          <div className="card-title">Buat tiket maintenance</div>
+          <div className="card-title">Tiket Maintenance</div>
+          <p className="muted">Buat tiket maintenance untuk armada.</p>
+          {!showCreate ? (
+            <button type="button" onClick={() => setShowCreate(true)}>Tambah Tugas</button>
+          ) : (
           <form onSubmit={handleCreate} className="data-form">
             <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceOptions} placeholder="Pilih jenis maintenance" required />
             <SearchableMasterSelect label="Lokasi Keberadaan Armada" name="location" options={locationOptions} placeholder="Pilih lokasi armada" required />
             <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih Armada" required />
             {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
             {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
-            <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Sedang membuat tiket...' : 'Buat tiket maintenance'}</button>
+            <div className="form-actions">
+              <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Sedang membuat tiket...' : 'Buat tiket maintenance'}</button>
+              <button type="button" className="secondary-button" onClick={() => setShowCreate(false)}>Batal</button>
+            </div>
           </form>
+          )}
         </div>
 
         <div className="metric-card">
