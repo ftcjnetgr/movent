@@ -9,7 +9,13 @@ import { getCurrentProfile } from '@/lib/server/profile'
 type Result = { error?: string; success?: string }
 
 function manualTimestamp(value: string) {
-  const parsed = new Date(value)
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value)
+  if (!match) return null
+
+  const [, year, month, day, hour, minute] = match
+  const iso = `${year}-${month}-${day}T${hour}:${minute}:00+07:00`
+  const parsed = new Date(iso)
+
   if (Number.isNaN(parsed.getTime())) return null
   return parsed.toISOString()
 }
