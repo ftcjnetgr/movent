@@ -3,6 +3,21 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
 
+async function lockUserFormAction(formData: FormData) {
+  'use server'
+  await lockUserAction(formData)
+}
+
+async function unlockUserFormAction(formData: FormData) {
+  'use server'
+  await unlockUserAction(formData)
+}
+
+async function updateUserProfileFormAction(formData: FormData) {
+  'use server'
+  await updateUserProfileAction(formData)
+}
+
 export default async function UserManagementPage() {
   const profile = await getCurrentProfile()
   if (profile.role !== 'Super User') return null
@@ -41,7 +56,7 @@ export default async function UserManagementPage() {
                   <td>
                     <details>
                       <summary className="link-button">Edit</summary>
-                      <form action={updateUserProfileAction} className="data-form compact-form" style={{marginTop:12}}>
+                      <form action={updateUserProfileFormAction} className="data-form compact-form" style={{marginTop:12}}>
                         <input type="hidden" name="id" value={user.id} />
                         <label>Username<input name="username" defaultValue={user.username} required /></label>
                         <label>Email<input name="email" type="email" defaultValue={user.email} required /></label>
@@ -54,9 +69,9 @@ export default async function UserManagementPage() {
                     </details>
                     <div style={{marginTop:8}}>
                       {user.status === 'Locked' ? (
-                        <form action={unlockUserAction}><input type="hidden" name="id" value={user.id} /><button type="submit">Buka kunci</button></form>
+                        <form action={unlockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit">Buka kunci</button></form>
                       ) : (
-                        <form action={lockUserAction}><input type="hidden" name="id" value={user.id} /><button type="submit" className="secondary-button">Kunci akun</button></form>
+                        <form action={lockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit" className="secondary-button">Kunci akun</button></form>
                       )}
                     </div>
                   </td>
