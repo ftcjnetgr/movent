@@ -39,6 +39,28 @@ function requiresSj(task: Task) {
   return task.task_type === 'Extra Schedule' || (task.task_type === 'Supply' && task.fleet_ownership === 'TGR')
 }
 
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Assigned: 'Ditugaskan',
+    Accepted: 'Diterima',
+    Driving: 'Berangkat',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
+function nextActionLabel(task: Task) {
+  if (task.status === 'Assigned') return 'Terima tugas'
+  if (task.status === 'Accepted' && requiresSj(task) && !task.sj_number) return 'Isi surat jalan'
+  if (task.status === 'Accepted' && task.odometer_start === null) return 'Isi odometer awal'
+  if (task.status === 'Accepted') return 'Konfirmasi berangkat'
+  if (task.status === 'Driving' && !task.arrived_at) return 'Konfirmasi datang'
+  if (task.status === 'Driving' && task.odometer_end === null) return 'Isi odometer akhir'
+  if (task.status === 'Driving') return 'Selesaikan tugas'
+  return 'Lanjutkan tugas'
+}
+
 export default function ExecutorTaskCard({ task, products }: { task: Task; products: string[] }) {
   const [message, setMessage] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -140,7 +162,12 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
           <span className="eyebrow">{task.task_type}</span>
           <h2>{task.transaction_id}</h2>
         </div>
-        <span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span>
+        <span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{statusLabel(task.status)}</span>
+      </div>
+
+      <div className="task-next-step">
+        <span>Langkah berikutnya</span>
+        <strong>{nextActionLabel(task)}</strong>
       </div>
 
       <div className="task-summary-grid">

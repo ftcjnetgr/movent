@@ -40,6 +40,17 @@ function ticketThresholdSeconds(status: string) {
   return 3 * 60 * 60
 }
 
+function ticketStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Created: 'Dibuat',
+    Accepted: 'Diterima',
+    'In Progress': 'Sedang dikerjakan',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
 export default function DashboardAlertList({
   taskAlerts,
   ticketAlerts,
@@ -100,7 +111,7 @@ export default function DashboardAlertList({
         <div className="alert-list">
           {ticketItems.map(({ ticket, indicator }) => (
             <div className="alert-item" key={ticket.transaction_id}>
-              <div><strong>{ticket.transaction_id}</strong><span>Status {ticket.status}</span></div>
+              <div><strong>{ticket.transaction_id}</strong><span>Status {ticketStatusLabel(ticket.status)}</span></div>
               <b>{indicator}</b>
             </div>
           ))}

@@ -18,25 +18,25 @@ const navByRole: Record<string, { label: string; href: string; icon: string }[]>
     { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
     { label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
     { label: 'Profil', href: '/dispatcher/profil', icon: 'user' },
-    { label: 'Ganti Password', href: '/ganti-password', icon: 'lock' },
+    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
   ],
   Operation: [
     { label: 'Permintaan Jadwal Tambahan', href: '/operation/request-extra-schedule', icon: 'calendar' },
     { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan', icon: 'history' },
     { label: 'Profil', href: '/operation/profil', icon: 'user' },
-    { label: 'Ganti Password', href: '/ganti-password', icon: 'lock' },
+    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
   ],
   Executor: [
     { label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' },
     { label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' },
     { label: 'Profil', href: '/executor/profil', icon: 'user' },
-    { label: 'Ganti Password', href: '/ganti-password', icon: 'lock' },
+    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
   ],
   Maintainer: [
     { label: 'Beranda', href: '/maintainer/beranda', icon: 'home' },
     { label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'ticket' },
     { label: 'Profil', href: '/maintainer/profil', icon: 'user' },
-    { label: 'Ganti Password', href: '/ganti-password', icon: 'lock' },
+    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
   ],
 }
 
@@ -157,7 +157,7 @@ export default function AppShellClient({
           <div className="super-menu">
             <div className="super-title">Pengaturan</div>
             <Link href="/super-user/profil" onClick={closeMobile}><span className="nav-icon"><Icon name="user" /></span><span className="nav-link-text">Profil Super User</span></Link>
-            <Link href="/ganti-password" onClick={closeMobile}><span className="nav-icon"><Icon name="lock" /></span><span className="nav-link-text">Ganti Password</span></Link>
+            <Link href="/ganti-password" onClick={closeMobile}><span className="nav-icon"><Icon name="lock" /></span><span className="nav-link-text">Ganti Kata Sandi</span></Link>
             <Link href="/super-user/pengelolaan-pengguna" onClick={closeMobile}><span className="nav-icon"><Icon name="user" /></span><span className="nav-link-text">Kelola Pengguna</span></Link>
             <Link href="/super-user/pengelolaan-database" onClick={closeMobile}><span className="nav-icon"><Icon name="report" /></span><span className="nav-link-text">Kelola Database</span></Link>
             <Link href="/super-user/pengelolaan-transaksi" onClick={closeMobile}><span className="nav-icon"><Icon name="clipboard" /></span><span className="nav-link-text">Kelola Transaksi</span></Link>
