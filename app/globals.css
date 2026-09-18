@@ -304,9 +304,24 @@ td select:focus {
 }
 
 .app-shell {
+  width: 100%;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.app-shell > .sidebar {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.app-shell > .app-content {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  width: 100%;
 }
 
 .sidebar {
@@ -474,6 +489,7 @@ td select:focus {
 
 
 .page-content {
+  width: 100%;
   padding: 28px;
   max-width: 1440px;
 }
