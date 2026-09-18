@@ -1,5 +1,5 @@
 import AppShell from '@/components/app-shell'
-import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
+import { TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
