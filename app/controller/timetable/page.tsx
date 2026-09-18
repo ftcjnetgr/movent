@@ -7,6 +7,7 @@ export default async function ControllerTimetablePage() {
   const data = await getTimetableData(profile)
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Controller</span>
@@ -15,5 +16,6 @@ export default async function ControllerTimetablePage() {
         </div>
       </div>
       <TimetableView date={data.date} schedules={data.schedules} tasks={data.tasks} taskBySchedule={data.taskBySchedule} />
+    </>
   )
 }
