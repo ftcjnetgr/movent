@@ -57,6 +57,16 @@ const navByRole: Record<string, NavGroup[]> = {
       { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
     ]},
   ],
+  Operation: [
+    { label: 'Permintaan', icon: 'calendar', items: [
+      { label: 'Request Extra Schedule', href: '/operation/request-extra-schedule', icon: 'calendar' },
+      { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan', icon: 'history' },
+    ]},
+    { label: 'Akun', icon: 'user', items: [
+      { label: 'Profil', href: '/operation/profil', icon: 'user' },
+      { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    ]},
+  ],
 }
 
 const superUserGroup: NavGroup = {
@@ -73,6 +83,7 @@ const modeRoutes: Record<string, string> = {
   Dispatcher: '/dispatcher/beranda',
   Executor: '/executor/tugas-saya',
   Maintainer: '/maintainer/beranda',
+  Operation: '/operation/request-extra-schedule',
 }
 
 function Icon({ name }: { name: string }) {
