@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -24,9 +25,9 @@ export default async function MaintainerBerandaPage() {
     <>
     <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Beranda</h1><p>Pantau tugas dan ticketing maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
-        <a className="dashboard-tab active" href="/maintainer/beranda">Tugas</a>
-        <a className="dashboard-tab" href="/maintainer/timetable">Jadwal</a>
-        <a className="dashboard-tab" href="/maintainer/ticketing-maintenance">Tiket Maintenance</a>
+        <Link className="dashboard-tab active" href="/maintainer/beranda">Tugas</Link>
+        <Link className="dashboard-tab" href="/maintainer/timetable">Jadwal</Link>
+        <Link className="dashboard-tab" href="/maintainer/ticketing-maintenance">Tiket Maintenance</Link>
       </div>
       <DashboardAlertList
         taskAlerts={data.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))}
