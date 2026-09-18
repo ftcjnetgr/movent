@@ -68,6 +68,12 @@ export default async function ControllerBerandaPage() {
           <div className="metric-card"><span>Cycle Completed</span><strong>{formatMinutes(data.averages.completedCycle)}</strong></div>
           <div className="metric-card"><span>Cycle Canceled</span><strong>{formatMinutes(data.averages.canceledCycle)}</strong></div>
         </div>
+        <div className="metric-grid">
+          <div className="metric-card"><span>Non-TGR: Assigned → Driving</span><strong>{formatMinutes(data.taskAveragesNonTgr.assignedDriving)}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Driving → Completed</span><strong>{formatMinutes(data.taskAveragesNonTgr.drivingCompleted)}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Cycle Completed</span><strong>{formatMinutes(data.taskAveragesNonTgr.completedCycle)}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Cycle Canceled</span><strong>{formatMinutes(data.taskAveragesNonTgr.canceledCycle)}</strong></div>
+        </div>
       </section>
 
       <TaskDurationVisualization rows={data.taskDurations} />
