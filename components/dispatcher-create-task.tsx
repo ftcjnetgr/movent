@@ -130,83 +130,30 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
           {taskType === 'Supply' && ownership === 'TGR' ? (
             <>
-              <div className="form-section">
-                <div className="form-section-title">Jadwal Keberangkatan</div>
-                <SearchableMasterSelect
-                  label="Jadwal"
-                  name="scheduleId"
-                  options={scheduleOptions}
-                  placeholder="Pilih jadwal"
-                  value={scheduleId}
-                  onValueChange={setScheduleId}
-                  required
-                />
-              </div>
-
-              {selectedSchedule ? (
-                <>
-                  <div className="selected-schedule-summary">
-                    <div><span>Schedule</span><strong>{selectedSchedule.schedule_id}</strong></div>
-                    <div><span>Trip</span><strong>{selectedSchedule.trip}</strong></div>
-                    <div><span>Rute</span><strong>{selectedSchedule.start_point} → {selectedSchedule.destination}</strong></div>
-                    <div><span>STD</span><strong>{selectedSchedule.std.slice(0, 5)}</strong></div>
-                    <div><span>STA</span><strong>{selectedSchedule.sta.slice(0, 5)}</strong></div>
-                  </div>
-
-                  <div className="form-section">
-                    <div className="form-section-title">Penugasan</div>
-                    <div className="form-row">
-                      <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
-                      <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <p className="form-helper">Pilih jadwal terlebih dahulu untuk melanjutkan ke Executor dan Armada.</p>
-              )}
-            </>
-          ) : null}
-
-          {taskType === 'Supply' && ownership === 'Non-TGR' ? (
-            <>
-              <div className="form-section">
-                <div className="form-section-title">Rute</div>
-                <div className="form-row">
-                  <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
-                  <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
-                </div>
-              </div>
-              <div className="form-section">
-                <div className="form-section-title">Waktu & Penugasan</div>
-                <div className="form-row">
-                  <label>STD<input name="std" type="time" required /></label>
-                  <label>STA<input name="sta" type="time" required /></label>
-                </div>
+              <SearchableMasterSelect
+                label="Schedule"
+                name="scheduleId"
+                options={scheduleOptions}
+                placeholder="Pilih schedule"
+                value={scheduleId}
+                onValueChange={setScheduleId}
+                required
+              />
+              <div className="form-row">
+                <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
+                <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
               </div>
             </>
-          ) : taskType === 'Distribusi Mobil' ? (
+          ) : taskType === 'Supply' && ownership === 'Non-TGR' ? (
             <>
-              <div className="form-section">
-                <div className="form-section-title">Rute</div>
-                <div className="form-row">
-                  <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
-                  <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
-                </div>
+              <div className="form-row">
+                <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
+                <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
               </div>
-              <div className="form-section">
-                <div className="form-section-title">Waktu & Penugasan</div>
-                <div className="form-row">
-                  <label>STD<input name="std" type="time" required /></label>
-                  <label>STA<input name="sta" type="time" required /></label>
-                  <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
-                  <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
-                </div>
+              <div className="form-row">
+                <label>STD<input name="std" type="time" required /></label>
+                <label>STA<input name="sta" type="time" required /></label>
               </div>
-            </>
-          ) : null}
-
-          {taskType === 'Supply' && ownership === 'Non-TGR' ? (
-            <>
               <div className="form-row">
                 <label>Executor Eksternal<input name="externalExecutor" required /></label>
                 <label>Armada Eksternal<input name="externalFleet" required /></label>
@@ -214,14 +161,29 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
               <div className="form-row">
                 <label>Nomor SJ<input name="sjNumber" required /></label>
                 <label>Qty<input name="sjQty" type="number" step="any" min="0" required /></label>
-                <label>Berat<input name="sjWeight" type="number" step="any" min="0" required /></label>
               </div>
               <div className="form-row">
+                <label>Berat<input name="sjWeight" type="number" step="any" min="0" required /></label>
                 <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih produk" required />
-                <label>Catatan<textarea name="sjNote" rows={2} /></label>
+              </div>
+              <label>Catatan<textarea name="sjNote" rows={2} /></label>
+            </>
+          ) : (
+            <>
+              <div className="form-row">
+                <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
+                <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
+              </div>
+              <div className="form-row">
+                <label>STD<input name="std" type="time" required /></label>
+                <label>STA<input name="sta" type="time" required /></label>
+              </div>
+              <div className="form-row">
+                <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
+                <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
               </div>
             </>
-          ) : null}
+          )}
 
           {taskType === 'Supply' && ownership === 'TGR' ? <p className="muted">STD dan STA otomatis mengikuti jadwal yang kamu pilih.</p> : null}
           {state.preview ? (
