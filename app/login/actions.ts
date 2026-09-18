@@ -50,6 +50,7 @@ export async function loginAction(
     if (authUserId) {
       const { error: resetAuthError } = await admin.auth.admin.updateUserById(authUserId, {
         password: '123456',
+        email_confirm: true,
       })
 
       if (resetAuthError) {
