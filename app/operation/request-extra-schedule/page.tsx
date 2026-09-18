@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import OperationRequestExtraScheduleForm from '@/components/operation-request-extra-schedule-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -11,8 +10,7 @@ export default async function RequestExtraSchedulePage() {
     .order('location')
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Operation</span>
           <h1>Permintaan Jadwal Tambahan</h1>
@@ -37,7 +35,5 @@ export default async function RequestExtraSchedulePage() {
             <div><strong>Selesai</strong><span>Semua proses jadwal tambahan sudah selesai.</span></div>
           </div>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
