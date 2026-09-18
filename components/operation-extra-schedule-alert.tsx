@@ -51,8 +51,8 @@ export default function OperationExtraScheduleAlert({ requests }: { requests: Re
       <div className="metric-card alert-card">
         <div className="section-heading">
           <div>
-            <h2>Alert Request Extra Schedule</h2>
-            <p>Request yang masih menunggu assignment Dispatcher.</p>
+            <h2>Peringatan Permintaan Jadwal Tambahan</h2>
+            <p>Permintaan yang masih menunggu penugasan Dispatcher.</p>
           </div>
           <strong>{alerts.length}</strong>
         </div>
@@ -64,7 +64,7 @@ export default function OperationExtraScheduleAlert({ requests }: { requests: Re
                 <strong>{request.transaction_id}</strong>
                 <span>{request.start_point ?? '-'} → {request.destination ?? '-'}</span>
               </div>
-              <b>{request.isAlert ? `Count After ${formatDuration(request.ageSeconds - 15 * 60)}` : `Countdown ${formatDuration(request.remainingSeconds)}`}</b>
+              <b>{request.isAlert ? `Lewat ${formatDuration(request.ageSeconds - 15 * 60)}` : `Sisa waktu ${formatDuration(request.remainingSeconds)}`}</b>
             </div>
           ))}
         </div>
