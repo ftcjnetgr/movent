@@ -20,6 +20,7 @@ export default async function DispatcherAssignmentHistoryPage() {
     : (tasks ?? [])
 
   return (
+    <>
     <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Riwayat Penugasan</h1><p>Seluruh tugas yang dibuat oleh Dispatcher ini, termasuk seluruh statusnya.</p></div></div>
       <section className="data-table-card">
         <div className="table-wrap">
