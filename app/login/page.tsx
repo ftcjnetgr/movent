@@ -23,7 +23,6 @@ export default function LoginPage() {
             </div>
 
             <div className="login-heading">
-              <span className="eyebrow">manajemen pergerakan</span>
               <h1>Masuk ke akun kamu</h1>
               <p>Kelola operasional, penugasan, dan armada dalam satu tempat.</p>
             </div>
@@ -77,7 +76,6 @@ export default function LoginPage() {
 
 
           <div className="login-visual-copy">
-            <span className="eyebrow login-visual-eyebrow">kendali operasional</span>
             <h2>Semua pergerakan.<br />Satu kendali.</h2>
             <p>
               Pantau jadwal, penugasan, ticketing, dan perjalanan armada
