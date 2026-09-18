@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 type NavItem = { label: string; href: string; icon: string }
 type NavGroup = { label: string; icon: string; items: NavItem[] }
@@ -192,6 +192,8 @@ export default function AppShellClient({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const [navigating, setNavigating] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -222,7 +224,18 @@ export default function AppShellClient({
     }
   }, [openGroups])
 
+  useEffect(() => {
+    setNavigating(false)
+  }, [pathname])
+
   const closeMobile = () => setMobileOpen(false)
+
+  function navigateTo(href: string) {
+    if (href === pathname) return
+    setNavigating(true)
+    closeMobile()
+    router.push(href)
+  }
 
   function toggleGroup(label: string) {
     if (collapsed) setCollapsed(false)
@@ -234,10 +247,11 @@ export default function AppShellClient({
   const activeItem = navGroups.flatMap((group) => group.items).find((item) => item.href === pathname)
 
   return (
-    <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'sidebar-mobile-open' : ''}`}>
+    <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'sidebar-mobile-open' : ''} ${navigating ? 'is-navigating' : ''}`}>
+      {navigating ? <div className="route-progress" aria-label="Memuat halaman" /> : null}
       <aside className="sidebar">
         <div className="sidebar-top">
-          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={closeMobile}>
+          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(event) => { event.preventDefault(); navigateTo(href) }}>
             <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
             <div className="sidebar-caption">Manajemen Pergerakan</div>
           </Link>
@@ -279,7 +293,7 @@ export default function AppShellClient({
                       key={item.href}
                       href={item.href}
                       className={pathname === item.href ? 'nav-link active' : 'nav-link'}
-                      onClick={closeMobile}
+                      onClick={(event) => { event.preventDefault(); navigateTo(item.href) }}
                       title={collapsed ? item.label : undefined}
                     >
                       <span className="nav-icon"><Icon name={item.icon} /></span>
