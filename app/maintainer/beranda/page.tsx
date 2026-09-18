@@ -27,8 +27,8 @@ export default async function MaintainerBerandaPage() {
           <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length}</strong></div>
         </div>
       </section>
-      <TaskDurationVisualization rows={dashboard.taskDurations} />
-      <TicketDurationVisualization rows={dashboard.ticketDurations} />
+      <TaskDurationVisualization rows={data.taskDurations} />
+      <TicketDurationVisualization rows={data.ticketDurations} />
 
       <section className="section-block">
         <div className="metric-grid">
