@@ -2474,3 +2474,40 @@ button:hover,
   background: var(--ui-primary-soft);
   color: var(--ui-primary);
 }
+
+
+.selected-schedule-summary {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  background: var(--surface-muted, #f8fafc);
+}
+
+.selected-schedule-summary span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  opacity: .65;
+}
+
+.selected-schedule-summary strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.form-helper {
+  margin: 12px 0 18px;
+  font-size: 13px;
+  opacity: .7;
+}
+
+@media (max-width: 760px) {
+  .selected-schedule-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
