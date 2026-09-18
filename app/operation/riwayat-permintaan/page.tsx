@@ -4,6 +4,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelExtraScheduleAction } from '../request-extra-schedule/actions'
 
+async function cancelExtraScheduleFormAction(formData: FormData) {
+  'use server'
+  await cancelExtraScheduleAction(formData)
+}
+
 function formatDateTime(value: string | null) {
   if (!value) return '-'
   return new Intl.DateTimeFormat('id-ID', {
@@ -89,7 +94,7 @@ export default async function OperationHistoryPage() {
                     {request.status === 'Requested' ? (
                       <details style={{marginTop:8}}>
                         <summary className="link-button">Batalkan</summary>
-                        <form action={cancelExtraScheduleAction} className="compact-form">
+                        <form action={cancelExtraScheduleFormAction} className="compact-form">
                           <input type="hidden" name="transactionId" value={request.transaction_id} />
                           <input name="note" placeholder="Alasan pembatalan" required />
                           <button type="submit">Konfirmasi batal</button>
