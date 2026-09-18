@@ -52,7 +52,7 @@ async function saveMasterRow(formData: FormData, mode: 'insert' | 'update'): Pro
 
   const admin = createAdminClient()
   if (mode === 'insert') {
-    if (db !== 'schedules' && payload.status === undefined) payload.status = 'Active'
+    payload.status = 'Active'
     const { error } = await admin.from(db).insert(payload)
     if (error) return { error: 'Data belum berhasil ditambahkan.' }
   } else {
