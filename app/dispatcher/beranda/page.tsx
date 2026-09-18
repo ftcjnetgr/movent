@@ -31,6 +31,7 @@ export default async function DispatcherBerandaPage() {
   ])
 
   return (
+    <>
     <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab active" href="/dispatcher/beranda">Tugas</a>
