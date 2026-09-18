@@ -36,8 +36,14 @@ export async function loginAction(
     .eq('username', username)
     .maybeSingle()
 
-  if (profileError || !profile) {
-    return { error: 'Username atau kata sandi salah. Coba lagi, ya.' }
+  if (profileError) {
+    return {
+      error: `Login diagnostic: PROFILE_QUERY | ${profileError.code ?? 'no_code'} | ${profileError.message}`,
+    }
+  }
+
+  if (!profile) {
+    return { error: 'Login diagnostic: PROFILE_NOT_FOUND' }
   }
 
   if (profile.status === 'Locked') {
