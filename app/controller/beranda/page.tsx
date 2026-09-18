@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -30,8 +29,7 @@ export default async function ControllerBerandaPage() {
   const data = await getDashboardData(profile)
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Beranda</h1>
@@ -114,6 +112,5 @@ export default async function ControllerBerandaPage() {
         </div>
 
       </section>
-    </AppShell>
   )
 }
