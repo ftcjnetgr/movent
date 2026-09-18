@@ -167,15 +167,15 @@ export default function TimetableView({
   return (
     <div>
       <div className="dashboard-tabs">
-        <button className={view === 'database' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('database')}>Dari Database</button>
-        <button className={view === 'live' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('live')}>Live</button>
+        <button className={view === 'database' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('database')}>Jadwal</button>
+        <button className={view === 'live' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('live')}>Transaksi Berjalan</button>
       </div>
 
       {view === 'database' ? (
         <>
           <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Dari Titik Mulai</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Ke Destinasi</button>
+            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Berdasarkan Titik Mulai</button>
+            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Berdasarkan Destinasi</button>
           </div>
 
           <section className="metric-grid">
@@ -241,8 +241,8 @@ export default function TimetableView({
       ) : (
         <section className="data-table-card section-block timetable-shell">
           <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Dari Titik Mulai</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Ke Destinasi</button>
+            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Berdasarkan Titik Mulai</button>
+            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Berdasarkan Destinasi</button>
           </div>
           <div className="section-heading"><div><h2>Jadwal Langsung</h2><p>Semua transaksi yang sudah dibuat atau ditugaskan.</p></div></div>
           <section className="metric-grid">
