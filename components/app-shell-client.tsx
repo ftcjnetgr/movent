@@ -6,21 +6,21 @@ import { usePathname } from 'next/navigation'
 const navByRole: Record<string, { label: string; href: string }[]> = {
   Controller: [
     { label: 'Beranda', href: '/controller/beranda' },
-    { label: 'Penarikan Laporan', href: '/controller/penarikan-report' },
+    { label: 'Tarik Laporan', href: '/controller/penarikan-report' },
     { label: 'Profil', href: '/controller/profil' },
-    { label: 'Ganti Password', href: '/ganti-password' },
+    { label: 'Ganti Kata Sandi', href: '/ganti-password' },
   ],
   Dispatcher: [
     { label: 'Beranda', href: '/dispatcher/beranda' },
     { label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan' },
-    { label: 'Extra Schedule', href: '/dispatcher/extra-schedule' },
+    { label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule' },
     { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr' },
     { label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada' },
     { label: 'Profil', href: '/dispatcher/profil' },
     { label: 'Ganti Password', href: '/ganti-password' },
   ],
   Operation: [
-    { label: 'Permintaan Extra Schedule', href: '/operation/request-extra-schedule' },
+    { label: 'Permintaan Jadwal Tambahan', href: '/operation/request-extra-schedule' },
     { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan' },
     { label: 'Profil', href: '/operation/profil' },
     { label: 'Ganti Password', href: '/ganti-password' },
@@ -67,7 +67,7 @@ export default function AppShellClient({
             alt="MOVENT"
             className="sidebar-brand-logo"
           />
-          <div className="sidebar-caption">Movement Management</div>
+          <div className="sidebar-caption">Manajemen Pergerakan</div>
         </div>
 
         {profile.role === 'Super User' ? (
@@ -96,9 +96,9 @@ export default function AppShellClient({
             <div className="super-title">Super User</div>
             <Link href="/super-user/profil">Profil Super User</Link>
             <Link href="/ganti-password">Ganti Password</Link>
-            <Link href="/super-user/pengelolaan-pengguna">Pengelolaan Pengguna</Link>
-            <Link href="/super-user/pengelolaan-database">Pengelolaan Database</Link>
-            <Link href="/super-user/pengelolaan-transaksi">Pengelolaan Transaksi</Link>
+            <Link href="/super-user/pengelolaan-pengguna">Kelola Pengguna</Link>
+            <Link href="/super-user/pengelolaan-database">Kelola Database</Link>
+            <Link href="/super-user/pengelolaan-transaksi">Kelola Transaksi</Link>
           </div>
         ) : null}
 
