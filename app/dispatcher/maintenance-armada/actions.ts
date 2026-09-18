@@ -6,7 +6,17 @@ import { redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
-type State = { error?: string; success?: string; transactionId?: string }
+type State = {
+  error?: string
+  success?: string
+  transactionId?: string
+  preview?: {
+    transactionId: string
+    maintenanceList: string
+    location: string
+    platNumber: string
+  }
+}
 
 export async function createMaintenanceTicketAction(_state: State, formData: FormData): Promise<State> {
   const profile = await getCurrentProfile()
@@ -54,7 +64,16 @@ export async function createMaintenanceTicketAction(_state: State, formData: For
   revalidatePath('/dispatcher/beranda')
   revalidatePath('/maintainer/beranda')
 
-  return { success: `Tiket ${transactionId} berhasil dibuat.`, transactionId }
+  return {
+    success: `Tiket ${transactionId} berhasil dibuat.`,
+    transactionId,
+    preview: {
+      transactionId,
+      maintenanceList: maintenance.maintenance_list,
+      location: locationData.location,
+      platNumber: fleet.plat_number,
+    },
+  }
 }
 
 export async function cancelMaintenanceTicketAction(formData: FormData) {
