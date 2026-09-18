@@ -36,7 +36,7 @@ function Bar({ value, max }: { value: number | null; max: number }) {
   const width = max > 0 ? Math.max(3, Math.min(100, (value / max) * 100)) : 3
   return (
     <div style={{display:'grid',gridTemplateColumns:'minmax(80px,1fr) auto',gap:8,alignItems:'center'}}>
-      <div style={{height:8,borderRadius:999,background:'var(--surface-muted)',overflow:'hidden'}}>
+      <div style={{height:8,borderRadius:999,background:'#eef1f4',overflow:'hidden'}}>
         <div style={{height:'100%',width:`${width}%`,background:'currentColor',opacity:0.65}} />
       </div>
       <span>{formatMinutes(value)}</span>
