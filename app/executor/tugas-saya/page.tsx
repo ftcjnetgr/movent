@@ -42,5 +42,7 @@ export default async function ExecutorTugasSayaPage() {
             <p>Tugas Completed masuk ke Riwayat Tugas. Tugas Dibatalkan tidak masuk ke daftar aktif.</p>
           </div>
         ) : null}
-      </section>)
+      </section>
+    </>
+  )
 }
