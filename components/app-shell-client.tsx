@@ -121,7 +121,14 @@ export default function AppShellClient({
   const pathname = usePathname()
   const router = useRouter()
   const [navigating, setNavigating] = useState(false)
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window === 'undefined') return false
+    try {
+      return window.localStorage.getItem('movent:sidebar-collapsed') === 'true'
+    } catch {
+      return false
+    }
+  })
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<string[]>([])
 
@@ -144,15 +151,6 @@ export default function AppShellClient({
   )
 
   const activeGroup = activeItem?.group ?? ''
-
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem('movent:sidebar-collapsed')
-      if (saved === 'true') setCollapsed(true)
-    } catch {
-      // ignore browser storage errors
-    }
-  }, [])
 
   useEffect(() => {
     try {
