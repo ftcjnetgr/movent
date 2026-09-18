@@ -13,16 +13,16 @@ export default function OperationRequestExtraScheduleForm({ locations }: { locat
   return (
     <form action={formAction} className="data-form">
       <label>
-        Start Point
+        Titik Mulai
         <select name="startPoint" defaultValue="" required>
-          <option value="">Pilih Start Point</option>
+          <option value="">Pilih Titik Mulai</option>
           {locations.map((location) => <option key={location}>{location}</option>)}
         </select>
       </label>
       <label>
         Destinasi
         <select name="destination" defaultValue="" required>
-          <option value="">Pilih Destinasi</option>
+          <option value="">Pilih destinasi</option>
           {locations.map((location) => <option key={location}>{location}</option>)}
         </select>
       </label>
@@ -41,7 +41,7 @@ export default function OperationRequestExtraScheduleForm({ locations }: { locat
       {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
 
       <button type="submit" disabled={pending}>
-        {pending ? 'Mengajukan...' : 'Ajukan request'}
+        {pending ? 'Sedang mengajukan...' : 'Ajukan permintaan'}
       </button>
     </form>
   )
