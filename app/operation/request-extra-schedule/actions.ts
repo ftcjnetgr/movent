@@ -31,7 +31,7 @@ export async function createExtraScheduleAction(_state: State, formData: FormDat
   const profile = await getCurrentProfile()
 
   if (profile.role !== 'Operation' && profile.role !== 'Super User') {
-    return { error: 'Akses tidak tersedia.' }
+    return { error: 'Kamu belum punya akses ke bagian ini.' }
   }
 
   const startPoint = String(formData.get('startPoint') ?? '').trim()
@@ -40,7 +40,7 @@ export async function createExtraScheduleAction(_state: State, formData: FormDat
   const sta = String(formData.get('sta') ?? '').trim()
 
   if (!startPoint || !destination || !std || !sta) {
-    return { error: 'Start Point, Destinasi, STD, dan STA wajib diisi.' }
+    return { error: 'Start Point, Destinasi, STD, dan STA perlu diisi dulu, ya.' }
   }
 
   const stdTimestamp = jakartaTimestamp(std)
@@ -64,7 +64,7 @@ export async function createExtraScheduleAction(_state: State, formData: FormDat
 
   const { data: transactionId, error: transactionError } = await admin.rpc('movent_next_transaction_id')
   if (transactionError || !transactionId) {
-    return { error: 'Transaction ID belum berhasil dibuat. Coba lagi.' }
+    return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya. Coba lagi, ya.' }
   }
 
   const { error: insertError } = await admin.from('tasks').insert({
@@ -82,7 +82,7 @@ export async function createExtraScheduleAction(_state: State, formData: FormDat
   })
 
   if (insertError) {
-    return { error: 'Request Extra Schedule belum berhasil dibuat. Coba lagi.' }
+    return { error: 'Request Extra Schedule belum berhasil dibuat. Coba lagi, ya.' }
   }
 
   revalidatePath('/operation/request-extra-schedule')
@@ -101,11 +101,11 @@ export async function cancelExtraScheduleAction(formData: FormData) {
   const note = String(formData.get('note') ?? '').trim()
 
   if (!transactionId || !note) {
-    return { error: 'Transaction ID dan alasan pembatalan wajib diisi.' }
+    return { error: 'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.' }
   }
 
   if (profile.role !== 'Operation' && profile.role !== 'Super User') {
-    return { error: 'Akses tidak tersedia.' }
+    return { error: 'Kamu belum punya akses ke bagian ini.' }
   }
 
   const admin = createAdminClient()
@@ -136,7 +136,7 @@ export async function cancelExtraScheduleAction(formData: FormData) {
     .eq('id', task.id)
 
   if (error) {
-    return { error: 'Request belum berhasil dibatalkan. Coba lagi.' }
+    return { error: 'Request belum berhasil dibatalkan. Coba lagi, ya.' }
   }
 
   revalidatePath('/operation/riwayat-permintaan')
