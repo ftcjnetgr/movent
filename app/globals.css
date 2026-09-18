@@ -247,6 +247,9 @@ td select:focus {
 
 .app-content {
   min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar {
@@ -274,6 +277,25 @@ td select:focus {
 .page-content {
   padding: 28px;
   max-width: 1440px;
+}
+
+.app-footer {
+  margin-top: auto;
+  padding: 18px 28px 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #858c97;
+  font-size: 11px;
+  border-top: 1px solid #e7e9ee;
+}
+
+@media (max-width: 640px) {
+  .app-footer {
+    flex-direction: column;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
 .page-heading {
