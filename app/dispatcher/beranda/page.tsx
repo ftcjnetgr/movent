@@ -56,6 +56,12 @@ export default async function DispatcherBerandaPage() {
           <div className="metric-card"><span>Cycle Completed</span><strong>{dashboard.averages.completedCycle === null ? '-' : `${Math.round(dashboard.averages.completedCycle)} m`}</strong></div>
           <div className="metric-card"><span>Cycle Canceled</span><strong>{dashboard.averages.canceledCycle === null ? '-' : `${Math.round(dashboard.averages.canceledCycle)} m`}</strong></div>
         </div>
+        <div className="metric-grid">
+          <div className="metric-card"><span>Non-TGR: Assigned → Driving</span><strong>{dashboard.taskAveragesNonTgr.assignedDriving === null ? '-' : `${Math.round(dashboard.taskAveragesNonTgr.assignedDriving)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Driving → Completed</span><strong>{dashboard.taskAveragesNonTgr.drivingCompleted === null ? '-' : `${Math.round(dashboard.taskAveragesNonTgr.drivingCompleted)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Cycle Completed</span><strong>{dashboard.taskAveragesNonTgr.completedCycle === null ? '-' : `${Math.round(dashboard.taskAveragesNonTgr.completedCycle)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Cycle Canceled</span><strong>{dashboard.taskAveragesNonTgr.canceledCycle === null ? '-' : `${Math.round(dashboard.taskAveragesNonTgr.canceledCycle)} m`}</strong></div>
+        </div>
       </section>
 
       <TaskDurationVisualization rows={dashboard.taskDurations} />
