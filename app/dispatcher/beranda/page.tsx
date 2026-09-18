@@ -84,5 +84,7 @@ export default async function DispatcherBerandaPage() {
           {Object.entries(dashboard.ticketCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
           <div className="metric-card alert-card"><span>Peringatan Ticketing</span><strong>{dashboard.ticketAlertCount}</strong></div>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
