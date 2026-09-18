@@ -41,7 +41,7 @@ export default function ReportForm({
     setLoading(false)
     if (!response.ok) {
       setRows([])
-      setMessage(data.error ?? 'Report belum berhasil dibuat.')
+      setMessage(data.error ?? 'Laporannya belum berhasil dibuat. Kok coba cek lagi, ya?')
       return
     }
     setRows(data.rows ?? [])
@@ -56,7 +56,7 @@ export default function ReportForm({
   return (
     <div>
       <div className="data-form">
-        <label>Jenis report
+        <label>Jenis laporan
           <select value={type} onChange={(event) => setType(event.target.value)}>
             <option value="STD">STD</option>
             <option value="STA">STA</option>
@@ -67,7 +67,7 @@ export default function ReportForm({
           <label>Dari tanggal<input type="date" value={from} onChange={(event) => setFrom(event.target.value)} /></label>
           <label>Sampai tanggal<input type="date" value={to} onChange={(event) => setTo(event.target.value)} /></label>
         </div>
-        <label>Start Point
+        <label>Titik Mulai
           <select value={startPoint} onChange={(event) => setStartPoint(event.target.value)}>
             <option value="">Semua</option>
             {startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
@@ -88,8 +88,8 @@ export default function ReportForm({
 
         {message ? <p className="form-error" role="alert">{message}</p> : null}
         <div className="form-row">
-          <button type="button" onClick={preview} disabled={loading}>{loading ? 'Menarik...' : 'Tarik report'}</button>
-          <button type="button" className="secondary-button" onClick={download} disabled={!from || !to}>Download CSV</button>
+          <button type="button" onClick={preview} disabled={loading}>{loading ? 'Menarik...' : 'Tarik laporan'}</button>
+          <button type="button" className="secondary-button" onClick={download} disabled={!from || !to}>Unduh CSV</button>
         </div>
         <p className="muted">Rentang waktu maksimal 7 hari. Hasil report menggunakan Bahasa Inggris yang formal.</p>
       </div>
@@ -103,7 +103,7 @@ export default function ReportForm({
             </thead>
             <tbody>
               {rows.map((row, index) => <tr key={index}>{Object.keys(row).map((key) => <td key={key}>{row[key] ?? '-'}</td>)}</tr>)}
-              {!rows.length ? <tr><td>Tarik report untuk melihat hasil.</td></tr> : null}
+              {!rows.length ? <tr><td>Tarik laporan untuk melihat hasil.</td></tr> : null}
             </tbody>
           </table>
         </div>
