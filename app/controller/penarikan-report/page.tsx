@@ -12,11 +12,13 @@ export default async function ControllerReportPage() {
   const executorOptions = (executors ?? []).map((item) => ({ value: item.executor_nik, label: `${item.executor_nik} - ${item.full_name}` }))
 
   return (
+    <>
     <div className="page-heading"><div><span className="eyebrow">Controller</span><h1>Penarikan Laporan</h1><p>Tarik laporan berdasarkan STD, STA, atau tugas yang dibatalkan.</p></div></div>
       <section className="section-block">
         <div className="metric-card report-card">
           <ReportForm startPoints={options} destinations={options} executors={executorOptions} />
         </div>
       </section>
+    </>
   )
 }
