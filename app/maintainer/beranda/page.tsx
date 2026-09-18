@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
 
@@ -14,6 +15,11 @@ export default async function MaintainerBerandaPage() {
         <a className="dashboard-tab" href="/maintainer/timetable">Timetable</a>
         <a className="dashboard-tab" href="/maintainer/ticketing-maintenance">Ticketing Maintenance</a>
       </div>
+      <DashboardAlertList
+        taskAlerts={data.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))}
+        ticketAlerts={data.ticketAlerts}
+      />
+
       <section className="section-block">
         <div className="metric-grid">
           {Object.entries(data.taskCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
