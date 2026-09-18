@@ -11,33 +11,151 @@ export default function LoginPage() {
 
   return (
     <main className="login-page">
-      <section className="login-card" aria-label="Login MOVENT">
-        <div className="login-brand">movent</div>
-        <h1>Masuk ke MOVENT</h1>
-        <p className="login-subtitle">Siap bantu operasional kamu berjalan lebih rapi.</p>
+      <section className="login-shell" aria-label="Login MOVENT">
+        <div className="login-panel login-panel-form">
+          <div className="login-form-inner">
+            <div className="login-brand-wrap">
+              <span className="login-brand-mark" aria-hidden="true">
+                <span className="login-brand-mark-blue" />
+                <span className="login-brand-mark-orange" />
+              </span>
+              <span className="login-brand">movent</span>
+            </div>
 
-        <form action={formAction} className="login-form">
-          <label>
-            Username
-            <input name="username" autoComplete="username" autoFocus />
-          </label>
+            <div className="login-heading">
+              <span className="eyebrow">movement management</span>
+              <h1>Masuk ke akun kamu</h1>
+              <p>Kelola operasional, penugasan, dan armada dalam satu tempat.</p>
+            </div>
 
-          <label>
-            Password
-            <input name="password" type="password" autoComplete="current-password" />
-          </label>
+            <form action={formAction} className="login-form">
+              <label>
+                Username
+                <div className="login-input-wrap">
+                  <span className="login-input-icon" aria-hidden="true">@</span>
+                  <input
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                    placeholder="Masukkan username"
+                  />
+                </div>
+              </label>
 
-          {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
+              <label>
+                Password
+                <div className="login-input-wrap">
+                  <span className="login-input-icon" aria-hidden="true">••</span>
+                  <input
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    placeholder="Masukkan password"
+                  />
+                </div>
+              </label>
 
-          <button type="submit" disabled={pending}>
-            {pending ? 'Memeriksa...' : 'Masuk'}
-          </button>
-        </form>
+              {state.error ? (
+                <p className="form-error login-error" role="alert">
+                  {state.error}
+                </p>
+              ) : null}
 
-        <div className="login-footer">
-          <span>Part of FTC Go Project</span>
-          <span>Developed by Fleet Traffic Control</span>
+              <button type="submit" className="login-submit" disabled={pending}>
+                {pending ? 'Memeriksa...' : 'Masuk ke MOVENT'}
+              </button>
+            </form>
+          </div>
+
+          <div className="login-footer">
+            <span>Part of FTC Go Project</span>
+            <span>Developed by Fleet Traffic Control</span>
+          </div>
         </div>
+
+        <aside className="login-panel login-panel-visual" aria-hidden="true">
+          <div className="login-visual-glow login-visual-glow-one" />
+          <div className="login-visual-glow login-visual-glow-two" />
+
+          <div className="login-visual-copy">
+            <span className="eyebrow login-visual-eyebrow">operational control</span>
+            <h2>Semua pergerakan.<br />Satu kendali.</h2>
+            <p>
+              Pantau jadwal, penugasan, ticketing, dan perjalanan armada
+              dengan alur kerja yang tetap rapi.
+            </p>
+          </div>
+
+          <div className="login-visual-board">
+            <div className="login-board-toolbar">
+              <div className="login-board-dots">
+                <span />
+                <span />
+                <span />
+              </div>
+              <span>movent / dashboard</span>
+            </div>
+
+            <div className="login-board-body">
+              <div className="login-board-sidebar">
+                <span className="login-board-logo" />
+                <span className="login-board-line long" />
+                <span className="login-board-line" />
+                <span className="login-board-line" />
+                <span className="login-board-line short" />
+              </div>
+
+              <div className="login-board-content">
+                <div className="login-board-heading">
+                  <span />
+                  <span />
+                </div>
+
+                <div className="login-board-cards">
+                  <div>
+                    <small>Tugas</small>
+                    <strong>Operasional</strong>
+                    <i />
+                  </div>
+                  <div>
+                    <small>Timetable</small>
+                    <strong>Jadwal</strong>
+                    <i />
+                  </div>
+                  <div>
+                    <small>Ticketing</small>
+                    <strong>Maintenance</strong>
+                    <i />
+                  </div>
+                </div>
+
+                <div className="login-board-chart">
+                  <span className="chart-bar bar-one" />
+                  <span className="chart-bar bar-two" />
+                  <span className="chart-bar bar-three" />
+                  <span className="chart-bar bar-four" />
+                  <span className="chart-bar bar-five" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="login-float-card login-float-card-one">
+            <span className="login-float-icon">✓</span>
+            <div>
+              <small>Status</small>
+              <strong>Operasional terpantau</strong>
+            </div>
+          </div>
+
+          <div className="login-float-card login-float-card-two">
+            <span className="login-float-icon">↗</span>
+            <div>
+              <small>Alur kerja</small>
+              <strong>Lebih terstruktur</strong>
+            </div>
+          </div>
+        </aside>
       </section>
     </main>
   )
