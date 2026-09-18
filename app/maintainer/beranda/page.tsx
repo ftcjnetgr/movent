@@ -26,6 +26,12 @@ export default async function MaintainerBerandaPage() {
           {Object.entries(data.taskCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
           <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length}</strong></div>
         </div>
+        <div className="metric-grid">
+          <div className="metric-card"><span>Non-TGR: Assigned → Driving</span><strong>{data.taskAveragesNonTgr.assignedDriving === null ? '-' : `${Math.round(data.taskAveragesNonTgr.assignedDriving)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Driving → Completed</span><strong>{data.taskAveragesNonTgr.drivingCompleted === null ? '-' : `${Math.round(data.taskAveragesNonTgr.drivingCompleted)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Cycle Completed</span><strong>{data.taskAveragesNonTgr.completedCycle === null ? '-' : `${Math.round(data.taskAveragesNonTgr.completedCycle)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Cycle Canceled</span><strong>{data.taskAveragesNonTgr.canceledCycle === null ? '-' : `${Math.round(data.taskAveragesNonTgr.canceledCycle)} m`}</strong></div>
+        </div>
       </section>
       <TaskDurationVisualization rows={data.taskDurations} />
       <TicketDurationVisualization rows={data.ticketDurations} />
