@@ -24,18 +24,22 @@ const configs = {
 export default async function DatabaseManagementPage({
   searchParams,
 }: {
-  searchParams: Promise<{ db?: string }>
+  searchParams: Promise<{ db?: string; q?: string }>
 }) {
   const profile = await getCurrentProfile()
   if (profile.role !== 'Super User') return null
 
-  const { db: rawDb } = await searchParams
+  const params = await searchParams
+  const rawDb = params.db
+  const query = (params.q ?? '').trim()
   const db = databases.some((item) => item.key === rawDb) ? rawDb! : 'schedules'
   const config = configs[db as keyof typeof configs]
   const meta = databases.find((item) => item.key === db)!
 
   const admin = createAdminClient()
-  const { data: rows } = await admin.from(db).select('*').order(meta.identifier).limit(50)
+  let rowsQuery = admin.from(db).select('*').order(meta.identifier)
+  if (query) rowsQuery = rowsQuery.ilike(meta.identifier, '%' + query + '%')
+  const { data: rows } = await rowsQuery.limit(50)
 
   return (
     <AppShell>
@@ -49,12 +53,17 @@ export default async function DatabaseManagementPage({
 
       <section className="section-block">
         <form className="data-form" method="get">
-          <label>Pilih Database
-            <select name="db" defaultValue={db}>
-              {databases.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
-            </select>
-          </label>
-          <button type="submit">Buka database</button>
+          <div className="form-row">
+            <label>Pilih Database
+              <select name="db" defaultValue={db}>
+                {databases.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
+              </select>
+            </label>
+            <label>Cari berdasarkan {meta.identifier}
+              <input name="q" defaultValue={query} placeholder="Ketik identifier" />
+            </label>
+          </div>
+          <button type="submit">Cari</button>
         </form>
       </section>
 
