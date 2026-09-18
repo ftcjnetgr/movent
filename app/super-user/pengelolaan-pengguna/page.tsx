@@ -28,6 +28,7 @@ export default async function UserManagementPage() {
     .order('full_name')
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
