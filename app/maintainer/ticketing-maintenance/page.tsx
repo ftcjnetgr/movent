@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
 
@@ -20,6 +21,7 @@ export default async function MaintainerTicketingMaintenanceDashboardPage() {
           <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlerts.length}</strong></div>
         </div>
       </section>
+      <DashboardAlertList ticketAlerts={data.ticketAlerts} />
     </AppShell>
   )
 }
