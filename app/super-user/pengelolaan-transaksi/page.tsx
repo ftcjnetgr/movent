@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { SuperUserTaskEditor, SuperUserTicketEditor } from '@/components/super-user-transaction-editor'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -40,8 +39,7 @@ export default async function SuperUserTransactionManagementPage() {
   const maintenanceOptions = masterOptions((maintenanceLists ?? []).map((item) => ({ value: item.maintenance_list, label: item.maintenance_list })))
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
           <h1>Kelola Transaksi</h1>
@@ -90,7 +88,5 @@ export default async function SuperUserTransactionManagementPage() {
             </tbody>
           </table>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
