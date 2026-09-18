@@ -1295,6 +1295,8 @@ th {
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
 
+}
+
 /* ===== dispatcher task creation workspace ===== */
 .task-create-workspace {
   padding: 18px;
@@ -1423,5 +1425,37 @@ th {
 
   .task-create-flow-head .secondary-button {
     flex: 0 0 auto;
+  }
+}
+
+
+/* ===== branding sizing ===== */
+.sidebar-top {
+  position: relative;
+}
+
+.sidebar-brand {
+  display: block;
+  min-width: 0;
+}
+
+.sidebar-brand-logo {
+  display: block;
+  width: min(190px, 100%);
+  height: auto;
+  max-height: 64px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-brand-logo {
+    width: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar-brand-logo {
+    width: 170px;
   }
 }
