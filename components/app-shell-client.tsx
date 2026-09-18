@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
@@ -69,6 +69,7 @@ const superUserGroup: NavGroup = {
 
 const modeRoutes: Record<string, string> = {
   Controller: '/controller/beranda',
+  Dispatcher: '/dispatcher/beranda',
   Executor: '/executor/tugas-saya',
   Maintainer: '/maintainer/beranda',
 }
@@ -97,8 +98,6 @@ function Icon({ name }: { name: string }) {
       return <svg {...common}><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
     case 'history':
       return <svg {...common}><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 4v5h5" /><path d="M12 7v5l3 2" /></svg>
-    case 'calendar':
-      return <svg {...common}><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></svg>
     case 'truck':
       return <svg {...common}><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z" /><circle cx="7" cy="18" r="2" /><circle cx="18" cy="18" r="2" /></svg>
     case 'wrench':
@@ -124,14 +123,24 @@ export default function AppShellClient({
   const [navigating, setNavigating] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [openGroups, setOpenGroups] = useState<string[]>([])
 
   const currentRole =
     Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ??
     (profile.role === 'Super User' ? 'Controller' : profile.role)
+
   const baseNavGroups = navByRole[currentRole] ?? []
   const navGroups = profile.role === 'Super User' ? [...baseNavGroups, superUserGroup] : baseNavGroups
-  const activeGroup = navGroups.find((group) => group.items.some((item) => item.href === pathname))?.label ?? ''
-  const [openGroups, setOpenGroups] = useState<string[]>([])
+
+  const activeItem = useMemo(
+    () => navGroups
+      .flatMap((group) => group.items.map((item) => ({ ...item, group: group.label })))
+      .filter((item) => pathname === item.href || pathname.startsWith(item.href + '/'))
+      .sort((a, b) => b.href.length - a.href.length)[0],
+    [navGroups, pathname],
+  )
+
+  const activeGroup = activeItem?.group ?? ''
 
   useEffect(() => {
     if (!activeGroup) return
@@ -140,25 +149,27 @@ export default function AppShellClient({
 
   useEffect(() => {
     try {
-      const saved = window.sessionStorage.getItem('movent:open-nav-groups')
+      const key = `movent:open-nav-groups:${currentRole}`
+      const saved = window.sessionStorage.getItem(key)
       if (!saved) return
       const parsed = JSON.parse(saved)
-      if (Array.isArray(parsed)) setOpenGroups(parsed.filter((item): item is string => typeof item === 'string'))
+      if (Array.isArray(parsed)) setOpenGroups(parsed.filter((item): item is string => navGroups.some((group) => group.label === item)))
     } catch {
       // ignore invalid browser storage
     }
-  }, [])
+  }, [currentRole, navGroups])
 
   useEffect(() => {
     try {
-      window.sessionStorage.setItem('movent:open-nav-groups', JSON.stringify(openGroups))
+      window.sessionStorage.setItem(`movent:open-nav-groups:${currentRole}`, JSON.stringify(openGroups))
     } catch {
       // ignore browser storage errors
     }
-  }, [openGroups])
+  }, [currentRole, openGroups])
 
   useEffect(() => {
     setNavigating(false)
+    setMobileOpen(false)
   }, [pathname])
 
   const closeMobile = () => setMobileOpen(false)
@@ -177,14 +188,17 @@ export default function AppShellClient({
       : [...current, label])
   }
 
-  const activeItem = navGroups.flatMap((group) => group.items).find((item) => item.href === pathname)
-
   return (
     <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'sidebar-mobile-open' : ''} ${navigating ? 'is-navigating' : ''}`}>
       {navigating ? <div className="route-progress" aria-label="Memuat halaman" /> : null}
+
       <aside className="sidebar">
         <div className="sidebar-top">
-          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(event) => { event.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}>
+          <Link
+            className="sidebar-brand"
+            href={modeRoutes[currentRole] ?? '/controller/beranda'}
+            onClick={(event) => { event.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}
+          >
             <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
             <div className="sidebar-caption">Manajemen Pergerakan</div>
           </Link>
@@ -202,7 +216,7 @@ export default function AppShellClient({
         <nav className="sidebar-nav sidebar-accordion" aria-label="Menu utama">
           {navGroups.map((group) => {
             const isOpen = openGroups.includes(group.label)
-            const hasActiveItem = group.items.some((item) => item.href === pathname)
+            const hasActiveItem = group.items.some((item) => pathname === item.href || pathname.startsWith(item.href + '/'))
             const panelId = 'nav-group-' + group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
             return (
@@ -221,24 +235,26 @@ export default function AppShellClient({
                 </button>
 
                 <div id={panelId} className="nav-group-items">
-                  {group.items.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={pathname === item.href ? 'nav-link active' : 'nav-link'}
-                      onClick={(event) => { event.preventDefault(); navigateTo(item.href) }}
-                      title={collapsed ? item.label : undefined}
-                    >
-                      <span className="nav-icon"><Icon name={item.icon} /></span>
-                      <span className="nav-link-text">{item.label}</span>
-                    </Link>
-                  ))}
+                  {group.items.map((item) => {
+                    const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={isActive ? 'nav-link active' : 'nav-link'}
+                        onClick={(event) => { event.preventDefault(); navigateTo(item.href) }}
+                        title={collapsed ? item.label : undefined}
+                      >
+                        <span className="nav-icon"><Icon name={item.icon} /></span>
+                        <span className="nav-link-text">{item.label}</span>
+                      </Link>
+                    )
+                  })}
                 </div>
               </div>
             )
           })}
         </nav>
-
 
         <div className="sidebar-footer">
           <div className="sidebar-user-avatar">{(profile.full_name || profile.username || 'U').slice(0, 1).toUpperCase()}</div>
@@ -262,24 +278,34 @@ export default function AppShellClient({
             >
               <span>☰</span>
             </button>
+
             <div className="topbar-title">
               <span className="role-label">{currentRole}</span>
-              <span className="topbar-page">{activeItem?.label ?? currentRole}</span>
+              <span className="topbar-page">
+                {activeGroup ? `${activeGroup} / ` : ''}{activeItem?.label ?? currentRole}
+              </span>
             </div>
           </div>
+
           <div className="topbar-actions">
             {profile.role === 'Super User' ? (
               <div className="topbar-mode" aria-label="Pilih mode">
                 <span className="topbar-mode-label">Mode</span>
                 <div className="topbar-mode-links">
                   {Object.entries(modeRoutes).map(([role, href]) => (
-                    <Link key={role} className={currentRole === role ? 'topbar-mode-link active' : 'topbar-mode-link'} href={href} onClick={(event) => { event.preventDefault(); navigateTo(href) }}>
+                    <Link
+                      key={role}
+                      className={currentRole === role ? 'topbar-mode-link active' : 'topbar-mode-link'}
+                      href={href}
+                      onClick={(event) => { event.preventDefault(); navigateTo(href) }}
+                    >
                       {role}
                     </Link>
                   ))}
                 </div>
               </div>
             ) : null}
+
             <div className="topbar-user">
               <span className="topbar-user-dot" />
               {profile.username}
