@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { submitNonTgrArrivalAction, submitNonTgrDepartureAction } from './actions'
@@ -23,8 +22,7 @@ export default async function ArmadaNonTgrPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <AppShell>
-      <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Armada Non-TGR</h1><p>Seluruh proses Armada Non-TGR dikerjakan oleh Dispatcher.</p></div></div>
+    <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Armada Non-TGR</h1><p>Seluruh proses Armada Non-TGR dikerjakan oleh Dispatcher.</p></div></div>
       <section className="data-table-card">
         <div className="table-wrap">
           <table>
@@ -60,7 +58,5 @@ export default async function ArmadaNonTgrPage() {
             </tbody>
           </table>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
