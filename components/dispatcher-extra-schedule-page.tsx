@@ -55,12 +55,11 @@ export default function DispatcherExtraSchedulePage() {
 
   return (
     <div>
-        <div>
+      <div className="page-heading">
           <span className="eyebrow">Dispatcher</span>
           <h1>Extra Schedule</h1>
           <p>Terima request dari Operation, lalu assign Executor dan Armada.</p>
         </div>
-      </div>
 
       <section className="data-table-card">
         {loading ? <div className="empty-state">Memuat request...</div> : null}
