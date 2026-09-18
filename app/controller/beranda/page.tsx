@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -68,6 +69,9 @@ export default async function ControllerBerandaPage() {
           <div className="metric-card"><span>Cycle Canceled</span><strong>{formatMinutes(data.averages.canceledCycle)}</strong></div>
         </div>
       </section>
+
+      <TaskDurationVisualization rows={data.taskDurations} />
+      <TicketDurationVisualization rows={data.ticketDurations} />
 
       <section className="section-block">
         <div className="section-heading">
