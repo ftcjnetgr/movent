@@ -28,6 +28,31 @@ type TicketRow = {
   canceled_at: string | null
 }
 
+type TaskDurationRow = {
+  transactionId: string
+  taskType: string
+  fleetOwnership: string | null
+  status: string
+  assignedAccepted: number | null
+  acceptedDriving: number | null
+  drivingCompleted: number | null
+  assignedDriving: number | null
+  totalCompleted: number | null
+  canceledFromPrevious: number | null
+  canceledCycle: number | null
+}
+
+type TicketDurationRow = {
+  transactionId: string
+  status: string
+  createdAccepted: number | null
+  acceptedInProgress: number | null
+  inProgressCompleted: number | null
+  totalCompleted: number | null
+  canceledFromCreated: number | null
+  canceledCycle: number | null
+}
+
 type TaskAlert = {
   kind: 'unassigned' | 'assigned'
   scheduleId: string
@@ -120,7 +145,36 @@ export async function getDashboardData(profile: AppProfile) {
     ['Created', 'Accepted', 'In Progress'].includes(ticket.status)
   )
 
+  const taskDurations: TaskDurationRow[] = tasks.map((task) => ({
+    transactionId: task.transaction_id,
+    taskType: task.task_type,
+    fleetOwnership: task.fleet_ownership,
+    status: task.status,
+    assignedAccepted: task.fleet_ownership === 'Non-TGR' ? null : minutesBetween(task.assigned_at, task.accepted_at),
+    acceptedDriving: task.fleet_ownership === 'Non-TGR' ? null : minutesBetween(task.accepted_at, task.driving_at),
+    drivingCompleted: minutesBetween(task.driving_at, task.completed_at),
+    assignedDriving: task.fleet_ownership === 'Non-TGR' ? minutesBetween(task.assigned_at, task.driving_at) : null,
+    totalCompleted: minutesBetween(task.assigned_at, task.completed_at),
+    canceledFromPrevious: task.status === 'Canceled'
+      ? minutesBetween(task.assigned_at ?? task.accepted_at ?? task.driving_at, task.canceled_at)
+      : null,
+    canceledCycle: task.status === 'Canceled' ? minutesBetween(task.assigned_at, task.canceled_at) : null,
+  }))
+
+  const ticketDurations: TicketDurationRow[] = ticketRows.map((ticket) => ({
+    transactionId: ticket.transaction_id,
+    status: ticket.status,
+    createdAccepted: minutesBetween(ticket.created_at, ticket.accepted_at),
+    acceptedInProgress: minutesBetween(ticket.accepted_at, ticket.in_progress_at),
+    inProgressCompleted: minutesBetween(ticket.in_progress_at, ticket.completed_at),
+    totalCompleted: minutesBetween(ticket.created_at, ticket.completed_at),
+    canceledFromCreated: ticket.status === 'Canceled' ? minutesBetween(ticket.created_at, ticket.canceled_at) : null,
+    canceledCycle: ticket.status === 'Canceled' ? minutesBetween(ticket.created_at, ticket.canceled_at) : null,
+  }))
+
   return {
+    taskDurations,
+    ticketDurations,
     taskCounts: {
       Assigned: tasks.filter((task) => task.status === 'Assigned').length,
       Accepted: tasks.filter((task) => task.status === 'Accepted').length,
