@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
 
@@ -8,12 +9,6 @@ function formatMinutes(value: number | null) {
   const hours = Math.floor(value / 60)
   const minutes = Math.round(value % 60)
   return `${hours}j ${minutes}m`
-}
-
-function alertLabel(targetAt: Date) {
-  const diff = Date.now() - targetAt.getTime()
-  if (diff >= 0) return `Count After ${formatMinutes(diff / 60000)}`
-  return `Countdown ${formatMinutes(Math.abs(diff) / 60000)}`
 }
 
 export default async function ControllerBerandaPage() {
@@ -50,16 +45,13 @@ export default async function ControllerBerandaPage() {
           <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length}</strong></div>
         </div>
 
-        <div className="alert-list">
-          {data.taskAlerts.slice(0, 12).map((alert) => (
-            <div className="alert-item" key={`${alert.kind}-${alert.scheduleId}-${alert.transactionId ?? ''}`}>
-              <div><strong>{alert.kind === 'unassigned' ? `Schedule ${alert.scheduleId}` : alert.transactionId}</strong><span>{alert.kind === 'unassigned' ? 'Belum digunakan Dispatcher' : `Status ${alert.status} • Schedule ${alert.scheduleId}`}</span></div>
-              <b>{alertLabel(alert.targetAt)}</b>
-            </div>
-          ))}
-          {data.taskAlerts.length === 0 ? <div className="empty-state">Belum ada alert tugas.</div> : null}
-        </div>
+
       </section>
+
+      <DashboardAlertList
+        taskAlerts={data.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))}
+        ticketAlerts={data.ticketAlerts}
+      />
 
       <section className="section-block">
         <div className="section-heading">
@@ -97,15 +89,7 @@ export default async function ControllerBerandaPage() {
           <div className="metric-card"><span>Cycle Completed</span><strong>{formatMinutes(data.ticketAverages.completedCycle)}</strong></div>
           <div className="metric-card"><span>Cycle Canceled</span><strong>{formatMinutes(data.ticketAverages.canceledCycle)}</strong></div>
         </div>
-        <div className="alert-list">
-          {data.ticketAlerts.slice(0, 12).map((ticket) => (
-            <div className="alert-item" key={ticket.transaction_id}>
-              <div><strong>{ticket.transaction_id}</strong><span>Status {ticket.status}</span></div>
-              <b>{ticket.status === 'Created' ? alertLabel(new Date(new Date(ticket.created_at).getTime() + 3 * 60 * 60 * 1000)) : ticket.status === 'Accepted' ? alertLabel(new Date(new Date(ticket.accepted_at as string).getTime() + 24 * 60 * 60 * 1000)) : alertLabel(new Date(new Date(ticket.in_progress_at as string).getTime() + 72 * 60 * 60 * 1000))}</b>
-            </div>
-          ))}
-          {data.ticketAlerts.length === 0 ? <div className="empty-state">Belum ada alert ticketing.</div> : null}
-        </div>
+
       </section>
     </AppShell>
   )
