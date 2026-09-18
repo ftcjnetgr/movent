@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -202,6 +202,25 @@ export default function AppShellClient({
   const navGroups = profile.role === 'Super User' ? [...baseNavGroups, superUserGroup] : baseNavGroups
   const activeGroup = navGroups.find((group) => group.items.some((item) => item.href === pathname))?.label ?? ''
   const [openGroups, setOpenGroups] = useState<string[]>([])
+
+  useEffect(() => {
+    try {
+      const saved = window.sessionStorage.getItem('movent:open-nav-groups')
+      if (!saved) return
+      const parsed = JSON.parse(saved)
+      if (Array.isArray(parsed)) setOpenGroups(parsed.filter((item): item is string => typeof item === 'string'))
+    } catch {
+      // ignore invalid browser storage
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      window.sessionStorage.setItem('movent:open-nav-groups', JSON.stringify(openGroups))
+    } catch {
+      // ignore browser storage errors
+    }
+  }, [openGroups])
 
   const closeMobile = () => setMobileOpen(false)
 
