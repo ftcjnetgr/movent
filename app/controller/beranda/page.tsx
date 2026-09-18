@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -37,12 +36,6 @@ export default async function ControllerBerandaPage() {
           <h1>Beranda</h1>
           <p>Pantau pergerakan operasional dari satu tempat.</p>
         </div>
-      </div>
-
-      <div className="dashboard-tabs">
-        <Link className="dashboard-tab active" href="/controller/beranda">Tugas</Link>
-        <Link className="dashboard-tab" href="/controller/timetable">Jadwal</Link>
-        <Link className="dashboard-tab" href="/controller/ticketing-maintenance">Tiket Maintenance</Link>
       </div>
 
       <section className="section-block">
