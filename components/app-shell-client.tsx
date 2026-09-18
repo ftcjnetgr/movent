@@ -23,6 +23,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Dispatcher: [
     { label: 'Penugasan', icon: 'clipboard', items: [
       { label: 'Beranda', href: '/dispatcher/beranda', icon: 'home' },
+      { label: 'Jadwal', href: '/dispatcher/timetable', icon: 'calendar' },
       { label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' },
       { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
     ]},
@@ -97,7 +98,9 @@ function Icon({ name }: { name: string }) {
     case 'lock':
       return <svg {...common}><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
     case 'history':
-      return <svg {...common}><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 4v5h5" /><path d="M12 7v5l3 2" /></svg>
+      return <svg {...common}><path d="M3 12a9 9 1 0 1 0 3-6.7" /><path d="M3 4v5h5" /><path d="M12 7v5l3 2" /></svg>
+    case 'calendar':
+      return <svg {...common}><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" /></svg>
     case 'truck':
       return <svg {...common}><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z" /><circle cx="7" cy="18" r="2" /><circle cx="18" cy="18" r="2" /></svg>
     case 'wrench':
