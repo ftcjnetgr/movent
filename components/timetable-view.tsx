@@ -167,20 +167,20 @@ export default function TimetableView({
   return (
     <div>
       <div className="dashboard-tabs">
-        <button className={view === 'database' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('database')}>Berdasarkan Database</button>
+        <button className={view === 'database' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('database')}>Dari Database</button>
         <button className={view === 'live' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('live')}>Live</button>
       </div>
 
       {view === 'database' ? (
         <>
           <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Sebagai Titik Mulai</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Sebagai Destinasi</button>
+            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Dari Titik Mulai</button>
+            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Ke Destinasi</button>
           </div>
 
           <section className="metric-grid">
-            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum Ditugaskan</span><strong>{summary.unassigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Ditugaskan</span><strong>{summary.assigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum ditugaskan</span><strong>{summary.unassigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Sudah ditugaskan</span><strong>{summary.assigned}</strong></button>
             <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><strong>{summary.canceled}</strong></button>
           </section>
 
@@ -205,7 +205,7 @@ export default function TimetableView({
           </section>
 
           <section className="data-table-card section-block timetable-shell">
-            <div className="section-heading"><div><h2>Rencana Schedule</h2><p>{date}</p></div></div>
+            <div className="section-heading"><div><h2>Rencana Jadwal</h2><p>{date}</p></div></div>
             <div className="timetable-scroll">
               <div className="timetable-grid">
                 <div className="timetable-axis-label">{direction === 'origin' ? 'Titik Mulai' : 'Destinasi'}</div>
@@ -226,14 +226,14 @@ export default function TimetableView({
                             <strong>{item.trip}</strong>
                             <span>{direction === 'origin' ? item.destination : item.start_point}</span>
                             <small>{item.route} · {item.category}</small>
-                            {task ? <details><summary>Pratinjau</summary><div>{task.transaction_id}<br />{task.executor_snapshot?.full_name ?? '-'} · {task.fleet_snapshot?.plat_number ?? '-'}</div></details> : <small>Belum Ditugaskan</small>}
+                            {task ? <details><summary>Lihat detail</summary><div>{task.transaction_id}<br />{task.executor_snapshot?.full_name ?? '-'} · {task.fleet_snapshot?.plat_number ?? '-'}</div></details> : <small>Belum ditugaskan</small>}
                           </div>
                         )
                       })}
                     </div>
                   </div>
                 ))}
-                {!databaseGroups.length ? <div className="empty-state">Tidak ada schedule yang sesuai filter.</div> : null}
+                {!databaseGroups.length ? <div className="empty-state">Nggak ada jadwal yang cocok dengan filter.</div> : null}
               </div>
             </div>
           </section>
@@ -241,18 +241,18 @@ export default function TimetableView({
       ) : (
         <section className="data-table-card section-block timetable-shell">
           <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Sebagai Titik Mulai</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Sebagai Destinasi</button>
+            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Dari Titik Mulai</button>
+            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Ke Destinasi</button>
           </div>
-          <div className="section-heading"><div><h2>Timetable Langsung</h2><p>Seluruh transaksi yang sudah dibuat atau di-assign.</p></div></div>
+          <div className="section-heading"><div><h2>Jadwal Langsung</h2><p>Semua transaksi yang sudah dibuat atau ditugaskan.</p></div></div>
           <section className="metric-grid">
-            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum Ditugaskan</span><strong>{liveSummary.unassigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Ditugaskan</span><strong>{liveSummary.assigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum ditugaskan</span><strong>{liveSummary.unassigned}</strong></button>
+            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Sudah ditugaskan</span><strong>{liveSummary.assigned}</strong></button>
             <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><strong>{liveSummary.canceled}</strong></button>
           </section>
           <div className="timetable-scroll">
             <div className="timetable-grid">
-              <div className="timetable-axis-label">{direction === 'origin' ? 'Start Point' : 'Destination'}</div>
+              <div className="timetable-axis-label">{direction === 'origin' ? 'Titik Mulai' : 'Destination'}</div>
               <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
               {liveGroups.map(([group, items]) => (
                 <div className="timetable-row" key={group}>
@@ -267,15 +267,15 @@ export default function TimetableView({
                           <div className="timetable-item-time">{direction === 'origin' ? timeValue(task.std) : timeValue(task.sta)}</div>
                           <strong>{task.transaction_id}</strong>
                           <span>{direction === 'origin' ? task.destination ?? '-' : task.start_point ?? '-'}</span>
-                          <small>{task.source_type === 'Extra Schedule' ? 'Extra Schedule' : task.task_type} · {task.fleet_snapshot?.plat_number ?? '-'}</small>
-                          <details><summary>Pratinjau</summary><div>{task.executor_snapshot?.full_name ?? task.executor_nik ?? '-'}</div></details>
+                          <small>{task.source_type === 'Jadwal Tambahan' ? 'Jadwal Tambahan' : task.task_type} · {task.fleet_snapshot?.plat_number ?? '-'}</small>
+                          <details><summary>Lihat detail</summary><div>{task.executor_snapshot?.full_name ?? task.executor_nik ?? '-'}</div></details>
                         </div>
                       )
                     })}
                   </div>
                 </div>
               ))}
-              {!liveGroups.length ? <div className="empty-state">Live Timetable masih kosong.</div> : null}
+              {!liveGroups.length ? <div className="empty-state">Belum ada jadwal langsung untuk sekarang.</div> : null}
             </div>
           </div>
         </section>
