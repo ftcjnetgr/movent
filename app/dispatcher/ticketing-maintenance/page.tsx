@@ -8,6 +8,7 @@ export default async function DispatcherTicketingMaintenancePage() {
   const data = await getDashboardData(profile)
 
   return (
+    <>
     <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Tiket Maintenance</h1><p>Ringkasan semua tiket maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab" href="/dispatcher/beranda">Tugas</a>
