@@ -116,13 +116,9 @@ export async function getDashboardData(profile: AppProfile) {
 
   const taskAlerts = [...unassignedAlerts, ...assignedAlerts]
   const ticketRows = (ticketings ?? []) as TicketRow[]
-  const ticketAlerts = ticketRows.filter((ticket) => {
-    const nowMs = now.getTime()
-    if (ticket.status === 'Created') return nowMs - new Date(ticket.created_at).getTime() >= 3 * 60 * 60 * 1000
-    if (ticket.status === 'Accepted' && ticket.accepted_at) return nowMs - new Date(ticket.accepted_at).getTime() >= 24 * 60 * 60 * 1000
-    if (ticket.status === 'In Progress' && ticket.in_progress_at) return nowMs - new Date(ticket.in_progress_at).getTime() >= 72 * 60 * 60 * 1000
-    return false
-  })
+  const ticketAlerts = ticketRows.filter((ticket) =>
+    ['Created', 'Accepted', 'In Progress'].includes(ticket.status)
+  )
 
   return {
     taskCounts: {
