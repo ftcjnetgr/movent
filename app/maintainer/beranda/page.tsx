@@ -13,8 +13,8 @@ export default async function MaintainerBerandaPage() {
       <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Beranda</h1><p>Pantau tugas dan ticketing maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab active" href="/maintainer/beranda">Tugas</a>
-        <a className="dashboard-tab" href="/maintainer/timetable">Timetable</a>
-        <a className="dashboard-tab" href="/maintainer/ticketing-maintenance">Ticketing Maintenance</a>
+        <a className="dashboard-tab" href="/maintainer/timetable">Jadwal</a>
+        <a className="dashboard-tab" href="/maintainer/ticketing-maintenance">Tiket Maintenance</a>
       </div>
       <DashboardAlertList
         taskAlerts={data.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))}
@@ -23,14 +23,14 @@ export default async function MaintainerBerandaPage() {
 
       <section className="section-block">
         <div className="metric-grid">
-          {Object.entries(data.taskCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
-          <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length}</strong></div>
+          {Object.entries(data.taskCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>)}
+          <div className="metric-card alert-card"><span>Peringatan</span><strong>{data.taskAlerts.length}</strong></div>
         </div>
         <div className="metric-grid">
-          <div className="metric-card"><span>Non-TGR: Assigned → Driving</span><strong>{data.taskAveragesNonTgr.assignedDriving === null ? '-' : `${Math.round(data.taskAveragesNonTgr.assignedDriving)} m`}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Driving → Completed</span><strong>{data.taskAveragesNonTgr.drivingCompleted === null ? '-' : `${Math.round(data.taskAveragesNonTgr.drivingCompleted)} m`}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Cycle Completed</span><strong>{data.taskAveragesNonTgr.completedCycle === null ? '-' : `${Math.round(data.taskAveragesNonTgr.completedCycle)} m`}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Cycle Canceled</span><strong>{data.taskAveragesNonTgr.canceledCycle === null ? '-' : `${Math.round(data.taskAveragesNonTgr.canceledCycle)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Ditugaskan → Berangkat</span><strong>{data.taskAveragesNonTgr.assignedDriving === null ? '-' : `${Math.round(data.taskAveragesNonTgr.assignedDriving)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Berangkat → Selesai</span><strong>{data.taskAveragesNonTgr.drivingCompleted === null ? '-' : `${Math.round(data.taskAveragesNonTgr.drivingCompleted)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Total waktu sampai selesai</span><strong>{data.taskAveragesNonTgr.completedCycle === null ? '-' : `${Math.round(data.taskAveragesNonTgr.completedCycle)} m`}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Total waktu sampai dibatalkan</span><strong>{data.taskAveragesNonTgr.canceledCycle === null ? '-' : `${Math.round(data.taskAveragesNonTgr.canceledCycle)} m`}</strong></div>
         </div>
       </section>
       <TaskDurationVisualization rows={data.taskDurations} />
