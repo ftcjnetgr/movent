@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
@@ -25,8 +24,7 @@ export default async function ExecutorHistoryPage() {
   const { data: tasks } = await query
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Executor</span>
           <h1>Riwayat Tugas</h1>
@@ -54,7 +52,5 @@ export default async function ExecutorHistoryPage() {
             </tbody>
           </table>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
