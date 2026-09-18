@@ -67,7 +67,6 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
     startCancelTransition(async () => {
       const result = await cancelMaintenanceTicketAction(formData)
       setCancelMessage(result.error ?? '')
-      if (result.success) window.location.reload()
     })
   }
 
