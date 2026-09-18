@@ -35,6 +35,8 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
   const [state, formAction, pending] = useActionState(createDispatcherTaskAction, initialState)
   const [taskType, setTaskType] = useState('Distribusi Mobil')
   const [ownership, setOwnership] = useState('TGR')
+  const [scheduleId, setScheduleId] = useState('')
+  const selectedSchedule = schedules.find((schedule) => schedule.schedule_id === scheduleId)
   const usesInternalExecutor = taskType === 'Distribusi Mobil' || ownership === 'TGR'
   const locationOptions = locations.map((location) => ({ value: location, label: location }))
   const scheduleOptions = schedules.map((schedule) => ({
@@ -57,6 +59,10 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
   useEffect(() => {
     if (state.success) window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [state.success])
+
+  useEffect(() => {
+    if (taskType !== 'Supply' || ownership !== 'TGR') setScheduleId('')
+  }, [taskType, ownership])
 
   function shareNonTgrSj() {
     if (!state.preview) return
@@ -131,17 +137,33 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
                   name="scheduleId"
                   options={scheduleOptions}
                   placeholder="Pilih jadwal"
+                  value={scheduleId}
+                  onValueChange={setScheduleId}
                   required
                 />
               </div>
 
-              <div className="form-section">
-                <div className="form-section-title">Detail Penugasan</div>
-                <div className="form-row">
-                  <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
-                  <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
-                </div>
-              </div>
+              {selectedSchedule ? (
+                <>
+                  <div className="selected-schedule-summary">
+                    <div><span>Schedule</span><strong>{selectedSchedule.schedule_id}</strong></div>
+                    <div><span>Trip</span><strong>{selectedSchedule.trip}</strong></div>
+                    <div><span>Rute</span><strong>{selectedSchedule.start_point} → {selectedSchedule.destination}</strong></div>
+                    <div><span>STD</span><strong>{selectedSchedule.std.slice(0, 5)}</strong></div>
+                    <div><span>STA</span><strong>{selectedSchedule.sta.slice(0, 5)}</strong></div>
+                  </div>
+
+                  <div className="form-section">
+                    <div className="form-section-title">Penugasan</div>
+                    <div className="form-row">
+                      <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
+                      <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <p className="form-helper">Pilih jadwal terlebih dahulu untuk melanjutkan ke Executor dan Armada.</p>
+              )}
             </>
           ) : null}
 
