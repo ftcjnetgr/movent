@@ -46,7 +46,7 @@ export default function SearchableMasterSelect({
         type="search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder={`Cari ${label.toLowerCase()}...`}
+        placeholder={`Ketik untuk mencari ${label.toLowerCase()}...`}
         aria-label={`Cari ${label.toLowerCase()}`}
       />
       <select
@@ -66,7 +66,7 @@ export default function SearchableMasterSelect({
           </option>
         ))}
       </select>
-      {!filtered.length ? <span className="muted">Data yang dicari tidak ditemukan.</span> : null}
+      {!filtered.length ? <span className="muted">Data yang kamu cari nggak ditemukan.</span> : null}
     </label>
   )
 }
