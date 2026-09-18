@@ -1291,3 +1291,12 @@ th {
     width: 158px;
   }
 }
+
+
+.sidebar-brand-logo {
+  display: block;
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+}
