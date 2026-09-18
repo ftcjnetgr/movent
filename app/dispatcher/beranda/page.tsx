@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import DashboardAlertList from '@/components/dashboard-alert-list'
 import DispatcherCreateTask from '@/components/dispatcher-create-task'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -31,6 +32,11 @@ export default async function DispatcherBerandaPage() {
           <div className="metric-card alert-card"><span>Alert</span><strong>{dashboard.taskAlerts.length}</strong></div>
         </div>
       </section>
+
+      <DashboardAlertList
+        taskAlerts={dashboard.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))}
+        ticketAlerts={dashboard.ticketAlerts}
+      />
 
       <DispatcherCreateTask
         locations={(locations ?? []).map((item) => item.location)}
