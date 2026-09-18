@@ -94,6 +94,7 @@ export default function AppShellClient({
             <Link href="/ganti-password">Ganti Password</Link>
             <Link href="/super-user/pengelolaan-pengguna">Pengelolaan Pengguna</Link>
             <Link href="/super-user/pengelolaan-database">Pengelolaan Database</Link>
+            <Link href="/super-user/pengelolaan-transaksi">Pengelolaan Transaksi</Link>
           </div>
         ) : null}
 
@@ -111,6 +112,10 @@ export default function AppShellClient({
           <div className="topbar-user">{profile.username}</div>
         </header>
         <section className="page-content">{children}</section>
+        <footer className="app-footer">
+          <span>Part of FTC Go Project</span>
+          <span>Developed by Fleet Traffic Control</span>
+        </footer>
       </main>
     </div>
   )
