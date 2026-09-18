@@ -214,6 +214,12 @@ export async function getDashboardData(profile: AppProfile) {
       completedCycle: average(tasks.filter((task) => task.status === 'Completed').map((task) => minutesBetween(task.assigned_at, task.completed_at))),
       canceledCycle: average(tasks.filter((task) => task.status === 'Canceled').map((task) => minutesBetween(task.assigned_at ?? task.accepted_at ?? task.driving_at, task.canceled_at))),
     },
+    taskAveragesNonTgr: {
+      assignedDriving: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR').map((task) => minutesBetween(task.assigned_at, task.driving_at))),
+      drivingCompleted: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR').map((task) => minutesBetween(task.driving_at, task.completed_at))),
+      completedCycle: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR' && task.status === 'Completed').map((task) => minutesBetween(task.assigned_at, task.completed_at))),
+      canceledCycle: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR' && task.status === 'Canceled').map((task) => minutesBetween(task.assigned_at, task.canceled_at))),
+    },
     ticketAverages: {
       createdAccepted: average(ticketRows.map((ticket) => minutesBetween(ticket.created_at, ticket.accepted_at))),
       acceptedInProgress: average(ticketRows.map((ticket) => minutesBetween(ticket.accepted_at, ticket.in_progress_at))),
