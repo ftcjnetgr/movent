@@ -10,6 +10,7 @@ export default async function RequestExtraSchedulePage() {
     .order('location')
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Operation</span>
