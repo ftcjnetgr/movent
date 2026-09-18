@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from 'react'
 import { jsPDF } from 'jspdf'
+import SearchableMasterSelect from '@/components/searchable-master-select'
 import { createDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
 
 const initialState: {
@@ -35,6 +36,23 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
   const [taskType, setTaskType] = useState('Distribusi Mobil')
   const [ownership, setOwnership] = useState('TGR')
   const usesInternalExecutor = taskType === 'Distribusi Mobil' || ownership === 'TGR'
+  const locationOptions = locations.map((location) => ({ value: location, label: location }))
+  const scheduleOptions = schedules.map((schedule) => ({
+    value: schedule.schedule_id,
+    label: schedule.schedule_id + ' • Trip ' + schedule.trip + ' • ' + schedule.start_point + ' → ' + schedule.destination + ' • ' + schedule.std.slice(0, 5),
+    searchText: [schedule.schedule_id, schedule.route, schedule.category, schedule.start_point, schedule.destination, String(schedule.trip), schedule.std, schedule.sta].join(' '),
+  }))
+  const executorOptions = executors.map((executor) => ({
+    value: executor.executor_nik,
+    label: executor.executor_nik + ' - ' + executor.full_name,
+    searchText: executor.executor_nik + ' ' + executor.full_name,
+  }))
+  const fleetOptions = fleets.map((fleet) => ({
+    value: fleet.plat_number,
+    label: fleet.plat_number + ' - ' + fleet.fleet_type,
+    searchText: fleet.plat_number + ' ' + fleet.fleet_type,
+  }))
+  const productOptions = products.map((product) => ({ value: product, label: product, searchText: product }))
 
   useEffect(() => {
     if (state.success) window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -105,23 +123,24 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
           </div>
 
           {taskType === 'Supply' && ownership === 'TGR' ? (
-            <label>Schedule
-              <select name="scheduleId" defaultValue="" required>
-                <option value="">Pilih Schedule</option>
-                {schedules.map((schedule) => <option key={schedule.schedule_id} value={schedule.schedule_id}>{schedule.schedule_id} • Trip {schedule.trip} • {schedule.start_point} → {schedule.destination} • {schedule.std.slice(0, 5)}</option>)}
-              </select>
-            </label>
+            <SearchableMasterSelect
+              label="Schedule"
+              name="scheduleId"
+              options={scheduleOptions}
+              placeholder="Pilih Schedule"
+              required
+            />
           ) : null}
 
           {taskType === 'Supply' && ownership === 'Non-TGR' ? (
             <div className="form-row">
-              <label>Start Point<input name="startPoint" list="locations" required /></label>
-              <label>Destinasi<input name="destination" list="locations" required /></label>
+              <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih Titik Mulai" required />
+              <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih Destinasi" required />
             </div>
           ) : taskType === 'Distribusi Mobil' ? (
             <div className="form-row">
-              <label>Start Point<select name="startPoint" defaultValue="" required><option value="">Pilih Start Point</option>{locations.map((location) => <option key={location}>{location}</option>)}</select></label>
-              <label>Destinasi<select name="destination" defaultValue="" required><option value="">Pilih Destinasi</option>{locations.map((location) => <option key={location}>{location}</option>)}</select></label>
+              <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih Titik Mulai" required />
+              <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih Destinasi" required />
             </div>
           ) : null}
 
@@ -134,12 +153,8 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
           {usesInternalExecutor ? (
             <div className="form-row">
-              <label>Executor
-                <select name="executorNik" defaultValue="" required><option value="">Pilih Executor</option>{executors.map((executor) => <option key={executor.executor_nik} value={executor.executor_nik}>{executor.executor_nik} - {executor.full_name}</option>)}</select>
-              </label>
-              <label>Armada
-                <select name="platNumber" defaultValue="" required><option value="">Pilih Armada</option>{fleets.map((fleet) => <option key={fleet.plat_number} value={fleet.plat_number}>{fleet.plat_number} - {fleet.fleet_type}</option>)}</select>
-              </label>
+              <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih Executor" required />
+              <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih Armada" required />
             </div>
           ) : null}
 
@@ -155,7 +170,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
                 <label>Berat<input name="sjWeight" type="number" step="any" min="0" required /></label>
               </div>
               <div className="form-row">
-                <label>Produk<select name="product" defaultValue="" required><option value="">Pilih Produk</option>{products.map((product) => <option key={product}>{product}</option>)}</select></label>
+                <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih Produk" required />
                 <label>Catatan SJ<textarea name="sjNote" rows={2} /></label>
               </div>
             </>
@@ -187,7 +202,6 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
       {state.error ? <p className="form-error">{state.error}</p> : null}
           {state.success ? <p className="form-success">{state.success}</p> : null}
           <button type="submit" disabled={pending}>{pending ? 'Membuat tugas...' : 'Buat tugas'}</button>
-          <datalist id="locations">{locations.map((location) => <option key={location} value={location} />)}</datalist>
         </form>
       </div>
     </section>
