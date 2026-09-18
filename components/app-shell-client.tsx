@@ -14,7 +14,7 @@ const navByRole: Record<string, NavGroup[]> = {
       icon: 'home',
       items: [
         { label: 'Beranda', href: '/controller/beranda', icon: 'home' },
-        { label: 'Timetable', href: '/controller/timetable', icon: 'calendar' },
+        { label: 'Jadwal', href: '/controller/timetable', icon: 'calendar' },
         { label: 'Tiket Maintenance', href: '/controller/ticketing-maintenance', icon: 'ticket' },
       ],
     },
@@ -104,7 +104,7 @@ const navByRole: Record<string, NavGroup[]> = {
       icon: 'home',
       items: [
         { label: 'Beranda', href: '/maintainer/beranda', icon: 'home' },
-        { label: 'Timetable', href: '/maintainer/timetable', icon: 'calendar' },
+        { label: 'Jadwal', href: '/maintainer/timetable', icon: 'calendar' },
       ],
     },
     {
