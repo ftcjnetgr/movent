@@ -17,6 +17,7 @@ export default async function MaintainerTicketMaintenancePage() {
     : (tickets ?? [])
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Maintainer</span>
