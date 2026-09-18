@@ -187,18 +187,18 @@ export default function TimetableView({
           <section className="section-block">
             <div className="data-form">
               <div className="form-row">
-                <label >Rute<select value={route} onChange={(event) => setRoute(event.target.value)}><option value="">Semua</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                <label >Kategori<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="">Semua</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select></label>
+                <label>Rute<select value={route} onChange={(event) => setRoute(event.target.value)}><option value="">Semua</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select></label>
+                <label>Kategori<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="">Semua</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select></label>
               </div>
               {direction === 'origin' ? (
                 <div className="form-row">
-                  <label >Jenis Titik Mulai<select value={originType} onChange={(event) => setOriginType(event.target.value)}><option value="">Semua</option>{options.originTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label >Titik Mulai<select value={origin} onChange={(event) => setOrigin(event.target.value)}><option value="">Semua</option>{options.origins.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label>Jenis Titik Mulai<select value={originType} onChange={(event) => setOriginType(event.target.value)}><option value="">Semua</option>{options.originTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label>Titik Mulai<select value={origin} onChange={(event) => setOrigin(event.target.value)}><option value="">Semua</option>{options.origins.map((item) => <option key={item}>{item}</option>)}</select></label>
                 </div>
               ) : (
                 <div className="form-row">
-                  <label >Jenis Destinasi<select value={destinationType} onChange={(event) => setDestinationType(event.target.value)}><option value="">Semua</option>{options.destinationTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label >Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{options.destinations.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label>Jenis Destinasi<select value={destinationType} onChange={(event) => setDestinationType(event.target.value)}><option value="">Semua</option>{options.destinationTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label>Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{options.destinations.map((item) => <option key={item}>{item}</option>)}</select></label>
                 </div>
               )}
             </div>
@@ -208,7 +208,7 @@ export default function TimetableView({
             <div className="section-heading"><div><h2>Rencana Schedule</h2><p>{date}</p></div></div>
             <div className="timetable-scroll">
               <div className="timetable-grid">
-                <div className="timetable-axis-label">{direction === 'origin' ? 'Start Point' : 'Destination'}</div>
+                <div className="timetable-axis-label">{direction === 'origin' ? 'Titik Mulai' : 'Destinasi'}</div>
                 <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
                 {databaseGroups.map(([group, items]) => (
                   <div className="timetable-row" key={group}>
