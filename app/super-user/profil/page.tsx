@@ -13,6 +13,7 @@ export default async function SuperUserProfilePage() {
   if (!data) return null
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
