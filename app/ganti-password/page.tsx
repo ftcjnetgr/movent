@@ -12,7 +12,13 @@ export default function ChangePasswordPage() {
   return (
     <main className="login-page">
       <section className="login-card">
-        <div className="login-brand">movent</div>
+        <div className="login-brand-wrap password-brand-wrap">
+          <img
+            src="/assets/branding/movent-dark.svg"
+            alt="MOVENT"
+            className="login-brand-logo"
+          />
+        </div>
         <h1>Buat kata sandi baru</h1>
         <p className="login-subtitle">Kata sandi bawaan cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
 
