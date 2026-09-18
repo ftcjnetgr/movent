@@ -231,7 +231,7 @@ export default function AppShellClient({
               className="sidebar-toggle desktop-only"
               onClick={() => setCollapsed((value) => !value)}
               aria-label={collapsed ? 'Tampilkan menu samping' : 'Sembunyikan menu samping'}
-              title={collapsed ? 'Tampilkan menu' : 'Sembunyikan menu'}
+              title={collapsed ? 'Tampilkan sidebar' : 'Sembunyikan sidebar'}
             >
               <span aria-hidden="true">{collapsed ? '›' : '‹'}</span>
             </button>
