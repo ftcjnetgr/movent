@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardPeringatanList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -9,8 +8,7 @@ export default async function DispatcherTicketingMaintenancePage() {
   const data = await getDashboardData(profile)
 
   return (
-    <AppShell>
-      <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Tiket Maintenance</h1><p>Ringkasan semua tiket maintenance armada.</p></div></div>
+    <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Tiket Maintenance</h1><p>Ringkasan semua tiket maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab" href="/dispatcher/beranda">Tugas</a>
         <a className="dashboard-tab" href="/dispatcher/timetable">Jadwal</a>
@@ -24,7 +22,5 @@ export default async function DispatcherTicketingMaintenancePage() {
       </section>
       <DashboardPeringatanList ticketAlerts={data.ticketAlerts} />
 
-      <TicketDurationVisualization rows={data.ticketDurations} />
-    </AppShell>
-  )
+      <TicketDurationVisualization rows={data.ticketDurations} />)
 }
