@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -203,11 +203,6 @@ export default function AppShellClient({
   const activeGroup = navGroups.find((group) => group.items.some((item) => item.href === pathname))?.label ?? ''
   const [openGroups, setOpenGroups] = useState<string[]>([])
 
-  useEffect(() => {
-    if (!activeGroup) return
-    setOpenGroups((current) => current.includes(activeGroup) ? current : [...current, activeGroup])
-  }, [activeGroup])
-
   const closeMobile = () => setMobileOpen(false)
 
   function toggleGroup(label: string) {
@@ -237,20 +232,6 @@ export default function AppShellClient({
             <span aria-hidden="true">{collapsed ? '→' : '←'}</span>
           </button>
         </div>
-
-        {profile.role === 'Super User' ? (
-          <div className="mode-box">
-            <span>Mode</span>
-            <div className="mode-links">
-              {Object.entries(modeRoutes).map(([role, href]) => (
-                <Link key={role} className={currentRole === role ? 'mode-link active' : 'mode-link'} href={href} onClick={closeMobile}>
-                  <span className="mode-dot" />
-                  <span className="mode-link-text">{role}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        ) : null}
 
         <nav className="sidebar-nav sidebar-accordion" aria-label="Menu utama">
           {navGroups.map((group) => {
@@ -320,9 +301,23 @@ export default function AppShellClient({
               <span className="topbar-page">{activeItem?.label ?? currentRole}</span>
             </div>
           </div>
-          <div className="topbar-user">
-            <span className="topbar-user-dot" />
-            {profile.username}
+          <div className="topbar-actions">
+            {profile.role === 'Super User' ? (
+              <div className="topbar-mode" aria-label="Pilih mode">
+                <span className="topbar-mode-label">Mode</span>
+                <div className="topbar-mode-links">
+                  {Object.entries(modeRoutes).map(([role, href]) => (
+                    <Link key={role} className={currentRole === role ? 'topbar-mode-link active' : 'topbar-mode-link'} href={href} onClick={closeMobile}>
+                      {role}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            <div className="topbar-user">
+              <span className="topbar-user-dot" />
+              {profile.username}
+            </div>
           </div>
         </header>
 
