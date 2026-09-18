@@ -26,7 +26,7 @@ export async function loginAction(
   const password = String(formData.get('password') ?? '')
 
   if (!username || !password) {
-    return { error: 'Username dan password wajib diisi.' }
+    return { error: 'Username dan password perlu diisi dulu, ya.' }
   }
 
   const admin = createAdminClient()
@@ -37,11 +37,11 @@ export async function loginAction(
     .maybeSingle()
 
   if (profileError || !profile) {
-    return { error: 'Username atau password salah.' }
+    return { error: 'Username atau kata sandi salah. Coba lagi, ya.' }
   }
 
   if (profile.status === 'Locked') {
-    return { error: 'Akun sedang terkunci. Hubungi Super User untuk membuka kembali.' }
+    return { error: 'Akun kamu sedang terkunci. Hubungi Super User untuk membukanya lagi.' }
   }
 
   let authUserId = profile.auth_user_id as string | null
@@ -54,7 +54,7 @@ export async function loginAction(
     })
 
     if (createAuthError || !createdAuth.user) {
-      return { error: 'Akun login belum berhasil disiapkan. Hubungi Super User.' }
+      return { error: 'Akun kamu belum siap untuk masuk. Hubungi Super User, ya.' }
     }
 
     authUserId = createdAuth.user.id
@@ -83,11 +83,11 @@ export async function loginAction(
         .eq('id', profile.id)
 
       if (nextAttempts >= 3) {
-        return { error: 'Akun terkunci karena 3 kali salah password. Hubungi Super User untuk membuka kembali.' }
+        return { error: 'Akun kamu terkunci karena 3 kali salah memasukkan kata sandi. Hubungi Super User untuk membukanya lagi.' }
       }
     }
 
-    return { error: 'Username atau password salah.' }
+    return { error: 'Username atau kata sandi salah. Coba lagi, ya.' }
   }
 
   await admin
