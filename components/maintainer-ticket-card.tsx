@@ -7,6 +7,24 @@ import {
   completeMaintenanceAction,
   startMaintenanceAction,
 } from '@/app/maintainer/tiket-maintenance/actions'
+function ticketStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Created: 'Dibuat',
+    Accepted: 'Diterima',
+    'In Progress': 'Sedang dikerjakan',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
+function nextActionLabel(status: string) {
+  if (status === 'Created') return 'Terima tiket'
+  if (status === 'Accepted') return 'Mulai pengerjaan'
+  if (status === 'In Progress') return 'Tandai selesai'
+  return 'Tidak ada tindakan'
+}
+
 
 type Ticket = {
   transaction_id: string
@@ -45,7 +63,11 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
           <span className="eyebrow">Tiket Maintenance</span>
           <h2>{ticket.transaction_id}</h2>
         </div>
-        <span className={`status-badge status-${ticket.status.toLowerCase().replaceAll(' ', '-')}`}>{ticket.status}</span>
+        <span className={`status-badge status-${ticket.status.toLowerCase().replaceAll(' ', '-')}`}>{ticketStatusLabel(ticket.status)}</span>
+      </div>
+      <div className="task-next-step">
+        <span>Langkah berikutnya</span>
+        <strong>{nextActionLabel(ticket.status)}</strong>
       </div>
       <div className="task-summary-grid">
         <div><span>Maintenance</span><strong>{ticket.maintenance_list ?? '-'}</strong></div>

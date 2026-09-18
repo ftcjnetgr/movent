@@ -1,6 +1,18 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Requested: 'Diajukan',
+    Assigned: 'Ditugaskan',
+    Accepted: 'Diterima',
+    Driving: 'Berangkat',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
 
 async function cancelDispatcherTaskFormAction(formData: FormData) {
   'use server'
@@ -34,7 +46,7 @@ export default async function DispatcherAssignmentHistoryPage() {
                   <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
                   <td>{task.executor_snapshot?.full_name ?? task.external_executor ?? '-'}</td>
                   <td>{task.fleet_snapshot?.plat_number ?? task.external_fleet ?? task.fleet_ownership ?? '-'}</td>
-                  <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{task.status}</span></td>
+                  <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(task.status)}</span></td>
                   <td>
                     {task.fleet_ownership === 'Non-TGR'
                       ? (profile.role === 'Super User' && task.status !== 'Completed' && task.status !== 'Canceled' ? (

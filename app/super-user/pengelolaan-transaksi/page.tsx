@@ -1,6 +1,28 @@
 import { SuperUserTaskEditor, SuperUserTicketEditor } from '@/components/super-user-transaction-editor'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Requested: 'Diajukan',
+    Assigned: 'Ditugaskan',
+    Accepted: 'Diterima',
+    Driving: 'Berangkat',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+function ticketStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Created: 'Dibuat',
+    Accepted: 'Diterima',
+    'In Progress': 'Sedang dikerjakan',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
 
 function masterOptions(items: Array<{ value: string; label: string }>) {
   return items.map((item) => ({ ...item, searchText: item.label }))
@@ -52,14 +74,14 @@ export default async function SuperUserTransactionManagementPage() {
         <div className="section-heading"><div><h2>Tugas</h2><p>Semua transaksi tugas dari berbagai alur.</p></div></div>
         <div className="table-wrap">
           <table>
-            <thead><tr><th>Transaction ID</th><th>Jenis</th><th>Rute</th><th>Status</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>ID Transaksi</th><th>Jenis</th><th>Rute</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody>
               {(tasks ?? []).map((task) => (
                 <tr key={task.transaction_id}>
                   <td><strong>{task.transaction_id}</strong></td>
                   <td>{task.task_type}</td>
                   <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
-                  <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{task.status}</span></td>
+                  <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(task.status)}</span></td>
                   <td><SuperUserTaskEditor task={task} locations={locationOptions} executors={executorOptions} fleets={fleetOptions} schedules={scheduleOptions} products={productOptions} /></td>
                 </tr>
               ))}
@@ -81,7 +103,7 @@ export default async function SuperUserTransactionManagementPage() {
                   <td>{ticket.maintenance_list ?? '-'}</td>
                   <td>{ticket.location ?? '-'}</td>
                   <td>{ticket.fleet_plat_number ?? '-'}</td>
-                  <td><span className={'status-badge status-' + ticket.status.toLowerCase().replaceAll(' ', '-')}>{ticket.status}</span></td>
+                  <td><span className={'status-badge status-' + ticket.status.toLowerCase().replaceAll(' ', '-')}>{ticketStatusLabel(ticket.status)}</span></td>
                   <td><SuperUserTicketEditor ticket={ticket} maintenanceLists={maintenanceOptions} locations={locationOptions} fleets={fleetOptions} /></td>
                 </tr>
               ))}

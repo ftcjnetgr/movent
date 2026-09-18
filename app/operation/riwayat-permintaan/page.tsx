@@ -2,6 +2,18 @@ import OperasionalExtraScheduleAlert from '@/components/operation-extra-schedule
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelExtraScheduleAction } from '../request-extra-schedule/actions'
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Requested: 'Diajukan',
+    Assigned: 'Ditugaskan',
+    Accepted: 'Diterima',
+    Driving: 'Berangkat',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
 
 async function cancelExtraScheduleFormAction(formData: FormData) {
   'use server'
@@ -69,7 +81,7 @@ export default async function OperasionalHistoryPage() {
                   <td>{request.start_point} → {request.destination}</td>
                   <td>{formatDateTime(request.std)}</td>
                   <td>{formatDateTime(request.sta)}</td>
-                  <td><span className={`status-badge status-${String(request.status).toLowerCase().replaceAll(' ', '-')}`}>{request.status}</span></td>
+                  <td><span className={`status-badge status-${String(request.status).toLowerCase().replaceAll(' ', '-')}`}>{statusLabel(request.status)}</span></td>
                   <td>{formatDateTime(request.created_at)}</td>
                   <td>
                     <details>
@@ -80,7 +92,7 @@ export default async function OperasionalHistoryPage() {
                         <div><span className="muted">Destinasi</span><strong>{request.destination ?? '-'}</strong></div>
                         <div><span className="muted">STD</span><strong>{formatDateTime(request.std)}</strong></div>
                         <div><span className="muted">STA</span><strong>{formatDateTime(request.sta)}</strong></div>
-                        <div><span className="muted">Status</span><strong>{request.status}</strong></div>
+                        <div><span className="muted">Status</span><strong>{statusLabel(request.status)}</strong></div>
                         <div><span className="muted">Executor</span><strong>{request.executor_snapshot?.executor_nik ?? '-'}{request.executor_snapshot?.full_name ? ' - ' + request.executor_snapshot.full_name : ''}</strong></div>
                         <div><span className="muted">Armada</span><strong>{request.fleet_snapshot?.plat_number ?? '-'}{request.fleet_snapshot?.fleet_type ? ' - ' + request.fleet_snapshot.fleet_type : ''}</strong></div>
                         <div><span className="muted">Dibuat</span><strong>{formatDateTime(request.created_at)}</strong></div>

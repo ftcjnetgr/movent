@@ -6,6 +6,17 @@ import {
   createMaintenanceTicketAction,
 } from '@/app/dispatcher/maintenance-armada/actions'
 import SearchableMasterSelect from '@/components/searchable-master-select'
+function ticketStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Created: 'Dibuat',
+    Accepted: 'Diterima',
+    'In Progress': 'Sedang dikerjakan',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
 
 type MaintenanceFormState = {
   error?: string
@@ -132,7 +143,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                   <td>{ticket.maintenance_list ?? '-'}</td>
                   <td>{ticket.location ?? '-'}</td>
                   <td>{ticket.fleet_plat_number ?? '-'}</td>
-                  <td><span className={'status-badge status-' + ticket.status.toLowerCase().replaceAll(' ', '-')}>{ticket.status}</span></td>
+                  <td><span className={'status-badge status-' + ticket.status.toLowerCase().replaceAll(' ', '-')}>{ticketStatusLabel(ticket.status)}</span></td>
                   <td>
                     {ticket.status === 'Created' ? (
                       <details>

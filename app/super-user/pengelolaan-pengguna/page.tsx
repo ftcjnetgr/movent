@@ -1,6 +1,22 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
+function roleLabel(role: string) {
+  const labels: Record<string, string> = {
+    Controller: 'Controller',
+    Dispatcher: 'Dispatcher',
+    Operation: 'Operasional',
+    Executor: 'Executor',
+    Maintainer: 'Maintainer',
+    'Super User': 'Super User',
+  }
+  return labels[role] ?? role
+}
+
+function userStatusLabel(status: string) {
+  return status === 'Active' ? 'Aktif' : status === 'Locked' ? 'Terkunci' : status
+}
+
 
 async function lockUserFormAction(formData: FormData) {
   'use server'
@@ -48,8 +64,8 @@ export default async function UserManagementPage() {
                     <strong>{user.full_name}</strong>
                     <div className="muted">{user.username} · {user.nik}</div>
                   </td>
-                  <td>{user.role}</td>
-                  <td><span className={'status-badge status-' + String(user.status).toLowerCase()}>{user.status}</span></td>
+                  <td>{roleLabel(user.role)}</td>
+                  <td><span className={'status-badge status-' + String(user.status).toLowerCase()}>{userStatusLabel(user.status)}</span></td>
                   <td>{user.auth_user_id ? 'Terhubung' : 'Belum terhubung'}</td>
                   <td>{user.failed_login_attempts}</td>
                   <td>

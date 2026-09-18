@@ -1,6 +1,18 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { submitNonTgrArrivalAction, submitNonTgrDepartureAction } from './actions'
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Requested: 'Diajukan',
+    Assigned: 'Ditugaskan',
+    Accepted: 'Diterima',
+    Driving: 'Berangkat',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+  }
+  return labels[status] ?? status
+}
+
 
 async function submitNonTgrDepartureFormAction(formData: FormData) {
   'use server'
@@ -36,7 +48,7 @@ export default async function ArmadaNonTgrPage() {
                 <td>{task.external_fleet ?? '-'}</td>
                 <td>{task.std ? new Date(task.std).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) : '-'}</td>
                 <td>{task.sta ? new Date(task.sta).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) : '-'}</td>
-                <td><span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{task.status}</span></td>
+                <td><span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{statusLabel(task.status)}</span></td>
                 <td>
                   {task.status === 'Assigned' ? (
                     <form action={submitNonTgrDepartureFormAction} className="compact-form">
