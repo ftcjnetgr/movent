@@ -31,14 +31,17 @@ type Props = {
   products: string[]
 }
 
+type Flow = 'distribusi' | 'supply' | null
+type SupplyOwnership = 'TGR' | 'Non-TGR' | null
+
 export default function DispatcherCreateTask({ locations, schedules, executors, fleets, products }: Props) {
   const [state, formAction, pending] = useActionState(createDispatcherTaskAction, initialState)
-  const [taskType, setTaskType] = useState('Distribusi Mobil')
-  const [ownership, setOwnership] = useState('TGR')
+  const [activeFlow, setActiveFlow] = useState<Flow>(null)
+  const [supplyOwnership, setSupplyOwnership] = useState<SupplyOwnership>(null)
   const [scheduleId, setScheduleId] = useState('')
-  const [activeFlow, setActiveFlow] = useState<'distribusi' | 'non-tgr' | null>(null)
+
   const selectedSchedule = schedules.find((schedule) => schedule.schedule_id === scheduleId)
-  const usesInternalExecutor = taskType === 'Distribusi Mobil' || ownership === 'TGR'
+
   const locationOptions = locations.map((location) => ({ value: location, label: location }))
   const scheduleOptions = schedules.map((schedule) => ({
     value: schedule.schedule_id,
@@ -61,9 +64,11 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
     if (state.success) window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [state.success])
 
-  useEffect(() => {
-    if (taskType !== 'Supply' || ownership !== 'TGR') setScheduleId('')
-  }, [taskType, ownership])
+  function resetCreateFlow() {
+    setActiveFlow(null)
+    setSupplyOwnership(null)
+    setScheduleId('')
+  }
 
   function shareNonTgrSj() {
     if (!state.preview) return
@@ -112,81 +117,125 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
       <div className="section-heading">
         <div>
           <h2>Buat Tugas</h2>
-          <p>Pilih jenis transaksi yang ingin dibuat.</p>
+          <p>Buat penugasan sesuai alur operasional.</p>
         </div>
       </div>
 
-      <div className="task-create-grid">
-        <div className="metric-card task-create-card">
-          <div className="card-title">Distribusi Mobil</div>
-          <p className="muted">Buat tugas distribusi mobil.</p>
-          {activeFlow !== 'distribusi' ? (
-            <button type="button" onClick={() => setActiveFlow('distribusi')}>Tambah Tugas</button>
-          ) : (
-            <form action={formAction} className="data-form">
-              <input type="hidden" name="taskType" value="Distribusi Mobil" />
-              <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
-              <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
+      {!activeFlow ? (
+        <div className="task-create-workspace">
+          <div className="task-create-intro">
+            <span className="eyebrow">Langkah 1</span>
+            <strong>Pilih proses</strong>
+            <span>Pilih jenis tugas yang ingin dibuat.</span>
+          </div>
+
+          <div className="task-create-choice-grid">
+            <button type="button" className="task-create-choice" onClick={() => setActiveFlow('distribusi')}>
+              <span className="task-create-choice-icon">DM</span>
+              <span>
+                <strong>Distribusi Mobil</strong>
+                <small>Start Point, Destinasi, waktu, Executor, dan Armada.</small>
+              </span>
+              <b>→</b>
+            </button>
+
+            <button type="button" className="task-create-choice" onClick={() => setActiveFlow('supply')}>
+              <span className="task-create-choice-icon">SP</span>
+              <span>
+                <strong>Supply</strong>
+                <small>Pilih kepemilikan Armada TGR atau Non-TGR.</small>
+              </span>
+              <b>→</b>
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {activeFlow === 'distribusi' ? (
+        <div className="task-create-workspace">
+          <div className="task-create-flow-head">
+            <div>
+              <span className="eyebrow">Distribusi Mobil</span>
+              <strong>Buat tugas distribusi mobil</strong>
+            </div>
+            <button type="button" className="secondary-button" onClick={resetCreateFlow}>Kembali</button>
+          </div>
+
+          <form action={formAction} className="data-form task-create-form">
+            <input type="hidden" name="taskType" value="Distribusi Mobil" />
+            <div className="form-section">
+              <div className="form-section-title">Rute</div>
+              <div className="form-row">
+                <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
+                <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
+              </div>
+            </div>
+            <div className="form-section">
+              <div className="form-section-title">Waktu</div>
               <div className="form-row">
                 <label>STD<input name="std" type="time" required /></label>
                 <label>STA<input name="sta" type="time" required /></label>
               </div>
+            </div>
+            <div className="form-section">
+              <div className="form-section-title">Penugasan</div>
               <div className="form-row">
                 <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
                 <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
               </div>
-              {state.error ? <p className="form-error">{state.error}</p> : null}
-              {state.success ? <p className="form-success">{state.success}</p> : null}
-              <div className="form-actions">
-                <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
-                <button type="button" className="secondary-button" onClick={() => setActiveFlow(null)}>Batal</button>
-              </div>
-            </form>
-          )}
+            </div>
+            {state.error ? <p className="form-error">{state.error}</p> : null}
+            {state.success ? <p className="form-success">{state.success}</p> : null}
+            <div className="form-actions">
+              <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
+              <button type="button" className="secondary-button" onClick={resetCreateFlow}>Batal</button>
+            </div>
+          </form>
         </div>
+      ) : null}
 
-        <div className="metric-card task-create-card">
-          <div className="card-title">Supply Armada Non-TGR</div>
-          <p className="muted">Buat tugas supply dengan armada non-TGR.</p>
-          {activeFlow !== 'non-tgr' ? (
-            <button type="button" onClick={() => setActiveFlow('non-tgr')}>Tambah Tugas</button>
-          ) : (
-            <form action={formAction} className="data-form">
-              <input type="hidden" name="taskType" value="Supply" />
-              <input type="hidden" name="fleetOwnership" value="Non-TGR" />
-              <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
-              <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
-              <div className="form-row">
-                <label>STD<input name="std" type="time" required /></label>
-                <label>STA<input name="sta" type="time" required /></label>
-              </div>
-              <div className="form-row">
-                <label>Executor Eksternal<input name="externalExecutor" required /></label>
-                <label>Armada Eksternal<input name="externalFleet" required /></label>
-              </div>
-              <div className="form-row">
-                <label>Nomor SJ<input name="sjNumber" required /></label>
-                <label>Qty<input name="sjQty" type="number" step="any" min="0" required /></label>
-              </div>
-              <div className="form-row">
-                <label>Berat<input name="sjWeight" type="number" step="any" min="0" required /></label>
-                <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih produk" required />
-              </div>
-              <label>Catatan<textarea name="sjNote" rows={2} /></label>
-              {state.error ? <p className="form-error">{state.error}</p> : null}
-              {state.success ? <p className="form-success">{state.success}</p> : null}
-              <div className="form-actions">
-                <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
-                <button type="button" className="secondary-button" onClick={() => setActiveFlow(null)}>Batal</button>
-              </div>
-            </form>
-          )}
+      {activeFlow === 'supply' && !supplyOwnership ? (
+        <div className="task-create-workspace">
+          <div className="task-create-flow-head">
+            <div>
+              <span className="eyebrow">Supply</span>
+              <strong>Pilih kepemilikan armada</strong>
+            </div>
+            <button type="button" className="secondary-button" onClick={resetCreateFlow}>Kembali</button>
+          </div>
+
+          <div className="task-create-choice-grid">
+            <button type="button" className="task-create-choice" onClick={() => setSupplyOwnership('TGR')}>
+              <span className="task-create-choice-icon">TGR</span>
+              <span>
+                <strong>Armada TGR</strong>
+                <small>Gunakan schedule dari database master.</small>
+              </span>
+              <b>→</b>
+            </button>
+            <button type="button" className="task-create-choice" onClick={() => setSupplyOwnership('Non-TGR')}>
+              <span className="task-create-choice-icon">NT</span>
+              <span>
+                <strong>Armada Non-TGR</strong>
+                <small>Isi rute, waktu, executor, armada, dan Surat Jalan.</small>
+              </span>
+              <b>→</b>
+            </button>
+          </div>
         </div>
+      ) : null}
 
-        <div className="metric-card task-create-card">
-          <div className="card-title">Supply Armada TGR</div>
-          <p className="muted">Gunakan schedule yang tersedia untuk membuat tugas.</p>
-          <form action={formAction} className="data-form">
+      {activeFlow === 'supply' && supplyOwnership === 'TGR' ? (
+        <div className="task-create-workspace">
+          <div className="task-create-flow-head">
+            <div>
+              <span className="eyebrow">Supply · Armada TGR</span>
+              <strong>Pilih schedule</strong>
+            </div>
+            <button type="button" className="secondary-button" onClick={() => { setSupplyOwnership(null); setScheduleId('') }}>Kembali</button>
+          </div>
+
+          <form action={formAction} className="data-form task-create-form">
             <input type="hidden" name="taskType" value="Supply" />
             <input type="hidden" name="fleetOwnership" value="TGR" />
             <SearchableMasterSelect
@@ -207,20 +256,81 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
                   <div><span>STD</span><strong>{selectedSchedule.std.slice(0, 5)}</strong></div>
                   <div><span>STA</span><strong>{selectedSchedule.sta.slice(0, 5)}</strong></div>
                 </div>
-                <div className="form-row">
-                  <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
-                  <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
+                <div className="form-section">
+                  <div className="form-section-title">Penugasan</div>
+                  <div className="form-row">
+                    <SearchableMasterSelect label="Executor" name="executorNik" options={executorOptions} placeholder="Pilih executor" required />
+                    <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih armada" required />
+                  </div>
                 </div>
                 {state.error ? <p className="form-error">{state.error}</p> : null}
                 {state.success ? <p className="form-success">{state.success}</p> : null}
-                <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
+                <div className="form-actions">
+                  <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
+                </div>
               </>
             ) : (
               <p className="form-helper">Pilih schedule terlebih dahulu, lalu isi Executor dan Armada.</p>
             )}
           </form>
         </div>
-      </div>
+      ) : null}
+
+      {activeFlow === 'supply' && supplyOwnership === 'Non-TGR' ? (
+        <div className="task-create-workspace">
+          <div className="task-create-flow-head">
+            <div>
+              <span className="eyebrow">Supply · Armada Non-TGR</span>
+              <strong>Buat tugas supply non-TGR</strong>
+            </div>
+            <button type="button" className="secondary-button" onClick={() => setSupplyOwnership(null)}>Kembali</button>
+          </div>
+
+          <form action={formAction} className="data-form task-create-form">
+            <input type="hidden" name="taskType" value="Supply" />
+            <input type="hidden" name="fleetOwnership" value="Non-TGR" />
+            <div className="form-section">
+              <div className="form-section-title">Rute</div>
+              <div className="form-row">
+                <SearchableMasterSelect label="Titik Mulai" name="startPoint" options={locationOptions} placeholder="Pilih titik mulai" required />
+                <SearchableMasterSelect label="Destinasi" name="destination" options={locationOptions} placeholder="Pilih destinasi" required />
+              </div>
+            </div>
+            <div className="form-section">
+              <div className="form-section-title">Waktu</div>
+              <div className="form-row">
+                <label>STD<input name="std" type="time" required /></label>
+                <label>STA<input name="sta" type="time" required /></label>
+              </div>
+            </div>
+            <div className="form-section">
+              <div className="form-section-title">Penugasan eksternal</div>
+              <div className="form-row">
+                <label>Executor Eksternal<input name="externalExecutor" required /></label>
+                <label>Armada Eksternal<input name="externalFleet" required /></label>
+              </div>
+            </div>
+            <div className="form-section">
+              <div className="form-section-title">Surat Jalan</div>
+              <div className="form-row">
+                <label>Nomor SJ<input name="sjNumber" required /></label>
+                <label>Qty<input name="sjQty" type="number" step="any" min="0" required /></label>
+              </div>
+              <div className="form-row">
+                <label>Berat<input name="sjWeight" type="number" step="any" min="0" required /></label>
+                <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih produk" required />
+              </div>
+              <label>Catatan<textarea name="sjNote" rows={2} /></label>
+            </div>
+            {state.error ? <p className="form-error">{state.error}</p> : null}
+            {state.success ? <p className="form-success">{state.success}</p> : null}
+            <div className="form-actions">
+              <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
+              <button type="button" className="secondary-button" onClick={resetCreateFlow}>Batal</button>
+            </div>
+          </form>
+        </div>
+      ) : null}
 
       {state.preview ? (
         <div className="metric-card section-block">
