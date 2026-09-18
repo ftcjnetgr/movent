@@ -6,6 +6,19 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
 
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Assigned: 'Ditugaskan',
+    Accepted: 'Diterima',
+    Driving: 'Berangkat',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+    Created: 'Dibuat',
+    'In Progress': 'Sedang dikerjakan',
+  }
+  return labels[status] ?? status
+}
+
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
