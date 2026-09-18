@@ -1,9 +1,0 @@
-node_modules
-.next
-out
-.env
-.env.*
-!.env.example
-supabase/functions/.env
-supabase/.branches
-.DS_Store

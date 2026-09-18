@@ -1,45 +1,130 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-const navByRole: Record<string, { label: string; href: string; icon: string }[]> = {
+type NavItem = { label: string; href: string; icon: string }
+type NavGroup = { label: string; icon: string; items: NavItem[] }
+
+const navByRole: Record<string, NavGroup[]> = {
   Controller: [
-    { label: 'Beranda', href: '/controller/beranda', icon: 'home' },
-    { label: 'Tarik Laporan', href: '/controller/penarikan-report', icon: 'report' },
-    { label: 'Profil', href: '/controller/profil', icon: 'user' },
-    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    {
+      label: 'Monitoring',
+      icon: 'home',
+      items: [
+        { label: 'Beranda', href: '/controller/beranda', icon: 'home' },
+        { label: 'Timetable', href: '/controller/timetable', icon: 'calendar' },
+        { label: 'Tiket Maintenance', href: '/controller/ticketing-maintenance', icon: 'ticket' },
+      ],
+    },
+    {
+      label: 'Laporan',
+      icon: 'report',
+      items: [
+        { label: 'Tarik Laporan', href: '/controller/penarikan-report', icon: 'report' },
+      ],
+    },
+    {
+      label: 'Akun',
+      icon: 'user',
+      items: [
+        { label: 'Profil', href: '/controller/profil', icon: 'user' },
+        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+      ],
+    },
   ],
   Dispatcher: [
-    { label: 'Beranda', href: '/dispatcher/beranda', icon: 'home' },
-    { label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' },
-    { label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule', icon: 'calendar' },
-    { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
-    { label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
-    { label: 'Profil', href: '/dispatcher/profil', icon: 'user' },
-    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    {
+      label: 'Penugasan',
+      icon: 'clipboard',
+      items: [
+        { label: 'Beranda', href: '/dispatcher/beranda', icon: 'home' },
+        { label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' },
+        { label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule', icon: 'calendar' },
+        { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
+      ],
+    },
+    {
+      label: 'Maintenance',
+      icon: 'wrench',
+      items: [
+        { label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
+        { label: 'Tiket Maintenance', href: '/dispatcher/ticketing-maintenance', icon: 'ticket' },
+      ],
+    },
+    {
+      label: 'Akun',
+      icon: 'user',
+      items: [
+        { label: 'Profil', href: '/dispatcher/profil', icon: 'user' },
+        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+      ],
+    },
   ],
   Operation: [
-    { label: 'Permintaan Jadwal Tambahan', href: '/operation/request-extra-schedule', icon: 'calendar' },
-    { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan', icon: 'history' },
-    { label: 'Profil', href: '/operation/profil', icon: 'user' },
-    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    {
+      label: 'Jadwal Tambahan',
+      icon: 'calendar',
+      items: [
+        { label: 'Permintaan Jadwal Tambahan', href: '/operation/request-extra-schedule', icon: 'calendar' },
+        { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan', icon: 'history' },
+      ],
+    },
+    {
+      label: 'Akun',
+      icon: 'user',
+      items: [
+        { label: 'Profil', href: '/operation/profil', icon: 'user' },
+        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+      ],
+    },
   ],
   Executor: [
-    { label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' },
-    { label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' },
-    { label: 'Profil', href: '/executor/profil', icon: 'user' },
-    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    {
+      label: 'Tugas',
+      icon: 'clipboard',
+      items: [
+        { label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' },
+        { label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' },
+      ],
+    },
+    {
+      label: 'Akun',
+      icon: 'user',
+      items: [
+        { label: 'Profil', href: '/executor/profil', icon: 'user' },
+        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+      ],
+    },
   ],
   Maintainer: [
-    { label: 'Beranda', href: '/maintainer/beranda', icon: 'home' },
-    { label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'ticket' },
-    { label: 'Profil', href: '/maintainer/profil', icon: 'user' },
-    { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+    {
+      label: 'Operasional',
+      icon: 'home',
+      items: [
+        { label: 'Beranda', href: '/maintainer/beranda', icon: 'home' },
+        { label: 'Timetable', href: '/maintainer/timetable', icon: 'calendar' },
+      ],
+    },
+    {
+      label: 'Maintenance',
+      icon: 'wrench',
+      items: [
+        { label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'ticket' },
+        { label: 'Dashboard Maintenance', href: '/maintainer/ticketing-maintenance', icon: 'report' },
+      ],
+    },
+    {
+      label: 'Akun',
+      icon: 'user',
+      items: [
+        { label: 'Profil', href: '/maintainer/profil', icon: 'user' },
+        { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
+      ],
+    },
   ],
 }
-
 const modeRoutes: Record<string, string> = {
   Controller: '/controller/beranda',
   Dispatcher: '/dispatcher/beranda',
@@ -101,9 +186,25 @@ export default function AppShellClient({
   const currentRole =
     Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ??
     (profile.role === 'Super User' ? 'Controller' : profile.role)
-  const nav = navByRole[currentRole] ?? []
+  const navGroups = navByRole[currentRole] ?? []
+  const activeGroup = navGroups.find((group) => group.items.some((item) => item.href === pathname))?.label ?? ''
+  const [openGroups, setOpenGroups] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!activeGroup) return
+    setOpenGroups((current) => current.includes(activeGroup) ? current : [...current, activeGroup])
+  }, [activeGroup])
 
   const closeMobile = () => setMobileOpen(false)
+
+  function toggleGroup(label: string) {
+    if (collapsed) setCollapsed(false)
+    setOpenGroups((current) => current.includes(label)
+      ? current.filter((item) => item !== label)
+      : [...current, label])
+  }
+
+  const activeItem = navGroups.flatMap((group) => group.items).find((item) => item.href === pathname)
 
   return (
     <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'sidebar-mobile-open' : ''}`}>
@@ -138,19 +239,44 @@ export default function AppShellClient({
           </div>
         ) : null}
 
-        <nav className="sidebar-nav" aria-label="Menu utama">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={pathname === item.href ? 'nav-link active' : 'nav-link'}
-              onClick={closeMobile}
-              title={collapsed ? item.label : undefined}
-            >
-              <span className="nav-icon"><Icon name={item.icon} /></span>
-              <span className="nav-link-text">{item.label}</span>
-            </Link>
-          ))}
+        <nav className="sidebar-nav sidebar-accordion" aria-label="Menu utama">
+          {navGroups.map((group) => {
+            const isOpen = openGroups.includes(group.label)
+            const hasActiveItem = group.items.some((item) => item.href === pathname)
+            const panelId = 'nav-group-' + group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
+            return (
+              <div className={`nav-group ${isOpen ? 'open' : ''} ${hasActiveItem ? 'has-active' : ''}`} key={group.label}>
+                <button
+                  type="button"
+                  className="nav-group-toggle"
+                  onClick={() => toggleGroup(group.label)}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  title={collapsed ? group.label : undefined}
+                >
+                  <span className="nav-icon"><Icon name={group.icon} /></span>
+                  <span className="nav-group-label">{group.label}</span>
+                  <span className="nav-group-chevron" aria-hidden="true">⌄</span>
+                </button>
+
+                <div id={panelId} className="nav-group-items">
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={pathname === item.href ? 'nav-link active' : 'nav-link'}
+                      onClick={closeMobile}
+                      title={collapsed ? item.label : undefined}
+                    >
+                      <span className="nav-icon"><Icon name={item.icon} /></span>
+                      <span className="nav-link-text">{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
         </nav>
 
         {profile.role === 'Super User' ? (
@@ -188,7 +314,7 @@ export default function AppShellClient({
             </button>
             <div className="topbar-title">
               <span className="role-label">{currentRole}</span>
-              <span className="topbar-page">{nav.find((item) => item.href === pathname)?.label ?? 'MOVENT'}</span>
+              <span className="topbar-page">{activeItem?.label ?? currentRole}</span>
             </div>
           </div>
           <div className="topbar-user">

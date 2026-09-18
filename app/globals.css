@@ -2187,3 +2187,108 @@ button:hover,
 .task-card > form:not(.compact-form) > button {
   width: 100%;
 }
+
+
+/* ===== sidebar accordion ===== */
+.sidebar-accordion {
+  gap: 6px;
+}
+
+.nav-group {
+  border: 1px solid transparent;
+  border-radius: 12px;
+}
+
+.nav-group-toggle {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+  background: transparent;
+  color: #5c6879;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  box-shadow: none;
+}
+
+.nav-group-toggle:hover {
+  background: #f3f6fa;
+  color: var(--ui-text);
+}
+
+.nav-group.has-active .nav-group-toggle {
+  color: var(--ui-primary);
+  background: #f7faff;
+}
+
+.nav-group-chevron {
+  margin-left: auto;
+  font-size: 14px;
+  line-height: 1;
+  color: #97a1af;
+  transform: rotate(0deg);
+  transition: transform .16s ease, color .16s ease;
+}
+
+.nav-group.open .nav-group-chevron {
+  transform: rotate(180deg);
+  color: #657386;
+}
+
+.nav-group-items {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  padding: 0 4px;
+  transition: grid-template-rows .18s ease, padding .18s ease;
+}
+
+.nav-group-items > * {
+  min-height: 0;
+}
+
+.nav-group.open .nav-group-items {
+  grid-template-rows: 1fr;
+  padding-bottom: 4px;
+}
+
+.nav-group-items .nav-link {
+  min-height: 38px;
+  margin: 2px 0;
+  padding-left: 28px;
+  font-size: 12px;
+}
+
+.nav-group-items .nav-link.active {
+  border-color: #d9e7ff;
+  background: var(--ui-primary-soft);
+}
+
+.app-shell.sidebar-collapsed .nav-group {
+  border-color: transparent;
+}
+
+.app-shell.sidebar-collapsed .nav-group-toggle {
+  justify-content: center;
+  padding: 8px;
+}
+
+.app-shell.sidebar-collapsed .nav-group-label,
+.app-shell.sidebar-collapsed .nav-group-chevron {
+  display: none;
+}
+
+.app-shell.sidebar-collapsed .nav-group-items {
+  display: none;
+}
+
+.app-shell.sidebar-collapsed .nav-group.has-active .nav-group-toggle {
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+}
