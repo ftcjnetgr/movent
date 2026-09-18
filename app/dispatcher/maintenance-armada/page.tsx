@@ -34,5 +34,7 @@ export default async function DispatcherMaintenanceArmadaPage() {
         locations={(locations ?? []).map((item) => item.location)}
         fleets={fleets ?? []}
         tickets={tickets ?? []}
-      />)
+      />
+    </>
+  )
 }
