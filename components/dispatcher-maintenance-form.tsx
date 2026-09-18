@@ -6,7 +6,17 @@ import {
   createMaintenanceTicketAction,
 } from '@/app/dispatcher/maintenance-armada/actions'
 
-const initialState: { error?: string; success?: string; transactionId?: string } = {}
+const initialState: {
+  error?: string
+  success?: string
+  transactionId?: string
+  preview?: {
+    transactionId: string
+    maintenanceList: string
+    location: string
+    platNumber: string
+  }
+} = {}
 
 type Ticket = {
   transaction_id: string
@@ -76,11 +86,31 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
 
         <div className="metric-card">
           <div className="card-title">Pratinjau tiket</div>
-          {state.transactionId ? (
+          {state.preview ? (
             <>
-              <h2>{state.transactionId}</h2>
+              <h2>{state.preview.transactionId}</h2>
+              <div className="compact-form">
+                <div><span className="muted">Daftar Maintenance</span><strong>{state.preview.maintenanceList}</strong></div>
+                <div><span className="muted">Lokasi</span><strong>{state.preview.location}</strong></div>
+                <div><span className="muted">Armada</span><strong>{state.preview.platNumber}</strong></div>
+              </div>
               <p className="muted">Detail tiket siap dibagikan ke WhatsApp.</p>
-              <a className="button-link" href={'https://wa.me/?text=' + encodeURIComponent('Tiket Maintenance MOVENT ' + state.transactionId)} target="_blank" rel="noreferrer">Bagikan ke WhatsApp</a>
+              <a
+                className="button-link"
+                href={'https://wa.me/?text=' + encodeURIComponent(
+                  [
+                    'Tiket Maintenance MOVENT',
+                    'Transaction ID: ' + state.preview.transactionId,
+                    'Daftar Maintenance: ' + state.preview.maintenanceList,
+                    'Lokasi: ' + state.preview.location,
+                    'Armada: ' + state.preview.platNumber,
+                  ].join('\n')
+                )}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Bagikan ke WhatsApp
+              </a>
             </>
           ) : (
             <p className="muted">Pratinjau akan muncul setelah tiket berhasil dibuat.</p>
