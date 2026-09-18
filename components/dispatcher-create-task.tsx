@@ -54,7 +54,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
       'Berat: ' + state.preview.sjWeight,
       'Produk: ' + state.preview.product,
       'Catatan: ' + (state.preview.sjNote ?? '-'),
-    ].join('\\n')
+    ].join('\n')
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer')
   }
 
