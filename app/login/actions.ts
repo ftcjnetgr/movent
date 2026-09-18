@@ -32,7 +32,7 @@ export async function loginAction(
   const admin = createAdminClient()
   const { data: profile, error: profileError } = await admin
     .from('user_profiles')
-    .select('id, username, email, role, status, must_change_password, failed_login_attempts')
+    .select('id, username, email, role, status, must_change_password, failed_login_attempts, auth_user_id')
     .eq('username', username)
     .maybeSingle()
 
@@ -42,6 +42,26 @@ export async function loginAction(
 
   if (profile.status === 'Locked') {
     return { error: 'Akun sedang terkunci. Hubungi Super User untuk membuka kembali.' }
+  }
+
+  let authUserId = profile.auth_user_id as string | null
+
+  if (!authUserId && profile.must_change_password && password === '123456') {
+    const { data: createdAuth, error: createAuthError } = await admin.auth.admin.createUser({
+      email: profile.email,
+      password: '123456',
+      email_confirm: true,
+    })
+
+    if (createAuthError || !createdAuth.user) {
+      return { error: 'Akun login belum berhasil disiapkan. Hubungi Super User.' }
+    }
+
+    authUserId = createdAuth.user.id
+    await admin
+      .from('user_profiles')
+      .update({ auth_user_id: authUserId })
+      .eq('id', profile.id)
   }
 
   const supabase = await createClient()
