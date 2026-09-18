@@ -3,6 +3,26 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { addMasterRowAction, deleteMasterRowAction, importMasterDatabaseAction, updateMasterRowAction } from './actions'
 
+async function importMasterDatabaseFormAction(formData: FormData) {
+  'use server'
+  await importMasterDatabaseAction(formData)
+}
+
+async function addMasterRowFormAction(formData: FormData) {
+  'use server'
+  await addMasterRowAction(formData)
+}
+
+async function updateMasterRowFormAction(formData: FormData) {
+  'use server'
+  await updateMasterRowAction(formData)
+}
+
+async function deleteMasterRowFormAction(formData: FormData) {
+  'use server'
+  await deleteMasterRowAction(formData)
+}
+
 const databases = [
   { key: 'schedules', label: 'Schedule', identifier: 'schedule_id' },
   { key: 'executors', label: 'Executor', identifier: 'executor_nik' },
@@ -71,7 +91,7 @@ export default async function DatabaseManagementPage({
         <div className="metric-card">
           <h2>Import Massal</h2>
           <p className="muted">Identifier yang sama akan diperbarui. Identifier baru akan dibuat. Data yang tidak ada di file tetap dipertahankan.</p>
-          <form action={importMasterDatabaseAction} className="data-form">
+          <form action={importMasterDatabaseFormAction} className="data-form">
             <input type="hidden" name="database" value={db} />
             <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
             <button type="submit">Import database</button>
@@ -80,7 +100,7 @@ export default async function DatabaseManagementPage({
 
         <div className="metric-card">
           <h2>Tambah Data</h2>
-          <form action={addMasterRowAction} className="data-form compact-form">
+          <form action={addMasterRowFormAction} className="data-form compact-form">
             <input type="hidden" name="database" value={db} />
             {config.map((column) => (
               <label key={column}>{column}<input name={'field__' + column} required={column === meta.identifier} /></label>
@@ -111,7 +131,7 @@ export default async function DatabaseManagementPage({
                   <td>
                     <details>
                       <summary className="link-button">Edit</summary>
-                      <form action={updateMasterRowAction} className="compact-form" style={{marginTop:12}}>
+                      <form action={updateMasterRowFormAction} className="compact-form" style={{marginTop:12}}>
                         <input type="hidden" name="database" value={db} />
                         <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
                         {config.map((column) => (
@@ -120,7 +140,7 @@ export default async function DatabaseManagementPage({
                         <button type="submit">Simpan</button>
                       </form>
                     </details>
-                    <form action={deleteMasterRowAction} style={{marginTop:8}}>
+                    <form action={deleteMasterRowFormAction} style={{marginTop:8}}>
                       <input type="hidden" name="database" value={db} />
                       <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
                       <button type="submit" className="secondary-button">Hapus</button>
