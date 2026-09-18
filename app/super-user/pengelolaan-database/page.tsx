@@ -66,7 +66,7 @@ export default async function DatabaseManagementPage({
       <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
-          <h1>Pengelolaan Database</h1>
+          <h1>Kelola Database</h1>
           <p>Kelola master data satu per satu atau melalui import CSV/XLSX.</p>
         </div>
       </div>
@@ -79,8 +79,8 @@ export default async function DatabaseManagementPage({
                 {databases.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
               </select>
             </label>
-            <label>Cari berdasarkan {meta.identifier}
-              <input name="q" defaultValue={query} placeholder="Ketik identifier" />
+            <label>Cari berdasarkan ID {meta.identifier}
+              <input name="q" defaultValue={query} placeholder="Ketik ID yang mau dicari" />
             </label>
           </div>
           <button type="submit">Cari</button>
@@ -89,17 +89,17 @@ export default async function DatabaseManagementPage({
 
       <section className="section-grid two-column section-block">
         <div className="metric-card">
-          <h2>Import Massal</h2>
-          <p className="muted">Identifier yang sama akan diperbarui. Identifier baru akan dibuat. Data yang tidak ada di file tetap dipertahankan.</p>
+          <h2>Import banyak data</h2>
+          <p className="muted">Data dengan ID yang sama akan diperbarui, ID baru akan ditambahkan, dan data lain tetap aman.</p>
           <form action={importMasterDatabaseFormAction} className="data-form">
             <input type="hidden" name="database" value={db} />
             <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
-            <button type="submit">Import database</button>
+            <button type="submit">Import data</button>
           </form>
         </div>
 
         <div className="metric-card">
-          <h2>Tambah Data</h2>
+          <h2>Tambah data</h2>
           <form action={addMasterRowFormAction} className="data-form compact-form">
             <input type="hidden" name="database" value={db} />
             {config.map((column) => (
@@ -114,7 +114,7 @@ export default async function DatabaseManagementPage({
         <div className="section-heading">
           <div>
             <h2>{meta.label}</h2>
-            <p>Identifier: {meta.identifier}. Menampilkan maksimal 50 data pertama.</p>
+            <p>Identifier: {meta.identifier}. Menampilkan maksimal 50 data. Jika mau, cari data berdasarkan ID.</p>
           </div>
         </div>
         <div className="table-wrap">
@@ -137,18 +137,18 @@ export default async function DatabaseManagementPage({
                         {config.map((column) => (
                           <label key={column}>{column}<input name={'field__' + column} defaultValue={row[column] === null || row[column] === undefined ? '' : String(row[column])} disabled={column === meta.identifier} /></label>
                         ))}
-                        <button type="submit">Simpan</button>
+                        <button type="submit">Simpan perubahan</button>
                       </form>
                     </details>
                     <form action={deleteMasterRowFormAction} style={{marginTop:8}}>
                       <input type="hidden" name="database" value={db} />
                       <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
-                      <button type="submit" className="secondary-button">Hapus</button>
+                      <button type="submit" className="secondary-button">Hapus data</button>
                     </form>
                   </td>
                 </tr>
               ))}
-              {!(rows ?? []).length ? <tr><td colSpan={config.length + 1}><div className="empty-state">Belum ada data.</div></td></tr> : null}
+              {!(rows ?? []).length ? <tr><td colSpan={config.length + 1}><div className="empty-state">Belum ada data untuk ditampilkan.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
