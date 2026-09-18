@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
@@ -29,8 +28,7 @@ export default async function UserManagementPage() {
     .order('full_name')
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
           <h1>Kelola Pengguna</h1>
@@ -81,7 +79,5 @@ export default async function UserManagementPage() {
             </tbody>
           </table>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
