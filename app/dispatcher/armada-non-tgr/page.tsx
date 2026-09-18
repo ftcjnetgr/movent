@@ -59,5 +59,7 @@ export default async function ArmadaNonTgrPage() {
             </tbody>
           </table>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
