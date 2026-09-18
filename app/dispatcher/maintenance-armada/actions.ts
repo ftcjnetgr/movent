@@ -20,14 +20,14 @@ type State = {
 
 export async function createMaintenanceTicketAction(_state: State, formData: FormData): Promise<State> {
   const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const maintenanceList = String(formData.get('maintenanceList') ?? '').trim()
   const location = String(formData.get('location') ?? '').trim()
   const platNumber = String(formData.get('platNumber') ?? '').trim()
 
   if (!maintenanceList || !location || !platNumber) {
-    return { error: 'Daftar Maintenance, lokasi, dan armada wajib diisi.' }
+    return { error: 'Daftar Maintenance, lokasi, dan armada perlu diisi dulu, ya.' }
   }
 
   const admin = createAdminClient()
@@ -37,12 +37,12 @@ export async function createMaintenanceTicketAction(_state: State, formData: For
     admin.from('fleets').select('plat_number, fleet_type, status').eq('plat_number', platNumber).eq('status', 'Active').maybeSingle(),
   ])
 
-  if (!maintenance) return { error: 'Daftar Maintenance tidak tersedia.' }
-  if (!locationData) return { error: 'Lokasi tidak tersedia.' }
-  if (!fleet) return { error: 'Armada tidak tersedia.' }
+  if (!maintenance) return { error: 'Daftar Maintenance belum tersedia.' }
+  if (!locationData) return { error: 'Lokasi belum tersedia.' }
+  if (!fleet) return { error: 'Armada belum tersedia.' }
 
   const { data: transactionId, error: transactionError } = await admin.rpc('movent_next_transaction_id')
-  if (transactionError || !transactionId) return { error: 'Transaction ID belum berhasil dibuat.' }
+  if (transactionError || !transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
 
   const { error } = await admin.from('ticketings').insert({
     transaction_id: transactionId,
@@ -81,8 +81,8 @@ export async function cancelMaintenanceTicketAction(formData: FormData) {
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const note = String(formData.get('note') ?? '').trim()
 
-  if (!transactionId || !note) return { error: 'Transaction ID dan alasan pembatalan wajib diisi.' }
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!transactionId || !note) return { error: 'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.' }
+  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const admin = createAdminClient()
   let query = admin.from('ticketings').select('id, status, created_by').eq('transaction_id', transactionId).eq('status', 'Created')
