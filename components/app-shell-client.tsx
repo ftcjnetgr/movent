@@ -130,7 +130,10 @@ export default function AppShellClient({
     (profile.role === 'Super User' ? 'Controller' : profile.role)
 
   const baseNavGroups = navByRole[currentRole] ?? []
-  const navGroups = profile.role === 'Super User' ? [...baseNavGroups, superUserGroup] : baseNavGroups
+  const navGroups = useMemo(
+    () => profile.role === 'Super User' ? [...baseNavGroups, superUserGroup] : baseNavGroups,
+    [currentRole, profile.role],
+  )
 
   const activeItem = useMemo(
     () => navGroups
@@ -141,6 +144,23 @@ export default function AppShellClient({
   )
 
   const activeGroup = activeItem?.group ?? ''
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem('movent:sidebar-collapsed')
+      if (saved === 'true') setCollapsed(true)
+    } catch {
+      // ignore browser storage errors
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('movent:sidebar-collapsed', String(collapsed))
+    } catch {
+      // ignore browser storage errors
+    }
+  }, [collapsed])
 
   useEffect(() => {
     if (!activeGroup) return
@@ -182,7 +202,11 @@ export default function AppShellClient({
   }
 
   function toggleGroup(label: string) {
-    if (collapsed) setCollapsed(false)
+    if (collapsed) {
+      setCollapsed(false)
+      setOpenGroups((current) => current.includes(label) ? current : [...current, label])
+      return
+    }
     setOpenGroups((current) => current.includes(label)
       ? current.filter((item) => item !== label)
       : [...current, label])
@@ -206,8 +230,8 @@ export default function AppShellClient({
             type="button"
             className="sidebar-toggle desktop-only"
             onClick={() => setCollapsed((value) => !value)}
-            aria-label={collapsed ? 'Buka menu samping' : 'Tutup menu samping'}
-            title={collapsed ? 'Buka menu' : 'Tutup menu'}
+            aria-label={collapsed ? 'Tampilkan menu samping' : 'Sembunyikan menu samping'}
+            title={collapsed ? 'Tampilkan menu' : 'Sembunyikan menu'}
           >
             <span aria-hidden="true">{collapsed ? '→' : '←'}</span>
           </button>
