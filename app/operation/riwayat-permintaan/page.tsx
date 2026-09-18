@@ -109,5 +109,7 @@ export default async function OperasionalHistoryPage() {
             </tbody>
           </table>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
