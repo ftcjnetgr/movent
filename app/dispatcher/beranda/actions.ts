@@ -6,7 +6,23 @@ import { redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
-type State = { error?: string; success?: string; transactionId?: string }
+type State = {
+  error?: string
+  success?: string
+  transactionId?: string
+  preview?: {
+    transactionId: string
+    startPoint: string
+    destination: string
+    externalExecutor: string
+    externalFleet: string
+    sjNumber: string
+    sjQty: number
+    sjWeight: number
+    product: string
+    sjNote: string | null
+  }
+}
 
 function todayTimestamp(time: string) {
   const [hour, minute] = time.split(':').map(Number)
@@ -176,7 +192,22 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     })
     if (error) return { error: 'Tugas Supply Non-TGR belum berhasil dibuat.' }
     revalidateTaskPaths()
-    return { success: `Tugas ${transactionId} berhasil dibuat.`, transactionId }
+    return {
+      success: `Tugas ${transactionId} berhasil dibuat.`,
+      transactionId,
+      preview: {
+        transactionId,
+        startPoint,
+        destination,
+        externalExecutor,
+        externalFleet,
+        sjNumber,
+        sjQty,
+        sjWeight,
+        product,
+        sjNote: sjNote || null,
+      },
+    }
   }
 
   return { error: 'Jenis tugas belum lengkap.' }
