@@ -1275,16 +1275,6 @@ th {
   object-position: left center;
 }
 
-.login-visual-logo {
-  position: relative;
-  z-index: 3;
-  display: block;
-  width: 190px;
-  height: auto;
-  margin-bottom: 34px;
-  object-fit: contain;
-  object-position: left center;
-}
 
 @media (max-width: 640px) {
   .login-brand-logo {
