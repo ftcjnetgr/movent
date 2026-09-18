@@ -21,6 +21,7 @@ export default async function MaintainerBerandaPage() {
   const data = await getDashboardData(profile)
 
   return (
+    <>
     <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Beranda</h1><p>Pantau tugas dan ticketing maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab active" href="/maintainer/beranda">Tugas</a>
