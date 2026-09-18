@@ -234,6 +234,40 @@ td select:focus {
   font-size: 12px;
 }
 
+.form-section {
+  padding-top: 2px;
+}
+
+.form-section + .form-section {
+  margin-top: 6px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.form-section-title {
+  margin-bottom: 10px;
+  color: var(--ui-text);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+
+.data-form {
+  max-width: 1120px;
+}
+
+.data-form > .form-row,
+.data-form > .form-section > .form-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 760px) {
+  .data-form > .form-row,
+  .data-form > .form-section > .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .form-row,
 .two-column,
 .task-summary-grid {
