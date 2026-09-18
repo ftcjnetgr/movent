@@ -15,26 +15,26 @@ export default async function RequestExtraSchedulePage() {
       <div className="page-heading">
         <div>
           <span className="eyebrow">Operation</span>
-          <h1>Request Extra Schedule</h1>
+          <h1>Permintaan Jadwal Tambahan</h1>
           <p>Ajukan kebutuhan perjalanan tambahan ke Dispatcher.</p>
         </div>
       </div>
 
       <section className="section-grid two-column">
         <div className="metric-card">
-          <div className="card-title">Buat request</div>
-          <p className="muted">Isi kebutuhan perjalanan tambahan yang mau diajukan.</p>
+          <div className="card-title">Buat permintaan</div>
+          <p className="muted">Ceritain kebutuhan perjalanan tambahan yang mau diajukan.</p>
           <OperationRequestExtraScheduleForm locations={(locations ?? []).map((item) => item.location)} />
         </div>
 
         <div className="metric-card">
-          <div className="card-title">Alur</div>
+          <div className="card-title">Alurnya</div>
           <div className="flow-list">
-            <div><strong>Requested</strong><span>Request sudah diajukan dan menunggu assignment.</span></div>
-            <div><strong>Assigned</strong><span>Dispatcher sudah memilih Executor dan Armada.</span></div>
-            <div><strong>Accepted</strong><span>Executor sudah menerima request.</span></div>
-            <div><strong>Driving</strong><span>Executor sudah konfirmasi berangkat.</span></div>
-            <div><strong>Completed</strong><span>Seluruh proses Extra Schedule selesai.</span></div>
+            <div><strong>Diajukan</strong><span>Permintaan sudah diajukan dan tinggal menunggu penugasan.</span></div>
+            <div><strong>Ditugaskan</strong><span>Dispatcher sudah memilih executor dan armada.</span></div>
+            <div><strong>Diterima</strong><span>Executor sudah menerima permintaan.</span></div>
+            <div><strong>Berangkat</strong><span>Executor sudah konfirmasi berangkat.</span></div>
+            <div><strong>Selesai</strong><span>Semua proses jadwal tambahan sudah selesai.</span></div>
           </div>
         </div>
       </section>
