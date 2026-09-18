@@ -33,15 +33,15 @@ export default async function UserManagementPage() {
       <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
-          <h1>Pengelolaan Pengguna</h1>
-          <p>Kunci, buka kunci, dan edit data pengguna.</p>
+          <h1>Kelola Pengguna</h1>
+          <p>Atur akses dan data pengguna dari sini.</p>
         </div>
       </div>
 
       <section className="data-table-card">
         <div className="table-wrap">
           <table>
-            <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Auth</th><th>Gagal Login</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Auth</th><th>Percobaan Login Gagal</th><th>Aksi</th></tr></thead>
             <tbody>
               {(users ?? []).map((user) => (
                 <tr key={user.id}>
@@ -64,12 +64,12 @@ export default async function UserManagementPage() {
                         <label>Nama lengkap<input name="fullName" defaultValue={user.full_name} required /></label>
                         <label>No. telepon<input name="phoneNumber" defaultValue={user.phone_number ?? ''} /></label>
                         <label>Role<select name="role" defaultValue={user.role} required>{['Controller','Dispatcher','Operation','Executor','Maintainer','Super User'].map((role) => <option key={role}>{role}</option>)}</select></label>
-                        <button type="submit">Simpan data</button>
+                        <button type="submit">Simpan perubahan</button>
                       </form>
                     </details>
                     <div style={{marginTop:8}}>
                       {user.status === 'Locked' ? (
-                        <form action={unlockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit">Buka kunci</button></form>
+                        <form action={unlockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit">Buka akses</button></form>
                       ) : (
                         <form action={lockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit" className="secondary-button">Kunci akun</button></form>
                       )}
@@ -77,7 +77,7 @@ export default async function UserManagementPage() {
                   </td>
                 </tr>
               ))}
-              {!(users ?? []).length ? <tr><td colSpan={6}><div className="empty-state">Belum ada user.</div></td></tr> : null}
+              {!(users ?? []).length ? <tr><td colSpan={6}><div className="empty-state">Belum ada pengguna.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
