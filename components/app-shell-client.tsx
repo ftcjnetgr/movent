@@ -120,7 +120,7 @@ export default function AppShellClient({
             aria-label={collapsed ? 'Buka menu samping' : 'Tutup menu samping'}
             title={collapsed ? 'Buka menu' : 'Tutup menu'}
           >
-            <span>{collapsed ? '→' : '←'}</span>
+            <span aria-hidden="true">{collapsed ? '→' : '←'}</span>
           </button>
         </div>
 
