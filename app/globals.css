@@ -2403,3 +2403,65 @@ tbody tr:hover { background: #fafcff; }
     min-width: 2500px;
   }
 }
+
+
+/* ===== page spacing cleanup ===== */
+.section-block {
+  margin-top: 32px;
+}
+
+.section-block > .metric-grid + .metric-grid {
+  margin-top: 14px;
+}
+
+.metric-grid {
+  gap: 14px;
+}
+
+.metric-card {
+  min-height: 108px;
+  padding: 18px 18px 16px;
+}
+
+.metric-card span {
+  line-height: 1.4;
+}
+
+.metric-card strong {
+  line-height: 1.15;
+}
+
+.timetable-group {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+}
+
+.timetable-axis-label {
+  position: sticky;
+  left: 0;
+  z-index: 6;
+}
+
+.timetable-item {
+  z-index: 2;
+}
+
+.timetable-item details {
+  max-height: 34px;
+  overflow: hidden;
+}
+
+.timetable-item details[open] {
+  max-height: none;
+}
+
+@media (max-width: 1024px) {
+  .section-block {
+    margin-top: 26px;
+  }
+
+  .metric-grid {
+    gap: 12px;
+  }
+}
