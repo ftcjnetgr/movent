@@ -8,6 +8,7 @@ export default async function MaintainerTicketingMaintenanceDashboardPage() {
   const data = await getDashboardData(profile)
 
   return (
+    <>
     <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Tiket Maintenance</h1><p>Ringkasan semua tiket maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab" href="/maintainer/beranda">Tugas</a>
