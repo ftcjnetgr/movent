@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useState, useTransition } from 'react'
+import { jsPDF } from 'jspdf'
 
 import {
   acceptExtraScheduleAction,
@@ -87,6 +88,49 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
 
   const needsSj = requiresSj(task)
 
+  function shareText() {
+    const lines = [
+      'MOVENT - Tugas',
+      'Transaction ID: ' + task.transaction_id,
+      'Jenis: ' + task.task_type,
+      'Rute: ' + (task.start_point ?? '-') + ' → ' + (task.destination ?? '-'),
+    ]
+    if (needsSj) {
+      lines.push(
+        'Nomor SJ: ' + (task.sj_number ?? '-'),
+        'Qty: ' + (task.sj_qty ?? '-'),
+        'Berat: ' + (task.sj_weight ?? '-'),
+        'Produk: ' + (task.product ?? '-'),
+        'Catatan: ' + (task.sj_note ?? '-')
+      )
+    }
+    return lines.join('\\n')
+  }
+
+  function handleShare() {
+    window.open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank', 'noopener,noreferrer')
+  }
+
+  function handlePrintSj() {
+    if (!task.sj_number) return
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: [210, 110],
+    })
+    doc.setFontSize(16)
+    doc.text('SURAT JALAN', 10, 14)
+    doc.setFontSize(10)
+    doc.text('Transaction ID: ' + task.transaction_id, 10, 22)
+    doc.text('Nomor SJ: ' + task.sj_number, 10, 30)
+    doc.text('Qty: ' + (task.sj_qty ?? '-'), 10, 38)
+    doc.text('Berat: ' + (task.sj_weight ?? '-'), 10, 46)
+    doc.text('Produk: ' + (task.product ?? '-'), 10, 54)
+    const note = doc.splitTextToSize('Catatan: ' + (task.sj_note ?? '-'), 185)
+    doc.text(note, 10, 62)
+    doc.save(task.transaction_id + '-SJ.pdf')
+  }
+
   return (
     <article className="task-card">
       <div className="task-card-top">
@@ -105,6 +149,37 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
       </div>
 
       {message ? <div className="inline-feedback">{message}</div> : null}
+
+      {needsSj && task.sj_number ? (
+        <div className="metric-card section-block">
+          <div className="card-title">Pratinjau SJ</div>
+          <div className="task-summary-grid">
+            <div><span>Transaction ID</span><strong>{task.transaction_id}</strong></div>
+            <div><span>Nomor SJ</span><strong>{task.sj_number}</strong></div>
+            <div><span>Qty</span><strong>{task.sj_qty ?? '-'}</strong></div>
+            <div><span>Berat</span><strong>{task.sj_weight ?? '-'}</strong></div>
+            <div><span>Produk</span><strong>{task.product ?? '-'}</strong></div>
+            <div><span>Catatan</span><strong>{task.sj_note ?? '-'}</strong></div>
+          </div>
+          <div className="form-row">
+            <button type="button" onClick={handlePrintSj}>Cetak PDF</button>
+            <button type="button" className="secondary-button" onClick={handleShare}>Bagikan ke WhatsApp</button>
+          </div>
+        </div>
+      ) : null}
+
+      {!needsSj && task.odometer_start !== null ? (
+        <div className="metric-card section-block">
+          <div className="card-title">Pratinjau Tugas</div>
+          <div className="task-summary-grid">
+            <div><span>Transaction ID</span><strong>{task.transaction_id}</strong></div>
+            <div><span>Jenis</span><strong>{task.task_type}</strong></div>
+            <div><span>Start Point</span><strong>{task.start_point ?? '-'}</strong></div>
+            <div><span>Destinasi</span><strong>{task.destination ?? '-'}</strong></div>
+          </div>
+          <button type="button" className="secondary-button" onClick={handleShare}>Bagikan ke WhatsApp</button>
+        </div>
+      ) : null}
 
       {task.status === 'Assigned' ? (
         <form onSubmit={handleAccept}>
