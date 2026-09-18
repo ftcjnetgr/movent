@@ -29,5 +29,7 @@ export default async function SuperUserProfilePage() {
         <div className="metric-card"><span>No. telepon</span><strong>{data.phone_number ?? '-'}</strong></div>
         <div className="metric-card"><span>Role</span><strong>{data.role}</strong></div>
         <div className="metric-card"><span>Status</span><strong>{data.status}</strong></div>
-      </section>)
+      </section>
+    </>
+  )
 }
