@@ -3,6 +3,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
 
+async function cancelDispatcherTaskFormAction(formData: FormData) {
+  'use server'
+  await cancelDispatcherTaskAction(formData)
+}
+
 export default async function DispatcherAssignmentHistoryPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
@@ -34,7 +39,7 @@ export default async function DispatcherAssignmentHistoryPage() {
                   <td>
                     {task.fleet_ownership === 'Non-TGR'
                       ? (profile.role === 'Super User' && task.status !== 'Completed' && task.status !== 'Canceled' ? (
-                          <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
+                          <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskFormAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
                         ) : <span className="muted">-</span>)
                       : (task.status === 'Assigned' && (profile.role === 'Super User' || task.created_by === profile.id) ? (
                           <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
