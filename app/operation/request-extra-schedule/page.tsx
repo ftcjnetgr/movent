@@ -1,14 +1,14 @@
-'use client'
-
-import { useActionState } from 'react'
-
 import AppShell from '@/components/app-shell'
-import { createExtraScheduleAction } from './actions'
+import OperationRequestExtraScheduleForm from '@/components/operation-request-extra-schedule-form'
+import { createAdminClient } from '@/lib/supabase/admin'
 
-const initialState: { error?: string; success?: string } = {}
-
-export default function RequestExtraSchedulePage() {
-  const [state, formAction, pending] = useActionState(createExtraScheduleAction, initialState)
+export default async function RequestExtraSchedulePage() {
+  const admin = createAdminClient()
+  const { data: locations } = await admin
+    .from('locations')
+    .select('location')
+    .eq('status', 'Active')
+    .order('location')
 
   return (
     <AppShell>
@@ -24,34 +24,7 @@ export default function RequestExtraSchedulePage() {
         <div className="metric-card">
           <div className="card-title">Buat request</div>
           <p className="muted">Isi kebutuhan perjalanan tambahan yang mau diajukan.</p>
-
-          <form action={formAction} className="data-form">
-            <label>
-              Start Point
-              <input name="startPoint" placeholder="Masukkan start point" required />
-            </label>
-            <label>
-              Destinasi
-              <input name="destination" placeholder="Masukkan destinasi" required />
-            </label>
-            <div className="form-row">
-              <label>
-                STD
-                <input name="std" type="time" required />
-              </label>
-              <label>
-                STA
-                <input name="sta" type="time" required />
-              </label>
-            </div>
-
-            {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
-            {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
-
-            <button type="submit" disabled={pending}>
-              {pending ? 'Mengajukan...' : 'Ajukan request'}
-            </button>
-          </form>
+          <OperationRequestExtraScheduleForm locations={(locations ?? []).map((item) => item.location)} />
         </div>
 
         <div className="metric-card">
