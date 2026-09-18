@@ -151,5 +151,7 @@ export default async function DatabaseManagementPage({
             </tbody>
           </table>
         </div>
-      </section>)
+      </section>
+    </>
+  )
 }
