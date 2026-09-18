@@ -19,6 +19,38 @@ function statusLabel(status: string) {
   return labels[status] ?? status
 }
 
+type DashboardData = Awaited<ReturnType<typeof getDashboardData>>
+
+const emptyDashboard: DashboardData = {
+  taskDurations: [],
+  ticketDurations: [],
+  taskCounts: { Assigned: 0, Accepted: 0, Driving: 0, Completed: 0 },
+  ticketCounts: { Created: 0, Accepted: 0, 'In Progress': 0, Completed: 0 },
+  taskAlerts: [],
+  ticketAlerts: [],
+  ticketAlertCount: 0,
+  averages: {
+    assignedAccepted: null,
+    acceptedDriving: null,
+    drivingCompleted: null,
+    completedCycle: null,
+    canceledCycle: null,
+  },
+  taskAveragesNonTgr: {
+    assignedDriving: null,
+    drivingCompleted: null,
+    completedCycle: null,
+    canceledCycle: null,
+  },
+  ticketAverages: {
+    createdAccepted: null,
+    acceptedInProgress: null,
+    inProgressCompleted: null,
+    completedCycle: null,
+    canceledCycle: null,
+  },
+}
+
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
@@ -30,29 +62,6 @@ export default async function DispatcherBerandaPage() {
     admin.from('products').select('product').eq('status', 'Active').order('product'),
   ])
 
-  const emptyDashboard = {
-    taskCounts: { Assigned: 0, Accepted: 0, Driving: 0, Completed: 0 },
-    ticketCounts: { Created: 0, Accepted: 0, 'In Progress': 0, Completed: 0 },
-    taskAlerts: [] as Awaited<ReturnType<typeof getDashboardData>>['taskAlerts'],
-    ticketAlerts: [] as Awaited<ReturnType<typeof getDashboardData>>['ticketAlerts'],
-    ticketAlertCount: 0,
-    taskDurations: [] as Awaited<ReturnType<typeof getDashboardData>>['taskDurations'],
-    ticketDurations: [] as Awaited<ReturnType<typeof getDashboardData>>['ticketDurations'],
-    averages: {
-      assignedAccepted: null,
-      acceptedDriving: null,
-      drivingCompleted: null,
-      completedCycle: null,
-      canceledCycle: null,
-    },
-    taskAveragesNonTgr: {
-      assignedDriving: null,
-      drivingCompleted: null,
-      completedCycle: null,
-      canceledCycle: null,
-    },
-  }
-
   let dashboard = emptyDashboard
   try {
     dashboard = await getDashboardData(profile)
@@ -62,7 +71,7 @@ export default async function DispatcherBerandaPage() {
 
   return (
     <>
-    <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
+      <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
       <div className="dashboard-tabs">
         <Link className="dashboard-tab active" href="/dispatcher/beranda">Tugas</Link>
         <Link className="dashboard-tab" href="/dispatcher/timetable">Jadwal</Link>
@@ -77,12 +86,10 @@ export default async function DispatcherBerandaPage() {
       </section>
 
       <DashboardAlertList
-        taskAlerts={dashboard.taskAlerts.map((alert) => {
-          const targetAt = alert.targetAt instanceof Date && !Number.isNaN(alert.targetAt.getTime())
-            ? alert.targetAt.toISOString()
-            : new Date().toISOString()
-          return { ...alert, targetAt }
-        })}
+        taskAlerts={dashboard.taskAlerts.map((alert) => ({
+          ...alert,
+          targetAt: alert.targetAt.toISOString(),
+        }))}
         ticketAlerts={dashboard.ticketAlerts}
       />
 
