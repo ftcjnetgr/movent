@@ -218,23 +218,26 @@ export default function AppShellClient({
 
       <aside className="sidebar">
         <div className="sidebar-top">
-          <Link
-            className="sidebar-brand"
-            href={modeRoutes[currentRole] ?? '/controller/beranda'}
-            onClick={(event) => { event.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}
-          >
-            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
-            <div className="sidebar-caption">Manajemen Pergerakan</div>
-          </Link>
-          <button
-            type="button"
-            className="sidebar-toggle desktop-only"
-            onClick={() => setCollapsed((value) => !value)}
-            aria-label={collapsed ? 'Tampilkan menu samping' : 'Sembunyikan menu samping'}
-            title={collapsed ? 'Tampilkan menu' : 'Sembunyikan menu'}
-          >
-            <span aria-hidden="true">{collapsed ? '→' : '←'}</span>
-          </button>
+          <div className="sidebar-brand-row">
+            <Link
+              className="sidebar-brand"
+              href={modeRoutes[currentRole] ?? '/controller/beranda'}
+              onClick={(event) => { event.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}
+              aria-label="MOVENT"
+            >
+              <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
+              <span className="sidebar-brand-mark" aria-hidden="true">M</span>
+            </Link>
+            <button
+              type="button"
+              className="sidebar-toggle desktop-only"
+              onClick={() => setCollapsed((value) => !value)}
+              aria-label={collapsed ? 'Tampilkan menu samping' : 'Sembunyikan menu samping'}
+              title={collapsed ? 'Tampilkan menu' : 'Sembunyikan menu'}
+            >
+              <span aria-hidden="true">{collapsed ? '›' : '‹'}</span>
+            </button>
+          </div>
         </div>
 
         <nav className="sidebar-nav sidebar-accordion" aria-label="Menu utama">
