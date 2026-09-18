@@ -67,6 +67,25 @@ function statusClass(status: string | undefined) {
   return `status-${status.toLowerCase().replaceAll(' ', '-')}`
 }
 
+function layoutTimelineItems<T>(items: T[], getMinutes: (item: T) => number | null) {
+  const laneEnds: number[] = []
+  const positioned: Array<{ item: T; lane: number }> = []
+
+  for (const item of [...items].sort((a, b) => (getMinutes(a) ?? 9999) - (getMinutes(b) ?? 9999))) {
+    const start = getMinutes(item) ?? 0
+    let lane = laneEnds.findIndex((end) => start >= end)
+    if (lane === -1) {
+      lane = laneEnds.length
+      laneEnds.push(start + 110)
+    } else {
+      laneEnds[lane] = start + 110
+    }
+    positioned.push({ item, lane })
+  }
+
+  return { positioned, laneCount: Math.max(1, laneEnds.length) }
+}
+
 export default function TimetableView({
   date,
   schedules,
@@ -210,18 +229,20 @@ export default function TimetableView({
               <div className="timetable-grid">
                 <div className="timetable-axis-label">{direction === 'origin' ? 'Titik Mulai' : 'Destinasi'}</div>
                 <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
-                {databaseGroups.map(([group, items]) => (
-                  <div className="timetable-row" key={group}>
+                {databaseGroups.map(([group, items]) => {
+                  const layout = layoutTimelineItems(items, (item) => minutesValue(direction === 'origin' ? item.std : item.sta))
+                  return (
+                  <div className="timetable-row" key={group} style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
                     <div className="timetable-group">{group}</div>
-                    <div className="timetable-track">
+                    <div className="timetable-track" style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
                       {Array.from({ length: 25 }, (_, hour) => <span className="timetable-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
-                      {items.map((item) => {
+                      {layout.positioned.map(({ item, lane }) => {
                         const task = taskBySchedule[item.schedule_id]
                         const start = minutesValue(direction === 'origin' ? item.std : item.sta) ?? 0
                         const dimmed = !summaryMatch(task)
                         const left = `${(start / 1440) * 100}%`
                         return (
-                          <div key={item.schedule_id} className={`timetable-item ${task ? statusClass(task.status) : 'unassigned'} ${dimmed ? 'faded' : ''}`} style={{ left }}>
+                          <div key={item.schedule_id} className={`timetable-item ${task ? statusClass(task.status) : 'unassigned'} ${dimmed ? 'faded' : ''}`} style={{ left, top: `${lane * 128 + 10}px` }}>
                             <div className="timetable-item-time">{direction === 'origin' ? timeValue(item.std) : timeValue(item.sta)}</div>
                             <strong>{item.trip}</strong>
                             <span>{direction === 'origin' ? item.destination : item.start_point}</span>
@@ -232,7 +253,8 @@ export default function TimetableView({
                       })}
                     </div>
                   </div>
-                ))}
+                  )
+                })}
                 {!databaseGroups.length ? <div className="empty-state">Nggak ada jadwal yang cocok dengan filter.</div> : null}
               </div>
             </div>
@@ -254,16 +276,18 @@ export default function TimetableView({
             <div className="timetable-grid">
               <div className="timetable-axis-label">{direction === 'origin' ? 'Titik Mulai' : 'Destination'}</div>
               <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
-              {liveGroups.map(([group, items]) => (
-                <div className="timetable-row" key={group}>
+              {liveGroups.map(([group, items]) => {
+                const layout = layoutTimelineItems(items, (task) => minutesValue(direction === 'origin' ? task.std : task.sta))
+                return (
+                <div className="timetable-row" key={group} style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
                   <div className="timetable-group">{group}</div>
-                  <div className="timetable-track">
+                  <div className="timetable-track" style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
                     {Array.from({ length: 25 }, (_, hour) => <span className="timetable-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
-                    {items.map((task) => {
+                    {layout.positioned.map(({ item: task, lane }) => {
                       const start = minutesValue(direction === 'origin' ? task.std : task.sta)
                       const left = `${((start ?? 0) / 1440) * 100}%`
                       return (
-                        <div className={`timetable-item live-item ${statusClass(task.status)} ${summaryFilter !== 'all' && !summaryMatch(task) ? 'faded' : ''}`} key={task.transaction_id} style={{ left }}>
+                        <div className={`timetable-item live-item ${statusClass(task.status)} ${summaryFilter !== 'all' && !summaryMatch(task) ? 'faded' : ''}`} key={task.transaction_id} style={{ left, top: `${lane * 128 + 10}px` }}>
                           <div className="timetable-item-time">{direction === 'origin' ? timeValue(task.std) : timeValue(task.sta)}</div>
                           <strong>{task.transaction_id}</strong>
                           <span>{direction === 'origin' ? task.destination ?? '-' : task.start_point ?? '-'}</span>
