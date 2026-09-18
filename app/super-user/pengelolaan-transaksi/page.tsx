@@ -39,6 +39,7 @@ export default async function SuperUserTransactionManagementPage() {
   const maintenanceOptions = masterOptions((maintenanceLists ?? []).map((item) => ({ value: item.maintenance_list, label: item.maintenance_list })))
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
