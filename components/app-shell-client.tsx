@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 const navByRole: Record<string, { label: string; href: string }[]> = {
   Controller: [
     { label: 'Beranda', href: '/controller/beranda' },
-    { label: 'Penarikan Report', href: '/controller/penarikan-report' },
+    { label: 'Penarikan Laporan', href: '/controller/penarikan-report' },
     { label: 'Profil', href: '/controller/profil' },
     { label: 'Ganti Password', href: '/ganti-password' },
   ],
@@ -20,7 +20,7 @@ const navByRole: Record<string, { label: string; href: string }[]> = {
     { label: 'Ganti Password', href: '/ganti-password' },
   ],
   Operation: [
-    { label: 'Request Extra Schedule', href: '/operation/request-extra-schedule' },
+    { label: 'Permintaan Extra Schedule', href: '/operation/request-extra-schedule' },
     { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan' },
     { label: 'Profil', href: '/operation/profil' },
     { label: 'Ganti Password', href: '/ganti-password' },
@@ -68,7 +68,7 @@ export default function AppShellClient({
 
         {profile.role === 'Super User' ? (
           <div className="mode-box">
-            <span>Mode role</span>
+            <span>Mode peran</span>
             <div className="mode-links">
               {Object.entries(modeRoutes).map(([role, href]) => (
                 <Link key={role} className={currentRole === role ? 'mode-link active' : 'mode-link'} href={href}>
