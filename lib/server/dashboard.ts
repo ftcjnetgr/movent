@@ -148,6 +148,19 @@ export async function getDashboardData(profile: AppProfile) {
   const ticketAlerts = ticketRows.filter((ticket) =>
     ['Created', 'Accepted', 'In Progress'].includes(ticket.status)
   )
+  const ticketAlertCount = ticketRows.filter((ticket) => {
+    const elapsed = now.getTime() - new Date(
+      ticket.status === 'Accepted'
+        ? ticket.accepted_at ?? ticket.created_at
+        : ticket.status === 'In Progress'
+        ? ticket.in_progress_at ?? ticket.created_at
+        : ticket.created_at,
+    ).getTime()
+    if (ticket.status === 'Created') return elapsed >= 3 * 60 * 60 * 1000
+    if (ticket.status === 'Accepted') return elapsed >= 24 * 60 * 60 * 1000
+    if (ticket.status === 'In Progress') return elapsed >= 3 * 24 * 60 * 60 * 1000
+    return false
+  }).length
 
   const taskDurations: TaskDurationRow[] = tasks.map((task) => ({
     transactionId: task.transaction_id,
@@ -193,6 +206,7 @@ export async function getDashboardData(profile: AppProfile) {
     },
     taskAlerts,
     ticketAlerts,
+    ticketAlertCount,
     averages: {
       assignedAccepted: average(tasks.map((task) => minutesBetween(task.assigned_at, task.accepted_at))),
       acceptedDriving: average(tasks.map((task) => minutesBetween(task.accepted_at, task.driving_at))),
