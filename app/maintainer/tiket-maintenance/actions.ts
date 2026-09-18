@@ -24,7 +24,7 @@ function allowedMaintainer(role: string) {
 
 export async function acceptMaintenanceTicketAction(formData: FormData): Promise<Result> {
   const profile = await getCurrentProfile()
-  if (!allowedMaintainer(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!allowedMaintainer(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const { admin, ticket } = await findTicket(transactionId, ['Created'])
@@ -45,10 +45,10 @@ export async function acceptMaintenanceTicketAction(formData: FormData): Promise
 
 export async function startMaintenanceAction(formData: FormData): Promise<Result> {
   const profile = await getCurrentProfile()
-  if (!allowedMaintainer(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!allowedMaintainer(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const { admin, ticket } = await findTicket(transactionId, ['Accepted'])
-  if (!ticket) return { error: 'Tiket tidak ditemukan.' }
+  if (!ticket) return { error: 'Tiket nggak ditemukan.' }
   if (profile.role !== 'Super User' && ticket.maintainer_user_id !== profile.id) return { error: 'Tiket ini bukan tanggung jawab kamu.' }
 
   const { error } = await admin.from('ticketings').update({
@@ -64,10 +64,10 @@ export async function startMaintenanceAction(formData: FormData): Promise<Result
 
 export async function completeMaintenanceAction(formData: FormData): Promise<Result> {
   const profile = await getCurrentProfile()
-  if (!allowedMaintainer(profile.role)) return { error: 'Akses tidak tersedia.' }
+  if (!allowedMaintainer(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const { admin, ticket } = await findTicket(transactionId, ['In Progress'])
-  if (!ticket) return { error: 'Tiket tidak ditemukan.' }
+  if (!ticket) return { error: 'Tiket nggak ditemukan.' }
   if (profile.role !== 'Super User' && ticket.maintainer_user_id !== profile.id) return { error: 'Tiket ini bukan tanggung jawab kamu.' }
 
   const { error } = await admin.from('ticketings').update({
