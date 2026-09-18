@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardPeringatanList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -11,9 +12,9 @@ export default async function MaintainerTicketingMaintenanceDashboardPage() {
     <>
     <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Tiket Maintenance</h1><p>Ringkasan semua tiket maintenance armada.</p></div></div>
       <div className="dashboard-tabs">
-        <a className="dashboard-tab" href="/maintainer/beranda">Tugas</a>
-        <a className="dashboard-tab" href="/maintainer/timetable">Jadwal</a>
-        <a className="dashboard-tab active" href="/maintainer/ticketing-maintenance">Tiket Maintenance</a>
+        <Link className="dashboard-tab" href="/maintainer/beranda">Tugas</Link>
+        <Link className="dashboard-tab" href="/maintainer/timetable">Jadwal</Link>
+        <Link className="dashboard-tab active" href="/maintainer/ticketing-maintenance">Tiket Maintenance</Link>
       </div>
       <section className="section-block">
         <div className="metric-grid">
