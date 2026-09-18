@@ -15,6 +15,8 @@ export default function SearchableMasterSelect({
   placeholder,
   required = false,
   defaultValue = '',
+  value,
+  onValueChange,
 }: {
   label: string
   name: string
