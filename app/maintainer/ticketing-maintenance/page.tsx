@@ -23,5 +23,7 @@ export default async function MaintainerTicketingMaintenanceDashboardPage() {
       </section>
       <DashboardPeringatanList ticketAlerts={data.ticketAlerts} />
 
-      <TicketDurationVisualization rows={data.ticketDurations} />)
+      <TicketDurationVisualization rows={data.ticketDurations} />
+    </>
+  )
 }
