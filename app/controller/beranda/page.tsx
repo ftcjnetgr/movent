@@ -12,6 +12,19 @@ function formatMinutes(value: number | null) {
   return `${hours}j ${minutes}m`
 }
 
+
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    Assigned: 'Ditugaskan',
+    Accepted: 'Diterima',
+    Driving: 'Berangkat',
+    Completed: 'Selesai',
+    Canceled: 'Dibatalkan',
+    Created: 'Dibuat',
+    'In Progress': 'Sedang dikerjakan',
+  }
+  return labels[status] ?? status
+}
 export default async function ControllerBerandaPage() {
   const profile = await getCurrentProfile()
   const data = await getDashboardData(profile)
@@ -28,22 +41,22 @@ export default async function ControllerBerandaPage() {
 
       <div className="dashboard-tabs">
         <a className="dashboard-tab active" href="/controller/beranda">Tugas</a>
-        <a className="dashboard-tab" href="/controller/timetable">Timetable</a>
-        <a className="dashboard-tab" href="/controller/ticketing-maintenance">Ticketing Maintenance</a>
+        <a className="dashboard-tab" href="/controller/timetable">Jadwal</a>
+        <a className="dashboard-tab" href="/controller/ticketing-maintenance">Tiket Maintenance</a>
       </div>
 
       <section className="section-block">
         <div className="section-heading">
           <div>
             <h2>Tugas</h2>
-            <p>Summary seluruh tugas yang ada.</p>
+            <p>Ringkasan semua tugas yang ada.</p>
           </div>
         </div>
         <div className="metric-grid">
           {Object.entries(data.taskCounts).map(([status, count]) => (
-            <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>
+            <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>
           ))}
-          <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length}</strong></div>
+          <div className="metric-card alert-card"><span>Peringatan</span><strong>{data.taskAlerts.length}</strong></div>
         </div>
 
 
@@ -57,22 +70,22 @@ export default async function ControllerBerandaPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <h2>Durasi & Cycle Time</h2>
-            <p>Rata-rata proses berdasarkan transaksi yang sudah memiliki penanda waktu.</p>
+            <h2>Durasi & waktu proses</h2>
+            <p>Rata-rata waktu proses dari transaksi yang sudah punya penanda waktu.</p>
           </div>
         </div>
         <div className="metric-grid">
-          <div className="metric-card"><span>Assigned → Accepted</span><strong>{formatMinutes(data.averages.assignedAccepted)}</strong></div>
-          <div className="metric-card"><span>Accepted → Driving</span><strong>{formatMinutes(data.averages.acceptedDriving)}</strong></div>
-          <div className="metric-card"><span>Driving → Completed</span><strong>{formatMinutes(data.averages.drivingCompleted)}</strong></div>
-          <div className="metric-card"><span>Cycle Completed</span><strong>{formatMinutes(data.averages.completedCycle)}</strong></div>
-          <div className="metric-card"><span>Cycle Canceled</span><strong>{formatMinutes(data.averages.canceledCycle)}</strong></div>
+          <div className="metric-card"><span>Ditugaskan → Diterima</span><strong>{formatMinutes(data.averages.assignedAccepted)}</strong></div>
+          <div className="metric-card"><span>Diterima → Berangkat</span><strong>{formatMinutes(data.averages.acceptedDriving)}</strong></div>
+          <div className="metric-card"><span>Berangkat → Selesai</span><strong>{formatMinutes(data.averages.drivingCompleted)}</strong></div>
+          <div className="metric-card"><span>Total waktu sampai selesai</span><strong>{formatMinutes(data.averages.completedCycle)}</strong></div>
+          <div className="metric-card"><span>Total waktu sampai dibatalkan</span><strong>{formatMinutes(data.averages.canceledCycle)}</strong></div>
         </div>
         <div className="metric-grid">
-          <div className="metric-card"><span>Non-TGR: Assigned → Driving</span><strong>{formatMinutes(data.taskAveragesNonTgr.assignedDriving)}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Driving → Completed</span><strong>{formatMinutes(data.taskAveragesNonTgr.drivingCompleted)}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Cycle Completed</span><strong>{formatMinutes(data.taskAveragesNonTgr.completedCycle)}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Cycle Canceled</span><strong>{formatMinutes(data.taskAveragesNonTgr.canceledCycle)}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Ditugaskan → Berangkat</span><strong>{formatMinutes(data.taskAveragesNonTgr.assignedDriving)}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Berangkat → Selesai</span><strong>{formatMinutes(data.taskAveragesNonTgr.drivingCompleted)}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Total waktu sampai selesai</span><strong>{formatMinutes(data.taskAveragesNonTgr.completedCycle)}</strong></div>
+          <div className="metric-card"><span>Non-TGR: Total waktu sampai dibatalkan</span><strong>{formatMinutes(data.taskAveragesNonTgr.canceledCycle)}</strong></div>
         </div>
       </section>
 
@@ -83,7 +96,7 @@ export default async function ControllerBerandaPage() {
         <div className="section-heading">
           <div>
             <h2>Ticketing Maintenance</h2>
-            <p>Summary seluruh ticketing maintenance.</p>
+            <p>Ringkasan semua tiket maintenance.</p>
           </div>
         </div>
         <div className="metric-grid">
