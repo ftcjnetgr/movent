@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import OperasionalExtraScheduleAlert from '@/components/operation-extra-schedule-alert'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -38,8 +37,7 @@ export default async function OperasionalHistoryPage() {
     }))
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Operasional</span>
           <h1>Riwayat Permintaan</h1>
@@ -110,7 +108,5 @@ export default async function OperasionalHistoryPage() {
             </tbody>
           </table>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
