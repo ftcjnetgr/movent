@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -26,6 +27,9 @@ export default async function MaintainerBerandaPage() {
           <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length}</strong></div>
         </div>
       </section>
+      <TaskDurationVisualization rows={dashboard.taskDurations} />
+      <TicketDurationVisualization rows={dashboard.ticketDurations} />
+
       <section className="section-block">
         <div className="metric-grid">
           {Object.entries(data.ticketCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
