@@ -14,7 +14,7 @@ const roleHome: Record<string, string> = {
   'Super User': '/controller/beranda',
 }
 
-export async function changePasswordAction(formData: FormData) {
+export async function changePasswordAction(_state: { error?: string }, formData: FormData) {
   const newPassword = String(formData.get('newPassword') ?? '')
   const confirmPassword = String(formData.get('confirmPassword') ?? '')
 
