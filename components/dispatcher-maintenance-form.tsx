@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useActionState, useState, useTransition } from 'react'
+import { FormEvent, useState, useTransition } from 'react'
 import {
   cancelMaintenanceTicketAction,
   createMaintenanceTicketAction,
@@ -40,7 +40,8 @@ type Props = {
 }
 
 export default function DispatcherMaintenanceForm({ maintenanceLists, locations, fleets, tickets }: Props) {
-  const [state, formAction, pending] = useActionState<MaintenanceFormState, FormData>(createMaintenanceTicketAction, initialState)
+  const [state, setState] = useState<MaintenanceFormState>(initialState)
+  const [isCreatePending, startCreateTransition] = useTransition()
   const [cancelMessage, setCancelMessage] = useState('')
   const [isCancelPending, startCancelTransition] = useTransition()
   const maintenanceOptions = maintenanceLists.map((item) => ({ value: item, label: item, searchText: item }))
@@ -50,6 +51,15 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
     label: fleet.plat_number + ' - ' + fleet.fleet_type,
     searchText: fleet.plat_number + ' ' + fleet.fleet_type,
   }))
+
+  function handleCreate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    startCreateTransition(async () => {
+      const result = await createMaintenanceTicketAction({}, formData)
+      setState(result)
+    })
+  }
 
   function handleCancel(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -66,13 +76,13 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
       <section className="section-grid two-column">
         <div className="metric-card">
           <div className="card-title">Buat tiket</div>
-          <form action={formAction} className="data-form">
+          <form onSubmit={handleCreate} className="data-form">
             <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceOptions} placeholder="Pilih Maintenance" required />
             <SearchableMasterSelect label="Lokasi Keberadaan Armada" name="location" options={locationOptions} placeholder="Pilih Lokasi" required />
             <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih Armada" required />
             {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
             {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
-            <button type="submit" disabled={pending}>{pending ? 'Membuat tiket...' : 'Buat tiket'}</button>
+            <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Membuat tiket...' : 'Buat tiket'}</button>
           </form>
         </div>
 
