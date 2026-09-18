@@ -5,6 +5,7 @@ import {
   cancelMaintenanceTicketAction,
   createMaintenanceTicketAction,
 } from '@/app/dispatcher/maintenance-armada/actions'
+import SearchableMasterSelect from '@/components/searchable-master-select'
 
 const initialState: {
   error?: string
@@ -40,6 +41,13 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
   const [state, formAction, pending] = useActionState(createMaintenanceTicketAction, initialState)
   const [cancelMessage, setCancelMessage] = useState('')
   const [isCancelPending, startCancelTransition] = useTransition()
+  const maintenanceOptions = maintenanceLists.map((item) => ({ value: item, label: item, searchText: item }))
+  const locationOptions = locations.map((item) => ({ value: item, label: item, searchText: item }))
+  const fleetOptions = fleets.map((fleet) => ({
+    value: fleet.plat_number,
+    label: fleet.plat_number + ' - ' + fleet.fleet_type,
+    searchText: fleet.plat_number + ' ' + fleet.fleet_type,
+  }))
 
   function handleCancel(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -57,27 +65,9 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
         <div className="metric-card">
           <div className="card-title">Buat tiket</div>
           <form action={formAction} className="data-form">
-            <label>
-              Daftar Maintenance
-              <select name="maintenanceList" defaultValue="" required>
-                <option value="">Pilih Maintenance</option>
-                {maintenanceLists.map((item) => <option key={item} value={item}>{item}</option>)}
-              </select>
-            </label>
-            <label>
-              Lokasi Keberadaan Armada
-              <select name="location" defaultValue="" required>
-                <option value="">Pilih Lokasi</option>
-                {locations.map((item) => <option key={item} value={item}>{item}</option>)}
-              </select>
-            </label>
-            <label>
-              Armada
-              <select name="platNumber" defaultValue="" required>
-                <option value="">Pilih Armada</option>
-                {fleets.map((fleet) => <option key={fleet.plat_number} value={fleet.plat_number}>{fleet.plat_number} - {fleet.fleet_type}</option>)}
-              </select>
-            </label>
+            <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceOptions} placeholder="Pilih Maintenance" required />
+            <SearchableMasterSelect label="Lokasi Keberadaan Armada" name="location" options={locationOptions} placeholder="Pilih Lokasi" required />
+            <SearchableMasterSelect label="Armada" name="platNumber" options={fleetOptions} placeholder="Pilih Armada" required />
             {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
             {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
             <button type="submit" disabled={pending}>{pending ? 'Membuat tiket...' : 'Buat tiket'}</button>
