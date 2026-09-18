@@ -44,13 +44,13 @@ export default async function SuperUserTransactionManagementPage() {
       <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
-          <h1>Pengelolaan Transaksi</h1>
-          <p>Edit data transaksi yang masih dapat diubah. Transaksi Completed tetap immutable.</p>
+          <h1>Kelola Transaksi</h1>
+          <p>Edit transaksi yang masih bisa diubah. Transaksi yang sudah selesai tetap terkunci.</p>
         </div>
       </div>
 
       <section className="data-table-card section-block">
-        <div className="section-heading"><div><h2>Tugas</h2><p>Transaksi tugas dari seluruh flow.</p></div></div>
+        <div className="section-heading"><div><h2>Tugas</h2><p>Semua transaksi tugas dari berbagai alur.</p></div></div>
         <div className="table-wrap">
           <table>
             <thead><tr><th>Transaction ID</th><th>Jenis</th><th>Rute</th><th>Status</th><th>Aksi</th></tr></thead>
@@ -64,14 +64,14 @@ export default async function SuperUserTransactionManagementPage() {
                   <td><SuperUserTaskEditor task={task} locations={locationOptions} executors={executorOptions} fleets={fleetOptions} schedules={scheduleOptions} products={productOptions} /></td>
                 </tr>
               ))}
-              {!(tasks ?? []).length ? <tr><td colSpan={5}><div className="empty-state">Belum ada transaksi tugas.</div></td></tr> : null}
+              {!(tasks ?? []).length ? <tr><td colSpan={5}><div className="empty-state">Belum ada transaksi tugas untuk sekarang.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
       </section>
 
       <section className="data-table-card section-block">
-        <div className="section-heading"><div><h2>Ticketing Maintenance</h2><p>Transaksi ticketing dari seluruh Dispatcher.</p></div></div>
+        <div className="section-heading"><div><h2>Tiket Maintenance</h2><p>Semua tiket maintenance dari Dispatcher.</p></div></div>
         <div className="table-wrap">
           <table>
             <thead><tr><th>Transaction ID</th><th>Maintenance</th><th>Lokasi</th><th>Armada</th><th>Status</th><th>Aksi</th></tr></thead>
@@ -86,7 +86,7 @@ export default async function SuperUserTransactionManagementPage() {
                   <td><SuperUserTicketEditor ticket={ticket} maintenanceLists={maintenanceOptions} locations={locationOptions} fleets={fleetOptions} /></td>
                 </tr>
               ))}
-              {!(ticketings ?? []).length ? <tr><td colSpan={6}><div className="empty-state">Belum ada transaksi ticketing.</div></td></tr> : null}
+              {!(ticketings ?? []).length ? <tr><td colSpan={6}><div className="empty-state">Belum ada transaksi ticketing untuk sekarang.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
