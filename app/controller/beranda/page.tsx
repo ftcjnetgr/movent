@@ -12,7 +12,6 @@ function formatMinutes(value: number | null) {
   return `${hours}j ${minutes}m`
 }
 
-
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Assigned: 'Ditugaskan',
@@ -25,13 +24,14 @@ function statusLabel(status: string) {
   }
   return labels[status] ?? status
 }
+
 export default async function ControllerBerandaPage() {
   const profile = await getCurrentProfile()
   const data = await getDashboardData(profile)
 
   return (
     <>
-    <div className="page-heading">
+      <div className="page-heading">
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Beranda</h1>
@@ -56,10 +56,7 @@ export default async function ControllerBerandaPage() {
           {Object.entries(data.taskCounts).map(([status, count]) => (
             <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>
           ))}
-          <div className="metric-card alert-card"><span>Peringatan</span><strong>{data.taskAlerts.length}</strong></div>
         </div>
-
-
       </section>
 
       <DashboardAlertList
@@ -104,6 +101,14 @@ export default async function ControllerBerandaPage() {
             <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>
           ))}
         </div>
+        <div className="metric-grid">
+          <div className="metric-card"><span>Created → Accepted</span><strong>{formatMinutes(data.ticketAverages.createdAccepted)}</strong></div>
+          <div className="metric-card"><span>Accepted → In Progress</span><strong>{formatMinutes(data.ticketAverages.acceptedInProgress)}</strong></div>
+          <div className="metric-card"><span>In Progress → Completed</span><strong>{formatMinutes(data.ticketAverages.inProgressCompleted)}</strong></div>
+          <div className="metric-card"><span>Cycle Completed</span><strong>{formatMinutes(data.ticketAverages.completedCycle)}</strong></div>
+          <div className="metric-card"><span>Cycle Canceled</span><strong>{formatMinutes(data.ticketAverages.canceledCycle)}</strong></div>
+        </div>
+      </section>
     </>
   )
 }
