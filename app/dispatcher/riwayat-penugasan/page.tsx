@@ -42,7 +42,7 @@ export default async function DispatcherAssignmentHistoryPage() {
                           <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskFormAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
                         ) : <span className="muted">-</span>)
                       : (task.status === 'Assigned' && (profile.role === 'Super User' || task.created_by === profile.id) ? (
-                          <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
+                          <details><summary className="link-button">Batalkan</summary><form action={cancelDispatcherTaskFormAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Alasan pembatalan" required /><button type="submit">Konfirmasi batal</button></form></details>
                         ) : <span className="muted">-</span>)}
                   </td>
                 </tr>
