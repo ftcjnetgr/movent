@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
@@ -21,8 +20,7 @@ export default async function DispatcherAssignmentHistoryPage() {
     : (tasks ?? [])
 
   return (
-    <AppShell>
-      <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Riwayat Penugasan</h1><p>Seluruh tugas yang dibuat oleh Dispatcher ini, termasuk seluruh statusnya.</p></div></div>
+    <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Riwayat Penugasan</h1><p>Seluruh tugas yang dibuat oleh Dispatcher ini, termasuk seluruh statusnya.</p></div></div>
       <section className="data-table-card">
         <div className="table-wrap">
           <table>
@@ -51,7 +49,5 @@ export default async function DispatcherAssignmentHistoryPage() {
             </tbody>
           </table>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
