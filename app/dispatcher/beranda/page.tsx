@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import DispatcherCreateTask from '@/components/dispatcher-create-task'
@@ -32,8 +31,7 @@ export default async function DispatcherBerandaPage() {
   ])
 
   return (
-    <AppShell>
-      <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
+    <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
       <div className="dashboard-tabs">
         <a className="dashboard-tab active" href="/dispatcher/beranda">Tugas</a>
         <a className="dashboard-tab" href="/dispatcher/timetable">Jadwal</a>
@@ -85,7 +83,5 @@ export default async function DispatcherBerandaPage() {
           {Object.entries(dashboard.ticketCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
           <div className="metric-card alert-card"><span>Peringatan Ticketing</span><strong>{dashboard.ticketAlertCount}</strong></div>
         </div>
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
