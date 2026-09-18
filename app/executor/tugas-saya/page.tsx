@@ -22,6 +22,7 @@ export default async function ExecutorTugasSayaPage() {
   ])
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Executor</span>
