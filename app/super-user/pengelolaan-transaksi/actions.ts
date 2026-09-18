@@ -24,7 +24,7 @@ function numberOrNull(formData: FormData, name: string) {
   return Number.isFinite(value) && value >= 0 ? value : null
 }
 
-export async function updateTaskTransactionAction(formData: FormData): Promise<Result> {
+export async function updateTaskTransactionAction(_state: Result, formData: FormData): Promise<Result> {
   try { await requireSuperUser() } catch { return { error: 'Akses tidak tersedia.' } }
 
   const transactionId = String(formData.get('transactionId') ?? '').trim()
@@ -123,7 +123,7 @@ export async function updateTaskTransactionAction(formData: FormData): Promise<R
   return { success: 'Data tugas berhasil diperbarui.' }
 }
 
-export async function updateTicketTransactionAction(formData: FormData): Promise<Result> {
+export async function updateTicketTransactionAction(_state: Result, formData: FormData): Promise<Result> {
   try { await requireSuperUser() } catch { return { error: 'Akses tidak tersedia.' } }
 
   const transactionId = String(formData.get('transactionId') ?? '').trim()
