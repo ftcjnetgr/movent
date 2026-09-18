@@ -61,6 +61,7 @@ export default async function DatabaseManagementPage({
   const { data: rows } = await rowsQuery.limit(50)
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Super User</span>
