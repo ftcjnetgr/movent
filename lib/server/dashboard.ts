@@ -87,6 +87,10 @@ function average(values: Array<number | null>) {
   return valid.reduce((sum, value) => sum + value, 0) / valid.length
 }
 
+function canceledFromTimestamp(task: TaskRow) {
+  return task.driving_at ?? task.accepted_at ?? task.assigned_at
+}
+
 export async function getDashboardData(profile: AppProfile) {
   const admin = createAdminClient()
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
@@ -156,7 +160,7 @@ export async function getDashboardData(profile: AppProfile) {
     assignedDriving: task.fleet_ownership === 'Non-TGR' ? minutesBetween(task.assigned_at, task.driving_at) : null,
     totalCompleted: minutesBetween(task.assigned_at, task.completed_at),
     canceledFromPrevious: task.status === 'Canceled'
-      ? minutesBetween(task.assigned_at ?? task.accepted_at ?? task.driving_at, task.canceled_at)
+      ? minutesBetween(canceledFromTimestamp(task), task.canceled_at)
       : null,
     canceledCycle: task.status === 'Canceled' ? minutesBetween(task.assigned_at, task.canceled_at) : null,
   }))
