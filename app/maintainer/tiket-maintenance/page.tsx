@@ -29,5 +29,7 @@ export default async function MaintainerTicketMaintenancePage() {
       <section className="task-list">
         {visible.map((ticket) => <MaintainerTicketCard key={ticket.transaction_id} ticket={ticket} />)}
         {visible.length === 0 ? <div className="metric-card"><span>Belum ada tiket aktif</span><strong>0</strong><p>Tiket baru bakal muncul di sini setelah Dispatcher membuatnya.</p></div> : null}
-      </section>)
+      </section>
+    </>
+  )
 }
