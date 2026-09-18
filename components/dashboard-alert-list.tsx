@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type TaskAlert = {
   kind: 'unassigned' | 'assigned'
@@ -47,7 +48,13 @@ export default function DashboardAlertList({
   taskAlerts?: TaskAlert[]
   ticketAlerts?: TicketAlert[]
 }) {
+  const router = useRouter()
   const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    const refreshTimer = window.setInterval(() => router.refresh(), 5000)
+    return () => window.clearInterval(refreshTimer)
+  }, [router])
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
