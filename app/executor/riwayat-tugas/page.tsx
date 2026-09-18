@@ -38,7 +38,7 @@ export default async function ExecutorHistoryPage() {
         <div className="table-wrap">
           <table>
             <thead>
-              <tr><th>Transaction ID</th><th>Jenis</th><th>Rute</th><th>Armada</th><th>Selesai</th></tr>
+              <tr><th>ID Transaksi</th><th>Jenis</th><th>Rute</th><th>Armada</th><th>Selesai</th></tr>
             </thead>
             <tbody>
               {(tasks ?? []).map((task) => (
@@ -50,7 +50,7 @@ export default async function ExecutorHistoryPage() {
                   <td>{formatDateTime(task.completed_at)}</td>
                 </tr>
               ))}
-              {(tasks ?? []).length === 0 ? <tr><td colSpan={5}><div className="empty-state">Belum ada tugas yang selesai.</div></td></tr> : null}
+              {(tasks ?? []).length === 0 ? <tr><td colSpan={5}><div className="empty-state">Belum ada tugas yang selesai untuk sekarang.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
