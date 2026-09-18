@@ -2,6 +2,7 @@
 
 import { FormEvent, useState, useTransition } from 'react'
 import { jsPDF } from 'jspdf'
+import SearchableMasterSelect from '@/components/searchable-master-select'
 
 import {
   acceptExtraScheduleAction,
@@ -87,6 +88,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
   }
 
   const needsSj = requiresSj(task)
+  const productOptions = products.map((product) => ({ value: product, label: product, searchText: product }))
 
   function shareText() {
     const lines = [
@@ -196,12 +198,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
             <label>Qty<input name="qty" type="number" step="any" min="0" required /></label>
             <label>Berat<input name="weight" type="number" step="any" min="0" required /></label>
           </div>
-          <label>Produk
-            <select name="product" required defaultValue="">
-              <option value="">Pilih Produk</option>
-              {products.map((product) => <option key={product} value={product}>{product}</option>)}
-            </select>
-          </label>
+          <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih Produk" required />
           <label>Catatan<textarea name="note" rows={3} /></label>
           <button type="submit" disabled={isPending}>Submit SJ</button>
         </form>
