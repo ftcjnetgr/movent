@@ -28,7 +28,7 @@ export default async function ArmadaNonTgrPage() {
       <section className="data-table-card">
         <div className="table-wrap">
           <table>
-            <thead><tr><th>Transaction ID</th><th>Rute</th><th>Executor Eksternal</th><th>Armada</th><th>STD</th><th>STA</th><th>Status</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>ID Transaksi</th><th>Rute</th><th>Executor dari luar</th><th>Armada</th><th>STD</th><th>STA</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody>
               {(tasks ?? []).map((task) => <tr key={task.transaction_id}>
                 <td><strong>{task.transaction_id}</strong></td>
@@ -43,20 +43,20 @@ export default async function ArmadaNonTgrPage() {
                     <form action={submitNonTgrDepartureFormAction} className="compact-form">
                       <input type="hidden" name="transactionId" value={task.transaction_id} />
                       <label>Berangkat<input name="departure" type="datetime-local" required /></label>
-                      <button type="submit">Submit keberangkatan</button>
+                      <button type="submit">Simpan waktu berangkat</button>
                     </form>
                   ) : null}
                   {task.status === 'Driving' ? (
                     <form action={submitNonTgrArrivalFormAction} className="compact-form">
                       <input type="hidden" name="transactionId" value={task.transaction_id} />
                       <label>Datang<input name="arrival" type="datetime-local" required /></label>
-                      <button type="submit">Submit kedatangan</button>
+                      <button type="submit">Simpan waktu datang</button>
                     </form>
                   ) : null}
                   {task.status === 'Completed' ? <span className="muted">Selesai</span> : null}
                 </td>
               </tr>)}
-              {!(tasks ?? []).length ? <tr><td colSpan={8}><div className="empty-state">Belum ada tugas Armada Non-TGR.</div></td></tr> : null}
+              {!(tasks ?? []).length ? <tr><td colSpan={8}><div className="empty-state">Belum ada tugas Armada Non-TGR untuk sekarang.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
