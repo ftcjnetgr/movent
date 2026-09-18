@@ -24,9 +24,8 @@ function formatDuration(totalSeconds: number) {
   const hours = Math.floor((seconds % 86400) / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const remaining = seconds % 60
-  if (days > 0) return `${days}d ${String(hours).padStart(2, '0')}j ${String(minutes).padStart(2, '0')}m`
-  if (hours > 0) return `${String(hours).padStart(2, '0')}j ${String(minutes).padStart(2, '0')}m ${String(remaining).padStart(2, '0')}d`
-  return `${String(minutes).padStart(2, '0')}m ${String(remaining).padStart(2, '0')}d`
+  const clock = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remaining).padStart(2, '0')}`
+  return days > 0 ? `${days} hari ${clock}` : clock
 }
 
 function ticketBaseAt(ticket: TicketAlert) {
