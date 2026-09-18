@@ -51,73 +51,106 @@ function ticketStatusLabel(status: string) {
   return labels[status] ?? status
 }
 
+function taskDetail(alert: TaskAlert, now: number) {
+  const target = new Date(alert.targetAt).getTime()
+  const threshold = alert.kind === 'unassigned' ? 30 * 60 * 1000 : 10 * 60 * 1000
+  const countdown = target - now
+  return {
+    title: alert.kind === 'unassigned' ? alert.scheduleId : alert.transactionId ?? '-',
+    detail: alert.kind === 'unassigned'
+      ? 'Jadwal belum digunakan Dispatcher'
+      : `Jadwal ${alert.scheduleId} • Status ${alert.status ?? '-'}`,
+    time: countdown > 0 ? `Sisa waktu ${formatDuration(countdown / 1000)}` : `Lewat ${formatDuration((now - target) / 1000)}`,
+    inWindow: now >= target - threshold,
+  }
+}
+
 export default function DashboardAlertList({
-  taskAlerts,
-  ticketAlerts,
+  taskAlerts = [],
+  ticketAlerts = [],
 }: {
   taskAlerts?: TaskAlert[]
   ticketAlerts?: TicketAlert[]
 }) {
   const [now, setNow] = useState(() => Date.now())
+  const [open, setOpen] = useState<'task' | 'ticket' | null>(null)
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
     return () => window.clearInterval(timer)
   }, [])
 
-  const taskItems = useMemo(() => (taskAlerts ?? []).map((alert) => {
-    const target = new Date(alert.targetAt).getTime()
-    const threshold = alert.kind === 'unassigned' ? 30 * 60 * 1000 : 10 * 60 * 1000
-    const countdown = target - now
-    return {
-      ...alert,
-      label: alert.kind === 'unassigned' ? `Jadwal ${alert.scheduleId}` : alert.transactionId ?? '-',
-      detail: alert.kind === 'unassigned' ? 'Belum digunakan Dispatcher' : `Status ${alert.status ?? '-'} • Jadwal ${alert.scheduleId}`,
-      indicator: countdown > 0 ? `Sisa waktu ${formatDuration(countdown / 1000)}` : `Lewat ${formatDuration((now - target) / 1000)}`,
-      inWindow: now >= target - threshold,
-    }
-  }).filter((item) => item.inWindow), [taskAlerts, now])
+  const taskItems = useMemo(
+    () => taskAlerts.map((alert) => taskDetail(alert, now)).filter((item) => item.inWindow),
+    [taskAlerts, now],
+  )
 
-  const ticketItems = useMemo(() => (ticketAlerts ?? []).map((ticket) => {
-    const base = ticketBaseAt(ticket)
-    if (base === null) return null
-    const thresholdSeconds = ticketThresholdSeconds(ticket.status)
-    const elapsed = (now - base) / 1000
-    return {
-      ticket,
-      thresholdSeconds,
-      indicator: elapsed < thresholdSeconds
-        ? `Countdown ${formatDuration(thresholdSeconds - elapsed)}`
-        : `Count After ${formatDuration(elapsed - thresholdSeconds)}`,
-    }
-  }).filter((item): item is NonNullable<typeof item> => item !== null), [ticketAlerts, now])
+  const ticketItems = useMemo(
+    () => ticketAlerts.map((ticket) => {
+      const base = ticketBaseAt(ticket)
+      if (base === null) return null
+      const thresholdSeconds = ticketThresholdSeconds(ticket.status)
+      const elapsed = (now - base) / 1000
+      return {
+        transactionId: ticket.transaction_id,
+        status: ticketStatusLabel(ticket.status),
+        indicator: elapsed < thresholdSeconds
+          ? `Countdown ${formatDuration(thresholdSeconds - elapsed)}`
+          : `Count After ${formatDuration(elapsed - thresholdSeconds)}`,
+      }
+    }).filter((item): item is NonNullable<typeof item> => item !== null),
+    [ticketAlerts, now],
+  )
+
+  const alertCount = taskItems.length + ticketItems.length
 
   return (
-    <div className="section-grid two-column">
-      <section className="section-block">
-        <div className="section-heading"><div><h2>Peringatan Tugas</h2><p>Waktu berjalan otomatis dan terus diperbarui.</p></div></div>
-        <div className="alert-list">
-          {taskItems.map((item) => (
-            <div className="alert-item" key={`${item.kind}-${item.scheduleId}-${item.transactionId ?? ''}`}>
-              <div><strong>{item.label}</strong><span>{item.detail}</span></div>
-              <b>{item.indicator}</b>
+    <>
+      <div className="metric-grid alert-summary-grid">
+        <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('task')}>
+          <span>Alert Tugas</span>
+          <strong>{taskItems.length}</strong>
+          <small>Klik untuk lihat detail</small>
+        </button>
+        <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('ticket')}>
+          <span>Alert Ticketing</span>
+          <strong>{ticketItems.length}</strong>
+          <small>Klik untuk lihat detail</small>
+        </button>
+      </div>
+
+      {open ? (
+        <div className="alert-modal-backdrop" role="presentation" onClick={() => setOpen(null)}>
+          <section className="alert-modal" role="dialog" aria-modal="true" aria-labelledby="alert-modal-title" onClick={(event) => event.stopPropagation()}>
+            <div className="alert-modal-heading">
+              <div>
+                <span className="eyebrow">Alert</span>
+                <h2 id="alert-modal-title">{open === 'task' ? 'Detail Alert Tugas' : 'Detail Alert Ticketing'}</h2>
+              </div>
+              <button type="button" className="secondary-button" onClick={() => setOpen(null)}>Tutup</button>
             </div>
-          ))}
-          {!taskItems.length ? <div className="empty-state">Belum ada peringatan tugas.</div> : null}
-        </div>
-      </section>
-      <section className="section-block">
-        <div className="section-heading"><div><h2>Peringatan Ticketing</h2><p>Countdown dan Count After berjalan real-time.</p></div></div>
-        <div className="alert-list">
-          {ticketItems.map(({ ticket, indicator }) => (
-            <div className="alert-item" key={ticket.transaction_id}>
-              <div><strong>{ticket.transaction_id}</strong><span>Status {ticketStatusLabel(ticket.status)}</span></div>
-              <b>{indicator}</b>
+
+            <div className="alert-detail-list">
+              {open === 'task' ? taskItems.map((item) => (
+                <div className="alert-detail-item" key={`${item.title}-${item.time}`}>
+                  <div><strong>{item.title}</strong><span>{item.detail}</span></div>
+                  <b>{item.time}</b>
+                </div>
+              )) : ticketItems.map((item) => (
+                <div className="alert-detail-item" key={item.transactionId}>
+                  <div><strong>{item.transactionId}</strong><span>Status {item.status}</span></div>
+                  <b>{item.indicator}</b>
+                </div>
+              ))}
+              {!((open === 'task' ? taskItems : ticketItems).length) ? (
+                <div className="empty-state">Tidak ada alert saat ini.</div>
+              ) : null}
             </div>
-          ))}
-          {!ticketItems.length ? <div className="empty-state">Belum ada peringatan ticketing.</div> : null}
+          </section>
         </div>
-      </section>
-    </div>
+      ) : null}
+
+      <span className="sr-only">{alertCount} alert aktif</span>
+    </>
   )
 }
