@@ -81,7 +81,7 @@ export default async function DispatcherBerandaPage() {
       <section className="section-block">
         <div className="metric-grid">
           {Object.entries(dashboard.taskCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>)}
-          <div className="metric-card alert-card"><span>Peringatan</span><strong>{dashboard.taskAlerts.length}</strong></div>
+          
         </div>
       </section>
 
@@ -124,9 +124,7 @@ export default async function DispatcherBerandaPage() {
       <section className="section-block">
         <div className="metric-grid">
           {Object.entries(dashboard.ticketCounts).map(([status, count]) => <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>)}
-          <div className="metric-card alert-card"><span>Peringatan Ticketing</span><strong>{dashboard.ticketAlertCount}</strong></div>
         </div>
-      </section>
     </>
   )
 }
