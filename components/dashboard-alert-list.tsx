@@ -67,9 +67,9 @@ export default function DashboardAlertList({
     const countdown = target - now
     return {
       ...alert,
-      label: alert.kind === 'unassigned' ? `Schedule ${alert.scheduleId}` : alert.transactionId ?? '-',
-      detail: alert.kind === 'unassigned' ? 'Belum digunakan Dispatcher' : `Status ${alert.status ?? '-'} • Schedule ${alert.scheduleId}`,
-      indicator: countdown > 0 ? `Countdown ${formatDuration(countdown / 1000)}` : `Count After ${formatDuration((now - target) / 1000)}`,
+      label: alert.kind === 'unassigned' ? `Jadwal ${alert.scheduleId}` : alert.transactionId ?? '-',
+      detail: alert.kind === 'unassigned' ? 'Belum digunakan Dispatcher' : `Status ${alert.status ?? '-'} • Jadwal ${alert.scheduleId}`,
+      indicator: countdown > 0 ? `Sisa waktu ${formatDuration(countdown / 1000)}` : `Lewat ${formatDuration((now - target) / 1000)}`,
       inWindow: now >= target - threshold,
     }
   }).filter((item) => item.inWindow), [taskAlerts, now])
@@ -91,7 +91,7 @@ export default function DashboardAlertList({
   return (
     <div className="section-grid two-column">
       <section className="section-block">
-        <div className="section-heading"><div><h2>Alert Tugas</h2><p>Countdown dan Count After berjalan real-time.</p></div></div>
+        <div className="section-heading"><div><h2>Peringatan Tugas</h2><p>Waktu berjalan otomatis dan terus diperbarui.</p></div></div>
         <div className="alert-list">
           {taskItems.map((item) => (
             <div className="alert-item" key={`${item.kind}-${item.scheduleId}-${item.transactionId ?? ''}`}>
@@ -99,11 +99,11 @@ export default function DashboardAlertList({
               <b>{item.indicator}</b>
             </div>
           ))}
-          {!taskItems.length ? <div className="empty-state">Belum ada alert tugas.</div> : null}
+          {!taskItems.length ? <div className="empty-state">Belum ada peringatan tugas.</div> : null}
         </div>
       </section>
       <section className="section-block">
-        <div className="section-heading"><div><h2>Alert Ticketing</h2><p>Countdown dan Count After berjalan real-time.</p></div></div>
+        <div className="section-heading"><div><h2>Peringatan Ticketing</h2><p>Countdown dan Count After berjalan real-time.</p></div></div>
         <div className="alert-list">
           {ticketItems.map(({ ticket, indicator }) => (
             <div className="alert-item" key={ticket.transaction_id}>
@@ -111,7 +111,7 @@ export default function DashboardAlertList({
               <b>{indicator}</b>
             </div>
           ))}
-          {!ticketItems.length ? <div className="empty-state">Belum ada alert ticketing.</div> : null}
+          {!ticketItems.length ? <div className="empty-state">Belum ada peringatan ticketing.</div> : null}
         </div>
       </section>
     </div>
