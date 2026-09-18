@@ -4,6 +4,9 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'MOVENT',
   description: 'Movement Management',
+  icons: {
+    icon: '/assets/branding/movent-icon.svg',
+  },
 }
 
 export default function RootLayout({
