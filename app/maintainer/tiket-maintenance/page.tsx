@@ -1,4 +1,3 @@
-import AppShell from '@/components/app-shell'
 import MaintainerTicketCard from '@/components/maintainer-ticket-card'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -18,8 +17,7 @@ export default async function MaintainerTicketMaintenancePage() {
     : (tickets ?? [])
 
   return (
-    <AppShell>
-      <div className="page-heading">
+    <div className="page-heading">
         <div>
           <span className="eyebrow">Maintainer</span>
           <h1>Tiket Maintenance</h1>
@@ -30,7 +28,5 @@ export default async function MaintainerTicketMaintenancePage() {
       <section className="task-list">
         {visible.map((ticket) => <MaintainerTicketCard key={ticket.transaction_id} ticket={ticket} />)}
         {visible.length === 0 ? <div className="metric-card"><span>Belum ada tiket aktif</span><strong>0</strong><p>Tiket baru bakal muncul di sini setelah Dispatcher membuatnya.</p></div> : null}
-      </section>
-    </AppShell>
-  )
+      </section>)
 }
