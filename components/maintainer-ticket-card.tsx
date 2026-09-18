@@ -42,7 +42,7 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
     <article className="task-card">
       <div className="task-card-top">
         <div>
-          <span className="eyebrow">Ticket Maintenance</span>
+          <span className="eyebrow">Tiket Maintenance</span>
           <h2>{ticket.transaction_id}</h2>
         </div>
         <span className={`status-badge status-${ticket.status.toLowerCase().replaceAll(' ', '-')}`}>{ticket.status}</span>
@@ -57,21 +57,21 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
       {ticket.status === 'Created' ? (
         <form onSubmit={(event) => handleSubmit(event, acceptMaintenanceTicketAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi menerima tiket</button>
+          <button type="submit" disabled={isPending}>Terima tiket</button>
         </form>
       ) : null}
 
       {ticket.status === 'Accepted' ? (
         <form onSubmit={(event) => handleSubmit(event, startMaintenanceAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi pengerjaan maintenance</button>
+          <button type="submit" disabled={isPending}>Mulai pengerjaan</button>
         </form>
       ) : null}
 
       {ticket.status === 'In Progress' ? (
         <form onSubmit={(event) => handleSubmit(event, completeMaintenanceAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi maintenance selesai</button>
+          <button type="submit" disabled={isPending}>Tandai selesai</button>
         </form>
       ) : null}
     </article>
