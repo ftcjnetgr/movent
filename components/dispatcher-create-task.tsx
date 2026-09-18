@@ -62,8 +62,8 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
     if (!state.preview) return
     const text = [
       'MOVENT - Surat Jalan',
-      'Transaction ID: ' + state.preview.transactionId,
-      'Start Point: ' + state.preview.startPoint,
+      'ID Transaksi: ' + state.preview.transactionId,
+      'Titik Mulai: ' + state.preview.startPoint,
       'Destinasi: ' + state.preview.destination,
       'Executor Eksternal: ' + state.preview.externalExecutor,
       'Armada Eksternal: ' + state.preview.externalFleet,
@@ -86,8 +86,8 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
     doc.setFontSize(16)
     doc.text('SURAT JALAN', 10, 14)
     doc.setFontSize(10)
-    doc.text('Transaction ID: ' + state.preview.transactionId, 10, 22)
-    doc.text('Start Point: ' + state.preview.startPoint, 10, 30)
+    doc.text('ID Transaksi: ' + state.preview.transactionId, 10, 22)
+    doc.text('Titik Mulai: ' + state.preview.startPoint, 10, 30)
     doc.text('Destinasi: ' + state.preview.destination, 10, 38)
     doc.text('Executor Eksternal: ' + state.preview.externalExecutor, 10, 46)
     doc.text('Armada Eksternal: ' + state.preview.externalFleet, 10, 54)
@@ -124,10 +124,10 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
           {taskType === 'Supply' && ownership === 'TGR' ? (
             <SearchableMasterSelect
-              label="Schedule"
+              label="Jadwal"
               name="scheduleId"
               options={scheduleOptions}
-              placeholder="Pilih Schedule"
+              placeholder="Pilih Jadwal"
               required
             />
           ) : null}
@@ -176,13 +176,13 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             </>
           ) : null}
 
-          {taskType === 'Supply' && ownership === 'TGR' ? <p className="muted">STD dan STA mengikuti Schedule yang dipilih.</p> : null}
+          {taskType === 'Supply' && ownership === 'TGR' ? <p className="muted">STD dan STA mengikuti Jadwal yang dipilih.</p> : null}
           {state.preview ? (
         <div className="metric-card section-block">
           <div className="card-title">Pratinjau SJ</div>
           <div className="task-summary-grid">
-            <div><span>Transaction ID</span><strong>{state.preview.transactionId}</strong></div>
-            <div><span>Start Point</span><strong>{state.preview.startPoint}</strong></div>
+            <div><span>ID Transaksi</span><strong>{state.preview.transactionId}</strong></div>
+            <div><span>Titik Mulai</span><strong>{state.preview.startPoint}</strong></div>
             <div><span>Destinasi</span><strong>{state.preview.destination}</strong></div>
             <div><span>Executor Eksternal</span><strong>{state.preview.externalExecutor}</strong></div>
             <div><span>Armada Eksternal</span><strong>{state.preview.externalFleet}</strong></div>
