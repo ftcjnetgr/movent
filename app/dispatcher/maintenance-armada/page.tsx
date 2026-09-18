@@ -1,9 +1,9 @@
 import AppShell from '@/components/app-shell'
-import DispatcherMaintenanceForm from '@/components/dispatcher-maintenance-form'
+import DispatcherDaftar MaintenanceForm from '@/components/dispatcher-maintenance-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
-export default async function DispatcherMaintenanceArmadaPage() {
+export default async function DispatcherDaftar MaintenanceArmadaPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
   const [{ data: maintenanceLists }, { data: locations }, { data: fleets }, { data: tickets }] = await Promise.all([
@@ -26,12 +26,12 @@ export default async function DispatcherMaintenanceArmadaPage() {
       <div className="page-heading">
         <div>
           <span className="eyebrow">Dispatcher</span>
-          <h1>Maintenance Armada</h1>
-          <p>Buat tiket maintenance untuk armada.</p>
+          <h1>Daftar Maintenance Armada</h1>
+          <p>Yuk, buat tiket maintenance untuk armada.</p>
         </div>
       </div>
 
-      <DispatcherMaintenanceForm
+      <DispatcherDaftar MaintenanceForm
         maintenanceLists={(maintenanceLists ?? []).map((item) => item.maintenance_list)}
         locations={(locations ?? []).map((item) => item.location)}
         fleets={fleets ?? []}
