@@ -47,7 +47,7 @@ function jakartaDate(value: Date) {
 }
 
 function scheduleTimestamp(date: string, time: string) {
-  return new Date(`${date}T${time}+07:00`)
+  return new Date(date + 'T' + time + '+07:00')
 }
 
 function minutesBetween(from: string | null, to: string | null) {
@@ -85,16 +85,17 @@ export async function getDashboardData(profile: AppProfile) {
     : all
 
   const date = jakartaDate(new Date())
-  const day = ((new Date(`${date}T12:00:00+07:00`).getUTCDay() + 6) % 7) + 1
+  const day = ((new Date(date + 'T12:00:00+07:00').getUTCDay() + 6) % 7) + 1
   const now = new Date()
-  const taskBySchedule = new Map(
-    tasks
+
+  const allTaskBySchedule = new Map(
+    all
       .filter((task) => task.schedule_id && task.status !== 'Canceled')
       .map((task) => [task.schedule_id as string, task]),
   )
 
   const unassignedAlerts: TaskAlert[] = (schedules ?? [])
-    .filter((schedule) => schedule.schedule_day === day && !taskBySchedule.has(schedule.schedule_id))
+    .filter((schedule) => schedule.schedule_day === day && !allTaskBySchedule.has(schedule.schedule_id))
     .map((schedule) => ({
       kind: 'unassigned' as const,
       scheduleId: schedule.schedule_id,
@@ -102,7 +103,7 @@ export async function getDashboardData(profile: AppProfile) {
     }))
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000)
 
-  const assignedAlerts: TaskAlert[] = tasks
+  const assignedAlerts: TaskAlert[] = all
     .filter((task) => task.schedule_id && ['Assigned', 'Accepted', 'Driving'].includes(task.status) && task.sta)
     .map((task) => ({
       kind: 'assigned' as const,
