@@ -79,7 +79,7 @@ export async function updateTaskTransactionAction(formData: FormData): Promise<R
     update.fleet_snapshot = fleet
   }
 
-  if (task.source_type !== 'Extra Schedule' && !task.schedule_id) {
+  if (!task.schedule_id) {
     const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(task.std ?? new Date().toISOString()))
     const std = text(formData, 'std')
     const sta = text(formData, 'sta')
