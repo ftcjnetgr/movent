@@ -29,6 +29,7 @@ export default async function ControllerBerandaPage() {
   const data = await getDashboardData(profile)
 
   return (
+    <>
     <div className="page-heading">
         <div>
           <span className="eyebrow">Controller</span>
@@ -112,5 +113,6 @@ export default async function ControllerBerandaPage() {
         </div>
 
       </section>
+    </>
   )
 }
