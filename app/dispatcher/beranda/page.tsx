@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import DispatcherCreateTask from '@/components/dispatcher-create-task'
@@ -34,9 +35,9 @@ export default async function DispatcherBerandaPage() {
     <>
     <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
       <div className="dashboard-tabs">
-        <a className="dashboard-tab active" href="/dispatcher/beranda">Tugas</a>
-        <a className="dashboard-tab" href="/dispatcher/timetable">Jadwal</a>
-        <a className="dashboard-tab" href="/dispatcher/ticketing-maintenance">Tiket Maintenance</a>
+        <Link className="dashboard-tab active" href="/dispatcher/beranda">Tugas</Link>
+        <Link className="dashboard-tab" href="/dispatcher/timetable">Jadwal</Link>
+        <Link className="dashboard-tab" href="/dispatcher/ticketing-maintenance">Tiket Maintenance</Link>
       </div>
 
       <section className="section-block">
