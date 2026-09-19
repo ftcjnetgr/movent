@@ -31,7 +31,7 @@ export async function acceptMaintenanceTicketAction(formData: FormData): Promise
   if (!ticket) return { error: 'Tiket tidak ditemukan atau sudah diproses.' }
 
   const { error } = await admin.from('ticketings').update({
-    status: 'Accepted',
+    status: 'Confirmed',
     maintainer_user_id: profile.id,
     accepted_at: new Date().toISOString(),
   }).eq('id', ticket.id).eq('status', 'Created')
@@ -47,14 +47,14 @@ export async function startMaintenanceAction(formData: FormData): Promise<Result
   const profile = await getCurrentProfile()
   if (!allowedMaintainer(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
   const transactionId = String(formData.get('transactionId') ?? '').trim()
-  const { admin, ticket } = await findTicket(transactionId, ['Accepted'])
+  const { admin, ticket } = await findTicket(transactionId, ['Confirmed'])
   if (!ticket) return { error: 'Tiket nggak ditemukan.' }
   if (profile.role !== 'Super User' && ticket.maintainer_user_id !== profile.id) return { error: 'Tiket ini bukan tanggung jawab kamu.' }
 
   const { error } = await admin.from('ticketings').update({
     status: 'In Progress',
     in_progress_at: new Date().toISOString(),
-  }).eq('id', ticket.id).eq('status', 'Accepted')
+  }).eq('id', ticket.id).eq('status', 'Confirmed')
 
   if (error) return { error: 'Pengerjaan maintenance belum berhasil dimulai.' }
   revalidatePath('/maintainer/tiket-maintenance')
