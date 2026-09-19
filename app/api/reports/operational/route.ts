@@ -14,7 +14,7 @@ function normalizeType(value: string): ReportFilters['type'] | null {
 
 export async function GET(request: NextRequest) {
   const profile = await getCurrentProfile()
-  if (!['Controller', 'Super User'].includes(profile.role)) {
+  if (!['Controller', 'Maintainer', 'Super User'].includes(profile.role)) {
     return NextResponse.json({ error: 'Akses tidak tersedia.' }, { status: 403 })
   }
 
