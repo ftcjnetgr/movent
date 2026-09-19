@@ -29,13 +29,13 @@ function formatDuration(totalSeconds: number) {
 }
 
 function ticketBaseAt(ticket: TicketAlert) {
-  if (ticket.status === 'Accepted') return ticket.accepted_at ? new Date(ticket.accepted_at).getTime() : null
+  if (ticket.status === 'Confirmed') return ticket.accepted_at ? new Date(ticket.accepted_at).getTime() : null
   if (ticket.status === 'In Progress') return ticket.in_progress_at ? new Date(ticket.in_progress_at).getTime() : null
   return new Date(ticket.created_at).getTime()
 }
 
 function ticketThresholdSeconds(status: string) {
-  if (status === 'Accepted') return 24 * 60 * 60
+  if (status === 'Confirmed') return 24 * 60 * 60
   if (status === 'In Progress') return 3 * 24 * 60 * 60
   return 3 * 60 * 60
 }
@@ -43,7 +43,7 @@ function ticketThresholdSeconds(status: string) {
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Dibuat',
-    Accepted: 'Diterima',
+    Confirmed: 'Dikonfirmasi',
     'In Progress': 'Sedang dikerjakan',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
