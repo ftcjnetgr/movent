@@ -8,8 +8,8 @@ import {
 import SearchableMasterSelect from '@/components/searchable-master-select'
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    Created: 'Dibuat',
-    Accepted: 'Diterima',
+    Requested: 'Dibuat',
+    Confirmed: 'Diterima',
     'In Progress': 'Sedang dikerjakan',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
@@ -154,7 +154,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                   <td>{ticket.fleet_plat_number ?? '-'}</td>
                   <td><span className={'status-badge status-' + ticket.status.toLowerCase().replaceAll(' ', '-')}>{ticketStatusLabel(ticket.status)}</span></td>
                   <td>
-                    {ticket.status === 'Created' ? (
+                    {ticket.status === 'Requested' ? (
                       <details>
                         <summary className="link-button">Batalkan</summary>
                         <form onSubmit={handleCancel} className="compact-form" style={{marginTop:12}}>
