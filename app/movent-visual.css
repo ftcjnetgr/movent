@@ -649,3 +649,43 @@ html,body{background:var(--mv-bg)!important;color:var(--mv-text)}
 .login-submit{background:var(--mv-red)!important;box-shadow:0 6px 14px rgba(215,25,32,.16)!important}
 .login-panel-visual{background:radial-gradient(circle at 70% 25%,rgba(255,255,255,.22),transparent 26%),linear-gradient(135deg,#123b69,#082a4e)!important}
 .app-footer{background:#fff;border-top-color:#dfe2e6!important}
+
+
+/* controller dashboard split — penugasan / ticketing */
+.dashboard-page{max-width:1500px}
+.dashboard-kpi-row{margin-bottom:2px}
+.dashboard-kpi-row .metric-card{position:relative;align-content:start;gap:3px;padding:12px 13px!important;min-height:82px!important}
+.dashboard-kpi-row .metric-card small{display:block;font-size:7px;color:#8a949c;line-height:1.35;margin-top:1px}
+.dashboard-alert-section{margin-top:12px}
+.dashboard-alert-section .section-heading{margin-bottom:7px!important}
+.dashboard-alert-section .section-heading h2{font-size:11px!important}
+.dashboard-alert-section .section-heading p{font-size:8px!important}
+.dashboard-alert-section .alert-summary-grid{grid-template-columns:repeat(2,minmax(0,220px))!important;gap:8px!important}
+.dashboard-alert-section .alert-summary-card{min-height:62px!important;padding:9px 11px!important;text-align:left!important;align-items:start!important}
+.dashboard-alert-section .alert-summary-card strong{font-size:16px!important}
+.dashboard-alert-section .alert-summary-card small{font-size:7px!important;color:#8a6c26!important}
+.dashboard-table-section{margin-top:14px}
+.dashboard-table-section .section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:7px!important}
+.dashboard-table-section .section-heading p{font-size:8px!important}
+.section-count{font-size:8px;color:#7c8790;white-space:nowrap}
+.dashboard-table-card{overflow:hidden!important}
+.dashboard-table-card .table-wrap{overflow-x:auto}
+.dashboard-table-card table{min-width:900px}
+.dashboard-table-card th{height:34px!important;padding:8px 10px!important;background:#f7f8fa!important;color:#66727d!important;border-bottom:1px solid #dfe2e6!important}
+.dashboard-table-card td{height:42px!important;padding:8px 10px!important;vertical-align:middle!important;border-bottom:1px solid #edf0f2!important}
+.dashboard-table-card tbody tr:last-child td{border-bottom:0!important}
+.route-cell{display:inline-flex;gap:5px;align-items:center;max-width:290px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.route-cell b{color:#8a959e;font-weight:500}
+.dashboard-empty-state{min-height:170px;display:grid;place-content:center;justify-items:center;gap:5px;text-align:center;color:#8a949c}
+.dashboard-empty-state strong{font-size:10px!important;color:#5e6d77!important;font-weight:500!important}
+.dashboard-empty-state span{font-size:8px!important;color:#929ba2}
+.dashboard-ticketing-page .dashboard-kpi-row{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+@media(max-width:1100px){
+ .dashboard-ticketing-page .dashboard-kpi-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+ .dashboard-alert-section .alert-summary-grid{grid-template-columns:1fr!important}
+ .dashboard-table-section .section-heading{align-items:flex-start}
+ .dashboard-ticketing-page .dashboard-kpi-row,.dashboard-kpi-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:480px){.dashboard-kpi-row{grid-template-columns:1fr!important}}
