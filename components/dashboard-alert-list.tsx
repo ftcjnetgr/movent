@@ -107,16 +107,20 @@ export default function DashboardAlertList({
   return (
     <>
       <div className="metric-grid alert-summary-grid">
-        <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('task')}>
-          <span>Alert Tugas</span>
-          <strong>{taskItems.length}</strong>
-          <small>Klik untuk lihat detail</small>
-        </button>
-        <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('ticket')}>
-          <span>Alert Ticketing</span>
-          <strong>{ticketItems.length}</strong>
-          <small>Klik untuk lihat detail</small>
-        </button>
+        {taskAlerts.length > 0 || ticketAlerts.length === 0 ? (
+          <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('task')}>
+            <span>Alert Tugas</span>
+            <strong>{taskItems.length}</strong>
+            <small>Klik untuk lihat detail</small>
+          </button>
+        ) : null}
+        {ticketAlerts.length > 0 || taskAlerts.length === 0 ? (
+          <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('ticket')}>
+            <span>Alert Ticketing</span>
+            <strong>{ticketItems.length}</strong>
+            <small>Klik untuk lihat detail</small>
+          </button>
+        ) : null}
       </div>
 
       {open ? (
