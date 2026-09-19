@@ -193,6 +193,7 @@ export async function getDashboardData(profile: AppProfile) {
     taskDurations,
     ticketDurations,
     taskCounts: {
+      Requested: tasks.filter((task) => task.status === 'Requested').length,
       Assigned: tasks.filter((task) => task.status === 'Assigned').length,
       Confirmed: tasks.filter((task) => task.status === 'Confirmed').length,
       Driving: tasks.filter((task) => task.status === 'Driving').length,
