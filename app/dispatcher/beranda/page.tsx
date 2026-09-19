@@ -9,11 +9,11 @@ import { getCurrentProfile } from '@/lib/server/profile'
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Assigned: 'Ditugaskan',
-    Confirmed: 'Diterima',
+    Confirmed: 'Dikonfirmasi',
     Driving: 'Berangkat',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
-    Created: 'Dibuat',
+    Requested: 'Dibuat',
     'In Progress': 'Sedang dikerjakan',
   }
   return labels[status] ?? status
@@ -25,7 +25,7 @@ const emptyDashboard: DashboardData = {
   taskDurations: [],
   ticketDurations: [],
   taskCounts: { Assigned: 0, Confirmed: 0, Driving: 0, Completed: 0 },
-  ticketCounts: { Created: 0, Confirmed: 0, 'In Progress': 0, Completed: 0 },
+  ticketCounts: { Requested: 0, Confirmed: 0, 'In Progress': 0, Completed: 0 },
   taskAlerts: [],
   ticketAlerts: [],
   ticketAlertCount: 0,
