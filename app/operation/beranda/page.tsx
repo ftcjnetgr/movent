@@ -13,47 +13,54 @@ export default async function OperationBerandaPage() {
   ])
 
   return (
-    <>
+    <div className="role-page">
       <div className="page-heading">
         <div>
-          <span className="eyebrow">Operation</span>
-          <h1>Homepage</h1>
-          <p>Kelola Supply Non-TGR dan kebutuhan Extra Schedule dari satu tempat.</p>
+          <span className="eyebrow">OPERATION</span>
+          <h1>Operasional Harian</h1>
+          <p>Buat Supply Non-TGR dan ajukan Extra Schedule tanpa pindah-pindah halaman.</p>
         </div>
       </div>
 
       <section className="section-block">
         <div className="metric-grid">
+          <div className="metric-card"><span>Non-TGR Menunggu</span><strong>{tasks?.length ?? 0}</strong></div>
           <div className="metric-card"><span>Extra Schedule Diajukan</span><strong>{requested ?? 0}</strong></div>
           <div className="metric-card"><span>Extra Schedule Selesai</span><strong>{completed ?? 0}</strong></div>
-          <div className="metric-card"><span>Non-TGR Siap Berangkat</span><strong>{tasks?.length ?? 0}</strong></div>
+          <div className="metric-card"><span>Proses Berjalan</span><strong>{(tasks?.length ?? 0) + (requested ?? 0)}</strong></div>
+          <div className="metric-card alert-card"><span>Perlu Follow Up</span><strong>{requested ?? 0}</strong></div>
         </div>
       </section>
 
-      <OperationCreateTask
-        locations={(locations ?? []).map((item) => item.location)}
-        products={(products ?? []).map((item) => item.product)}
-        tasks={tasks ?? []}
-      />
+      <section className="section-block">
+        <div className="section-heading"><div><h2>Buat tugas baru</h2><p>Pilih proses sesuai kebutuhan operasional.</p></div></div>
+        <OperationCreateTask
+          locations={(locations ?? []).map((item) => item.location)}
+          products={(products ?? []).map((item) => item.product)}
+          tasks={tasks ?? []}
+        />
+      </section>
 
-      <section className="section-grid two-column section-block">
-        <div className="metric-card">
-          <div className="card-title">Buat Request Extra Schedule</div>
-          <p className="muted">Ajukan kebutuhan perjalanan tambahan ke Dispatcher.</p>
-          <OperationRequestExtraScheduleForm locations={(locations ?? []).map((item) => item.location)} />
-        </div>
-        <div className="metric-card">
-          <div className="card-title">Alur Extra Schedule</div>
-          <div className="flow-list">
-            <div><strong>Diajukan</strong><span>Request masuk ke Dispatcher.</span></div>
-            <div><strong>Dikonfirmasi</strong><span>Dispatcher menerima request.</span></div>
-            <div><strong>Ditugaskan</strong><span>Dispatcher memilih Executor dan Armada.</span></div>
-            <div><strong>Dikonfirmasi</strong><span>Executor menerima penugasan.</span></div>
-            <div><strong>Berangkat</strong><span>Executor mengonfirmasi keberangkatan.</span></div>
-            <div><strong>Selesai</strong><span>Perjalanan selesai.</span></div>
+      <section className="section-block">
+        <div className="section-heading"><div><h2>Buat request baru</h2><p>Ajukan Extra Schedule ke Dispatcher.</p></div></div>
+        <div className="section-grid two-column">
+          <div className="metric-card">
+            <div className="card-title">Extra Schedule</div>
+            <p className="muted">Isi Start Point, Destination, STD, dan STA. Setelah dikonfirmasi, request masuk ke Dispatcher.</p>
+            <OperationRequestExtraScheduleForm locations={(locations ?? []).map((item) => item.location)} />
+          </div>
+          <div className="metric-card">
+            <div className="card-title">Setelah request dikirim</div>
+            <div className="flow-list">
+              <div><strong>1. Diajukan</strong><span>Request tersimpan sebagai Requested.</span></div>
+              <div><strong>2. Diterima</strong><span>Dispatcher mengonfirmasi request.</span></div>
+              <div><strong>3. Ditugaskan</strong><span>Dispatcher memilih Executor dan Armada.</span></div>
+              <div><strong>4. Berjalan</strong><span>Executor menerima dan menjalankan tugas.</span></div>
+              <div><strong>5. Selesai</strong><span>Perjalanan ditutup setelah tiba.</span></div>
+            </div>
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
