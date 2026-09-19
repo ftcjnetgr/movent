@@ -213,14 +213,14 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
               </span>
               <b>→</b>
             </button>
-            <button type="button" className="task-create-choice" onClick={() => setSupplyOwnership('Non-TGR')}>
+            <div className="task-create-choice" aria-disabled="true">
               <span className="task-create-choice-icon">NT</span>
               <span>
                 <strong>Armada Non-TGR</strong>
-                <small>Isi rute, waktu, executor, armada, dan Surat Jalan.</small>
+                <small>Tugas Supply Non-TGR dibuat oleh Operation.</small>
               </span>
-              <b>→</b>
-            </button>
+              <b>—</b>
+            </div>
           </div>
         </div>
       ) : null}
