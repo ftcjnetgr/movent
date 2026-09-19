@@ -116,17 +116,17 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
     <section className="section-block">
       <div className="section-heading">
         <div>
-          <h2>Buat Tugas</h2>
-          <p>Buat penugasan sesuai alur operasional.</p>
+          <h2>Buat Tugas Baru</h2>
+          <p>Pilih proses, lengkapi detail penugasan, lalu konfirmasi sebelum dikirim ke Executor.</p>
         </div>
       </div>
 
       {!activeFlow ? (
         <div className="task-create-workspace">
           <div className="task-create-intro">
-            <span className="eyebrow">Langkah 1</span>
-            <strong>Pilih proses</strong>
-            <span>Pilih jenis tugas yang ingin dibuat.</span>
+            <span className="eyebrow">MULAI PENUGASAN</span>
+            <strong>Kamu mau bikin tugas yang mana?</strong>
+            <span>Pilih alur yang sesuai kebutuhan operasional hari ini.</span>
           </div>
 
           <div className="task-create-choice-grid">
@@ -187,7 +187,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             {state.error ? <p className="form-error">{state.error}</p> : null}
             {state.success ? <p className="form-success">{state.success}</p> : null}
             <div className="form-actions">
-              <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
+              <button type="submit" disabled={pending}>{pending ? 'Sedang menyimpan...' : 'Submit Tugas'}</button>
               <button type="button" className="secondary-button" onClick={resetCreateFlow}>Batal</button>
             </div>
           </form>
@@ -230,7 +230,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
           <div className="task-create-flow-head">
             <div>
               <span className="eyebrow">Supply · Armada TGR</span>
-              <strong>Pilih schedule</strong>
+              <strong>Pilih jadwal yang mau dipakai</strong>
             </div>
             <button type="button" className="secondary-button" onClick={() => { setSupplyOwnership(null); setScheduleId('') }}>Kembali</button>
           </div>
@@ -266,7 +266,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
                 {state.error ? <p className="form-error">{state.error}</p> : null}
                 {state.success ? <p className="form-success">{state.success}</p> : null}
                 <div className="form-actions">
-                  <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
+                  <button type="submit" disabled={pending}>{pending ? 'Sedang menyimpan...' : 'Submit Tugas'}</button>
                 </div>
               </>
             ) : (
@@ -325,7 +325,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             {state.error ? <p className="form-error">{state.error}</p> : null}
             {state.success ? <p className="form-success">{state.success}</p> : null}
             <div className="form-actions">
-              <button type="submit" disabled={pending}>{pending ? 'Sedang membuat tugas...' : 'Buat tugas'}</button>
+              <button type="submit" disabled={pending}>{pending ? 'Sedang menyimpan...' : 'Submit Tugas'}</button>
               <button type="button" className="secondary-button" onClick={resetCreateFlow}>Batal</button>
             </div>
           </form>
