@@ -19,9 +19,9 @@ function ticketStatusLabel(status: string) {
 }
 
 function nextActionLabel(status: string) {
-  if (status === 'Requested') return 'Terima tiket'
-  if (status === 'Confirmed') return 'Mulai pengerjaan'
-  if (status === 'In Progress') return 'Tandai selesai'
+  if (status === 'Requested') return 'Terima Ticket'
+  if (status === 'Confirmed') return 'Konfirmasi Pengerjaan'
+  if (status === 'In Progress') return 'Konfirmasi Maintenance Selesai'
   return 'Tidak ada tindakan'
 }
 
@@ -66,7 +66,7 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
         <span className={`status-badge status-${ticket.status.toLowerCase().replaceAll(' ', '-')}`}>{ticketStatusLabel(ticket.status)}</span>
       </div>
       <div className="task-next-step">
-        <span>Langkah berikutnya</span>
+        <span>LANGKAH BERIKUTNYA</span>
         <strong>{nextActionLabel(ticket.status)}</strong>
       </div>
       <div className="task-summary-grid">
@@ -79,21 +79,21 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
       {ticket.status === 'Requested' ? (
         <form onSubmit={(event) => handleSubmit(event, acceptMaintenanceTicketAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <button type="submit" disabled={isPending}>Terima tiket</button>
+          <button type="submit" disabled={isPending}>Terima Ticket</button>
         </form>
       ) : null}
 
       {ticket.status === 'Confirmed' ? (
         <form onSubmit={(event) => handleSubmit(event, startMaintenanceAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <button type="submit" disabled={isPending}>Mulai pengerjaan</button>
+          <button type="submit" disabled={isPending}>Konfirmasi Pengerjaan</button>
         </form>
       ) : null}
 
       {ticket.status === 'In Progress' ? (
         <form onSubmit={(event) => handleSubmit(event, completeMaintenanceAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <button type="submit" disabled={isPending}>Tandai selesai</button>
+          <button type="submit" disabled={isPending}>Konfirmasi Maintenance Selesai</button>
         </form>
       ) : null}
     </article>
