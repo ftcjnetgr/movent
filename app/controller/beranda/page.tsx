@@ -1,24 +1,16 @@
-import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
+import Link from 'next/link'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
 
-function formatMinutes(value: number | null) {
-  if (value === null) return '-'
-  if (value < 60) return `${Math.round(value)} m`
-  const hours = Math.floor(value / 60)
-  const minutes = Math.round(value % 60)
-  return `${hours}j ${minutes}m`
-}
-
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
-    Assigned: 'Ditugaskan',
+    Requested: 'Diajukan',
     Confirmed: 'Dikonfirmasi',
+    Assigned: 'Ditugaskan',
     Driving: 'Berangkat',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
-    Requested: 'Diajukan',
     'In Progress': 'Sedang dikerjakan',
   }
   return labels[status] ?? status
@@ -27,28 +19,31 @@ function statusLabel(status: string) {
 export default async function ControllerBerandaPage() {
   const profile = await getCurrentProfile()
   const data = await getDashboardData(profile)
+  const activeTasks = (data.taskCounts.Assigned ?? 0) + (data.taskCounts.Confirmed ?? 0) + (data.taskCounts.Driving ?? 0)
+  const activeTickets = (data.ticketCounts.Requested ?? 0) + (data.ticketCounts.Confirmed ?? 0) + (data.ticketCounts['In Progress'] ?? 0)
 
   return (
-    <>
+    <div className="role-page">
       <div className="page-heading">
         <div>
-          <span className="eyebrow">Controller</span>
-          <h1>Beranda</h1>
-          <p>Pantau pergerakan operasional dari satu tempat.</p>
+          <span className="eyebrow">CONTROLLER</span>
+          <h1>Monitoring Operasional</h1>
+          <p>Lihat kondisi penugasan, jadwal, dan ticketing dari satu layar.</p>
+        </div>
+        <div className="page-heading-actions">
+          <Link className="secondary-button button-link" href="/controller/schedule">Lihat Schedule</Link>
+          <Link className="button-link" href="/controller/penarikan-report">Tarik Report</Link>
         </div>
       </div>
 
       <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <h2>Tugas</h2>
-            <p>Ringkasan semua tugas yang ada.</p>
-          </div>
-        </div>
+        <div className="section-heading"><div><h2>Ringkasan hari ini</h2><p>Status operasional yang sedang berjalan.</p></div></div>
         <div className="metric-grid">
-          {Object.entries(data.taskCounts).map(([status, count]) => (
-            <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>
-          ))}
+          <div className="metric-card"><span>Total Penugasan</span><strong>{Object.values(data.taskCounts).reduce((a,b)=>a+b,0)}</strong></div>
+          <div className="metric-card"><span>Sedang Berjalan</span><strong>{data.taskCounts.Driving ?? 0}</strong></div>
+          <div className="metric-card"><span>Menunggu Tindakan</span><strong>{activeTasks}</strong></div>
+          <div className="metric-card"><span>Ticketing Aktif</span><strong>{activeTickets}</strong></div>
+          <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length + data.ticketAlertCount}</strong></div>
         </div>
       </section>
 
@@ -58,50 +53,22 @@ export default async function ControllerBerandaPage() {
       />
 
       <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <h2>Durasi & waktu proses</h2>
-            <p>Rata-rata waktu proses dari transaksi yang sudah punya penanda waktu.</p>
-          </div>
-        </div>
+        <div className="section-heading"><div><h2>Status penugasan</h2><p>Distribusi status seluruh penugasan yang tersedia untuk monitoring.</p></div></div>
         <div className="metric-grid">
-          <div className="metric-card"><span>Ditugaskan → Diterima</span><strong>{formatMinutes(data.averages.assignedAccepted)}</strong></div>
-          <div className="metric-card"><span>Diterima → Berangkat</span><strong>{formatMinutes(data.averages.acceptedDriving)}</strong></div>
-          <div className="metric-card"><span>Berangkat → Selesai</span><strong>{formatMinutes(data.averages.drivingCompleted)}</strong></div>
-          <div className="metric-card"><span>Total waktu sampai selesai</span><strong>{formatMinutes(data.averages.completedCycle)}</strong></div>
-          <div className="metric-card"><span>Total waktu sampai dibatalkan</span><strong>{formatMinutes(data.averages.canceledCycle)}</strong></div>
-        </div>
-        <div className="metric-grid">
-          <div className="metric-card"><span>Non-TGR: Ditugaskan → Berangkat</span><strong>{formatMinutes(data.taskAveragesNonTgr.assignedDriving)}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Berangkat → Selesai</span><strong>{formatMinutes(data.taskAveragesNonTgr.drivingCompleted)}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Total waktu sampai selesai</span><strong>{formatMinutes(data.taskAveragesNonTgr.completedCycle)}</strong></div>
-          <div className="metric-card"><span>Non-TGR: Total waktu sampai dibatalkan</span><strong>{formatMinutes(data.taskAveragesNonTgr.canceledCycle)}</strong></div>
-        </div>
-      </section>
-
-      <TaskDurationVisualization rows={data.taskDurations} />
-      <TicketDurationVisualization rows={data.ticketDurations} />
-
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <h2>Ticketing Maintenance</h2>
-            <p>Ringkasan semua tiket maintenance.</p>
-          </div>
-        </div>
-        <div className="metric-grid">
-          {Object.entries(data.ticketCounts).map(([status, count]) => (
-            <div className="metric-card" key={status}><span>{status}</span><strong>{count}</strong></div>
+          {Object.entries(data.taskCounts).map(([status,count]) => (
+            <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>
           ))}
         </div>
+      </section>
+
+      <section className="section-block">
+        <div className="section-heading"><div><h2>Status ticketing</h2><p>Pergerakan tiket maintenance dari request sampai selesai.</p></div></div>
         <div className="metric-grid">
-          <div className="metric-card"><span>Requested → Confirmed</span><strong>{formatMinutes(data.ticketAverages.createdAccepted)}</strong></div>
-          <div className="metric-card"><span>Confirmed → In Progress</span><strong>{formatMinutes(data.ticketAverages.acceptedInProgress)}</strong></div>
-          <div className="metric-card"><span>In Progress → Completed</span><strong>{formatMinutes(data.ticketAverages.inProgressCompleted)}</strong></div>
-          <div className="metric-card"><span>Cycle Completed</span><strong>{formatMinutes(data.ticketAverages.completedCycle)}</strong></div>
-          <div className="metric-card"><span>Cycle Canceled</span><strong>{formatMinutes(data.ticketAverages.canceledCycle)}</strong></div>
+          {Object.entries(data.ticketCounts).map(([status,count]) => (
+            <div className="metric-card" key={status}><span>{statusLabel(status)}</span><strong>{count}</strong></div>
+          ))}
         </div>
       </section>
-    </>
+    </div>
   )
 }
