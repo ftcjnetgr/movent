@@ -10,7 +10,10 @@ type NavGroup = { label: string; icon: string; items: NavItem[] }
 
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
-    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/controller/beranda', icon: 'home' }] },
+    { label: 'Dashboard', icon: 'home', items: [
+      { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/controller/beranda/ticketing', icon: 'ticket' },
+    ] },
     { label: 'Schedule', icon: 'calendar', items: [
       { label: 'By Plan', href: '/controller/timetable/by-plan', icon: 'calendar' },
       { label: 'Live Tracking', href: '/controller/timetable/live-tracking', icon: 'truck' },
