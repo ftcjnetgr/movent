@@ -844,3 +844,76 @@ html,body{background:var(--mv-bg)!important;color:var(--mv-text)}
   .login-panel-form{padding:24px 18px 16px!important}
   .login-heading{margin-top:34px!important}
 }
+
+/* login — enforce clean two-column composition */
+.login-page .login-shell{
+  width:min(1520px,100%)!important;
+  min-height:min(760px,calc(100vh - 44px))!important;
+  grid-template-columns:300px minmax(0,1fr)!important;
+}
+.login-page .login-panel-visual{
+  width:300px!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  padding:42px 30px!important;
+  overflow:hidden!important;
+}
+.login-page .login-visual-copy,
+.login-page .login-visual-board,
+.login-page .login-float-card{
+  width:100%!important;
+  max-width:240px!important;
+  min-width:0!important;
+}
+.login-page .login-visual-copy h2{
+  width:100%!important;
+  font-size:38px!important;
+  line-height:.98!important;
+  letter-spacing:-.045em!important;
+  white-space:normal!important;
+  overflow:visible!important;
+}
+.login-page .login-visual-copy p{
+  width:100%!important;
+  max-width:235px!important;
+}
+.login-page .login-visual-board{
+  margin-top:22px!important;
+}
+.login-page .login-panel-form{
+  min-width:0!important;
+  padding:30px 56px 18px!important;
+  justify-content:stretch!important;
+}
+.login-page .login-form-inner{
+  width:min(100%,550px)!important;
+}
+.login-page .login-brand-wrap{
+  justify-content:center!important;
+}
+.login-page .login-heading{
+  margin-top:92px!important;
+}
+.login-page .login-heading h1{
+  font-size:28px!important;
+  line-height:1.1!important;
+}
+.login-page .login-footer{
+  margin-top:auto!important;
+}
+@media(max-width:1050px){
+  .login-page .login-shell{
+    grid-template-columns:270px minmax(0,1fr)!important;
+  }
+  .login-page .login-panel-visual{
+    width:270px!important;
+    padding:34px 24px!important;
+  }
+  .login-page .login-visual-copy,
+  .login-page .login-visual-board,
+  .login-page .login-float-card{
+    max-width:218px!important;
+  }
+  .login-page .login-visual-copy h2{font-size:34px!important}
+  .login-page .login-panel-form{padding-left:38px!important;padding-right:38px!important}
+}
