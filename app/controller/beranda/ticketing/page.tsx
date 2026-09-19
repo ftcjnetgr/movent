@@ -23,7 +23,7 @@ export default async function ControllerTicketingDashboardPage() {
   const activeCount = (data.ticketCounts.Requested ?? 0) + (data.ticketCounts.Confirmed ?? 0) + (data.ticketCounts['In Progress'] ?? 0)
 
   return (
-    <div className="role-page dashboard-page">
+    <div className="role-page dashboard-page dashboard-ticketing-page">
       <div className="page-heading">
         <div>
           <span className="eyebrow">Controller</span>
