@@ -18,7 +18,7 @@ function statusLabel(status: string) {
     Driving: 'Berangkat',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
-    Requested: 'Dibuat',
+    Requested: 'Diajukan',
     'In Progress': 'Sedang dikerjakan',
   }
   return labels[status] ?? status
