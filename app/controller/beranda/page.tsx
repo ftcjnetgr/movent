@@ -15,10 +15,11 @@ function typeLabel(type: string) {
 export default async function ControllerBerandaPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
-  const [data, taskResult, ticketResult] = await Promise.all([
+  const [data, taskResult, ticketResult, canceledResult] = await Promise.all([
     getDashboardData(profile),
     admin.from('tasks').select('transaction_id, task_type, status, start_point, destination, std, sta, executor_snapshot, fleet_snapshot').order('created_at', { ascending: false }).limit(8),
     admin.from('ticketings').select('transaction_id, status, maintenance_list, fleet_plat_number').order('created_at', { ascending: false }).limit(6),
+    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('status', 'Canceled'),
   ])
   const tasks = taskResult.data ?? []
   const tickets = ticketResult.data ?? []
@@ -35,7 +36,7 @@ export default async function ControllerBerandaPage() {
         <div className="metric-card"><span>Confirmed</span><strong>{data.taskCounts.Confirmed ?? 0}</strong></div>
         <div className="metric-card"><span>Driving</span><strong>{data.taskCounts.Driving ?? 0}</strong></div>
         <div className="metric-card metric-completed"><span>Completed</span><strong>{data.taskCounts.Completed ?? 0}</strong></div>
-        <div className="metric-card metric-canceled"><span>Canceled</span><strong>{data.taskCounts.Canceled ?? 0}</strong></div>
+        <div className="metric-card metric-canceled"><span>Canceled</span><strong>{canceledResult.count ?? 0}</strong></div>
         <div className="metric-card metric-ticket"><span>Ticketing Aktif</span><strong>{tickets.filter((ticket) => !['Completed','Canceled'].includes(ticket.status)).length}</strong></div>
       </section>
 
