@@ -54,9 +54,6 @@ const navByRole: Record<string, NavGroup[]> = {
     { label: 'Operasional', icon: 'home', items: [
       { label: 'Homepage', href: '/maintainer/beranda', icon: 'home' },
     ]},
-    { label: 'Penarikan Report', icon: 'report', items: [
-      { label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' },
-    ]},
     { label: 'Setting', icon: 'user', items: [
       { label: 'Profil', href: '/maintainer/profil', icon: 'user' },
       { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
