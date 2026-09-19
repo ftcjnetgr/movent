@@ -39,7 +39,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
     <div className="section-grid two-column section-block">
       <section className="metric-card">
         <div className="card-title">Buat Tugas Baru</div>
-        <p className="muted">Buat Supply Armada Non-TGR, isi SJ, lalu konfirmasi waktu berangkat.</p>
+        <p className="muted">Supply Armada Non TGR · isi data perjalanan dan Surat Jalan, lalu konfirmasi keberangkatan.</p>
         <form action={formAction} className="data-form compact-form">
           <div className="form-row">
             <SearchableMasterSelect label="Start Point" name="startPoint" options={locationOptions} placeholder="Pilih start point" required />
@@ -66,13 +66,13 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
           <label>Catatan SJ<textarea name="sjNote" rows={3} /></label>
           {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
           {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
-          <button type="submit" disabled={pending}>{pending ? 'Membuat tugas...' : 'Submit SJ'}</button>
+          <button type="submit" disabled={pending}>{pending ? 'Menyimpan tugas...' : 'Submit SJ'}</button>
         </form>
       </section>
 
       <section className="metric-card">
-        <div className="card-title">Konfirmasi Berangkat</div>
-        <p className="muted">Masukkan ATD manual. Waktu ini tidak dicatat sebagai timestamp sistem.</p>
+        <div className="card-title">Tugas Siap Berangkat</div>
+        <p className="muted">Pilih tugas yang siap berangkat, lalu masukkan ATD secara manual.</p>
         {departureState.error ? <p className="form-error" role="alert">{departureState.error}</p> : null}
         {departureState.success ? <p className="form-success" role="status">{departureState.success}</p> : null}
         <div className="task-list">
@@ -83,12 +83,12 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
                 <span className="status-badge status-assigned">Ditugaskan</span>
               </div>
               <div className="task-summary-grid">
-                <div><span>Rute</span><strong>{task.start_point} → {task.destination}</strong></div>
+                <div><span>Rute Perjalanan</span><strong>{task.start_point} → {task.destination}</strong></div>
                 <div><span>STD</span><strong>{timeValue(task.std)}</strong></div>
                 <div><span>STA</span><strong>{timeValue(task.sta)}</strong></div>
                 <div><span>Executor</span><strong>{task.external_executor}</strong></div>
                 <div><span>Armada</span><strong>{task.external_fleet}</strong></div>
-                <div><span>SJ</span><strong>{task.sj_number} · {task.product}</strong></div>
+                <div><span>Surat Jalan</span><strong>{task.sj_number} · {task.product}</strong></div>
               </div>
               <form action={departureAction} className="data-form compact-form">
                 <input type="hidden" name="transactionId" value={task.transaction_id} />
@@ -97,7 +97,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
               </form>
             </div>
           ))}
-          {tasks.length === 0 ? <div className="empty-state">Belum ada tugas Non-TGR yang siap diberangkatkan.</div> : null}
+          {tasks.length === 0 ? <div className="empty-state">Belum ada Supply Non TGR yang menunggu konfirmasi berangkat.</div> : null}
         </div>
       </section>
     </div>
