@@ -10,27 +10,32 @@ type NavGroup = { label: string; icon: string; items: NavItem[] }
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     { label: 'Monitoring', icon: 'home', items: [
-      { label: 'Beranda', href: '/controller/beranda', icon: 'home' },
+      { label: 'Homepage', href: '/controller/beranda', icon: 'home' },
     ]},
-    { label: 'Laporan', icon: 'report', items: [
+    { label: 'Schedule', icon: 'calendar', items: [
+      { label: 'By Plan', href: '/controller/timetable/by-plan', icon: 'calendar' },
+      { label: 'Live Tracking', href: '/controller/timetable/live-tracking', icon: 'truck' },
+    ]},
+    { label: 'Penarikan Report', icon: 'report', items: [
       { label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' },
     ]},
-    { label: 'Akun', icon: 'user', items: [
+    { label: 'Setting', icon: 'user', items: [
       { label: 'Profil', href: '/controller/profil', icon: 'user' },
       { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
     ]},
   ],
   Dispatcher: [
     { label: 'Penugasan', icon: 'clipboard', items: [
-      { label: 'Beranda', href: '/dispatcher/beranda', icon: 'home' },
-      { label: 'Jadwal', href: '/dispatcher/timetable', icon: 'calendar' },
+      { label: 'Homepage', href: '/dispatcher/beranda', icon: 'home' },
       { label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' },
-      { label: 'Armada Non-TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
     ]},
-    { label: 'Maintenance', icon: 'wrench', items: [
-      { label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
+    { label: 'Extra Schedule', icon: 'calendar', items: [
+      { label: 'Extra Schedule', href: '/dispatcher/extra-schedule', icon: 'calendar' },
     ]},
-    { label: 'Akun', icon: 'user', items: [
+    { label: 'Armada Non TGR', icon: 'truck', items: [
+      { label: 'Armada Non TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' },
+    ]},
+    { label: 'Setting', icon: 'user', items: [
       { label: 'Profil', href: '/dispatcher/profil', icon: 'user' },
       { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
     ]},
@@ -47,22 +52,25 @@ const navByRole: Record<string, NavGroup[]> = {
   ],
   Maintainer: [
     { label: 'Operasional', icon: 'home', items: [
-      { label: 'Beranda', href: '/maintainer/beranda', icon: 'home' },
+      { label: 'Homepage', href: '/maintainer/beranda', icon: 'home' },
     ]},
-    { label: 'Maintenance', icon: 'wrench', items: [
-      { label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'ticket' },
+    { label: 'Penarikan Report', icon: 'report', items: [
+      { label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' },
     ]},
-    { label: 'Akun', icon: 'user', items: [
+    { label: 'Setting', icon: 'user', items: [
       { label: 'Profil', href: '/maintainer/profil', icon: 'user' },
       { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
     ]},
   ],
   Operation: [
-    { label: 'Permintaan', icon: 'calendar', items: [
-      { label: 'Request Extra Schedule', href: '/operation/request-extra-schedule', icon: 'calendar' },
-      { label: 'Riwayat Permintaan', href: '/operation/riwayat-permintaan', icon: 'history' },
+    { label: 'Operasional', icon: 'home', items: [
+      { label: 'Homepage', href: '/operation/beranda', icon: 'home' },
     ]},
-    { label: 'Akun', icon: 'user', items: [
+    { label: 'Extra Schedule', icon: 'calendar', items: [
+      { label: 'Request Extra Schedule', href: '/operation/request-extra-schedule', icon: 'calendar' },
+      { label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' },
+    ]},
+    { label: 'Setting', icon: 'user', items: [
       { label: 'Profil', href: '/operation/profil', icon: 'user' },
       { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' },
     ]},
