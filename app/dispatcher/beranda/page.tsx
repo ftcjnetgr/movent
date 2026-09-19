@@ -12,7 +12,7 @@ function statusLabel(status: string) {
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
-  const [{ data: locations }, { data: schedules }, { data: executors }, { data: fleets }, { data: products }, { data: maintenanceLists }, { data: tickets }, { data: tasks }] = await Promise.all([
+  const [{ data: locations }, { data: schedules }, { data: executors }, { data: fleets }, { data: products }, { data: maintenanceLists }, { data: tickets }, { data: tasks }, { count: canceledCount }] = await Promise.all([
     admin.from('locations').select('location').eq('status', 'Active').order('location'),
     admin.from('schedules').select('schedule_id, route, category, start_point, destination, std, sta, trip').eq('status', 'Active').order('schedule_day').order('std'),
     admin.from('executors').select('executor_nik, full_name').eq('status', 'Active').order('full_name'),
@@ -21,6 +21,7 @@ export default async function DispatcherBerandaPage() {
     admin.from('maintenance_lists').select('maintenance_list').eq('status', 'Active').order('maintenance_list'),
     admin.from('ticketings').select('transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note').eq('created_by', profile.id).order('created_at', { ascending: false }),
     admin.from('tasks').select('transaction_id, task_type, status, start_point, destination, executor_snapshot, fleet_snapshot').eq('created_by', profile.id).order('created_at', { ascending: false }).limit(6),
+    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('created_by', profile.id).eq('status', 'Canceled'),
   ])
   const data = await getDashboardData(profile)
   const active = (data.taskCounts.Requested ?? 0) + (data.taskCounts.Assigned ?? 0) + (data.taskCounts.Confirmed ?? 0) + (data.taskCounts.Driving ?? 0)
@@ -36,7 +37,7 @@ export default async function DispatcherBerandaPage() {
         <div className="metric-card"><span>Penugasan Dibuat</span><strong>{active}</strong></div>
         <div className="metric-card"><span>On Progress</span><strong>{(data.taskCounts.Confirmed ?? 0)+(data.taskCounts.Driving ?? 0)}</strong></div>
         <div className="metric-card"><span>Completed</span><strong>{data.taskCounts.Completed ?? 0}</strong></div>
-        <div className="metric-card alert-card"><span>Canceled</span><strong>{data.taskCounts.Canceled ?? 0}</strong></div>
+        <div className="metric-card alert-card"><span>Canceled</span><strong>{canceledCount ?? 0}</strong></div>
         <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length + data.ticketAlertCount}</strong></div>
       </section>
 
