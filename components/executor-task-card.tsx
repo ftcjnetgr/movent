@@ -42,7 +42,7 @@ function requiresSj(task: Task) {
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Assigned: 'Ditugaskan',
-    Accepted: 'Diterima',
+    Confirmed: 'Diterima',
     Driving: 'Berangkat',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
@@ -52,9 +52,9 @@ function statusLabel(status: string) {
 
 function nextActionLabel(task: Task) {
   if (task.status === 'Assigned') return 'Terima tugas'
-  if (task.status === 'Accepted' && requiresSj(task) && !task.sj_number) return 'Isi surat jalan'
-  if (task.status === 'Accepted' && task.odometer_start === null) return 'Isi odometer awal'
-  if (task.status === 'Accepted') return 'Konfirmasi berangkat'
+  if (task.status === 'Confirmed' && requiresSj(task) && !task.sj_number) return 'Isi surat jalan'
+  if (task.status === 'Confirmed' && task.odometer_start === null) return 'Isi odometer awal'
+  if (task.status === 'Confirmed') return 'Konfirmasi berangkat'
   if (task.status === 'Driving' && !task.arrived_at) return 'Konfirmasi datang'
   if (task.status === 'Driving' && task.odometer_end === null) return 'Isi odometer akhir'
   if (task.status === 'Driving') return 'Selesaikan tugas'
@@ -217,7 +217,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Accepted' && needsSj && !task.sj_number ? (
+      {task.status === 'Confirmed' && needsSj && !task.sj_number ? (
         <form onSubmit={handleSj} className="data-form compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <div className="form-row">
@@ -231,7 +231,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Accepted' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start === null ? (
+      {task.status === 'Confirmed' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start === null ? (
         <form onSubmit={handleOdometerStart} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Awal<input name="odometerStart" type="number" min="0" step="any" required /></label>
@@ -239,7 +239,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Accepted' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start !== null ? (
+      {task.status === 'Confirmed' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start !== null ? (
         <form onSubmit={handleDriving}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <button type="submit" disabled={isPending}>Konfirmasi berangkat</button>
