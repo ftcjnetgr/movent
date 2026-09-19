@@ -51,6 +51,9 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
 
   const taskType = String(formData.get('taskType') ?? '')
   const ownership = String(formData.get('fleetOwnership') ?? '')
+  if (profile.role === 'Dispatcher' && taskType === 'Supply' && ownership === 'Non-TGR') {
+    return { error: 'Tugas Supply Non-TGR dibuat oleh Operation.' }
+  }
   const admin = createAdminClient()
 
   if (taskType === 'Distribusi Mobil') {
