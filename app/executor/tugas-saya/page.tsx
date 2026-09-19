@@ -12,37 +12,54 @@ export default async function ExecutorTugasSayaPage() {
     .not('status', 'in', '(Completed,Canceled)')
     .order('created_at', { ascending: false })
 
-  if (profile.role === 'Executor') {
-    taskQuery = taskQuery.eq('executor_nik', profile.nik)
-  }
+  if (profile.role === 'Executor') taskQuery = taskQuery.eq('executor_nik', profile.nik)
 
   const [{ data: tasks }, { data: products }] = await Promise.all([
     taskQuery,
     admin.from('products').select('product').eq('status', 'Active').order('product'),
   ])
 
+  const activeCount = tasks?.length ?? 0
+  const waitingCount = (tasks ?? []).filter((task) => task.status === 'Assigned').length
+  const drivingCount = (tasks ?? []).filter((task) => task.status === 'Driving').length
+
   return (
-    <>
-    <div className="page-heading">
+    <div className="role-page">
+      <div className="page-heading">
         <div>
-          <span className="eyebrow">Executor</span>
+          <span className="eyebrow">EXECUTOR</span>
           <h1>Tugas Saya</h1>
-          <p>Semua tugas aktif yang sedang menjadi tanggung jawab kamu.</p>
+          <p>Fokus ke tugas yang perlu kamu selesaikan. Semua langkah berikutnya ada di setiap kartu.</p>
         </div>
       </div>
 
-      <section className="task-list">
-        {(tasks ?? []).map((task) => (
-          <ExecutorTaskCard key={task.transaction_id} task={task} products={(products ?? []).map((item) => item.product)} />
-        ))}
-        {(tasks ?? []).length === 0 ? (
-          <div className="metric-card">
-            <span>Belum ada tugas aktif</span>
-            <strong>0</strong>
-            <p>Tugas Completed masuk ke Riwayat Tugas. Tugas Dibatalkan tidak masuk ke daftar aktif.</p>
-          </div>
-        ) : null}
+      <section className="section-block">
+        <div className="metric-grid">
+          <div className="metric-card"><span>Tugas Aktif</span><strong>{activeCount}</strong></div>
+          <div className="metric-card"><span>Menunggu Diterima</span><strong>{waitingCount}</strong></div>
+          <div className="metric-card"><span>Sedang Berangkat</span><strong>{drivingCount}</strong></div>
+          <div className="metric-card"><span>Sudah Selesai</span><strong>—</strong></div>
+          <div className="metric-card"><span>Hari Ini</span><strong>{activeCount}</strong></div>
+        </div>
       </section>
-    </>
+
+      <section className="section-block">
+        <div className="section-heading">
+          <div><h2>Antrian tugas</h2><p>Kerjakan dari status paling awal sampai selesai.</p></div>
+        </div>
+        <section className="task-list">
+          {(tasks ?? []).map((task) => (
+            <ExecutorTaskCard key={task.transaction_id} task={task} products={(products ?? []).map((item) => item.product)} />
+          ))}
+          {!tasks?.length ? (
+            <div className="metric-card">
+              <span>Semua aman</span>
+              <strong>Tidak ada tugas aktif</strong>
+              <p>Belum ada penugasan yang perlu kamu kerjakan. Tugas yang selesai bisa kamu lihat di Riwayat Tugas.</p>
+            </div>
+          ) : null}
+        </section>
+      </section>
+    </div>
   )
 }
