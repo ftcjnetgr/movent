@@ -467,3 +467,16 @@ td select{
   .login-panel-visual{min-height:270px;padding:25px!important}
   .login-visual-copy h2{font-size:31px!important}
 }
+
+.dashboard-main-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,.65fr);gap:10px}
+.dashboard-main-grid>.data-table-card{min-width:0}
+.dashboard-summary-card{padding:13px}
+.summary-bar-row{display:grid;grid-template-columns:1.2fr 28px 1fr;align-items:center;gap:7px;padding:9px 0;border-bottom:1px solid #edf2f2}
+.summary-bar-row:last-child{border-bottom:0}
+.summary-bar-row span{font-size:9px;color:#64797f}
+.summary-bar-row strong{font-size:10px;color:#24434a;text-align:right}
+.summary-bar-row i{height:5px;background:#eef3f2;border-radius:99px;overflow:hidden}
+.summary-bar-row i b{display:block;height:100%;background:#3e83eb;border-radius:99px}
+.dashboard-form-card{padding:14px;border:1px solid var(--mv-line);border-radius:9px;background:#fff;box-shadow:var(--mv-shadow)}
+@media(max-width:1050px){.dashboard-main-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.dashboard-main-grid{grid-template-columns:1fr}}
