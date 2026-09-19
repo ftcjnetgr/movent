@@ -42,7 +42,7 @@ function ticketThresholdSeconds(status: string) {
 
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    Created: 'Dibuat',
+    Requested: 'Dibuat',
     Accepted: 'Diterima',
     'In Progress': 'Sedang dikerjakan',
     Completed: 'Selesai',
