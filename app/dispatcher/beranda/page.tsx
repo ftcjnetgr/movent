@@ -76,12 +76,6 @@ export default async function DispatcherBerandaPage() {
     <>
       <div className="page-heading"><div><span className="eyebrow">Dispatcher</span><h1>Beranda</h1><p>Pantau tugas yang kamu buat dan ticketing maintenance.</p></div></div>
 
-      <div className="dashboard-tabs">
-        <Link className="dashboard-tab active" href="/dispatcher/beranda">Tugas</Link>
-        <Link className="dashboard-tab" href="/dispatcher/timetable">Jadwal</Link>
-        <Link className="dashboard-tab" href="/dispatcher/ticketing-maintenance">Tiket Maintenance</Link>
-      </div>
-
       <section className="section-block">
         <div className="metric-grid">
           {Object.entries(dashboard.taskCounts).map(([status, count]) => (
