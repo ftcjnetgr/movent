@@ -76,6 +76,7 @@ export default function LoginPage() {
 
 
           <div className="login-visual-copy">
+            <div className="login-visual-eyebrow">OPERASI LEBIH TERKONTROL</div>
             <h2>Semua pergerakan.<br />Satu kendali.</h2>
             <p>
               Pantau jadwal, penugasan, ticketing, dan perjalanan armada
@@ -85,12 +86,13 @@ export default function LoginPage() {
 
           <div className="login-visual-board">
             <div className="login-board-toolbar">
+              <div className="login-board-brand">MOVENT</div>
               <div className="login-board-dots">
                 <span />
                 <span />
                 <span />
               </div>
-              <span>movent / beranda</span>
+              <span>Dashboard / Operasional</span>
             </div>
 
             <div className="login-board-body">
@@ -110,13 +112,13 @@ export default function LoginPage() {
 
                 <div className="login-board-cards">
                   <div>
-                    <small>Tugas</small>
-                    <strong>Operasional</strong>
+                    <small>Penugasan</small>
+                    <strong>12 Assigned</strong>
                     <i />
                   </div>
                   <div>
-                    <small>Timetable</small>
-                    <strong>Jadwal</strong>
+                    <small>Perjalanan</small>
+                    <strong>8 Driving</strong>
                     <i />
                   </div>
                   <div>
