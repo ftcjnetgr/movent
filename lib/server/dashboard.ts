@@ -146,7 +146,7 @@ export async function getDashboardData(profile: AppProfile) {
   const taskAlerts = [...unassignedAlerts, ...assignedAlerts]
   const ticketRows = (ticketings ?? []) as TicketRow[]
   const ticketAlerts = ticketRows.filter((ticket) =>
-    ['Created', 'Confirmed', 'In Progress'].includes(ticket.status)
+    ['Requested', 'Confirmed', 'In Progress'].includes(ticket.status)
   )
   const ticketAlertCount = ticketRows.filter((ticket) => {
     const elapsed = now.getTime() - new Date(
@@ -156,7 +156,7 @@ export async function getDashboardData(profile: AppProfile) {
         ? ticket.in_progress_at ?? ticket.created_at
         : ticket.created_at,
     ).getTime()
-    if (ticket.status === 'Created') return elapsed >= 3 * 60 * 60 * 1000
+    if (ticket.status === 'Requested') return elapsed >= 3 * 60 * 60 * 1000
     if (ticket.status === 'Confirmed') return elapsed >= 24 * 60 * 60 * 1000
     if (ticket.status === 'In Progress') return elapsed >= 3 * 24 * 60 * 60 * 1000
     return false
@@ -199,7 +199,7 @@ export async function getDashboardData(profile: AppProfile) {
       Completed: tasks.filter((task) => task.status === 'Completed').length,
     },
     ticketCounts: {
-      Created: ticketRows.filter((ticket) => ticket.status === 'Created').length,
+      Requested: ticketRows.filter((ticket) => ticket.status === 'Requested').length,
       Confirmed: ticketRows.filter((ticket) => ticket.status === 'Confirmed').length,
       'In Progress': ticketRows.filter((ticket) => ticket.status === 'In Progress').length,
       Completed: ticketRows.filter((ticket) => ticket.status === 'Completed').length,
