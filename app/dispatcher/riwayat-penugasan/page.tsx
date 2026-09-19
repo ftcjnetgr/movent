@@ -5,7 +5,7 @@ function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Diajukan',
     Assigned: 'Ditugaskan',
-    Accepted: 'Diterima',
+    Confirmed: 'Diterima',
     Driving: 'Berangkat',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
