@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 type NavItem = { label: string; href: string; icon: string }
 type NavGroup = { label: string; icon: string; items: NavItem[] }
@@ -94,6 +95,8 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   useEffect(() => { setNavigating(false); setMobileOpen(false) }, [pathname])
   useEffect(() => { if (activeGroup && !openGroups.includes(activeGroup)) setOpenGroups((v) => [...v, activeGroup]) }, [activeGroup])
 
+  async function logout() { const supabase = createClient(); await supabase.auth.signOut(); router.replace('/login') }
+
   function navigateTo(href: string) {
     if (href === pathname) return
     setNavigating(true); setMobileOpen(false); router.push(href)
@@ -135,8 +138,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
         </nav>
 
         <div className="sidebar-footer">
-          <span>Part of FTC Go Project</span>
-          <small>Developed by Fleet Traffic Control</small>
+          <button type="button" className="sidebar-logout" onClick={logout}><span>↪</span>Logout</button>
         </div>
       </aside>
 
