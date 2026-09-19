@@ -44,20 +44,20 @@ function statusLabel(status: string) {
     Assigned: 'Ditugaskan',
     Confirmed: 'Diterima',
     Driving: 'Berangkat',
-    Completed: 'Selesai',
+    Completed: 'Selesaikan Tugas',
     Canceled: 'Dibatalkan',
   }
   return labels[status] ?? status
 }
 
 function nextActionLabel(task: Task) {
-  if (task.status === 'Assigned') return 'Terima tugas'
-  if (task.status === 'Confirmed' && requiresSj(task) && !task.sj_number) return 'Isi surat jalan'
+  if (task.status === 'Assigned') return 'Terima Penugasan'
+  if (task.status === 'Confirmed' && requiresSj(task) && !task.sj_number) return 'Isi Surat Jalan'
   if (task.status === 'Confirmed' && task.odometer_start === null) return 'Isi odometer awal'
-  if (task.status === 'Confirmed') return 'Konfirmasi berangkat'
-  if (task.status === 'Driving' && !task.arrived_at) return 'Konfirmasi datang'
+  if (task.status === 'Confirmed') return 'Konfirmasi Berangkat'
+  if (task.status === 'Driving' && !task.arrived_at) return 'Konfirmasi Tiba'
   if (task.status === 'Driving' && task.odometer_end === null) return 'Isi odometer akhir'
-  if (task.status === 'Driving') return 'Selesaikan tugas'
+  if (task.status === 'Driving') return 'Selesaikan Tugaskan tugas'
   return 'Lanjutkan tugas'
 }
 
@@ -166,7 +166,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
       </div>
 
       <div className="task-next-step">
-        <span>Langkah berikutnya</span>
+        <span>LANGKAH BERIKUTNYA</span>
         <strong>{nextActionLabel(task)}</strong>
       </div>
 
@@ -213,7 +213,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
       {task.status === 'Assigned' ? (
         <form onSubmit={handleAccept}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Terima tugas</button>
+          <button type="submit" disabled={isPending}>Terima Penugasan</button>
         </form>
       ) : null}
 
@@ -235,21 +235,21 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         <form onSubmit={handleOdometerStart} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Awal<input name="odometerStart" type="number" min="0" step="any" required /></label>
-          <button type="submit" disabled={isPending}>Simpan odometer awal</button>
+          <button type="submit" disabled={isPending}>Simpan Odometer Awal</button>
         </form>
       ) : null}
 
       {task.status === 'Confirmed' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start !== null ? (
         <form onSubmit={handleDriving}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi berangkat</button>
+          <button type="submit" disabled={isPending}>Konfirmasi Berangkat</button>
         </form>
       ) : null}
 
       {task.status === 'Driving' && !task.arrived_at ? (
         <form onSubmit={handleArrival}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Konfirmasi datang</button>
+          <button type="submit" disabled={isPending}>Konfirmasi Tiba</button>
         </form>
       ) : null}
 
@@ -257,14 +257,14 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         <form onSubmit={handleOdometerEnd} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Akhir<input name="odometerEnd" type="number" min="0" step="any" required /></label>
-          <button type="submit" disabled={isPending}>Simpan odometer akhir</button>
+          <button type="submit" disabled={isPending}>Simpan Odometer Akhir</button>
         </form>
       ) : null}
 
       {task.status === 'Driving' && task.arrived_at && task.odometer_end !== null ? (
         <form onSubmit={handleComplete}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
-          <button type="submit" disabled={isPending}>Selesai</button>
+          <button type="submit" disabled={isPending}>Selesaikan Tugas</button>
         </form>
       ) : null}
     </article>
