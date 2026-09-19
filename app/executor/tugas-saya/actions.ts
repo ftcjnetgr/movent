@@ -37,7 +37,7 @@ export async function acceptExtraScheduleAction(formData: FormData): Promise<Res
 
   const { error } = await admin
     .from('tasks')
-    .update({ status: 'Accepted', accepted_at: new Date().toISOString() })
+    .update({ status: 'Confirmed', accepted_at: new Date().toISOString() })
     .eq('id', task.id)
     .eq('status', 'Assigned')
 
@@ -60,7 +60,7 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
     return { error: 'Nomor SJ, Qty, Berat, dan Produk wajib diisi.' }
   }
 
-  const { admin, task } = await getTask(transactionId, ['Accepted'])
+  const { admin, task } = await getTask(transactionId, ['Confirmed'])
   if (!task || !requiresSj(task) || !allowedExecutor(profile.role, task.executor_nik, profile.nik)) {
     return { error: 'Tugas tidak tersedia untuk proses SJ.' }
   }
@@ -85,7 +85,7 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
       sj_note: note || null,
     })
     .eq('id', task.id)
-    .eq('status', 'Accepted')
+    .eq('status', 'Confirmed')
 
   if (error) return { error: 'SJ belum berhasil disimpan.' }
 
@@ -99,11 +99,11 @@ export async function saveOdometerStartAction(formData: FormData): Promise<Resul
   const value = Number(formData.get('odometerStart'))
   if (!Number.isFinite(value) || value < 0) return { error: 'Odometer Awal belum benar.' }
 
-  const { admin, task } = await getTask(transactionId, ['Accepted'])
+  const { admin, task } = await getTask(transactionId, ['Confirmed'])
   if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik)) return { error: 'Tugas tidak tersedia untuk kamu.' }
   if (requiresSj(task) && !task.sj_number) return { error: 'Submit SJ terlebih dahulu.' }
 
-  const { error } = await admin.from('tasks').update({ odometer_start: value }).eq('id', task.id).eq('status', 'Accepted')
+  const { error } = await admin.from('tasks').update({ odometer_start: value }).eq('id', task.id).eq('status', 'Confirmed')
   if (error) return { error: 'Odometer Awal belum berhasil disimpan.' }
   revalidateExecutorPaths()
   return { success: 'Odometer Awal tersimpan.' }
@@ -112,7 +112,7 @@ export async function saveOdometerStartAction(formData: FormData): Promise<Resul
 export async function confirmDrivingAction(formData: FormData): Promise<Result> {
   const profile = await getCurrentProfile()
   const transactionId = String(formData.get('transactionId') ?? '').trim()
-  const { admin, task } = await getTask(transactionId, ['Accepted'])
+  const { admin, task } = await getTask(transactionId, ['Confirmed'])
   if (!task || task.fleet_ownership === 'Non-TGR' || !allowedExecutor(profile.role, task.executor_nik, profile.nik)) return { error: 'Tugas tidak tersedia untuk kamu.' }
   if (requiresSj(task) && !task.sj_number) return { error: 'Submit SJ terlebih dahulu.' }
   if (task.odometer_start === null) return { error: 'Isi Odometer Awal terlebih dahulu.' }
@@ -121,7 +121,7 @@ export async function confirmDrivingAction(formData: FormData): Promise<Result> 
     .from('tasks')
     .update({ status: 'Driving', driving_at: new Date().toISOString() })
     .eq('id', task.id)
-    .eq('status', 'Accepted')
+    .eq('status', 'Confirmed')
   if (error) return { error: 'Konfirmasi Berangkat belum berhasil.' }
   revalidateExecutorPaths()
   return { success: 'Berangkat sudah dikonfirmasi.' }
