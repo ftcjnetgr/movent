@@ -13,7 +13,7 @@ export default async function MaintainerTicketMaintenancePage() {
     .order('created_at', { ascending: true })
 
   const visible = profile.role === 'Maintainer'
-    ? (tickets ?? []).filter((ticket) => ticket.status === 'Created' || ticket.maintainer_user_id === profile.id)
+    ? (tickets ?? []).filter((ticket) => ticket.status === 'Requested' || ticket.maintainer_user_id === profile.id)
     : (tickets ?? [])
 
   return (
