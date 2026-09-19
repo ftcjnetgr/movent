@@ -9,7 +9,7 @@ import {
 } from '@/app/maintainer/tiket-maintenance/actions'
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: 'Dibuat',
+    Requested: 'Diajukan',
     Confirmed: 'Dikonfirmasi',
     'In Progress': 'Sedang dikerjakan',
     Completed: 'Selesai',
