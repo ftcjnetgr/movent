@@ -298,7 +298,7 @@ export default function TimetableView({
                     })}
                   </div>
                 </div>
-              ))}
+              })}
               {!liveGroups.length ? <div className="empty-state">Belum ada jadwal langsung untuk sekarang.</div> : null}
             </div>
           </div>
