@@ -67,7 +67,6 @@ const navByRole: Record<string, NavGroup[]> = {
       { label: 'Homepage', href: '/operation/beranda', icon: 'home' },
     ]},
     { label: 'Extra Schedule', icon: 'calendar', items: [
-      { label: 'Request Extra Schedule', href: '/operation/request-extra-schedule', icon: 'calendar' },
       { label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' },
     ]},
     { label: 'Setting', icon: 'user', items: [
