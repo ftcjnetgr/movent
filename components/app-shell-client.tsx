@@ -123,17 +123,25 @@ export default function AppShellClient({ profile, children }: { profile: { usern
             const hasActive = group.items.some(item => pathname === item.href || pathname.startsWith(item.href + '/'))
             return (
               <div className={'nav-group ' + (hasActive ? 'has-active' : '')} key={group.label}>
-                <button type="button" className="nav-group-title" onClick={() => setOpenGroups((current) => current.includes(group.label) ? current.filter((item) => item !== group.label) : [...current, group.label])}>
-                  <span className="nav-icon"><Icon name={group.icon} /></span><span>{group.label}</span><span className="nav-group-chevron">{openGroups.includes(group.label) ? '⌃' : '⌄'}</span>
-                </button>
-                <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
-                  {group.items.map(item => {
-                    const active = pathname === item.href || pathname.startsWith(item.href + '/')
-                    return <Link key={item.href} href={item.href} className={'nav-link ' + (active ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(item.href) }}>
-                      <span className="nav-icon"><Icon name={item.icon} /></span><span>{item.label}</span>
-                    </Link>
-                  })}
-                </div>
+                {group.items.length === 1 ? (
+                  <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(group.items[0].href) }}>
+                    <span className="nav-icon"><Icon name={group.items[0].icon} /></span><span>{group.label}</span>
+                  </Link>
+                ) : (
+                  <>
+                    <button type="button" className="nav-group-title" onClick={() => setOpenGroups((current) => current.includes(group.label) ? current.filter((item) => item !== group.label) : [...current, group.label])}>
+                      <span className="nav-icon"><Icon name={group.icon} /></span><span>{group.label}</span><span className="nav-group-chevron">{openGroups.includes(group.label) ? '⌃' : '⌄'}</span>
+                    </button>
+                    <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
+                      {group.items.map(item => {
+                        const active = pathname === item.href || pathname.startsWith(item.href + '/')
+                        return <Link key={item.href} href={item.href} className={'nav-link ' + (active ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(item.href) }}>
+                          <span className="nav-icon"><Icon name={item.icon} /></span><span>{item.label}</span>
+                        </Link>
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
             )
           })}
