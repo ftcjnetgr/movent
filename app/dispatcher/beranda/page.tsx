@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { TaskDurationVisualization, TicketDurationVisualization } from '@/components/duration-visualization'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import DispatcherCreateTask from '@/components/dispatcher-create-task'
+import DispatcherMaintenanceForm from '@/components/dispatcher-maintenance-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -54,12 +55,14 @@ const emptyDashboard: DashboardData = {
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
-  const [{ data: locations }, { data: schedules }, { data: executors }, { data: fleets }, { data: products }] = await Promise.all([
+  const [{ data: locations }, { data: schedules }, { data: executors }, { data: fleets }, { data: products }, { data: maintenanceLists }, { data: tickets }] = await Promise.all([
     admin.from('locations').select('location').eq('status', 'Active').order('location'),
     admin.from('schedules').select('schedule_id, route, category, start_point, destination, std, sta, trip').eq('status', 'Active').order('schedule_day').order('std'),
     admin.from('executors').select('executor_nik, full_name').eq('status', 'Active').order('full_name'),
     admin.from('fleets').select('plat_number, fleet_type').eq('status', 'Active').order('plat_number'),
     admin.from('products').select('product').eq('status', 'Active').order('product'),
+    admin.from('maintenance_lists').select('maintenance_list').eq('status', 'Active').order('maintenance_list'),
+    admin.from('ticketings').select('transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note').eq('created_by', profile.id).order('created_at', { ascending: false }),
   ])
 
   let dashboard = emptyDashboard
@@ -98,6 +101,13 @@ export default async function DispatcherBerandaPage() {
         executors={executors ?? []}
         fleets={fleets ?? []}
         products={(products ?? []).map((item) => item.product)}
+      />
+
+      <DispatcherMaintenanceForm
+        maintenanceLists={(maintenanceLists ?? []).map((item) => item.maintenance_list)}
+        locations={(locations ?? []).map((item) => item.location)}
+        fleets={fleets ?? []}
+        tickets={tickets ?? []}
       />
 
       <section className="section-block">
