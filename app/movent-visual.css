@@ -1,0 +1,346 @@
+/* MOVENT visual system v2 — role-based operational workspace */
+
+:root{
+  --mv-ink:#102c35;
+  --mv-ink-2:#173f48;
+  --mv-green:#08a57a;
+  --mv-green-dark:#08785e;
+  --mv-green-soft:#e7f8f2;
+  --mv-blue:#2f80ed;
+  --mv-orange:#f5a623;
+  --mv-red:#e85b5b;
+  --mv-bg:#f5f8f8;
+  --mv-card:#fff;
+  --mv-line:#e3ebeb;
+  --mv-muted:#7b8b90;
+  --mv-shadow:0 6px 22px rgba(16,44,53,.055);
+}
+
+/* global workspace */
+body{
+  background:var(--mv-bg);
+  color:#18313a;
+}
+.app-shell{
+  min-height:100vh;
+  background:var(--mv-bg);
+}
+.sidebar{
+  background:linear-gradient(180deg,#102f38 0%,#0d2830 100%);
+  border-right:0;
+  color:#fff;
+  padding:14px 10px 12px;
+  box-shadow:8px 0 28px rgba(16,44,53,.10);
+}
+.sidebar-top{
+  border-bottom:1px solid rgba(255,255,255,.09);
+  padding:2px 5px 13px;
+}
+.sidebar-brand-logo{
+  width:138px;
+  height:31px;
+  filter:brightness(0) invert(1);
+}
+.sidebar-toggle{
+  color:#b9cbd0;
+}
+.sidebar-toggle:hover{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.08);
+  color:#fff;
+}
+.nav-group-toggle{
+  color:#a9bdc2;
+  border-radius:8px;
+}
+.nav-group-toggle:hover,
+.nav-group.has-active>.nav-group-toggle{
+  background:rgba(255,255,255,.065);
+  color:#fff;
+}
+.nav-group-items{
+  border-left:1px solid rgba(255,255,255,.10);
+}
+.nav-link{
+  color:#a5b8bd;
+}
+.nav-link:hover{
+  background:rgba(255,255,255,.055);
+  color:#fff;
+}
+.nav-link.active{
+  background:var(--mv-green);
+  color:#fff;
+  box-shadow:none;
+  font-weight:700;
+}
+.nav-icon svg{
+  stroke-width:1.9;
+}
+.nav-group-chevron{
+  color:#779098;
+}
+.sidebar-footer{
+  border-top:1px solid rgba(255,255,255,.09);
+}
+.sidebar-user-avatar{
+  background:#1a4a55;
+  border-color:#32616b;
+  color:#fff;
+}
+.sidebar-user-copy>div{color:#fff}
+.sidebar-user-copy small{color:#8ea6ad}
+
+/* top bar */
+.topbar{
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid var(--mv-line);
+  box-shadow:0 1px 0 rgba(16,44,53,.025);
+  padding:0 28px;
+}
+.role-label{
+  color:#8b999d;
+  font-size:9px;
+}
+.topbar-page{
+  color:#17343c;
+  font-size:14px;
+}
+.topbar-user{
+  background:#f7faf9;
+  border-color:#dfe9e7;
+  color:#50676d;
+}
+.topbar-user-dot{background:var(--mv-green)}
+.topbar-mode{
+  background:#f4f8f7;
+  border-color:#dfe9e7;
+}
+.topbar-mode-link.active{
+  background:#fff;
+  color:var(--mv-green-dark);
+}
+
+/* content */
+.page-content{
+  padding:25px 28px 30px;
+}
+.page-heading{
+  margin-bottom:20px;
+}
+.eyebrow{
+  color:var(--mv-green-dark);
+  letter-spacing:.08em;
+}
+.page-heading h1{
+  color:#12313a;
+  font-size:28px;
+}
+.page-heading p{
+  color:#829196;
+}
+
+/* cards and metrics */
+.section-block{margin-top:23px}
+.section-heading h2{
+  color:#173740;
+  font-size:15px;
+}
+.section-heading p{color:#879599}
+.metric-grid{
+  gap:10px;
+}
+.metric-card{
+  min-height:88px;
+  padding:14px 15px;
+  border:1px solid var(--mv-line);
+  border-radius:11px;
+  background:#fff;
+  box-shadow:var(--mv-shadow);
+}
+.metric-card:hover{
+  border-color:#cfe0dc;
+  box-shadow:0 9px 28px rgba(16,44,53,.08);
+}
+.metric-card span{
+  color:#819095;
+  font-size:10px;
+}
+.metric-card strong{
+  color:#17333c;
+  font-size:24px;
+}
+.alert-card{
+  background:#fff9ee;
+  border-color:#f2dfb8;
+}
+.alert-card strong{color:#b16a00}
+
+/* green product accents */
+button,.button-link,.link-button{
+  background:var(--mv-green);
+  border-color:var(--mv-green);
+  box-shadow:0 4px 12px rgba(8,165,122,.16);
+}
+button:not(:disabled):hover,.button-link:hover,.link-button:hover{
+  background:var(--mv-green-dark);
+  border-color:var(--mv-green-dark);
+}
+.secondary-button{
+  background:#fff;
+  color:#486169;
+  border-color:#d8e3e2;
+  box-shadow:none;
+}
+.secondary-button:hover{
+  background:#f6faf9;
+  color:#17343c;
+}
+.data-form input,.data-form select,.data-form textarea,
+.compact-form input,.compact-form select,.compact-form textarea,td select{
+  border-color:#d7e2e1;
+  border-radius:8px;
+  min-height:40px;
+}
+.data-form input:focus,.data-form select:focus,.data-form textarea:focus,
+.compact-form input:focus,.compact-form select:focus,.compact-form textarea:focus{
+  border-color:#67bea7;
+  box-shadow:0 0 0 3px rgba(8,165,122,.09);
+}
+
+/* tables */
+.data-table-card,.task-card,.task-create-workspace,.report-card{
+  border-color:var(--mv-line);
+  border-radius:12px;
+  box-shadow:var(--mv-shadow);
+}
+th{
+  background:#f4f8f7;
+  color:#718186;
+}
+td,th{
+  border-bottom-color:#edf2f1;
+}
+tbody tr:hover{background:#f8fbfa}
+
+/* status language */
+.status-badge{
+  border-radius:999px;
+  padding:5px 9px;
+}
+.status-assigned{
+  background:#edf5ff;
+  color:#3278cf;
+  border-color:#d8e7fb;
+}
+.status-accepted{
+  background:#eefbfb;
+  color:#117b7d;
+  border-color:#d5eeee;
+}
+.status-requested,.status-created{
+  background:#fff7e8;
+  color:#a86b05;
+  border-color:#f3dfb5;
+}
+.status-driving,.status-in-progress{
+  background:#fff2e7;
+  color:#b66120;
+  border-color:#f1d7c1;
+}
+.status-completed{
+  background:#e9f8f1;
+  color:#12815d;
+  border-color:#ccecdf;
+}
+.status-canceled{
+  background:#fff0f0;
+  color:#bf4a4a;
+  border-color:#f1d1d1;
+}
+
+/* dashboard tab */
+.dashboard-tabs{
+  background:#f1f6f5;
+  border-color:#dfe9e7;
+}
+.dashboard-tab.active{
+  color:var(--mv-green-dark);
+}
+
+/* task cards */
+.task-card h2,.task-create-intro strong,.task-create-flow-head strong{
+  color:#173740;
+}
+.task-summary-grid>div{
+  border-bottom-color:#edf2f1;
+}
+
+/* timetable */
+.timetable-shell{
+  border-color:var(--mv-line);
+  border-radius:12px;
+  box-shadow:var(--mv-shadow);
+}
+.timetable-shell .section-heading{
+  border-bottom-color:#edf2f1;
+}
+.timetable-hours,.timetable-axis-label{
+  background:#f3f7f6;
+}
+.timetable-group{
+  background:#f8fbfa;
+}
+.timetable-item{
+  border-color:#d7e3e1;
+  box-shadow:0 3px 10px rgba(16,44,53,.06);
+}
+.timetable-item:hover{
+  box-shadow:0 9px 22px rgba(16,44,53,.10);
+}
+
+/* role-specific dashboard framing */
+.role-controller .page-content,
+.role-dispatcher .page-content,
+.role-maintainer .page-content,
+.role-operation .page-content{
+  max-width:1500px;
+}
+.role-executor .page-content{
+  max-width:1250px;
+}
+.role-executor .task-list{
+  display:grid;
+  gap:10px;
+}
+
+/* login */
+.login-page{
+  background:
+    radial-gradient(circle at 10% 15%,rgba(8,165,122,.10),transparent 28%),
+    radial-gradient(circle at 90% 85%,rgba(47,128,237,.08),transparent 25%),
+    #edf4f3;
+}
+.login-shell{
+  border-color:#d9e6e4;
+  box-shadow:0 28px 80px rgba(16,44,53,.14);
+  border-radius:20px;
+}
+.login-panel-visual{
+  background:linear-gradient(145deg,#103740,#0d5a50 62%,#08785e);
+}
+.login-submit{
+  background:var(--mv-green);
+  border-color:var(--mv-green);
+}
+
+/* mobile */
+@media(max-width:1024px){
+  .page-content{padding:20px 18px 30px}
+}
+@media(max-width:640px){
+  .page-content{padding:16px 12px 85px}
+  .topbar{padding:0 13px}
+  .metric-grid{gap:8px}
+}
