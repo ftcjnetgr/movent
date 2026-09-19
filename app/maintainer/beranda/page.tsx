@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import DashboardAlertList from '@/components/dashboard-alert-list'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
 
@@ -9,43 +10,43 @@ function label(status: string) {
 
 export default async function MaintainerBerandaPage() {
   const profile = await getCurrentProfile()
-  const data = await getDashboardData(profile)
+  const admin = createAdminClient()
+  const [data, ticketResult] = await Promise.all([
+    getDashboardData(profile),
+    admin.from('ticketings').select('transaction_id, status, maintenance_list, location, fleet_plat_number, created_at').not('status','in','(Completed,Canceled)').order('created_at',{ascending:true}).limit(8),
+  ])
+  const tickets = ticketResult.data ?? []
 
   return (
     <div className="role-page">
       <div className="page-heading">
-        <div>
-          <span className="eyebrow">MAINTAINER</span>
-          <h1>Maintenance Armada</h1>
-          <p>Lihat tiket yang masuk, kerjakan sesuai urutan, dan tandai selesai saat maintenance sudah beres.</p>
-        </div>
-        <div className="page-heading-actions">
-          <Link className="button-link" href="/maintainer/penarikan-report">Penarikan Report</Link>
-        </div>
+        <div><h1>Halo, Maintainer!</h1><p>Kelola ticketing maintenance armada dan selesaikan sesuai urutan.</p></div>
+        <div className="page-heading-actions"><Link className="button-link" href="/maintainer/penarikan-report">Penarikan Report</Link></div>
       </div>
 
-      <section className="section-block">
-        <div className="section-heading"><div><h2>Ringkasan tiket</h2><p>Status tiket maintenance yang perlu kamu pantau.</p></div></div>
-        <div className="metric-grid">
-          <div className="metric-card"><span>Request Masuk</span><strong>{data.ticketCounts.Requested ?? 0}</strong></div>
-          <div className="metric-card"><span>Sudah Dikonfirmasi</span><strong>{data.ticketCounts.Confirmed ?? 0}</strong></div>
-          <div className="metric-card"><span>Sedang Dikerjakan</span><strong>{data.ticketCounts['In Progress'] ?? 0}</strong></div>
-          <div className="metric-card"><span>Selesai</span><strong>{data.ticketCounts.Completed ?? 0}</strong></div>
-          <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlertCount}</strong></div>
-        </div>
+      <section className="metric-grid">
+        <div className="metric-card"><span>Tiket Masuk</span><strong>{data.ticketCounts.Requested ?? 0}</strong></div>
+        <div className="metric-card"><span>In Progress</span><strong>{data.ticketCounts['In Progress'] ?? 0}</strong></div>
+        <div className="metric-card"><span>Selesai</span><strong>{data.ticketCounts.Completed ?? 0}</strong></div>
+        <div className="metric-card"><span>Total Aktif</span><strong>{tickets.length}</strong></div>
+        <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlertCount}</strong></div>
       </section>
 
-      <DashboardAlertList
-        taskAlerts={[]}
-        ticketAlerts={data.ticketAlerts}
-      />
+      <DashboardAlertList taskAlerts={[]} ticketAlerts={data.ticketAlerts} />
 
       <section className="section-block">
-        <div className="section-heading"><div><h2>Alur kerja ticketing</h2><p>Setiap tiket bergerak melalui status berikut.</p></div></div>
-        <div className="metric-grid">
-          {['Requested','Confirmed','In Progress','Completed'].map((status) => (
-            <div className="metric-card" key={status}><span>{label(status)}</span><strong>{data.ticketCounts[status as keyof typeof data.ticketCounts] ?? 0}</strong></div>
+        <div className="section-heading"><div><h2>Ticket Maintenance</h2><p>Tiket yang perlu kamu tindak sekarang.</p></div><Link className="link-button" href="/maintainer/tiket-maintenance">Lihat semua</Link></div>
+        <div className="ticket-grid">
+          {tickets.map(ticket => (
+            <article className="ticket-row-card" key={ticket.transaction_id}>
+              <div className="ticket-row-icon">✣</div>
+              <div className="ticket-row-main"><strong>{ticket.transaction_id}</strong><span>{ticket.maintenance_list ?? '-'}</span></div>
+              <div className="ticket-row-meta"><strong>{ticket.fleet_plat_number ?? '-'}</strong><span>Lokasi: {ticket.location ?? '-'}</span><small>{ticket.created_at ? new Date(ticket.created_at).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Jakarta'}) : '-'}</small></div>
+              <span className={'status-badge status-'+ticket.status.toLowerCase().replaceAll(' ','-')}>{label(ticket.status)}</span>
+              <Link className="button-link ticket-action" href="/maintainer/tiket-maintenance">{ticket.status === 'Requested' ? 'Proses' : 'Lihat'}</Link>
+            </article>
           ))}
+          {!tickets.length ? <div className="data-table-card"><div className="empty-state">Belum ada ticketing aktif.</div></div> : null}
         </div>
       </section>
     </div>
