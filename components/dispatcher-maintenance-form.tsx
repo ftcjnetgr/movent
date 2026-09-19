@@ -86,10 +86,10 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
     <section>
       <section className="section-grid two-column">
         <div className="metric-card">
-          <div className="card-title">Tiket Maintenance</div>
-          <p className="muted">Buat tiket maintenance untuk armada.</p>
+          <div className="card-title">Buat Ticketing Maintenance</div>
+          <p className="muted">Pilih kebutuhan maintenance, lokasi armada, dan armada yang akan ditangani.</p>
           {!showCreate ? (
-            <button type="button" onClick={() => setShowCreate(true)}>Tambah Tugas</button>
+            <button type="button" onClick={() => setShowCreate(true)}>Buat Ticketing</button>
           ) : (
           <form onSubmit={handleCreate} className="data-form">
             <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceOptions} placeholder="Pilih jenis maintenance" required />
@@ -98,7 +98,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
             {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
             {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
             <div className="form-actions">
-              <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Sedang membuat tiket...' : 'Buat tiket maintenance'}</button>
+              <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Sedang menyimpan...' : 'Submit Ticketing'}</button>
               <button type="button" className="secondary-button" onClick={() => setShowCreate(false)}>Batal</button>
             </div>
           </form>
@@ -106,10 +106,10 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
         </div>
 
         <div className="metric-card">
-          <div className="card-title">Pratinjau tiket maintenance</div>
+          <div className="card-title">Preview Ticketing</div>
           {state.preview ? (
             <>
-              <h2>{state.preview.transactionId}</h2>
+              <span className="eyebrow">PREVIEW</span><h2>{state.preview.transactionId}</h2>
               <div className="compact-form">
                 <div><span className="muted">Daftar Maintenance</span><strong>{state.preview.maintenanceList}</strong></div>
                 <div><span className="muted">Lokasi</span><strong>{state.preview.location}</strong></div>
@@ -134,7 +134,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
               </a>
             </>
           ) : (
-            <p className="muted">Pratinjau bakal muncul setelah tiket berhasil dibuat.</p>
+            <p className="muted">Preview ticketing akan muncul setelah data berhasil disimpan.</p>
           )}
         </div>
       </section>
