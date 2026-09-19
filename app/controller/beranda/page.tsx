@@ -42,7 +42,7 @@ export default async function ControllerBerandaPage() {
 
       <section className="section-block dashboard-main-grid">
         <div className="data-table-card">
-          <div className="section-heading"><div><h2>Penugasan Hari Ini</h2><p>Assignment terbaru yang sedang dipantau.</p></div><Link className="link-button" href="/controller/timetable/live-tracking">Lihat semua</Link></div>
+          <div className="section-heading"><div><h2>Penugasan Hari Ini</h2><p>Assignment terbaru yang sedang dipantau.</p></div></div>
           <div className="table-wrap"><table>
             <thead><tr><th>Waktu</th><th>ID</th><th>Jenis</th><th>Rute</th><th>Armada</th><th>Executor</th><th>Status</th></tr></thead>
             <tbody>{tasks.map(task => (
