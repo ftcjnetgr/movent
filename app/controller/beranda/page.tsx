@@ -30,12 +30,13 @@ export default async function ControllerBerandaPage() {
         <div className="page-heading-actions"><Link className="secondary-button button-link" href="/controller/timetable/by-plan">Lihat Schedule</Link><Link className="button-link" href="/controller/penarikan-report">Tarik Report</Link></div>
       </div>
 
-      <section className="metric-grid">
+      <section className="metric-grid controller-kpi-grid">
         <div className="metric-card"><span>Assigned</span><strong>{data.taskCounts.Assigned ?? 0}</strong></div>
         <div className="metric-card"><span>Confirmed</span><strong>{data.taskCounts.Confirmed ?? 0}</strong></div>
         <div className="metric-card"><span>Driving</span><strong>{data.taskCounts.Driving ?? 0}</strong></div>
-        <div className="metric-card"><span>Completed</span><strong>{data.taskCounts.Completed ?? 0}</strong></div>
-        <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length + data.ticketAlertCount}</strong></div>
+        <div className="metric-card metric-completed"><span>Completed</span><strong>{data.taskCounts.Completed ?? 0}</strong></div>
+        <div className="metric-card metric-canceled"><span>Canceled</span><strong>{data.taskCounts.Canceled ?? 0}</strong></div>
+        <div className="metric-card metric-ticket"><span>Ticketing Aktif</span><strong>{tickets.filter((ticket) => !['Completed','Canceled'].includes(ticket.status)).length}</strong></div>
       </section>
 
       <DashboardAlertList taskAlerts={data.taskAlerts.map((alert) => ({ ...alert, targetAt: alert.targetAt.toISOString() }))} ticketAlerts={data.ticketAlerts} />
