@@ -99,7 +99,7 @@ export default function TimetableView({
   taskBySchedule: Record<string, Task>
   initialView?: 'database' | 'live'
 }) {
-  const [view, setView] = useState<'database' | 'live'>(initialView)
+  const view = initialView
   const [direction, setDirection] = useState<'origin' | 'destination'>('origin')
   const [route, setRoute] = useState('')
   const [category, setCategory] = useState('')
@@ -187,11 +187,6 @@ export default function TimetableView({
 
   return (
     <div>
-      <div className="dashboard-tabs">
-        <button className={view === 'database' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('database')}>Jadwal</button>
-        <button className={view === 'live' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setView('live')}>Transaksi Berjalan</button>
-      </div>
-
       {view === 'database' ? (
         <>
           <div className="dashboard-tabs">
