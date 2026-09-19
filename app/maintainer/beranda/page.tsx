@@ -6,7 +6,7 @@ import { getCurrentProfile } from '@/lib/server/profile'
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Assigned: 'Ditugaskan',
-    Accepted: 'Diterima',
+    Confirmed: 'Diterima',
     Driving: 'Berangkat',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
