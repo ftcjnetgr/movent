@@ -66,12 +66,16 @@ function taskDetail(alert: TaskAlert, now: number) {
 }
 
 export default function DashboardAlertList({
-  taskAlerts = [],
-  ticketAlerts = [],
+  taskAlerts,
+  ticketAlerts,
 }: {
   taskAlerts?: TaskAlert[]
   ticketAlerts?: TicketAlert[]
 }) {
+  const showTask = taskAlerts !== undefined
+  const showTicket = ticketAlerts !== undefined
+  const taskAlertRows = taskAlerts ?? []
+  const ticketAlertRows = ticketAlerts ?? []
   const [now, setNow] = useState(() => Date.now())
   const [open, setOpen] = useState<'task' | 'ticket' | null>(null)
 
@@ -81,12 +85,12 @@ export default function DashboardAlertList({
   }, [])
 
   const taskItems = useMemo(
-    () => taskAlerts.map((alert) => taskDetail(alert, now)).filter((item) => item.inWindow),
-    [taskAlerts, now],
+    () => taskAlertRows.map((alert) => taskDetail(alert, now)).filter((item) => item.inWindow),
+    [taskAlertRows, now],
   )
 
   const ticketItems = useMemo(
-    () => ticketAlerts.map((ticket) => {
+    () => ticketAlertRows.map((ticket) => {
       const base = ticketBaseAt(ticket)
       if (base === null) return null
       const thresholdSeconds = ticketThresholdSeconds(ticket.status)
@@ -99,7 +103,7 @@ export default function DashboardAlertList({
           : `Count After ${formatDuration(elapsed - thresholdSeconds)}`,
       }
     }).filter((item): item is NonNullable<typeof item> => item !== null),
-    [ticketAlerts, now],
+    [ticketAlertRows, now],
   )
 
   const alertCount = taskItems.length + ticketItems.length
@@ -107,14 +111,14 @@ export default function DashboardAlertList({
   return (
     <>
       <div className="metric-grid alert-summary-grid">
-        {taskAlerts.length > 0 || ticketAlerts.length === 0 ? (
+        {showTask ? (
           <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('task')}>
             <span>Alert Tugas</span>
             <strong>{taskItems.length}</strong>
             <small>Klik untuk lihat detail</small>
           </button>
         ) : null}
-        {ticketAlerts.length > 0 || taskAlerts.length === 0 ? (
+        {showTicket ? (
           <button type="button" className="metric-card alert-card alert-summary-card" onClick={() => setOpen('ticket')}>
             <span>Alert Ticketing</span>
             <strong>{ticketItems.length}</strong>
