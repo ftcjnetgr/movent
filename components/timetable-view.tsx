@@ -91,13 +91,15 @@ export default function TimetableView({
   schedules,
   tasks,
   taskBySchedule,
+  initialView = 'database',
 }: {
   date: string
   schedules: Schedule[]
   tasks: Task[]
   taskBySchedule: Record<string, Task>
+  initialView?: 'database' | 'live'
 }) {
-  const [view, setView] = useState<'database' | 'live'>('database')
+  const [view, setView] = useState<'database' | 'live'>(initialView)
   const [direction, setDirection] = useState<'origin' | 'destination'>('origin')
   const [route, setRoute] = useState('')
   const [category, setCategory] = useState('')
