@@ -1,4 +1,5 @@
 import OperationCreateTask from '@/components/operation-create-task'
+import OperationRequestExtraScheduleForm from '@/components/operation-request-extra-schedule-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export default async function OperationBerandaPage() {
@@ -34,6 +35,25 @@ export default async function OperationBerandaPage() {
         products={(products ?? []).map((item) => item.product)}
         tasks={tasks ?? []}
       />
+
+      <section className="section-grid two-column section-block">
+        <div className="metric-card">
+          <div className="card-title">Buat Request Extra Schedule</div>
+          <p className="muted">Ajukan kebutuhan perjalanan tambahan ke Dispatcher.</p>
+          <OperationRequestExtraScheduleForm locations={(locations ?? []).map((item) => item.location)} />
+        </div>
+        <div className="metric-card">
+          <div className="card-title">Alur Extra Schedule</div>
+          <div className="flow-list">
+            <div><strong>Diajukan</strong><span>Request masuk ke Dispatcher.</span></div>
+            <div><strong>Dikonfirmasi</strong><span>Dispatcher menerima request.</span></div>
+            <div><strong>Ditugaskan</strong><span>Dispatcher memilih Executor dan Armada.</span></div>
+            <div><strong>Dikonfirmasi</strong><span>Executor menerima penugasan.</span></div>
+            <div><strong>Berangkat</strong><span>Executor mengonfirmasi keberangkatan.</span></div>
+            <div><strong>Selesai</strong><span>Perjalanan selesai.</span></div>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
