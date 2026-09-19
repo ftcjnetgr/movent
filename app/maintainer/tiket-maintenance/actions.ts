@@ -27,14 +27,14 @@ export async function acceptMaintenanceTicketAction(formData: FormData): Promise
   if (!allowedMaintainer(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const transactionId = String(formData.get('transactionId') ?? '').trim()
-  const { admin, ticket } = await findTicket(transactionId, ['Created'])
+  const { admin, ticket } = await findTicket(transactionId, ['Requested'])
   if (!ticket) return { error: 'Tiket tidak ditemukan atau sudah diproses.' }
 
   const { error } = await admin.from('ticketings').update({
     status: 'Confirmed',
     maintainer_user_id: profile.id,
     accepted_at: new Date().toISOString(),
-  }).eq('id', ticket.id).eq('status', 'Created')
+  }).eq('id', ticket.id).eq('status', 'Requested')
 
   if (error) return { error: 'Konfirmasi menerima tiket belum berhasil.' }
   revalidatePath('/maintainer/tiket-maintenance')
