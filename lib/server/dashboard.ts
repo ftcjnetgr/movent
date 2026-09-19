@@ -133,7 +133,7 @@ export async function getDashboardData(profile: AppProfile) {
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000)
 
   const assignedAlerts: TaskAlert[] = all
-    .filter((task) => task.schedule_id && ['Assigned', 'Accepted', 'Driving'].includes(task.status) && task.sta)
+    .filter((task) => task.schedule_id && ['Assigned', 'Confirmed', 'Driving'].includes(task.status) && task.sta)
     .map((task) => ({
       kind: 'assigned' as const,
       transactionId: task.transaction_id,
@@ -146,18 +146,18 @@ export async function getDashboardData(profile: AppProfile) {
   const taskAlerts = [...unassignedAlerts, ...assignedAlerts]
   const ticketRows = (ticketings ?? []) as TicketRow[]
   const ticketAlerts = ticketRows.filter((ticket) =>
-    ['Created', 'Accepted', 'In Progress'].includes(ticket.status)
+    ['Created', 'Confirmed', 'In Progress'].includes(ticket.status)
   )
   const ticketAlertCount = ticketRows.filter((ticket) => {
     const elapsed = now.getTime() - new Date(
-      ticket.status === 'Accepted'
+      ticket.status === 'Confirmed'
         ? ticket.accepted_at ?? ticket.created_at
         : ticket.status === 'In Progress'
         ? ticket.in_progress_at ?? ticket.created_at
         : ticket.created_at,
     ).getTime()
     if (ticket.status === 'Created') return elapsed >= 3 * 60 * 60 * 1000
-    if (ticket.status === 'Accepted') return elapsed >= 24 * 60 * 60 * 1000
+    if (ticket.status === 'Confirmed') return elapsed >= 24 * 60 * 60 * 1000
     if (ticket.status === 'In Progress') return elapsed >= 3 * 24 * 60 * 60 * 1000
     return false
   }).length
@@ -194,13 +194,13 @@ export async function getDashboardData(profile: AppProfile) {
     ticketDurations,
     taskCounts: {
       Assigned: tasks.filter((task) => task.status === 'Assigned').length,
-      Accepted: tasks.filter((task) => task.status === 'Accepted').length,
+      Confirmed: tasks.filter((task) => task.status === 'Confirmed').length,
       Driving: tasks.filter((task) => task.status === 'Driving').length,
       Completed: tasks.filter((task) => task.status === 'Completed').length,
     },
     ticketCounts: {
       Created: ticketRows.filter((ticket) => ticket.status === 'Created').length,
-      Accepted: ticketRows.filter((ticket) => ticket.status === 'Accepted').length,
+      Confirmed: ticketRows.filter((ticket) => ticket.status === 'Confirmed').length,
       'In Progress': ticketRows.filter((ticket) => ticket.status === 'In Progress').length,
       Completed: ticketRows.filter((ticket) => ticket.status === 'Completed').length,
     },
