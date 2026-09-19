@@ -291,7 +291,7 @@ export default function TimetableView({
                           <div className="timetable-item-time">{direction === 'origin' ? timeValue(task.std) : timeValue(task.sta)}</div>
                           <strong>{task.transaction_id}</strong>
                           <span>{direction === 'origin' ? task.destination ?? '-' : task.start_point ?? '-'}</span>
-                          <small>{task.source_type === 'Jadwal Tambahan' ? 'Jadwal Tambahan' : task.task_type} · {task.fleet_snapshot?.plat_number ?? '-'}</small>
+                          <small>{task.source_type === 'Extra Schedule' ? 'Extra Schedule' : task.task_type} · {task.fleet_snapshot?.plat_number ?? '-'}</small>
                           <details><summary>Lihat detail</summary><div>{task.executor_snapshot?.full_name ?? task.executor_nik ?? '-'}</div></details>
                         </div>
                       )
