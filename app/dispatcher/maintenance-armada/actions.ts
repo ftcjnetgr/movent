@@ -46,7 +46,7 @@ export async function createMaintenanceTicketAction(_state: State, formData: For
 
   const { error } = await admin.from('ticketings').insert({
     transaction_id: transactionId,
-    status: 'Created',
+    status: 'Requested',
     created_by: profile.id,
     maintenance_list: maintenance.maintenance_list,
     maintenance_snapshot: maintenance,
@@ -93,7 +93,7 @@ export async function cancelMaintenanceTicketAction(formData: FormData) {
   const { error } = await admin.from('ticketings').update({
     status: 'Canceled',
     canceled_at: new Date().toISOString(),
-    canceled_from_status: 'Created',
+    canceled_from_status: 'Requested',
     cancellation_note: note,
   }).eq('id', ticket.id).eq('status', 'Created')
 
