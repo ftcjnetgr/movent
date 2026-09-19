@@ -8,7 +8,7 @@ import {
 import SearchableMasterSelect from '@/components/searchable-master-select'
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: 'Dibuat',
+    Requested: 'Diajukan',
     Confirmed: 'Diterima',
     'In Progress': 'Sedang dikerjakan',
     Completed: 'Selesai',
