@@ -89,7 +89,7 @@ export async function createNonTgrSupplyAction(_state: State, formData: FormData
   return { success: `Tugas ${transactionId} siap untuk konfirmasi berangkat.`, transactionId }
 }
 
-export async function confirmNonTgrDepartureByOperationAction(formData: FormData): Promise<State> {
+export async function confirmNonTgrDepartureByOperationAction(_state: State, formData: FormData): Promise<State> {
   const profile = await getCurrentProfile()
   if (!['Operation', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
