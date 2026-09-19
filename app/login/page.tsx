@@ -14,7 +14,6 @@ export default function LoginPage() {
       <section className="login-shell" aria-label="Login MOVENT">
         <aside className="login-panel login-panel-visual">
           <div className="login-visual-scene" />
-
           <div className="login-visual-overlay" />
 
           <div className="login-visual-top">
@@ -42,24 +41,15 @@ export default function LoginPage() {
           <div className="login-visual-features">
             <div>
               <span className="login-feature-icon">↗</span>
-              <div>
-                <small>Operasional</small>
-                <strong>Terpantau</strong>
-              </div>
+              <div><small>Operasional</small><strong>Terpantau</strong></div>
             </div>
             <div>
               <span className="login-feature-icon">✓</span>
-              <div>
-                <small>Keputusan</small>
-                <strong>Lebih cepat</strong>
-              </div>
+              <div><small>Keputusan</small><strong>Lebih cepat</strong></div>
             </div>
             <div>
               <span className="login-feature-icon">◉</span>
-              <div>
-                <small>Armada</small>
-                <strong>Lebih produktif</strong>
-              </div>
+              <div><small>Armada</small><strong>Lebih produktif</strong></div>
             </div>
           </div>
 
@@ -77,6 +67,7 @@ export default function LoginPage() {
           <div className="login-system-status">
             <span className="login-online-dot" />
             <span>System Online</span>
+            <small>v1.0.0</small>
           </div>
 
           <div className="login-form-inner">
@@ -122,6 +113,14 @@ export default function LoginPage() {
                 </div>
               </label>
 
+              <div className="login-options">
+                <label className="login-remember">
+                  <input type="checkbox" name="remember" />
+                  <span>Ingat saya di perangkat ini</span>
+                </label>
+                <button type="button" className="login-forgot">Lupa password?</button>
+              </div>
+
               {state.error ? (
                 <p className="form-error login-error" role="alert">
                   {state.error}
@@ -132,6 +131,23 @@ export default function LoginPage() {
                 <span>{pending ? 'Memeriksa...' : 'Masuk ke MOVENT'}</span>
                 <span aria-hidden="true">→</span>
               </button>
+
+              <div className="login-divider">
+                <span>atau masuk dengan</span>
+              </div>
+
+              <div className="login-social-grid">
+                <button type="button" className="login-social-button">
+                  <span className="login-social-google">G</span>
+                  Google
+                </button>
+                <button type="button" className="login-social-button">
+                  <span className="login-social-ms">
+                    <i /><i /><i /><i />
+                  </span>
+                  Microsoft
+                </button>
+              </div>
             </form>
           </div>
 
