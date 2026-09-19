@@ -10,7 +10,7 @@ import {
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
     Created: 'Dibuat',
-    Accepted: 'Diterima',
+    Confirmed: 'Diterima',
     'In Progress': 'Sedang dikerjakan',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
@@ -20,7 +20,7 @@ function ticketStatusLabel(status: string) {
 
 function nextActionLabel(status: string) {
   if (status === 'Created') return 'Terima tiket'
-  if (status === 'Accepted') return 'Mulai pengerjaan'
+  if (status === 'Confirmed') return 'Mulai pengerjaan'
   if (status === 'In Progress') return 'Tandai selesai'
   return 'Tidak ada tindakan'
 }
@@ -83,7 +83,7 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
         </form>
       ) : null}
 
-      {ticket.status === 'Accepted' ? (
+      {ticket.status === 'Confirmed' ? (
         <form onSubmit={(event) => handleSubmit(event, startMaintenanceAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
           <button type="submit" disabled={isPending}>Mulai pengerjaan</button>
