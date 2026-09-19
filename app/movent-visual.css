@@ -480,3 +480,15 @@ td select{
 .dashboard-form-card{padding:14px;border:1px solid var(--mv-line);border-radius:9px;background:#fff;box-shadow:var(--mv-shadow)}
 @media(max-width:1050px){.dashboard-main-grid{grid-template-columns:1fr}}
 @media(max-width:760px){.dashboard-main-grid{grid-template-columns:1fr}}
+
+.ticket-grid{display:grid;gap:7px}
+.ticket-row-card{
+  display:grid;grid-template-columns:34px minmax(130px,.8fr) minmax(190px,1.5fr) auto auto;align-items:center;gap:10px;
+  padding:10px;border:1px solid var(--mv-line);border-radius:8px;background:#fff;box-shadow:var(--mv-shadow)
+}
+.ticket-row-icon{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:#edf4ff;color:#3a78dc;font-size:14px}
+.ticket-row-main,.ticket-row-meta{display:grid;gap:2px}
+.ticket-row-main strong,.ticket-row-meta strong{font-size:10px;color:#203f47}
+.ticket-row-main span,.ticket-row-meta span,.ticket-row-meta small{font-size:8px;color:#829196}
+.ticket-action{white-space:nowrap}
+@media(max-width:760px){.ticket-row-card{grid-template-columns:30px 1fr auto;}.ticket-row-meta{grid-column:2/-1}.ticket-row-card .status-badge{grid-column:2}.ticket-action{grid-column:3;grid-row:1/3}}
