@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" fill="none">
+<defs>
+  <linearGradient id="sky" x1="80" y1="80" x2="920" y2="650" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#18385F"/><stop offset=".52" stop-color="#245A8E"/><stop offset="1" stop-color="#E16B46"/>
+  </linearGradient>
+  <linearGradient id="ground" x1="600" y1="500" x2="600" y2="900" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#17283B"/><stop offset="1" stop-color="#07111D"/>
+  </linearGradient>
+  <linearGradient id="building" x1="500" y1="290" x2="1000" y2="650" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#123456"/><stop offset="1" stop-color="#071827"/>
+  </linearGradient>
+  <linearGradient id="glass" x1="600" y1="320" x2="850" y2="550" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#2A587C"/><stop offset="1" stop-color="#0D2134"/>
+  </linearGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1200" height="900" fill="url(#sky)"/>
+<circle cx="840" cy="290" r="150" fill="#F0A06B" opacity=".22" filter="url(#blur)"/>
+<path d="M0 430L130 355L230 405L340 320L480 390L600 300L760 395L910 325L1200 450V610H0V430Z" fill="#18304A" opacity=".7"/>
+<path d="M0 510L120 445L260 480L390 420L530 485L690 420L860 490L1010 430L1200 500V650H0V510Z" fill="#10243A"/>
+<rect y="585" width="1200" height="315" fill="url(#ground)"/>
+<path d="M0 720L510 585L1200 585V900H0V720Z" fill="#0C1A29"/>
+<path d="M530 585L1200 585V900H820L530 585Z" fill="#14273A"/>
+<!-- warehouse -->
+<path d="M420 255L1085 175L1195 270V615H420V255Z" fill="url(#building)"/>
+<path d="M420 255L1085 175L1195 270L535 354L420 310V255Z" fill="#0D2945"/>
+<path d="M535 354L1195 270V615H535V354Z" fill="#091C2D"/>
+<path d="M600 350L1160 280V595H600V350Z" fill="url(#glass)" opacity=".75"/>
+<path d="M620 380H1140M620 440H1140M620 500H1140M620 560H1140" stroke="#6A8DAA" opacity=".2"/>
+<path d="M700 338V595M800 326V595M900 313V595M1000 301V595M1100 288V595" stroke="#7A9AB4" opacity=".14"/>
+<!-- red blue logistics stripe -->
+<path d="M545 352L1195 270V291L545 373V352Z" fill="#E21F2F"/>
+<path d="M545 373L1195 291V304L545 387V373Z" fill="#0A67B9"/>
+<!-- loading bays -->
+<g opacity=".9">
+<rect x="620" y="405" width="92" height="132" rx="4" fill="#061421" stroke="#42627C"/>
+<rect x="735" y="391" width="92" height="132" rx="4" fill="#061421" stroke="#42627C"/>
+<rect x="850" y="377" width="92" height="132" rx="4" fill="#061421" stroke="#42627C"/>
+<rect x="965" y="362" width="92" height="132" rx="4" fill="#061421" stroke="#42627C"/>
+</g>
+<g fill="#E8B35D" opacity=".55">
+<rect x="634" y="418" width="64" height="5" rx="2"/><rect x="749" y="404" width="64" height="5" rx="2"/>
+<rect x="864" y="390" width="64" height="5" rx="2"/><rect x="979" y="375" width="64" height="5" rx="2"/>
+</g>
+<!-- distant trucks -->
+<g opacity=".65">
+<rect x="220" y="570" width="100" height="42" rx="6" fill="#D9E0E5"/><rect x="310" y="580" width="36" height="32" rx="5" fill="#B8C5CD"/>
+<circle cx="245" cy="614" r="13" fill="#091522"/><circle cx="315" cy="614" r="13" fill="#091522"/>
+<rect x="370" y="585" width="100" height="37" rx="6" fill="#C7D0D6"/><rect x="458" y="593" width="34" height="29" rx="5" fill="#AAB9C3"/>
+<circle cx="393" cy="623" r="12" fill="#091522"/><circle cx="460" cy="623" r="12" fill="#091522"/>
+</g>
+<!-- foreground truck -->
+<g>
+<rect x="565" y="580" width="340" height="145" rx="10" fill="#E9EDF0"/>
+<rect x="565" y="580" width="340" height="18" rx="8" fill="#D8DEE3"/>
+<path d="M905 625H1015L1080 676V725H905V625Z" fill="#D9E0E5"/>
+<path d="M1015 637L1060 676H1015V637Z" fill="#8DA1AF"/>
+<rect x="925" y="650" width="80" height="48" rx="5" fill="#1D3B55"/>
+<rect x="930" y="654" width="70" height="40" rx="4" fill="#315873"/>
+<rect x="590" y="610" width="275" height="88" rx="7" fill="#F4F6F7"/>
+<path d="M620 628H825" stroke="#D2D8DC" stroke-width="3"/>
+<path d="M620 640H770" stroke="#E0E4E7" stroke-width="3"/>
+<rect x="720" y="660" width="115" height="24" rx="4" fill="#F1F3F4"/>
+<text x="736" y="678" fill="#143C62" font-family="Arial,sans-serif" font-size="19" font-weight="800">JNE</text>
+<path d="M744 681H803" stroke="#E21F2F" stroke-width="3"/>
+<circle cx="650" cy="730" r="25" fill="#08131F"/><circle cx="650" cy="730" r="12" fill="#465A69"/>
+<circle cx="1018" cy="730" r="25" fill="#08131F"/><circle cx="1018" cy="730" r="12" fill="#465A69"/>
+</g>
+<!-- road markings -->
+<path d="M85 820H300" stroke="#D9A84E" stroke-width="7" stroke-linecap="round" opacity=".55"/>
+<path d="M380 780H505" stroke="#D9A84E" stroke-width="7" stroke-linecap="round" opacity=".4"/>
+<path d="M935 810H1110" stroke="#D9A84E" stroke-width="7" stroke-linecap="round" opacity=".45"/>
+<!-- subtle rain/light -->
+<g stroke="#D9ECFF" opacity=".13">
+<path d="M120 160L90 220M185 125L155 185M265 165L235 225M1030 110L1000 170M1110 150L1080 210"/>
+</g>
+</svg>
