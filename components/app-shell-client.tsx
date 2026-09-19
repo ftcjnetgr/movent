@@ -78,11 +78,12 @@ const navByRole: Record<string, NavGroup[]> = {
 }
 
 const superUserGroup: NavGroup = {
-  label: 'Pengaturan Super User',
+  label: 'Super User',
   icon: 'report',
   items: [
-    { label: 'Kelola Pengguna', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
-    { label: 'Kelola Database', href: '/super-user/pengelolaan-database', icon: 'report' },
+    { label: 'Setting', href: '/super-user/profil', icon: 'user' },
+    { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
+    { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'report' },
   ],
 }
 
