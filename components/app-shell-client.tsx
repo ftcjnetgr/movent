@@ -91,7 +91,7 @@ const modeRoutes: Record<string, string> = {
   Dispatcher: '/dispatcher/beranda',
   Executor: '/executor/tugas-saya',
   Maintainer: '/maintainer/beranda',
-  Operation: '/operation/request-extra-schedule',
+  Operation: '/operation/beranda',
 }
 
 function Icon({ name }: { name: string }) {
