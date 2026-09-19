@@ -14,11 +14,11 @@ function formatMinutes(value: number | null) {
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Assigned: 'Ditugaskan',
-    Confirmed: 'Diterima',
+    Confirmed: 'Dikonfirmasi',
     Driving: 'Berangkat',
     Completed: 'Selesai',
     Canceled: 'Dibatalkan',
-    Created: 'Dibuat',
+    Requested: 'Dibuat',
     'In Progress': 'Sedang dikerjakan',
   }
   return labels[status] ?? status
@@ -95,7 +95,7 @@ export default async function ControllerBerandaPage() {
           ))}
         </div>
         <div className="metric-grid">
-          <div className="metric-card"><span>Created → Confirmed</span><strong>{formatMinutes(data.ticketAverages.createdAccepted)}</strong></div>
+          <div className="metric-card"><span>Requested → Confirmed</span><strong>{formatMinutes(data.ticketAverages.createdAccepted)}</strong></div>
           <div className="metric-card"><span>Confirmed → In Progress</span><strong>{formatMinutes(data.ticketAverages.acceptedInProgress)}</strong></div>
           <div className="metric-card"><span>In Progress → Completed</span><strong>{formatMinutes(data.ticketAverages.inProgressCompleted)}</strong></div>
           <div className="metric-card"><span>Cycle Completed</span><strong>{formatMinutes(data.ticketAverages.completedCycle)}</strong></div>
