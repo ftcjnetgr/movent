@@ -15,7 +15,7 @@ export default function LoginPage() {
         <aside className="login-simple-visual">
           <div className="login-simple-pattern" />
           <div className="login-simple-content">
-            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="login-simple-logo" />
+            <img src="/assets/branding/movent-light.svg" alt="MOVENT" className="login-simple-logo" />
 
             <div className="login-simple-message">
               <span>movement management</span>
