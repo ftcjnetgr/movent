@@ -1930,3 +1930,28 @@ html,body{background:var(--mv-bg)!important;color:var(--mv-text)}
   .login-heading h1{font-size:32px!important}
   .login-heading p{font-size:14px!important}
 }
+
+
+/* login logistics refinement */
+.login-panel-visual:after{display:none!important}
+.login-panel-form:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  right:0!important;
+  width:170px!important;
+  height:125px!important;
+  background:
+    linear-gradient(140deg,transparent 0 44%,rgba(215,25,32,.92) 45% 63%,transparent 64%),
+    linear-gradient(140deg,transparent 0 58%,rgba(0,84,166,.9) 59% 69%,transparent 70%)!important;
+  opacity:.72!important;
+  pointer-events:none!important;
+}
+.login-panel-form{position:relative!important;overflow:hidden!important}
+.login-form-inner,.login-system-status,.login-footer{position:relative!important;z-index:2!important}
+.login-visual-scene{filter:saturate(.92) contrast(1.04)!important}
+.login-visual-overlay{
+  background:
+    linear-gradient(180deg,rgba(4,18,34,.48) 0%,rgba(4,18,34,.04) 38%,rgba(3,14,26,.82) 100%),
+    linear-gradient(90deg,rgba(3,16,30,.62) 0%,rgba(3,16,30,.10) 72%,rgba(3,16,30,.16) 100%)!important;
+}
