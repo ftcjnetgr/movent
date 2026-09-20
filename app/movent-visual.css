@@ -2736,3 +2736,103 @@ html,body{background:var(--mv-bg)!important;color:var(--mv-text)}
   .schedule-toolbar{flex-wrap:wrap;overflow:visible}
   .schedule-board-shell{overflow-x:auto}
 }
+
+
+/* ui correction pass — active state, assets, filters, password, super user nav */
+.sidebar{grid-column:1;min-width:250px!important}
+.sidebar-brand-logo{width:150px!important;filter:none!important}
+.nav-group-items{padding-left:0!important}
+.nav-link{white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis!important;color:#c6d2df!important;background:transparent!important}
+.nav-link.active{background:#d71920!important;color:#fff!important;box-shadow:none!important}
+.nav-link:not(.active){background:transparent!important;color:#aebed0!important}
+.nav-group-title{white-space:nowrap!important;color:#aebed0!important;background:transparent!important}
+.nav-group.has-active>.nav-group-title{background:transparent!important;color:#d4dee8!important}
+.nav-link .nav-icon{opacity:.95!important}
+.nav-group-items .nav-link{font-size:10.5px!important;min-height:33px!important;padding-top:7px!important;padding-bottom:7px!important}
+.sidebar-footer{padding-top:10px!important}
+.sidebar-logout{white-space:nowrap!important;color:#aebed0!important}
+.sidebar-logout:hover{background:rgba(215,25,32,.10)!important;color:#fff!important}
+
+/* stronger text/background contrast */
+.page-content{color:#1d2a40!important}
+.page-heading h1,.section-heading h2,.task-card h2,.report-filter-heading h2,.report-type-heading h2{color:#17243a!important}
+.page-heading p,.section-heading p,.report-filter-heading p,.report-type-heading p{color:#68778b!important}
+th{color:#5e6c80!important;background:#f5f8fb!important}
+td{color:#33445a!important}
+.data-form label,.compact-form label,.report-filter-card label,.schedule-toolbar select{color:#526174!important}
+.schedule-toolbar select{background:#fff!important;color:#32445b!important}
+
+/* report filters: one compact desktop row */
+.report-filter-fields{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;align-items:end!important}
+.report-filter-fields label{min-width:0!important;display:grid!important;gap:4px!important}
+.report-filter-fields input,.report-filter-fields select{width:100%!important;min-width:0!important;height:36px!important;min-height:36px!important}
+.report-date-row,.report-route-row{display:contents!important}
+.report-filter-card{padding:13px!important}
+.report-filter-heading{margin-bottom:9px!important}
+.report-actions{display:flex!important;gap:7px!important;margin-top:10px!important}
+.report-actions button{min-height:34px!important;padding:7px 11px!important;font-size:10px!important}
+.report-type-picker{padding:11px!important}
+.report-type-buttons{display:flex!important;gap:6px!important;flex-wrap:nowrap!important}
+.report-type-button{min-width:0!important;flex:1 1 0!important;padding:8px 9px!important}
+
+/* password screen */
+.password-page{width:100%;padding:0!important}
+.password-page-topbar{display:flex;align-items:center;margin-bottom:12px}
+.password-back{font-size:10px;font-weight:700;color:#5e6c80;text-decoration:none}
+.password-back:hover{color:#d71920}
+.password-card-wrap{width:100%}
+.password-card{width:min(620px,100%);padding:18px 20px!important;border:1px solid var(--ui-border)!important;border-radius:12px!important;background:#fff!important;box-shadow:var(--ui-shadow)!important}
+.password-card-heading{margin-bottom:16px!important}
+.password-card-heading h1{margin:3px 0 5px!important;font-size:19px!important;line-height:1.2!important;color:#17243a!important}
+.password-card-heading p{margin:0!important;color:#718096!important;font-size:10px!important;line-height:1.5!important;max-width:520px}
+.password-form{display:grid;gap:11px!important}
+.password-form label{display:grid;gap:5px;color:#425167;font-size:10px;font-weight:700}
+.password-form input{min-height:38px!important;padding:8px 10px!important;border:1px solid var(--ui-border-strong)!important;border-radius:8px!important;background:#fff!important;font-size:11px!important;color:#26344a!important}
+.password-form input:focus{border-color:#7ea8e5!important;box-shadow:0 0 0 3px rgba(23,105,224,.08)!important;outline:0}
+.password-form button{width:max-content;min-width:150px;min-height:36px!important;background:#d71920!important;border-color:#d71920!important;box-shadow:none!important;font-size:10px!important}
+.password-form button:hover{background:#b51218!important;border-color:#b51218!important}
+.password-card-footer{display:flex;justify-content:space-between;gap:12px;margin-top:11px;padding-top:10px;border-top:1px solid #edf1f5;color:#8a96a5;font-size:9px}
+.password-page-first{min-height:100vh;display:grid;place-items:center;padding:18px}
+.password-page-first .password-card{width:min(480px,100%)}
+
+/* actual schedule table grid */
+.schedule-grid-shell{overflow:hidden;border:1px solid var(--ui-border);border-radius:10px;background:#fff;box-shadow:var(--ui-shadow)}
+.schedule-hub{border-bottom:1px solid #e9eef3}
+.schedule-hub:last-child{border-bottom:0}
+.schedule-hub>summary{display:flex;align-items:center;gap:8px;min-height:34px;padding:0 10px;cursor:pointer;list-style:none;background:#f7f9fc;color:#2b3a50;border-bottom:1px solid #edf1f5}
+.schedule-hub>summary::-webkit-details-marker{display:none}
+.schedule-hub>summary:before{content:'›';font-size:14px;color:#7c899b;transition:transform .15s ease}
+.schedule-hub[open]>summary:before{transform:rotate(90deg)}
+.schedule-hub>summary span{color:#8794a7;font-size:8px;font-weight:700}.schedule-hub>summary b{font-size:9px;color:#25364d}.schedule-hub>summary small{margin-left:auto;color:#8794a7;font-size:8px}
+.schedule-grid-scroll{overflow-x:auto}
+.schedule-grid-table{border-collapse:collapse;table-layout:fixed;min-width:1190px!important;width:100%;margin:0!important}
+.schedule-grid-table thead th{height:30px;padding:0!important;border:1px solid #e7edf3!important;background:#f5f8fb!important;color:#64748b!important;text-align:center!important;font-size:8px!important;font-weight:800!important}
+.schedule-grid-table thead th:first-child{width:180px;text-align:left!important;padding-left:10px!important}
+.schedule-grid-table tbody th{width:180px;padding:7px 10px!important;border:1px solid #edf1f5!important;background:#fbfcfe!important;color:#2f4057!important;text-align:left!important;font-size:9px!important;font-weight:700!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.schedule-grid-table td{height:40px!important;padding:3px!important;border:1px solid #edf1f5!important;background:#fff!important;vertical-align:top!important}
+.schedule-grid-cell{display:flex;align-items:flex-start;justify-content:center;gap:3px;flex-wrap:wrap;min-height:32px}
+.schedule-trip{display:inline-grid;place-items:center;min-width:23px;height:23px;padding:0 4px;border-radius:5px;background:#edf4ff;color:#245fb9;border:1px solid #d8e6fa;font-size:8px;font-weight:800;line-height:1}
+.schedule-trip.status-driving,.schedule-trip.status-in-progress{background:#fff2e8;color:#ad5b18;border-color:#f3d8c2}
+.schedule-trip.status-completed{background:#edf9f3;color:#187b54;border-color:#d5eee1}
+.schedule-trip.status-canceled{background:#fff0f0;color:#b63d3d;border-color:#f2d2d2}
+.schedule-trip.status-confirmed,.schedule-trip.status-assigned{background:#edf4ff;color:#245fb9;border-color:#d8e6fa}
+.schedule-trip.unassigned{background:#f4f6f9;color:#7f8c9d;border-color:#dfe5ec}
+.schedule-trip.faded{opacity:.2}
+.schedule-empty{padding:28px;text-align:center;color:#7c899b;font-size:10px}
+.schedule-date{margin-top:7px;color:#8995a5;font-size:8px}
+.schedule-summary-inline{display:flex;gap:6px;align-items:center;margin-bottom:9px}
+.schedule-summary-inline button{min-height:29px;padding:5px 8px!important;background:#fff!important;border:1px solid var(--ui-border)!important;border-radius:7px!important;box-shadow:none!important;color:#6d7b8f!important;font-size:8px!important}
+.schedule-summary-inline button b{margin-left:5px;color:#25364d;font-size:9px}
+.schedule-summary-inline button.active{background:var(--ui-primary-soft)!important;border-color:#cfe0f8!important;color:var(--ui-primary)!important}
+.schedule-summary-inline button.active b{color:var(--ui-primary)!important}
+
+@media(max-width:900px){
+  .report-filter-fields{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .report-type-buttons{overflow-x:auto}
+}
+@media(max-width:640px){
+  .sidebar{min-width:238px!important}
+  .report-filter-fields{grid-template-columns:1fr!important}
+  .password-card{padding:16px!important}
+  .password-card-footer{flex-direction:column;gap:4px}
+}
