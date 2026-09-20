@@ -42,7 +42,7 @@ export default async function ControllerPenugasanDashboardPage() {
           <p>Pantau pergerakan penugasan dan kondisi operasional hari ini.</p>
         </div>
         <div className="page-heading-actions">
-          <Link className="secondary-button button-link" href="/controller/timetable/by-plan">Lihat Schedule</Link>
+          <Link className="secondary-button button-link" href="/controller/timetable?view=plan">Lihat Schedule</Link>
           <Link className="button-link" href="/controller/penarikan-report">Tarik Report</Link>
         </div>
       </div>
