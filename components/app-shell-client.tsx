@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 type NavItem = { label: string; href: string; icon: string }
@@ -15,8 +15,8 @@ const navByRole: Record<string, NavGroup[]> = {
       { label: 'Ticketing Maintenance', href: '/controller/beranda/ticketing', icon: 'ticket' },
     ] },
     { label: 'Schedule', icon: 'calendar', items: [
-      { label: 'By Plan', href: '/controller/timetable/by-plan', icon: 'calendar' },
-      { label: 'Live Tracking', href: '/controller/timetable/live-tracking', icon: 'truck' },
+      { label: 'By Plan', href: '/controller/timetable?view=plan', icon: 'calendar' },
+      { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
     ]},
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
     { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/controller/profil', icon: 'user' }, { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' }] },
@@ -86,13 +86,21 @@ function Icon({ name }: { name: string }) {
 
 export default function AppShellClient({ profile, children }: { profile: { username: string; full_name: string; role: string }; children: React.ReactNode }) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const router = useRouter()
   const [navigating, setNavigating] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<string[]>([])
   const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
   const navGroups = useMemo(() => profile.role === 'Super User' ? [...(navByRole[currentRole] ?? []), superUserGroup] : (navByRole[currentRole] ?? []), [currentRole, profile.role])
-  const activeItem = useMemo(() => navGroups.flatMap(group => group.items.map(item => ({ ...item, group: group.label }))).filter(item => pathname === item.href || pathname.startsWith(item.href + '/')).sort((a,b) => b.href.length-a.href.length)[0], [navGroups, pathname])
+  const isItemActive = (item: NavItem) => {
+    const [itemPath, itemQuery] = item.href.split('?')
+    if (pathname !== itemPath && !pathname.startsWith(itemPath + '/')) return false
+    if (!itemQuery) return true
+    const expected = new URLSearchParams(itemQuery).get('view')
+    return searchParams.get('view') === expected
+  }
+  const activeItem = useMemo(() => navGroups.flatMap(group => group.items.map(item => ({ ...item, group: group.label }))).filter(isItemActive).sort((a,b) => b.href.length-a.href.length)[0], [navGroups, pathname, searchParams])
   const activeGroup = activeItem?.group ?? ''
 
   useEffect(() => { setNavigating(false); setMobileOpen(false) }, [pathname])
@@ -123,7 +131,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
 
         <nav className="sidebar-nav" aria-label="Menu utama">
           {navGroups.map(group => {
-            const hasActive = group.items.some(item => pathname === item.href || pathname.startsWith(item.href + '/'))
+            const hasActive = group.items.some(isItemActive)
             return (
               <div className={'nav-group ' + (hasActive ? 'has-active' : '')} key={group.label}>
                 {group.items.length === 1 ? (
@@ -137,7 +145,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
                     </button>
                     <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
                       {group.items.map(item => {
-                        const active = pathname === item.href || pathname.startsWith(item.href + '/')
+                        const active = isItemActive(item)
                         return <Link key={item.href} href={item.href} className={'nav-link ' + (active ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(item.href) }}>
                           <span className="nav-icon"><Icon name={item.icon} /></span><span>{item.label}</span>
                         </Link>
