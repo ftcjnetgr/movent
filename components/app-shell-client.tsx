@@ -80,6 +80,7 @@ function Icon({ name }: { name: string }) {
     case 'ticket': return <svg {...common}><path d="M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4Z" /><path d="M12 7v2M12 15v2" /></svg>
     case 'database': return <svg {...common}><ellipse cx="12" cy="5" rx="7" ry="3" /><path d="M5 5v7c0 1.7 3.1 3 7 3s7-1.3 7-3V5M5 12v7c0 1.7 3.1 3 7 3s7-1.3 7-3v-7" /></svg>
     case 'settings': return <svg {...common}><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4" /><circle cx="12" cy="12" r="4" /></svg>
+    case 'logout': return <svg {...common}><path d="M10 5H5v14h5" /><path d="M14 8l4 4-4 4" /><path d="M18 12H9" /></svg>
     default: return <svg {...common}><circle cx="12" cy="12" r="8" /></svg>
   }
 }
@@ -159,7 +160,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
         </nav>
 
         <div className="sidebar-footer">
-          <button type="button" className="sidebar-logout" onClick={logout}><span>↪</span>Logout</button>
+          <button type="button" className="sidebar-logout" onClick={logout}><span className="nav-icon"><Icon name="logout" /></span><span>Logout</span></button>
         </div>
       </aside>
 
