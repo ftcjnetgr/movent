@@ -41,18 +41,18 @@ function minutesValue(value: string | null) {
   if (value.includes('T')) {
     const date = new Date(value)
     if (Number.isNaN(date.getTime())) return null
-    const parts = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Asia/Jakarta',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }).formatToParts(date)
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(date)
     const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? 0)
     const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? 0)
     return hour * 60 + minute
   }
   const [hour, minute] = value.split(':').map(Number)
   return Number.isFinite(hour) && Number.isFinite(minute) ? hour * 60 + minute : null
+}
+
+function hourValue(value: string | null) {
+  const minutes = minutesValue(value)
+  return minutes === null ? null : Math.floor(minutes / 60)
 }
 
 function timeValue(value: string | null) {
@@ -62,23 +62,6 @@ function timeValue(value: string | null) {
 
 function statusClass(status: string | undefined) {
   return status ? `status-${status.toLowerCase().replaceAll(' ', '-')}` : ''
-}
-
-function layoutTimelineItems<T>(items: T[], getMinutes: (item: T) => number | null) {
-  const laneEnds: number[] = []
-  const positioned: Array<{ item: T; lane: number }> = []
-  for (const item of [...items].sort((a, b) => (getMinutes(a) ?? 9999) - (getMinutes(b) ?? 9999))) {
-    const start = getMinutes(item) ?? 0
-    let lane = laneEnds.findIndex((end) => start >= end)
-    if (lane === -1) {
-      lane = laneEnds.length
-      laneEnds.push(start + 100)
-    } else {
-      laneEnds[lane] = start + 100
-    }
-    positioned.push({ item, lane })
-  }
-  return { positioned, laneCount: Math.max(1, laneEnds.length) }
 }
 
 export default function TimetableView({
@@ -102,6 +85,8 @@ export default function TimetableView({
   const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>('all')
   const view = initialView
 
+  const scheduleById = useMemo(() => new Map(schedules.map((item) => [item.schedule_id, item])), [schedules])
+
   const options = useMemo(() => ({
     routes: [...new Set(schedules.map((item) => item.route).filter(Boolean))],
     categories: [...new Set(schedules.map((item) => item.category).filter(Boolean))],
@@ -121,19 +106,24 @@ export default function TimetableView({
   const filteredTasks = useMemo(() => tasks.filter((task) => {
     const displayPoint = direction === 'origin' ? task.destination : task.start_point
     if (point && displayPoint !== point) return false
+    if (hub) {
+      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
+      if ((schedule?.schedule_hub_id ?? '') !== hub) return false
+    }
+    if (route) {
+      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
+      if ((schedule?.route ?? '') !== route) return false
+    }
+    if (category) {
+      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
+      if ((schedule?.category ?? '') !== category) return false
+    }
     return true
-  }).sort((a, b) => {
-    const aTime = direction === 'origin' ? minutesValue(a.std) : minutesValue(a.sta)
-    const bTime = direction === 'origin' ? minutesValue(b.std) : minutesValue(b.sta)
-    return (aTime ?? 9999) - (bTime ?? 9999)
-  }), [tasks, direction, point])
+  }), [tasks, direction, point, hub, route, category, scheduleById])
 
   const summary = useMemo(() => ({
     unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
-    assigned: filteredSchedules.filter((item) => {
-      const task = taskBySchedule[item.schedule_id]
-      return !!task && task.status !== 'Canceled'
-    }).length,
+    assigned: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id] && taskBySchedule[item.schedule_id].status !== 'Canceled').length,
     canceled: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status === 'Canceled').length,
   }), [filteredSchedules, taskBySchedule])
 
@@ -150,93 +140,132 @@ export default function TimetableView({
     return !task
   }
 
-  const scheduleGroups = useMemo(() => {
-    const hubs = new Map<string, Schedule[]>()
+  const planRows = useMemo(() => {
+    const groups = new Map<string, Schedule[]>()
+    for (const item of filteredSchedules) {
+      const row = direction === 'origin' ? item.destination : item.start_point
+      groups.set(row, [...(groups.get(row) ?? []), item])
+    }
+    return [...groups.entries()]
+  }, [filteredSchedules, direction])
+
+  const liveRows = useMemo(() => {
+    const groups = new Map<string, Task[]>()
+    for (const task of filteredTasks) {
+      const row = direction === 'origin' ? (task.destination ?? '-') : (task.start_point ?? '-')
+      groups.set(row, [...(groups.get(row) ?? []), task])
+    }
+    return [...groups.entries()]
+  }, [filteredTasks, direction])
+
+  const planHubs = useMemo(() => {
+    const groups = new Map<string, Schedule[]>()
     for (const item of filteredSchedules) {
       const key = item.schedule_hub_id || 'Tanpa Hub'
-      hubs.set(key, [...(hubs.get(key) ?? []), item])
+      groups.set(key, [...(groups.get(key) ?? []), item])
     }
-    return [...hubs.entries()]
+    return [...groups.entries()]
   }, [filteredSchedules])
 
-  const liveGroups = useMemo(() => {
-    const hubs = new Map<string, Task[]>()
+  const liveHubs = useMemo(() => {
+    const groups = new Map<string, Task[]>()
     for (const task of filteredTasks) {
-      const key = 'Live'
-      hubs.set(key, [...(hubs.get(key) ?? []), task])
+      const key = task.schedule_id ? (scheduleById.get(task.schedule_id)?.schedule_hub_id || 'Tanpa Hub') : 'Tanpa Hub'
+      groups.set(key, [...(groups.get(key) ?? []), task])
     }
-    return [...hubs.entries()]
-  }, [filteredTasks])
+    return [...groups.entries()]
+  }, [filteredTasks, scheduleById])
 
-  function renderPlanRows(items: Schedule[]) {
+  function renderPlanTable(items: Schedule[]) {
     const rows = new Map<string, Schedule[]>()
     for (const item of items) {
-      const key = direction === 'origin' ? item.destination : item.start_point
-      rows.set(key, [...(rows.get(key) ?? []), item])
+      const row = direction === 'origin' ? item.destination : item.start_point
+      rows.set(row, [...(rows.get(row) ?? []), item])
     }
-    return [...rows.entries()].map(([label, rowItems]) => {
-      const layout = layoutTimelineItems(rowItems, (item) => minutesValue(direction === 'origin' ? item.std : item.sta))
-      const height = layout.laneCount * 82 + 8
-      return (
-        <div className="schedule-board-row" key={label}>
-          <div className="schedule-board-label">{label}</div>
-          <div className="schedule-board-track" style={{ minHeight: height }}>
-            {Array.from({ length: 25 }, (_, hour) => <span className="schedule-board-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
-            {layout.positioned.map(({ item, lane }) => {
-              const task = taskBySchedule[item.schedule_id]
-              const start = minutesValue(direction === 'origin' ? item.std : item.sta) ?? 0
-              return (
-                <div
-                  className={`schedule-board-item ${task ? statusClass(task.status) : 'unassigned'} ${!summaryMatch(task) ? 'faded' : ''}`}
-                  key={item.schedule_id}
-                  style={{ left: `${(start / 1440) * 100}%`, top: lane * 82 + 5 }}
-                  title={`${label} · ${timeValue(direction === 'origin' ? item.std : item.sta)}`}
-                >
-                  <b>{timeValue(direction === 'origin' ? item.std : item.sta)}</b>
-                  <span>Trip {item.trip}</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )
-    })
+    return (
+      <div className="schedule-grid-scroll">
+        <table className="schedule-grid-table">
+          <thead>
+            <tr>
+              <th>{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</th>
+              {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {[...rows.entries()].map(([row, rowItems]) => (
+              <tr key={row}>
+                <th>{row}</th>
+                {Array.from({ length: 24 }, (_, hour) => {
+                  const cellItems = rowItems.filter((item) => hourValue(direction === 'origin' ? item.std : item.sta) === hour)
+                  return (
+                    <td key={hour}>
+                      <div className="schedule-grid-cell">
+                        {cellItems.map((item) => {
+                          const task = taskBySchedule[item.schedule_id]
+                          return (
+                            <span
+                              key={item.schedule_id}
+                              className={`schedule-trip ${task ? statusClass(task.status) : 'unassigned'} ${!summaryMatch(task) ? 'faded' : ''}`}
+                              title={`Trip ${item.trip} · ${timeValue(direction === 'origin' ? item.std : item.sta)} · ${item.route} · ${item.category}`}
+                            >
+                              {item.trip}
+                            </span>
+                          )
+                        })}
+                      </div>
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
   }
 
-  function renderLiveRows(items: Task[]) {
+  function renderLiveTable(items: Task[]) {
     const rows = new Map<string, Task[]>()
-    for (const task of items) {
-      const key = direction === 'origin' ? (task.destination ?? '-') : (task.start_point ?? '-')
-      rows.set(key, [...(rows.get(key) ?? []), task])
+    for (const item of items) {
+      const row = direction === 'origin' ? (item.destination ?? '-') : (item.start_point ?? '-')
+      rows.set(row, [...(rows.get(row) ?? []), item])
     }
-    return [...rows.entries()].map(([label, rowItems]) => {
-      const layout = layoutTimelineItems(rowItems, (task) => minutesValue(direction === 'origin' ? task.std : task.sta))
-      const height = layout.laneCount * 82 + 8
-      return (
-        <div className="schedule-board-row" key={label}>
-          <div className="schedule-board-label">{label}</div>
-          <div className="schedule-board-track" style={{ minHeight: height }}>
-            {Array.from({ length: 25 }, (_, hour) => <span className="schedule-board-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
-            {layout.positioned.map(({ item, lane }) => {
-              const start = minutesValue(direction === 'origin' ? item.std : item.sta) ?? 0
-              return (
-                <div
-                  className={`schedule-board-item live-item ${statusClass(item.status)} ${summaryFilter !== 'all' && !summaryMatch(item) ? 'faded' : ''}`}
-                  key={item.transaction_id}
-                  style={{ left: `${(start / 1440) * 100}%`, top: lane * 82 + 5 }}
-                  title={`${item.transaction_id} · ${label}`}
-                >
-                  <b>{timeValue(direction === 'origin' ? item.std : item.sta)}</b>
-                  <span>{item.transaction_id}</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )
-    })
+    return (
+      <div className="schedule-grid-scroll">
+        <table className="schedule-grid-table">
+          <thead>
+            <tr>
+              <th>{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</th>
+              {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {[...rows.entries()].map(([row, rowItems]) => (
+              <tr key={row}>
+                <th>{row}</th>
+                {Array.from({ length: 24 }, (_, hour) => {
+                  const cellItems = rowItems.filter((item) => hourValue(direction === 'origin' ? item.std : item.sta) === hour)
+                  return (
+                    <td key={hour}>
+                      <div className="schedule-grid-cell">
+                        {cellItems.map((item) => (
+                          <span key={item.transaction_id} className={`schedule-trip live-item ${statusClass(item.status)} ${summaryFilter !== 'all' && !summaryMatch(item) ? 'faded' : ''}`} title={`${item.transaction_id} · ${timeValue(direction === 'origin' ? item.std : item.sta)}`}>
+                            {item.transaction_id}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
   }
 
+  const hubs = view === 'database' ? planHubs : liveHubs
   const summaries = view === 'database' ? summary : liveSummary
 
   return (
@@ -248,51 +277,39 @@ export default function TimetableView({
 
       <div className="schedule-toolbar">
         <div className="schedule-direction">
-          <button className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setHub(''); setPoint('') }}>AS Origin</button>
-          <button className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setHub(''); setPoint('') }}>AS Destination</button>
+          <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setHub(''); setPoint('') }}>AS Origin</button>
+          <button type="button" className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setHub(''); setPoint('') }}>AS Destination</button>
         </div>
         <select value={hub} onChange={(e) => setHub(e.target.value)}>
-          <option value="">{direction === 'origin' ? 'Semua Hub Origin' : 'Semua Hub Destinasi'}</option>
+          <option value="">{direction === 'origin' ? 'Hub Origin' : 'Hub Destinasi'}</option>
           {options.hubs.map((item) => <option key={item}>{item}</option>)}
         </select>
         <select value={point} onChange={(e) => setPoint(e.target.value)}>
-          <option value="">{direction === 'origin' ? 'Semua Destinasi' : 'Semua Origin'}</option>
+          <option value="">{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</option>
           {options.points.map((item) => <option key={item}>{item}</option>)}
         </select>
-        <select value={route} onChange={(e) => setRoute(e.target.value)}><option value="">Semua Rute</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}><option value="">Semua Kategori</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select>
+        <select value={route} onChange={(e) => setRoute(e.target.value)}><option value="">Rute</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select>
+        <select value={category} onChange={(e) => setCategory(e.target.value)}><option value="">Kategori</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select>
       </div>
 
-      <div className="schedule-summary">
-        <button className={summaryFilter === 'unassigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum ditugaskan</span><b>{summaries.unassigned}</b></button>
-        <button className={summaryFilter === 'assigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Sudah ditugaskan</span><b>{summaries.assigned}</b></button>
-        <button className={summaryFilter === 'canceled' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><b>{summaries.canceled}</b></button>
+      <div className="schedule-summary-inline">
+        <button type="button" className={summaryFilter === 'unassigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}>Belum ditugaskan <b>{summaries.unassigned}</b></button>
+        <button type="button" className={summaryFilter === 'assigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}>Sudah ditugaskan <b>{summaries.assigned}</b></button>
+        <button type="button" className={summaryFilter === 'canceled' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}>Dibatalkan <b>{summaries.canceled}</b></button>
       </div>
 
-      <section className="schedule-board-shell">
-        <div className="schedule-board-head">
-          <div>{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</div>
-          <div className="schedule-board-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}</span>)}</div>
-        </div>
-
-        {view === 'database' ? (
-          scheduleGroups.map(([hubName, items], index) => (
-            <details className="schedule-hub" key={hubName} open={index === 0}>
-              <summary><span>Hub {direction === 'origin' ? 'Origin' : 'Destinasi'}</span><b>{hubName}</b><small>{items.length} schedule</small></summary>
-              <div className="schedule-hub-body">{renderPlanRows(items)}</div>
-            </details>
-          ))
-        ) : (
-          liveGroups.map(([hubName, items]) => (
-            <details className="schedule-hub" key={hubName} open>
-              <summary><span>Live Tracking</span><b>{hubName}</b><small>{items.length} assignment</small></summary>
-              <div className="schedule-hub-body">{renderLiveRows(items)}</div>
-            </details>
-          ))
-        )}
-
-        {view === 'database' && !scheduleGroups.length ? <div className="schedule-empty">Nggak ada schedule yang cocok.</div> : null}
-        {view === 'live' && !liveGroups.length ? <div className="schedule-empty">Belum ada assignment untuk ditampilkan.</div> : null}
+      <section className="schedule-grid-shell">
+        {hubs.map(([hubName, items], index) => (
+          <details className="schedule-hub" key={hubName} open={index === 0}>
+            <summary>
+              <span>Hub {direction === 'origin' ? 'Origin' : 'Destinasi'}</span>
+              <b>{hubName}</b>
+              <small>{items.length} {view === 'database' ? 'schedule' : 'assignment'}</small>
+            </summary>
+            {view === 'database' ? renderPlanTable(items as Schedule[]) : renderLiveTable(items as Task[])}
+          </details>
+        ))}
+        {!hubs.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
 
       <div className="schedule-date">Schedule date · {date}</div>
