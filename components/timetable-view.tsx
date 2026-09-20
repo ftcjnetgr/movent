@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react'
 type Schedule = {
   schedule_id: string
   trip: number
+  schedule_hub_id: string | null
   route: string
   category: string
   start_point: string
@@ -51,38 +52,32 @@ function minutesValue(value: string | null) {
     return hour * 60 + minute
   }
   const [hour, minute] = value.split(':').map(Number)
-  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null
-  return hour * 60 + minute
+  return Number.isFinite(hour) && Number.isFinite(minute) ? hour * 60 + minute : null
 }
 
 function timeValue(value: string | null) {
-  if (!value) return '-'
   const minutes = minutesValue(value)
-  if (minutes === null) return '-'
-  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
+  return minutes === null ? '-' : `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
 }
 
 function statusClass(status: string | undefined) {
-  if (!status) return ''
-  return `status-${status.toLowerCase().replaceAll(' ', '-')}`
+  return status ? `status-${status.toLowerCase().replaceAll(' ', '-')}` : ''
 }
 
 function layoutTimelineItems<T>(items: T[], getMinutes: (item: T) => number | null) {
   const laneEnds: number[] = []
   const positioned: Array<{ item: T; lane: number }> = []
-
   for (const item of [...items].sort((a, b) => (getMinutes(a) ?? 9999) - (getMinutes(b) ?? 9999))) {
     const start = getMinutes(item) ?? 0
     let lane = laneEnds.findIndex((end) => start >= end)
     if (lane === -1) {
       lane = laneEnds.length
-      laneEnds.push(start + 110)
+      laneEnds.push(start + 100)
     } else {
-      laneEnds[lane] = start + 110
+      laneEnds[lane] = start + 100
     }
     positioned.push({ item, lane })
   }
-
   return { positioned, laneCount: Math.max(1, laneEnds.length) }
 }
 
@@ -99,47 +94,39 @@ export default function TimetableView({
   taskBySchedule: Record<string, Task>
   initialView?: 'database' | 'live'
 }) {
-  const view = initialView
   const [direction, setDirection] = useState<'origin' | 'destination'>('origin')
   const [route, setRoute] = useState('')
   const [category, setCategory] = useState('')
-  const [originType, setOriginType] = useState('')
-  const [origin, setOrigin] = useState('')
-  const [destinationType, setDestinationType] = useState('')
-  const [destination, setDestination] = useState('')
+  const [hub, setHub] = useState('')
+  const [point, setPoint] = useState('')
   const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>('all')
+  const view = initialView
 
   const options = useMemo(() => ({
-    routes: [...new Set(schedules.map((item) => item.route))],
-    categories: [...new Set(schedules.map((item) => item.category))],
-    originTypes: [...new Set(schedules.map((item) => item.start_point_type))],
-    origins: [...new Set(schedules.map((item) => item.start_point))],
-    destinationTypes: [...new Set(schedules.map((item) => item.destination_type))],
-    destinations: [...new Set(schedules.map((item) => item.destination))],
-  }), [schedules])
+    routes: [...new Set(schedules.map((item) => item.route).filter(Boolean))],
+    categories: [...new Set(schedules.map((item) => item.category).filter(Boolean))],
+    hubs: [...new Set(schedules.map((item) => item.schedule_hub_id).filter(Boolean) as string[])],
+    points: [...new Set(schedules.map((item) => direction === 'origin' ? item.destination : item.start_point).filter(Boolean))],
+  }), [schedules, direction])
 
   const filteredSchedules = useMemo(() => schedules.filter((item) => {
+    const displayPoint = direction === 'origin' ? item.destination : item.start_point
     if (route && item.route !== route) return false
     if (category && item.category !== category) return false
-    if (direction === 'origin') {
-      if (originType && item.start_point_type !== originType) return false
-      if (origin && item.start_point !== origin) return false
-    } else {
-      if (destinationType && item.destination_type !== destinationType) return false
-      if (destination && item.destination !== destination) return false
-    }
+    if (hub && item.schedule_hub_id !== hub) return false
+    if (point && displayPoint !== point) return false
     return true
-  }), [schedules, route, category, originType, origin, destinationType, destination, direction])
+  }), [schedules, direction, route, category, hub, point])
 
   const filteredTasks = useMemo(() => tasks.filter((task) => {
-    if (direction === 'origin' && origin && task.start_point !== origin) return false
-    if (direction === 'destination' && destination && task.destination !== destination) return false
+    const displayPoint = direction === 'origin' ? task.destination : task.start_point
+    if (point && displayPoint !== point) return false
     return true
   }).sort((a, b) => {
     const aTime = direction === 'origin' ? minutesValue(a.std) : minutesValue(a.sta)
     const bTime = direction === 'origin' ? minutesValue(b.std) : minutesValue(b.sta)
     return (aTime ?? 9999) - (bTime ?? 9999)
-  }), [tasks, direction, origin, destination])
+  }), [tasks, direction, point])
 
   const summary = useMemo(() => ({
     unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
@@ -150,6 +137,12 @@ export default function TimetableView({
     canceled: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status === 'Canceled').length,
   }), [filteredSchedules, taskBySchedule])
 
+  const liveSummary = useMemo(() => ({
+    unassigned: 0,
+    assigned: filteredTasks.filter((task) => task.status !== 'Canceled').length,
+    canceled: filteredTasks.filter((task) => task.status === 'Canceled').length,
+  }), [filteredTasks])
+
   const summaryMatch = (task: Task | undefined) => {
     if (summaryFilter === 'all') return true
     if (summaryFilter === 'canceled') return task?.status === 'Canceled'
@@ -157,151 +150,152 @@ export default function TimetableView({
     return !task
   }
 
-  const databaseGroups = useMemo(() => {
-    const groups = new Map<string, Schedule[]>()
+  const scheduleGroups = useMemo(() => {
+    const hubs = new Map<string, Schedule[]>()
     for (const item of filteredSchedules) {
-      const key = direction === 'origin' ? item.start_point : item.destination
-      const items = groups.get(key) ?? []
-      items.push(item)
-      groups.set(key, items)
+      const key = item.schedule_hub_id || 'Tanpa Hub'
+      hubs.set(key, [...(hubs.get(key) ?? []), item])
     }
-    return [...groups.entries()]
-  }, [filteredSchedules, direction])
-
-  const liveSummary = useMemo(() => ({
-    unassigned: 0,
-    assigned: filteredTasks.filter((task) => task.status !== 'Canceled').length,
-    canceled: filteredTasks.filter((task) => task.status === 'Canceled').length,
-  }), [filteredTasks])
+    return [...hubs.entries()]
+  }, [filteredSchedules])
 
   const liveGroups = useMemo(() => {
-    const groups = new Map<string, Task[]>()
+    const hubs = new Map<string, Task[]>()
     for (const task of filteredTasks) {
-      const key = direction === 'origin' ? (task.start_point ?? '-') : (task.destination ?? '-')
-      const items = groups.get(key) ?? []
-      items.push(task)
-      groups.set(key, items)
+      const key = 'Live'
+      hubs.set(key, [...(hubs.get(key) ?? []), task])
     }
-    return [...groups.entries()]
-  }, [filteredTasks, direction])
+    return [...hubs.entries()]
+  }, [filteredTasks])
+
+  function renderPlanRows(items: Schedule[]) {
+    const rows = new Map<string, Schedule[]>()
+    for (const item of items) {
+      const key = direction === 'origin' ? item.destination : item.start_point
+      rows.set(key, [...(rows.get(key) ?? []), item])
+    }
+    return [...rows.entries()].map(([label, rowItems]) => {
+      const layout = layoutTimelineItems(rowItems, (item) => minutesValue(direction === 'origin' ? item.std : item.sta))
+      const height = layout.laneCount * 82 + 8
+      return (
+        <div className="schedule-board-row" key={label}>
+          <div className="schedule-board-label">{label}</div>
+          <div className="schedule-board-track" style={{ minHeight: height }}>
+            {Array.from({ length: 25 }, (_, hour) => <span className="schedule-board-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
+            {layout.positioned.map(({ item, lane }) => {
+              const task = taskBySchedule[item.schedule_id]
+              const start = minutesValue(direction === 'origin' ? item.std : item.sta) ?? 0
+              return (
+                <div
+                  className={`schedule-board-item ${task ? statusClass(task.status) : 'unassigned'} ${!summaryMatch(task) ? 'faded' : ''}`}
+                  key={item.schedule_id}
+                  style={{ left: `${(start / 1440) * 100}%`, top: lane * 82 + 5 }}
+                  title={`${label} · ${timeValue(direction === 'origin' ? item.std : item.sta)}`}
+                >
+                  <b>{timeValue(direction === 'origin' ? item.std : item.sta)}</b>
+                  <span>Trip {item.trip}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )
+    })
+  }
+
+  function renderLiveRows(items: Task[]) {
+    const rows = new Map<string, Task[]>()
+    for (const task of items) {
+      const key = direction === 'origin' ? (task.destination ?? '-') : (task.start_point ?? '-')
+      rows.set(key, [...(rows.get(key) ?? []), task])
+    }
+    return [...rows.entries()].map(([label, rowItems]) => {
+      const layout = layoutTimelineItems(rowItems, (task) => minutesValue(direction === 'origin' ? task.std : task.sta))
+      const height = layout.laneCount * 82 + 8
+      return (
+        <div className="schedule-board-row" key={label}>
+          <div className="schedule-board-label">{label}</div>
+          <div className="schedule-board-track" style={{ minHeight: height }}>
+            {Array.from({ length: 25 }, (_, hour) => <span className="schedule-board-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
+            {layout.positioned.map(({ item, lane }) => {
+              const start = minutesValue(direction === 'origin' ? item.std : item.sta) ?? 0
+              return (
+                <div
+                  className={`schedule-board-item live-item ${statusClass(item.status)} ${summaryFilter !== 'all' && !summaryMatch(item) ? 'faded' : ''}`}
+                  key={item.transaction_id}
+                  style={{ left: `${(start / 1440) * 100}%`, top: lane * 82 + 5 }}
+                  title={`${item.transaction_id} · ${label}`}
+                >
+                  <b>{timeValue(direction === 'origin' ? item.std : item.sta)}</b>
+                  <span>{item.transaction_id}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )
+    })
+  }
+
+  const summaries = view === 'database' ? summary : liveSummary
 
   return (
-    <div>
-      {view === 'database' ? (
-        <>
-          <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Berdasarkan Titik Mulai</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Berdasarkan Destinasi</button>
-          </div>
+    <div className="schedule-page">
+      <div className="schedule-view-tabs" role="tablist" aria-label="Tampilan schedule">
+        <a className={view === 'database' ? 'active' : ''} href="/controller/timetable?view=plan">By Plan</a>
+        <a className={view === 'live' ? 'active' : ''} href="/controller/timetable?view=live">Live Tracking</a>
+      </div>
 
-          <section className="metric-grid">
-            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum ditugaskan</span><strong>{summary.unassigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Sudah ditugaskan</span><strong>{summary.assigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><strong>{summary.canceled}</strong></button>
-          </section>
+      <div className="schedule-toolbar">
+        <div className="schedule-direction">
+          <button className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setHub(''); setPoint('') }}>AS Origin</button>
+          <button className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setHub(''); setPoint('') }}>AS Destination</button>
+        </div>
+        <select value={hub} onChange={(e) => setHub(e.target.value)}>
+          <option value="">{direction === 'origin' ? 'Semua Hub Origin' : 'Semua Hub Destinasi'}</option>
+          {options.hubs.map((item) => <option key={item}>{item}</option>)}
+        </select>
+        <select value={point} onChange={(e) => setPoint(e.target.value)}>
+          <option value="">{direction === 'origin' ? 'Semua Destinasi' : 'Semua Origin'}</option>
+          {options.points.map((item) => <option key={item}>{item}</option>)}
+        </select>
+        <select value={route} onChange={(e) => setRoute(e.target.value)}><option value="">Semua Rute</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select>
+        <select value={category} onChange={(e) => setCategory(e.target.value)}><option value="">Semua Kategori</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select>
+      </div>
 
-          <section className="section-block">
-            <div className="data-form">
-              <div className="form-row">
-                <label>Rute<select value={route} onChange={(event) => setRoute(event.target.value)}><option value="">Semua</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                <label>Kategori<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="">Semua</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select></label>
-              </div>
-              {direction === 'origin' ? (
-                <div className="form-row">
-                  <label>Jenis Titik Mulai<select value={originType} onChange={(event) => setOriginType(event.target.value)}><option value="">Semua</option>{options.originTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label>Titik Mulai<select value={origin} onChange={(event) => setOrigin(event.target.value)}><option value="">Semua</option>{options.origins.map((item) => <option key={item}>{item}</option>)}</select></label>
-                </div>
-              ) : (
-                <div className="form-row">
-                  <label>Jenis Destinasi<select value={destinationType} onChange={(event) => setDestinationType(event.target.value)}><option value="">Semua</option>{options.destinationTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label>Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{options.destinations.map((item) => <option key={item}>{item}</option>)}</select></label>
-                </div>
-              )}
-            </div>
-          </section>
+      <div className="schedule-summary">
+        <button className={summaryFilter === 'unassigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum ditugaskan</span><b>{summaries.unassigned}</b></button>
+        <button className={summaryFilter === 'assigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Sudah ditugaskan</span><b>{summaries.assigned}</b></button>
+        <button className={summaryFilter === 'canceled' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><b>{summaries.canceled}</b></button>
+      </div>
 
-          <section className="data-table-card section-block timetable-shell">
-            <div className="section-heading"><div><h2>Rencana Jadwal</h2><p>{date}</p></div></div>
-            <div className="timetable-scroll">
-              <div className="timetable-grid">
-                <div className="timetable-axis-label">{direction === 'origin' ? 'Titik Mulai' : 'Destinasi'}</div>
-                <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
-                {databaseGroups.map(([group, items]) => {
-                  const layout = layoutTimelineItems(items, (item) => minutesValue(direction === 'origin' ? item.std : item.sta))
-                  return (
-                  <div className="timetable-row" key={group} style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
-                    <div className="timetable-group">{group}</div>
-                    <div className="timetable-track" style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
-                      {Array.from({ length: 25 }, (_, hour) => <span className="timetable-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
-                      {layout.positioned.map(({ item, lane }) => {
-                        const task = taskBySchedule[item.schedule_id]
-                        const start = minutesValue(direction === 'origin' ? item.std : item.sta) ?? 0
-                        const dimmed = !summaryMatch(task)
-                        const left = `${(start / 1440) * 100}%`
-                        return (
-                          <div key={item.schedule_id} className={`timetable-item ${task ? statusClass(task.status) : 'unassigned'} ${dimmed ? 'faded' : ''}`} style={{ left, top: `${lane * 128 + 10}px` }}>
-                            <div className="timetable-item-time">{direction === 'origin' ? timeValue(item.std) : timeValue(item.sta)}</div>
-                            <strong>{item.trip}</strong>
-                            <span>{direction === 'origin' ? item.destination : item.start_point}</span>
-                            <small>{item.route} · {item.category}</small>
-                            {task ? <details><summary>Lihat detail</summary><div>{task.transaction_id}<br />{task.executor_snapshot?.full_name ?? '-'} · {task.fleet_snapshot?.plat_number ?? '-'}</div></details> : <small>Belum ditugaskan</small>}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                  )
-                })}
-                {!databaseGroups.length ? <div className="empty-state">Nggak ada jadwal yang cocok dengan filter.</div> : null}
-              </div>
-            </div>
-          </section>
-        </>
-      ) : (
-        <section className="data-table-card section-block timetable-shell">
-          <div className="dashboard-tabs">
-            <button className={direction === 'origin' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('origin')}>Berdasarkan Titik Mulai</button>
-            <button className={direction === 'destination' ? 'dashboard-tab active' : 'dashboard-tab'} onClick={() => setDirection('destination')}>Berdasarkan Destinasi</button>
-          </div>
-          <div className="section-heading"><div><h2>Jadwal Langsung</h2><p>Semua transaksi yang sudah dibuat atau ditugaskan.</p></div></div>
-          <section className="metric-grid">
-            <button className={`metric-card summary-filter ${summaryFilter === 'unassigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}><span>Belum ditugaskan</span><strong>{liveSummary.unassigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'assigned' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}><span>Sudah ditugaskan</span><strong>{liveSummary.assigned}</strong></button>
-            <button className={`metric-card summary-filter ${summaryFilter === 'canceled' ? 'selected' : ''}`} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}><span>Dibatalkan</span><strong>{liveSummary.canceled}</strong></button>
-          </section>
-          <div className="timetable-scroll">
-            <div className="timetable-grid">
-              <div className="timetable-axis-label">{direction === 'origin' ? 'Titik Mulai' : 'Destination'}</div>
-              <div className="timetable-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}:00</span>)}</div>
-              {liveGroups.map(([group, items]) => {
-                const layout = layoutTimelineItems(items, (task) => minutesValue(direction === 'origin' ? task.std : task.sta))
-                return (
-                <div className="timetable-row" key={group} style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
-                  <div className="timetable-group">{group}</div>
-                  <div className="timetable-track" style={{ minHeight: `${layout.laneCount * 128 + 12}px` }}>
-                    {Array.from({ length: 25 }, (_, hour) => <span className="timetable-line" key={hour} style={{ left: `${(hour / 24) * 100}%` }} />)}
-                    {layout.positioned.map(({ item: task, lane }) => {
-                      const start = minutesValue(direction === 'origin' ? task.std : task.sta)
-                      const left = `${((start ?? 0) / 1440) * 100}%`
-                      return (
-                        <div className={`timetable-item live-item ${statusClass(task.status)} ${summaryFilter !== 'all' && !summaryMatch(task) ? 'faded' : ''}`} key={task.transaction_id} style={{ left, top: `${lane * 128 + 10}px` }}>
-                          <div className="timetable-item-time">{direction === 'origin' ? timeValue(task.std) : timeValue(task.sta)}</div>
-                          <strong>{task.transaction_id}</strong>
-                          <span>{direction === 'origin' ? task.destination ?? '-' : task.start_point ?? '-'}</span>
-                          <small>{task.source_type === 'Extra Schedule' ? 'Extra Schedule' : task.task_type} · {task.fleet_snapshot?.plat_number ?? '-'}</small>
-                          <details><summary>Lihat detail</summary><div>{task.executor_snapshot?.full_name ?? task.executor_nik ?? '-'}</div></details>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-                )
-              })}
-              {!liveGroups.length ? <div className="empty-state">Belum ada jadwal langsung untuk sekarang.</div> : null}
-            </div>
-          </div>
-        </section>
-      )}
+      <section className="schedule-board-shell">
+        <div className="schedule-board-head">
+          <div>{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</div>
+          <div className="schedule-board-hours">{Array.from({ length: 24 }, (_, hour) => <span key={hour}>{String(hour).padStart(2, '0')}</span>)}</div>
+        </div>
+
+        {view === 'database' ? (
+          scheduleGroups.map(([hubName, items], index) => (
+            <details className="schedule-hub" key={hubName} open={index === 0}>
+              <summary><span>Hub {direction === 'origin' ? 'Origin' : 'Destinasi'}</span><b>{hubName}</b><small>{items.length} schedule</small></summary>
+              <div className="schedule-hub-body">{renderPlanRows(items)}</div>
+            </details>
+          ))
+        ) : (
+          liveGroups.map(([hubName, items]) => (
+            <details className="schedule-hub" key={hubName} open>
+              <summary><span>Live Tracking</span><b>{hubName}</b><small>{items.length} assignment</small></summary>
+              <div className="schedule-hub-body">{renderLiveRows(items)}</div>
+            </details>
+          ))
+        )}
+
+        {view === 'database' && !scheduleGroups.length ? <div className="schedule-empty">Nggak ada schedule yang cocok.</div> : null}
+        {view === 'live' && !liveGroups.length ? <div className="schedule-empty">Belum ada assignment untuk ditampilkan.</div> : null}
+      </section>
+
+      <div className="schedule-date">Schedule date · {date}</div>
     </div>
   )
 }
