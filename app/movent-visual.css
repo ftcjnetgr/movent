@@ -2333,7 +2333,7 @@ html,body{background:var(--mv-bg)!important;color:var(--mv-text)}
   min-width:0!important;
   min-height:0!important;
   overflow:hidden!important;
-  background:#0758c9!important;
+  background:#0b2d53!important;
   color:#fff!important;
 }
 
@@ -2513,7 +2513,7 @@ html,body{background:var(--mv-bg)!important;color:var(--mv-text)}
 
 .login-simple-form input:focus{
   border-color:#0054a6!important;
-  box-shadow:0 0 0 3px rgba(0,84,166,.09)!important;
+  box-shadow:0 0 0 3px rgba(0,84,166,.10)!important;
 }
 
 .login-simple-form .login-error{
