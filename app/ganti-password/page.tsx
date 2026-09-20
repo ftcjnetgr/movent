@@ -1,28 +1,32 @@
 'use client'
 
+import Link from 'next/link'
 import { useActionState } from 'react'
-
+import { useSearchParams } from 'next/navigation'
 import { changePasswordAction } from './actions'
+import AppShell from '@/components/app-shell'
 
 const initialState: { error?: string } = {}
 
-export default function ChangePasswordPage() {
+function ChangePasswordCard({ first }: { first: boolean }) {
   const [state, formAction, pending] = useActionState(changePasswordAction, initialState)
 
   return (
-    <main className="login-page">
-      <section className="login-card">
-        <div className="login-brand-wrap password-brand-wrap">
-          <img
-            src="/assets/branding/movent-dark.svg"
-            alt="MOVENT"
-            className="login-brand-logo"
-          />
+    <div className={first ? 'password-page password-page-first' : 'password-page'}>
+      {!first ? (
+        <div className="password-page-topbar">
+          <Link href="/controller/beranda" className="password-back">← Kembali</Link>
         </div>
-        <h1>Buat kata sandi baru</h1>
-        <p className="login-subtitle">Kata sandi bawaan cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
+      ) : null}
 
-        <form action={formAction} className="login-form">
+      <section className="password-card">
+        <div className="password-card-heading">
+          <span className="eyebrow">SETTING</span>
+          <h1>Buat kata sandi baru</h1>
+          <p>Kata sandi bawaan cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
+        </div>
+
+        <form action={formAction} className="password-form">
           <label>
             Password baru
             <input name="newPassword" type="password" autoComplete="new-password" autoFocus />
@@ -40,12 +44,24 @@ export default function ChangePasswordPage() {
           </button>
         </form>
 
-        <div className="login-footer">
-          <span>Minimal 6 karakter, ya</span>
+        <div className="password-card-footer">
+          <span>Minimal 6 karakter</span>
           <span>Kata sandi bawaan nggak bisa dipakai lagi.</span>
         </div>
       </section>
-    </main>
+    </div>
   )
 }
 
+export default function ChangePasswordPage() {
+  const searchParams = useSearchParams()
+  const first = searchParams.get('first') === '1'
+
+  if (first) return <ChangePasswordCard first />
+
+  return (
+    <AppShell>
+      <ChangePasswordCard first={false} />
+    </AppShell>
+  )
+}
