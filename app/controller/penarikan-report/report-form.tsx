@@ -68,11 +68,9 @@ export default function ReportForm({ startPoints, destinations, executors }: { s
 
       <div className="report-filter-card">
         <div className="report-filter-heading"><div><h2>Filter Laporan</h2><p>Rentang waktu maksimal 7 hari.</p></div></div>
-        <div className="report-date-row">
+        <div className="report-filter-fields">
           <label>Dari tanggal<input type="date" value={from} onChange={(event) => setFrom(event.target.value)} /></label>
           <label>Sampai tanggal<input type="date" value={to} onChange={(event) => setTo(event.target.value)} /></label>
-        </div>
-        <div className="report-route-row">
           <label>Titik mulai<select value={startPoint} onChange={(event) => setStartPoint(event.target.value)}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
           <label>Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
           <label>Executor<select value={executorNik} onChange={(event) => setExecutorNik(event.target.value)}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
