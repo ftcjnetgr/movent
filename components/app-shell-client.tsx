@@ -101,7 +101,21 @@ export default function AppShellClient({ profile, children }: { profile: { usern
     const expected = new URLSearchParams(itemQuery).get('view')
     return searchParams.get('view') === expected
   }
-  const activeItem = useMemo(() => navGroups.flatMap(group => group.items.map(item => ({ ...item, group: group.label }))).filter(isItemActive).sort((a,b) => b.href.length-a.href.length)[0], [navGroups, pathname, searchParams])
+  const activeItem = useMemo(() => {
+    return navGroups
+      .flatMap(group => group.items.map(item => ({ ...item, group: group.label })))
+      .filter((item) => {
+        const [itemPath, itemQuery] = item.href.split('?')
+        if (pathname !== itemPath && !pathname.startsWith(itemPath + '/')) return false
+        if (itemQuery) {
+          const expected = new URLSearchParams(itemQuery).get('view')
+          return searchParams.get('view') === expected
+        }
+        return true
+      })
+      .sort((a, b) => b.href.length - a.href.length)[0]
+  }, [navGroups, pathname, searchParams.toString()])
+  const isItemActive = (item: NavItem) => activeItem?.href === item.href
   const activeGroup = activeItem?.group ?? ''
 
   useEffect(() => { setNavigating(false); setMobileOpen(false) }, [pathname])
@@ -120,7 +134,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
       <aside className="sidebar">
         <div className="sidebar-top">
           <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(e) => { e.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}>
-            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
+            <img src="/assets/branding/movent-light.svg" alt="MOVENT" className="sidebar-brand-logo" />
           </Link>
           <div className="sidebar-role">
             <div className="sidebar-role-name">{profile.role === 'Super User' ? 'Super User' : currentRole}</div>
