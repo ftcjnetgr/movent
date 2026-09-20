@@ -2301,3 +2301,212 @@ html,body{background:var(--mv-bg)!important;color:var(--mv-text)}
   .login-heading h1{font-size:38px!important}
   .login-heading p{font-size:14px!important}
 }
+
+
+/* login — clean simple two-panel */
+.login-page{
+  min-height:100vh!important;
+  padding:28px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:#eef2f7!important;
+}
+.login-simple-shell{
+  width:min(100%,1280px)!important;
+  min-height:720px!important;
+  height:min(760px,calc(100vh - 56px))!important;
+  display:grid!important;
+  grid-template-columns:1.04fr .96fr!important;
+  overflow:hidden!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  box-shadow:0 24px 70px rgba(19,38,65,.13)!important;
+  border:1px solid #dfe5ed!important;
+}
+.login-simple-visual{
+  position:relative!important;
+  overflow:hidden!important;
+  background:#0758c9!important;
+  color:#fff!important;
+}
+.login-simple-pattern{
+  position:absolute!important;
+  inset:0!important;
+  opacity:.28!important;
+  background:
+    linear-gradient(145deg,transparent 0 42%,rgba(255,255,255,.12) 42.1% 42.35%,transparent 42.5%),
+    linear-gradient(145deg,transparent 0 54%,rgba(255,255,255,.08) 54.1% 54.35%,transparent 54.5%),
+    radial-gradient(circle at 90% 10%,rgba(255,255,255,.22),transparent 30%)!important;
+}
+.login-simple-pattern:after{
+  content:""!important;
+  position:absolute!important;
+  width:620px!important;
+  height:620px!important;
+  left:-320px!important;
+  bottom:-360px!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  border-radius:50%!important;
+  box-shadow:
+    0 0 0 55px rgba(255,255,255,.025),
+    0 0 0 110px rgba(255,255,255,.025),
+    0 0 0 165px rgba(255,255,255,.025)!important;
+}
+.login-simple-content{
+  position:relative!important;
+  z-index:2!important;
+  height:100%!important;
+  padding:64px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.login-simple-logo{
+  width:190px!important;
+  height:auto!important;
+  filter:brightness(0) invert(1)!important;
+}
+.login-simple-message{
+  max-width:560px!important;
+  margin-top:auto!important;
+  margin-bottom:92px!important;
+}
+.login-simple-message>span,
+.login-simple-kicker{
+  display:block!important;
+  margin-bottom:18px!important;
+  color:rgba(255,255,255,.72)!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  letter-spacing:.22em!important;
+  text-transform:uppercase!important;
+}
+.login-simple-message h1{
+  margin:0!important;
+  color:#fff!important;
+  font-size:clamp(46px,5vw,72px)!important;
+  line-height:.98!important;
+  letter-spacing:-.065em!important;
+  font-weight:800!important;
+}
+.login-simple-message p{
+  max-width:480px!important;
+  margin:25px 0 0!important;
+  color:rgba(255,255,255,.82)!important;
+  font-size:16px!important;
+  line-height:1.55!important;
+}
+.login-simple-left-footer{
+  position:absolute!important;
+  z-index:2!important;
+  left:64px!important;
+  bottom:34px!important;
+  color:rgba(255,255,255,.65)!important;
+  font-size:11px!important;
+}
+.login-simple-form-panel{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  min-width:0!important;
+  background:#fff!important;
+}
+.login-simple-form{
+  width:min(100%,390px)!important;
+  margin:auto!important;
+}
+.login-simple-form-heading{
+  margin-bottom:38px!important;
+}
+.login-simple-kicker{
+  margin-bottom:18px!important;
+  color:#1769e8!important;
+  font-size:10px!important;
+  letter-spacing:.18em!important;
+}
+.login-simple-form-heading h2{
+  margin:0!important;
+  color:#18263a!important;
+  font-size:38px!important;
+  line-height:1.05!important;
+  letter-spacing:-.05em!important;
+  font-weight:800!important;
+}
+.login-simple-form-heading p{
+  margin:14px 0 0!important;
+  color:#7a8799!important;
+  font-size:14px!important;
+  line-height:1.55!important;
+}
+.login-simple-form form{
+  display:grid!important;
+  gap:20px!important;
+}
+.login-simple-form label{
+  display:grid!important;
+  gap:8px!important;
+  color:#26364b!important;
+  font-size:12px!important;
+  font-weight:700!important;
+}
+.login-simple-form input{
+  width:100%!important;
+  height:54px!important;
+  padding:0 16px!important;
+  border:1px solid #d9e0e9!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#1b2b40!important;
+  outline:none!important;
+  font-size:13px!important;
+  transition:.18s ease!important;
+}
+.login-simple-form input::placeholder{color:#a2adbb!important}
+.login-simple-form input:focus{
+  border-color:#1769e8!important;
+  box-shadow:0 0 0 3px rgba(23,105,232,.10)!important;
+}
+.login-simple-submit{
+  width:100%!important;
+  height:54px!important;
+  margin-top:4px!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:#1769e8!important;
+  color:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+  font-size:13px!important;
+  font-weight:750!important;
+  box-shadow:0 9px 20px rgba(23,105,232,.20)!important;
+}
+.login-simple-submit:hover{background:#0d5ed7!important}
+.login-simple-submit span{font-size:17px!important}
+.login-simple-right-footer{
+  padding:20px 32px 24px!important;
+  border-top:1px solid #edf0f4!important;
+  text-align:center!important;
+  color:#9aa5b4!important;
+  font-size:10px!important;
+}
+@media(max-width:800px){
+  .login-page{padding:0!important}
+  .login-simple-shell{
+    width:100%!important;
+    height:100vh!important;
+    min-height:100vh!important;
+    grid-template-columns:1fr!important;
+    border:0!important;
+    border-radius:0!important;
+  }
+  .login-simple-visual{min-height:300px!important}
+  .login-simple-content{padding:34px 28px!important}
+  .login-simple-logo{width:150px!important}
+  .login-simple-message{margin-top:auto!important;margin-bottom:20px!important}
+  .login-simple-message h1{font-size:42px!important}
+  .login-simple-message p{font-size:13px!important}
+  .login-simple-left-footer{display:none!important}
+  .login-simple-form-panel{min-height:calc(100vh - 300px)!important}
+  .login-simple-form{width:100%!important;padding:40px 28px!important}
+}
