@@ -18,11 +18,12 @@ export default async function ControllerTimetablePage({
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Schedule</h1>
-          <p>Pantau jadwal dalam satu tampilan.</p>
+          <p>{view === 'live' ? 'Penugasan hari ini sesuai waktu sistem.' : 'Rencana schedule berdasarkan hari yang dipilih.'}</p>
         </div>
       </div>
       <TimetableView
         date={data.date}
+        todayDay={data.todayDay}
         schedules={data.schedules}
         tasks={data.tasks}
         taskBySchedule={data.taskBySchedule}
