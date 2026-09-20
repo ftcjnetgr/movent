@@ -29,8 +29,6 @@ export async function getTimetableData(profile: AppProfile) {
     admin
       .from('tasks')
       .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, sj_number')
-      .gte('std', startIso)
-      .lt('std', endIso)
       .order('std'),
   ])
 
@@ -41,6 +39,12 @@ export async function getTimetableData(profile: AppProfile) {
   const tasks = profile.role === 'Dispatcher'
     ? visibleTasks.filter((task) => task.created_by === profile.id || task.fleet_ownership === 'Non-TGR')
     : visibleTasks
+
+  const todayTasks = tasks.filter((task) => {
+    if (!task.std) return false
+    const value = new Date(task.std).getTime()
+    return value >= new Date(startIso).getTime() && value < new Date(endIso).getTime()
+  })
 
   const taskBySchedule = new Map(
     tasks
@@ -53,6 +57,7 @@ export async function getTimetableData(profile: AppProfile) {
     todayDay: day,
     schedules: schedules ?? [],
     tasks,
+    todayTasks,
     taskBySchedule: Object.fromEntries(taskBySchedule),
   }
 }
