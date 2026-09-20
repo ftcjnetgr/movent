@@ -36,12 +36,27 @@ type Task = {
 
 type SummaryFilter = 'all' | 'unassigned' | 'assigned' | 'canceled'
 
+const DAYS = [
+  { value: 1, label: 'Senin' },
+  { value: 2, label: 'Selasa' },
+  { value: 3, label: 'Rabu' },
+  { value: 4, label: 'Kamis' },
+  { value: 5, label: 'Jumat' },
+  { value: 6, label: 'Sabtu' },
+  { value: 7, label: 'Minggu' },
+]
+
 function minutesValue(value: string | null) {
   if (!value) return null
   if (value.includes('T')) {
     const date = new Date(value)
     if (Number.isNaN(date.getTime())) return null
-    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(date)
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Jakarta',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).formatToParts(date)
     const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? 0)
     const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? 0)
     return hour * 60 + minute
@@ -57,7 +72,9 @@ function hourValue(value: string | null) {
 
 function timeValue(value: string | null) {
   const minutes = minutesValue(value)
-  return minutes === null ? '-' : `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
+  return minutes === null
+    ? '-'
+    : `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
 }
 
 function statusClass(status: string | undefined) {
@@ -66,64 +83,76 @@ function statusClass(status: string | undefined) {
 
 export default function TimetableView({
   date,
+  todayDay,
   schedules,
   tasks,
+  todayTasks,
   taskBySchedule,
   initialView = 'database',
 }: {
   date: string
+  todayDay: number
   schedules: Schedule[]
   tasks: Task[]
+  todayTasks: Task[]
   taskBySchedule: Record<string, Task>
   initialView?: 'database' | 'live'
 }) {
+  const view = initialView
+  const [selectedDay, setSelectedDay] = useState(todayDay)
   const [direction, setDirection] = useState<'origin' | 'destination'>('origin')
   const [route, setRoute] = useState('')
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState('Normal')
   const [hub, setHub] = useState('')
   const [point, setPoint] = useState('')
   const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>('all')
-  const view = initialView
 
-  const scheduleById = useMemo(() => new Map(schedules.map((item) => [item.schedule_id, item])), [schedules])
+  const scheduleById = useMemo(
+    () => new Map(schedules.map((item) => [item.schedule_id, item])),
+    [schedules],
+  )
 
-  const options = useMemo(() => ({
-    routes: [...new Set(schedules.map((item) => item.route).filter(Boolean))],
-    categories: [...new Set(schedules.map((item) => item.category).filter(Boolean))],
-    hubs: [...new Set(schedules.map((item) => item.schedule_hub_id).filter(Boolean) as string[])],
-    points: [...new Set(schedules.map((item) => direction === 'origin' ? item.destination : item.start_point).filter(Boolean))],
-  }), [schedules, direction])
+  const categories = useMemo(() => {
+    const unique = [...new Set(schedules.map((item) => item.category).filter(Boolean))]
+    return unique.sort((a, b) => (a === 'Normal' ? -1 : b === 'Normal' ? 1 : a.localeCompare(b)))
+  }, [schedules])
 
-  const filteredSchedules = useMemo(() => schedules.filter((item) => {
+  const selectedPlanSchedules = useMemo(
+    () => schedules.filter((item) => item.schedule_day === selectedDay),
+    [schedules, selectedDay],
+  )
+
+  const options = useMemo(() => {
+    const source = view === 'database' ? selectedPlanSchedules : schedules
+    return {
+      routes: [...new Set(source.map((item) => item.route).filter(Boolean))],
+      hubs: [...new Set(source.map((item) => item.schedule_hub_id).filter(Boolean) as string[])],
+      points: [...new Set(source.map((item) => direction === 'origin' ? item.destination : item.start_point).filter(Boolean))],
+    }
+  }, [selectedPlanSchedules, schedules, view, direction])
+
+  const filteredSchedules = useMemo(() => selectedPlanSchedules.filter((item) => {
     const displayPoint = direction === 'origin' ? item.destination : item.start_point
     if (route && item.route !== route) return false
     if (category && item.category !== category) return false
     if (hub && item.schedule_hub_id !== hub) return false
     if (point && displayPoint !== point) return false
     return true
-  }), [schedules, direction, route, category, hub, point])
+  }), [selectedPlanSchedules, direction, route, category, hub, point])
 
-  const filteredTasks = useMemo(() => tasks.filter((task) => {
+  const filteredTasks = useMemo(() => todayTasks.filter((task) => {
     const displayPoint = direction === 'origin' ? task.destination : task.start_point
+    const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
     if (point && displayPoint !== point) return false
-    if (hub) {
-      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
-      if ((schedule?.schedule_hub_id ?? '') !== hub) return false
-    }
-    if (route) {
-      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
-      if ((schedule?.route ?? '') !== route) return false
-    }
-    if (category) {
-      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
-      if ((schedule?.category ?? '') !== category) return false
-    }
+    if (hub && (schedule?.schedule_hub_id ?? '') !== hub) return false
+    if (route && (schedule?.route ?? '') !== route) return false
+    if (category && schedule && schedule.category !== category) return false
     return true
-  }), [tasks, direction, point, hub, route, category, scheduleById])
+  }), [todayTasks, direction, point, hub, route, category, scheduleById])
 
   const summary = useMemo(() => ({
     unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
-    assigned: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id] && taskBySchedule[item.schedule_id].status !== 'Canceled').length,
+    assigned: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status !== 'Canceled').length,
     canceled: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status === 'Canceled').length,
   }), [filteredSchedules, taskBySchedule])
 
@@ -140,24 +169,6 @@ export default function TimetableView({
     return !task
   }
 
-  const planRows = useMemo(() => {
-    const groups = new Map<string, Schedule[]>()
-    for (const item of filteredSchedules) {
-      const row = direction === 'origin' ? item.destination : item.start_point
-      groups.set(row, [...(groups.get(row) ?? []), item])
-    }
-    return [...groups.entries()]
-  }, [filteredSchedules, direction])
-
-  const liveRows = useMemo(() => {
-    const groups = new Map<string, Task[]>()
-    for (const task of filteredTasks) {
-      const row = direction === 'origin' ? (task.destination ?? '-') : (task.start_point ?? '-')
-      groups.set(row, [...(groups.get(row) ?? []), task])
-    }
-    return [...groups.entries()]
-  }, [filteredTasks, direction])
-
   const planHubs = useMemo(() => {
     const groups = new Map<string, Schedule[]>()
     for (const item of filteredSchedules) {
@@ -170,7 +181,8 @@ export default function TimetableView({
   const liveHubs = useMemo(() => {
     const groups = new Map<string, Task[]>()
     for (const task of filteredTasks) {
-      const key = task.schedule_id ? (scheduleById.get(task.schedule_id)?.schedule_hub_id || 'Tanpa Hub') : 'Tanpa Hub'
+      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
+      const key = schedule?.schedule_hub_id || 'Tanpa Hub'
       groups.set(key, [...(groups.get(key) ?? []), task])
     }
     return [...groups.entries()]
@@ -182,6 +194,7 @@ export default function TimetableView({
       const row = direction === 'origin' ? item.destination : item.start_point
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
+
     return (
       <div className="schedule-grid-scroll">
         <table className="schedule-grid-table">
@@ -196,7 +209,10 @@ export default function TimetableView({
               <tr key={row}>
                 <th>{row}</th>
                 {Array.from({ length: 24 }, (_, hour) => {
-                  const cellItems = rowItems.filter((item) => hourValue(direction === 'origin' ? item.std : item.sta) === hour)
+                  const cellItems = rowItems
+                    .filter((item) => hourValue(item.std) === hour)
+                    .sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
+
                   return (
                     <td key={hour}>
                       <div className="schedule-grid-cell">
@@ -206,9 +222,9 @@ export default function TimetableView({
                             <span
                               key={item.schedule_id}
                               className={`schedule-trip ${task ? statusClass(task.status) : 'unassigned'} ${!summaryMatch(task) ? 'faded' : ''}`}
-                              title={`Trip ${item.trip} · ${timeValue(direction === 'origin' ? item.std : item.sta)} · ${item.route} · ${item.category}`}
+                              title={`STD ${timeValue(item.std)} · Trip ${item.trip} · ${item.route} · ${item.category}`}
                             >
-                              {item.trip}
+                              {timeValue(item.std)}
                             </span>
                           )
                         })}
@@ -230,6 +246,7 @@ export default function TimetableView({
       const row = direction === 'origin' ? (item.destination ?? '-') : (item.start_point ?? '-')
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
+
     return (
       <div className="schedule-grid-scroll">
         <table className="schedule-grid-table">
@@ -244,13 +261,20 @@ export default function TimetableView({
               <tr key={row}>
                 <th>{row}</th>
                 {Array.from({ length: 24 }, (_, hour) => {
-                  const cellItems = rowItems.filter((item) => hourValue(direction === 'origin' ? item.std : item.sta) === hour)
+                  const cellItems = rowItems
+                    .filter((item) => hourValue(item.std) === hour)
+                    .sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
+
                   return (
                     <td key={hour}>
                       <div className="schedule-grid-cell">
                         {cellItems.map((item) => (
-                          <span key={item.transaction_id} className={`schedule-trip live-item ${statusClass(item.status)} ${summaryFilter !== 'all' && !summaryMatch(item) ? 'faded' : ''}`} title={`${item.transaction_id} · ${timeValue(direction === 'origin' ? item.std : item.sta)}`}>
-                            {item.transaction_id}
+                          <span
+                            key={item.transaction_id}
+                            className={`schedule-trip live-item ${statusClass(item.status)} ${summaryFilter !== 'all' && !summaryMatch(item) ? 'faded' : ''}`}
+                            title={`${item.transaction_id} · STD ${timeValue(item.std)}`}
+                          >
+                            {timeValue(item.std)}
                           </span>
                         ))}
                       </div>
@@ -270,26 +294,60 @@ export default function TimetableView({
 
   return (
     <div className="schedule-page">
-      <div className="schedule-view-tabs" role="tablist" aria-label="Tampilan schedule">
-        <a className={view === 'database' ? 'active' : ''} href="/controller/timetable?view=plan">By Plan</a>
-        <a className={view === 'live' ? 'active' : ''} href="/controller/timetable?view=live">Live Tracking</a>
-      </div>
+      {view === 'database' ? (
+        <div className="schedule-day-row">
+          {DAYS.map((day) => (
+            <button
+              key={day.value}
+              type="button"
+              className={selectedDay === day.value ? 'active' : ''}
+              onClick={() => {
+                setSelectedDay(day.value)
+                setHub('')
+                setPoint('')
+                setSummaryFilter('all')
+              }}
+            >
+              {day.label}
+              {day.value === todayDay ? <small>Hari ini</small> : null}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <div className="schedule-toolbar">
         <div className="schedule-direction">
           <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setHub(''); setPoint('') }}>AS Origin</button>
           <button type="button" className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setHub(''); setPoint('') }}>AS Destination</button>
         </div>
+
+        <div className="schedule-category-buttons">
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={category === item ? 'active' : ''}
+              onClick={() => { setCategory(item); setSummaryFilter('all') }}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+
         <select value={hub} onChange={(e) => setHub(e.target.value)}>
           <option value="">{direction === 'origin' ? 'Hub Origin' : 'Hub Destinasi'}</option>
           {options.hubs.map((item) => <option key={item}>{item}</option>)}
         </select>
+
         <select value={point} onChange={(e) => setPoint(e.target.value)}>
           <option value="">{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</option>
           {options.points.map((item) => <option key={item}>{item}</option>)}
         </select>
-        <select value={route} onChange={(e) => setRoute(e.target.value)}><option value="">Rute</option>{options.routes.map((item) => <option key={item}>{item}</option>)}</select>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}><option value="">Kategori</option>{options.categories.map((item) => <option key={item}>{item}</option>)}</select>
+
+        <select value={route} onChange={(e) => setRoute(e.target.value)}>
+          <option value="">Rute</option>
+          {options.routes.map((item) => <option key={item}>{item}</option>)}
+        </select>
       </div>
 
       <div className="schedule-summary-inline">
@@ -312,7 +370,9 @@ export default function TimetableView({
         {!hubs.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
 
-      <div className="schedule-date">Schedule date · {date}</div>
+      <div className="schedule-date">
+        {view === 'live' ? 'Live date' : 'Schedule date'} · {view === 'live' ? date : DAYS.find((day) => day.value === selectedDay)?.label}
+      </div>
     </div>
   )
 }
