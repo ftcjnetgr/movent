@@ -73,30 +73,12 @@ export default function LoginPage() {
                 </div>
               </label>
 
-              <div className="login-options">
-                <label className="login-remember">
-                  <input type="checkbox" name="remember" />
-                  <span>Ingat saya di perangkat ini</span>
-                </label>
-                <button type="button" className="login-forgot">Lupa password?</button>
-              </div>
-
               {state.error ? <p className="form-error login-error" role="alert">{state.error}</p> : null}
 
               <button type="submit" className="login-submit" disabled={pending}>
                 <span>{pending ? 'Memeriksa...' : 'Masuk ke MOVENT'}</span>
                 <span aria-hidden="true">→</span>
               </button>
-
-              <div className="login-divider"><span>atau masuk dengan</span></div>
-
-              <div className="login-social-grid">
-                <button type="button" className="login-social-button"><span className="login-social-google">G</span>Google</button>
-                <button type="button" className="login-social-button">
-                  <span className="login-social-ms"><i /><i /><i /><i /></span>
-                  Microsoft
-                </button>
-              </div>
             </form>
           </div>
 
