@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import AppShell from '@/components/app-shell'
+import { getCurrentProfile } from '@/lib/server/profile'
 import ChangePasswordForm from '@/components/change-password-form'
 
 export default async function ChangePasswordPage({
@@ -14,11 +15,22 @@ export default async function ChangePasswordPage({
     return <ChangePasswordForm first />
   }
 
+  const profile = await getCurrentProfile()
+  const backRoute = profile.role === 'Dispatcher'
+    ? '/dispatcher/beranda'
+    : profile.role === 'Executor'
+      ? '/executor/tugas-saya'
+      : profile.role === 'Maintainer'
+        ? '/maintainer/beranda'
+        : profile.role === 'Operation'
+          ? '/operation/beranda'
+          : '/controller/beranda'
+
   return (
-    <AppShell>
+    <AppShell profile={profile}>
       <div className="password-page">
         <div className="password-page-topbar">
-          <Link href="/controller/beranda" className="password-back">← Kembali</Link>
+          <Link href={backRoute} className="password-back">← Kembali</Link>
         </div>
         <ChangePasswordForm first={false} />
       </div>
