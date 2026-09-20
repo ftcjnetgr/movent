@@ -51,8 +51,8 @@ export default function LoginPage() {
 
           <div className="login-form-inner">
             <div className="login-heading">
-              <h1>Selamat datang kembali</h1>
-              <p>Masuk untuk melanjutkan operasional hari ini.</p>
+              <h1>Halo, balik lagi 👋</h1>
+              <p>Masuk dulu, biar operasional hari ini tetap jalan.</p>
             </div>
 
             <form action={formAction} className="login-form">
@@ -60,7 +60,7 @@ export default function LoginPage() {
                 Username
                 <div className="login-input-wrap">
                   <span className="login-input-icon" aria-hidden="true">♙</span>
-                  <input name="username" autoComplete="username" autoFocus placeholder="Masukkan username" />
+                  <input name="username" autoComplete="username" autoFocus placeholder="Username kamu" />
                 </div>
               </label>
 
@@ -68,7 +68,7 @@ export default function LoginPage() {
                 Password
                 <div className="login-input-wrap">
                   <span className="login-input-icon" aria-hidden="true">♧</span>
-                  <input name="password" type="password" autoComplete="current-password" placeholder="Masukkan password" />
+                  <input name="password" type="password" autoComplete="current-password" placeholder="Password kamu" />
                   <span className="login-password-hint" aria-hidden="true">◉</span>
                 </div>
               </label>
