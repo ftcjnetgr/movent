@@ -15,7 +15,7 @@ export async function getTimetableData(profile: AppProfile) {
   const [{ data: schedules }, { data: allTasks }] = await Promise.all([
     admin
       .from('schedules')
-      .select('schedule_id, trip, route, category, start_point, start_point_type, destination, destination_type, schedule_day, schedule_day_name, std, sta, status')
+      .select('schedule_id, trip, schedule_hub_id, route, category, start_point, start_point_type, destination, destination_type, schedule_day, schedule_day_name, std, sta, status')
       .eq('status', 'Active')
       .eq('schedule_day', day)
       .order('std'),
