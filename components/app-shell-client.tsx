@@ -94,13 +94,6 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const [openGroups, setOpenGroups] = useState<string[]>([])
   const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
   const navGroups = useMemo(() => profile.role === 'Super User' ? [...(navByRole[currentRole] ?? []), superUserGroup] : (navByRole[currentRole] ?? []), [currentRole, profile.role])
-  const isItemActive = (item: NavItem) => {
-    const [itemPath, itemQuery] = item.href.split('?')
-    if (pathname !== itemPath && !pathname.startsWith(itemPath + '/')) return false
-    if (!itemQuery) return true
-    const expected = new URLSearchParams(itemQuery).get('view')
-    return searchParams.get('view') === expected
-  }
   const activeItem = useMemo(() => {
     return navGroups
       .flatMap(group => group.items.map(item => ({ ...item, group: group.label })))
