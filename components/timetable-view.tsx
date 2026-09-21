@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react'
 type Schedule = {
   schedule_id: string
   trip: number
-  schedule_hub_id: string | null
   route: string
   category: string
   start_point: string
@@ -81,6 +80,12 @@ function statusClass(status: string | undefined) {
   return status ? `status-${status.toLowerCase().replaceAll(' ', '-')}` : ''
 }
 
+const routeLabels: Record<string, string> = {
+  Interhub: 'Interhub',
+  Transit: 'Gateway',
+  Direct: 'Direct',
+}
+
 export default function TimetableView({
   date,
   todayDay,
@@ -100,8 +105,8 @@ export default function TimetableView({
 }) {
   const view = initialView
   const [selectedDay, setSelectedDay] = useState(todayDay)
-  const [direction, setDirection] = useState<'origin' | 'destination'>('origin')
-  const [route, setRoute] = useState('')
+  const [direction, setDirection] = useState<'start-point' | 'destination'>('start-point')
+  const [route, setRoute] = useState('Interhub')
   const [category, setCategory] = useState('Normal')
   const [point, setPoint] = useState('')
   const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>('all')
@@ -116,21 +121,35 @@ export default function TimetableView({
     return unique.sort((a, b) => (a === 'Normal' ? -1 : b === 'Normal' ? 1 : a.localeCompare(b)))
   }, [schedules])
 
+  const routes = useMemo(() => {
+    const unique = [...new Set(schedules.map((item) => item.route).filter(Boolean))]
+    const order = ['Interhub', 'Transit', 'Direct']
+    return unique.sort((a, b) => {
+      const ai = order.indexOf(a)
+      const bi = order.indexOf(b)
+      if (ai === -1 && bi === -1) return a.localeCompare(b)
+      if (ai === -1) return 1
+      if (bi === -1) return -1
+      return ai - bi
+    })
+  }, [schedules])
+
   const selectedPlanSchedules = useMemo(
     () => schedules.filter((item) => item.schedule_day === selectedDay),
     [schedules, selectedDay],
   )
 
-  const options = useMemo(() => {
+  const pointOptions = useMemo(() => {
     const source = view === 'database' ? selectedPlanSchedules : schedules
-    return {
-      routes: [...new Set(source.map((item) => item.route).filter(Boolean))].sort((a, b) => a.localeCompare(b)),
-      points: [...new Set(source.map((item) => direction === 'origin' ? item.destination : item.start_point).filter(Boolean))].sort((a, b) => a.localeCompare(b)),
-    }
+    return [...new Set(
+      source
+        .map((item) => direction === 'start-point' ? item.start_point : item.destination)
+        .filter(Boolean),
+    )].sort((a, b) => a.localeCompare(b))
   }, [selectedPlanSchedules, schedules, view, direction])
 
   const filteredSchedules = useMemo(() => selectedPlanSchedules.filter((item) => {
-    const displayPoint = direction === 'origin' ? item.destination : item.start_point
+    const displayPoint = direction === 'start-point' ? item.start_point : item.destination
     if (route && item.route !== route) return false
     if (category && item.category !== category) return false
     if (point && displayPoint !== point) return false
@@ -138,13 +157,13 @@ export default function TimetableView({
   }), [selectedPlanSchedules, direction, route, category, point])
 
   const filteredTasks = useMemo(() => todayTasks.filter((task) => {
-    const displayPoint = direction === 'origin' ? task.destination : task.start_point
+    const displayPoint = direction === 'start-point' ? task.start_point : task.destination
     const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
-    if (point && displayPoint !== point) return false
-    if (route && (schedule?.route ?? '') !== route) return false
+    if (route && schedule && schedule.route !== route) return false
     if (category && schedule && schedule.category !== category) return false
+    if (point && displayPoint !== point) return false
     return true
-  }), [todayTasks, direction, point, route, category, scheduleById])
+  }), [todayTasks, direction, route, category, point, scheduleById])
 
   const summary = useMemo(() => ({
     unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
@@ -165,39 +184,21 @@ export default function TimetableView({
     return !task
   }
 
-  const planHubs = useMemo(() => {
-    const groups = new Map<string, Schedule[]>()
-    for (const item of filteredSchedules) {
-      const key = item.schedule_hub_id || 'Tanpa Hub'
-      groups.set(key, [...(groups.get(key) ?? []), item])
-    }
-    return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-  }, [filteredSchedules])
-
-  const liveHubs = useMemo(() => {
-    const groups = new Map<string, Task[]>()
-    for (const task of filteredTasks) {
-      const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
-      const key = schedule?.schedule_hub_id || 'Tanpa Hub'
-      groups.set(key, [...(groups.get(key) ?? []), task])
-    }
-    return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-  }, [filteredTasks, scheduleById])
-
   function renderPlanTable(items: Schedule[]) {
     const rows = new Map<string, Schedule[]>()
     for (const item of items) {
-      const row = direction === 'origin' ? item.destination : item.start_point
+      const row = direction === 'start-point' ? item.start_point : item.destination
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
 
     const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+
     return (
       <div className="schedule-grid-scroll">
         <table className="schedule-grid-table">
           <thead>
             <tr>
-              <th>{direction === 'origin' ? 'Destination' : 'Start Point'}</th>
+              <th>{direction === 'start-point' ? 'Start Point' : 'Destination'}</th>
               {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
             </tr>
           </thead>
@@ -219,7 +220,7 @@ export default function TimetableView({
                             <span
                               key={item.schedule_id}
                               className={`schedule-trip ${task ? statusClass(task.status) : 'unassigned'} ${!summaryMatch(task) ? 'faded' : ''}`}
-                              title={`STD ${timeValue(item.std)} · Trip ${item.trip} · ${item.route} · ${item.category}`}
+                              title={`STD ${timeValue(item.std)} · ${item.route} · ${item.category}`}
                             >
                               {timeValue(item.std)}
                             </span>
@@ -240,17 +241,18 @@ export default function TimetableView({
   function renderLiveTable(items: Task[]) {
     const rows = new Map<string, Task[]>()
     for (const item of items) {
-      const row = direction === 'origin' ? (item.destination ?? '-') : (item.start_point ?? '-')
+      const row = direction === 'start-point' ? (item.start_point ?? '-') : (item.destination ?? '-')
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
 
     const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+
     return (
       <div className="schedule-grid-scroll">
         <table className="schedule-grid-table">
           <thead>
             <tr>
-              <th>{direction === 'origin' ? 'Destination' : 'Start Point'}</th>
+              <th>{direction === 'start-point' ? 'Start Point' : 'Destination'}</th>
               {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
             </tr>
           </thead>
@@ -287,34 +289,46 @@ export default function TimetableView({
     )
   }
 
-  const hubs = view === 'database' ? planHubs : liveHubs
+  const activeRows = view === 'database' ? filteredSchedules : filteredTasks
   const summaries = view === 'database' ? summary : liveSummary
 
   return (
     <div className="schedule-page">
-      {view === 'database' ? (
-        <div className="schedule-day-row">
-          {DAYS.map((day) => (
-            <button
-              key={day.value}
-              type="button"
-              className={selectedDay === day.value ? 'active' : ''}
-              onClick={() => {
-                setSelectedDay(day.value)
-                setPoint('')
-                setSummaryFilter('all')
-              }}
-            >
-              {day.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
+      <div className="schedule-day-row">
+        {DAYS.map((day) => (
+          <button
+            key={day.value}
+            type="button"
+            disabled={view === 'live' && day.value !== todayDay}
+            className={selectedDay === day.value ? 'active' : ''}
+            onClick={() => {
+              if (view === 'live') return
+              setSelectedDay(day.value)
+              setPoint('')
+              setSummaryFilter('all')
+            }}
+          >
+            {day.label}
+          </button>
+        ))}
+      </div>
 
       <div className="schedule-toolbar">
         <div className="schedule-direction">
-          <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setPoint('') }}>AS Start Point</button>
-          <button type="button" className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setPoint('') }}>AS Destination</button>
+          <button
+            type="button"
+            className={direction === 'start-point' ? 'active' : ''}
+            onClick={() => { setDirection('start-point'); setPoint('') }}
+          >
+            AS Start Point
+          </button>
+          <button
+            type="button"
+            className={direction === 'destination' ? 'active' : ''}
+            onClick={() => { setDirection('destination'); setPoint('') }}
+          >
+            AS Destination
+          </button>
         </div>
 
         <div className="schedule-category-buttons">
@@ -331,14 +345,22 @@ export default function TimetableView({
         </div>
 
         <select value={point} onChange={(e) => setPoint(e.target.value)}>
-          <option value="">{direction === 'origin' ? 'Destination' : 'Start Point'}</option>
-          {options.points.map((item) => <option key={item}>{item}</option>)}
+          <option value="">{direction === 'start-point' ? 'Start Point' : 'Destination'}</option>
+          {pointOptions.map((item) => <option key={item}>{item}</option>)}
         </select>
+      </div>
 
-        <select value={route} onChange={(e) => setRoute(e.target.value)}>
-          <option value="">Rute</option>
-          {options.routes.map((item) => <option key={item}>{item}</option>)}
-        </select>
+      <div className="schedule-route-tabs">
+        {routes.map((item) => (
+          <button
+            key={item}
+            type="button"
+            className={route === item ? 'active' : ''}
+            onClick={() => { setRoute(item); setSummaryFilter('all') }}
+          >
+            {routeLabels[item] ?? item}
+          </button>
+        ))}
       </div>
 
       <div className="schedule-summary-inline">
@@ -348,17 +370,8 @@ export default function TimetableView({
       </div>
 
       <section className="schedule-grid-shell">
-        {hubs.map(([hubName, items], index) => (
-          <details className="schedule-hub" key={hubName}>
-            <summary>
-              <span>Hub {direction === 'origin' ? 'Start Point' : 'Destination'}</span>
-              <b>{hubName}</b>
-              <small>{items.length} {view === 'database' ? 'schedule' : 'assignment'}</small>
-            </summary>
-            {view === 'database' ? renderPlanTable(items as Schedule[]) : renderLiveTable(items as Task[])}
-          </details>
-        ))}
-        {!hubs.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
+        {view === 'database' ? renderPlanTable(activeRows as Schedule[]) : renderLiveTable(activeRows as Task[])}
+        {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
 
       <div className="schedule-date">
