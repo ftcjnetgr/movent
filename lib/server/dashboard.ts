@@ -17,6 +17,8 @@ type TaskRow = {
   accepted_at: string | null
   driving_at: string | null
   completed_at: string | null
+  external_departure_at: string | null
+  external_arrival_at: string | null
   canceled_at: string | null
 }
 
@@ -102,7 +104,7 @@ export async function getDashboardData(profile: AppProfile) {
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
     admin
       .from('tasks')
-      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, canceled_at')
+      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at')
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
@@ -228,13 +230,13 @@ export async function getDashboardData(profile: AppProfile) {
       assignedAccepted: average(tasks.map((task) => minutesBetween(task.assigned_at, task.accepted_at))),
       acceptedDriving: average(tasks.map((task) => minutesBetween(task.accepted_at, task.driving_at))),
       drivingCompleted: average(tasks.map((task) => minutesBetween(task.driving_at, task.completed_at))),
-      completedCycle: average(tasks.filter((task) => task.status === 'Completed').map((task) => minutesBetween(task.assigned_at, task.completed_at))),
+      completedCycle: average(tasks.filter((task) => task.status === 'Completed').map((task) => task.fleet_ownership === 'Non-TGR' ? minutesBetween(task.assigned_at, task.external_arrival_at) : minutesBetween(task.assigned_at, task.completed_at))),
       canceledCycle: average(tasks.filter((task) => task.status === 'Canceled').map((task) => minutesBetween(task.assigned_at ?? task.accepted_at ?? task.driving_at, task.canceled_at))),
     },
     taskAveragesNonTgr: {
       assignedDriving: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR').map((task) => minutesBetween(task.assigned_at, task.driving_at))),
-      drivingCompleted: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR').map((task) => minutesBetween(task.driving_at, task.completed_at))),
-      completedCycle: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR' && task.status === 'Completed').map((task) => minutesBetween(task.assigned_at, task.completed_at))),
+      drivingCompleted: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR').map((task) => minutesBetween(task.external_departure_at, task.external_arrival_at))),
+      completedCycle: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR' && task.status === 'Completed').map((task) => minutesBetween(task.assigned_at, task.external_arrival_at))),
       canceledCycle: average(tasks.filter((task) => task.fleet_ownership === 'Non-TGR' && task.status === 'Canceled').map((task) => minutesBetween(task.assigned_at, task.canceled_at))),
     },
     ticketAverages: {
