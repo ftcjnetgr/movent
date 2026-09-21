@@ -1,10 +1,23 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import SearchableMasterSelect from '@/components/searchable-master-select'
-import { createNonTgrSupplyAction, confirmNonTgrDepartureByOperationAction } from '@/app/operation/beranda/actions'
+import { createNonTgrSupplyAction, confirmNonTgrDepartureByOperationAction, confirmNonTgrSupplyAction } from '@/app/operation/beranda/actions'
 
 type Option = { value: string; label: string; searchText?: string }
+type Preview = {
+  startPoint: string
+  destination: string
+  std: string
+  sta: string
+  externalExecutor: string
+  externalFleet: string
+  sjNumber: string
+  sjQty: number
+  sjWeight: number
+  product: string
+  sjNote: string | null
+}
 
 type Task = {
   transaction_id: string
@@ -30,7 +43,9 @@ function timeValue(value: string | null) {
 
 export default function OperationCreateTask({ locations, products, tasks }: { locations: string[]; products: string[]; tasks: Task[] }) {
   const [state, formAction, pending] = useActionState(createNonTgrSupplyAction, {})
+  const [confirmState, confirmAction, confirmPending] = useActionState(confirmNonTgrSupplyAction, {})
   const [departureState, departureAction, departurePending] = useActionState(confirmNonTgrDepartureByOperationAction, {})
+  const [preview, setPreview] = useState<Preview | null>(null)
 
   const locationOptions: Option[] = locations.map((value) => ({ value, label: value, searchText: value }))
   const productOptions: Option[] = products.map((value) => ({ value, label: value, searchText: value }))
@@ -39,7 +54,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
     <div className="section-grid two-column section-block">
       <section className="metric-card">
         <div className="card-title">Buat Tugas Baru</div>
-        <p className="muted">Supply Armada Non TGR · isi data perjalanan dan Surat Jalan, lalu konfirmasi keberangkatan.</p>
+        <p className="muted">Supply Armada Non TGR · isi data perjalanan dan Surat Jalan, lalu preview sebelum konfirmasi.</p>
         <form action={formAction} className="data-form compact-form">
           <div className="form-row">
             <SearchableMasterSelect label="Start Point" name="startPoint" options={locationOptions} placeholder="Pilih start point" required />
@@ -66,8 +81,41 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
           <label>Catatan SJ<textarea name="sjNote" rows={3} /></label>
           {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
           {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
-          <button type="submit" disabled={pending}>{pending ? 'Menyimpan tugas...' : 'Submit SJ'}</button>
+          <button type="submit" disabled={pending}>{pending ? 'Menyiapkan preview...' : 'Preview Tugas'}</button>
         </form>
+
+        {state.preview ? (
+          <div className="metric-card compact-form" style={{ marginTop: 16 }}>
+            <div className="card-title">Preview Tugas Supply Non-TGR</div>
+            <div className="task-summary-grid">
+              <div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div>
+              <div><span>STD</span><strong>{timeValue(state.preview.std)}</strong></div>
+              <div><span>STA</span><strong>{timeValue(state.preview.sta)}</strong></div>
+              <div><span>Executor</span><strong>{state.preview.externalExecutor}</strong></div>
+              <div><span>Armada</span><strong>{state.preview.externalFleet}</strong></div>
+              <div><span>SJ</span><strong>{state.preview.sjNumber} · {state.preview.product}</strong></div>
+            </div>
+            <p className="muted">Periksa data sebelum konfirmasi. Jika ada yang salah, kembali ke form untuk mengedit.</p>
+            <form action={confirmAction} className="compact-form">
+              <input type="hidden" name="startPoint" value={state.preview.startPoint} />
+              <input type="hidden" name="destination" value={state.preview.destination} />
+              <input type="hidden" name="std" value={timeValue(state.preview.std)} />
+              <input type="hidden" name="sta" value={timeValue(state.preview.sta)} />
+              <input type="hidden" name="executorName" value={state.preview.externalExecutor.split(' · ')[0]} />
+              <input type="hidden" name="executorPhone" value={state.preview.externalExecutor.split(' · ').slice(1).join(' · ')} />
+              <input type="hidden" name="fleetPlate" value={state.preview.externalFleet.split(' · ')[0]} />
+              <input type="hidden" name="fleetType" value={state.preview.externalFleet.split(' · ').slice(1).join(' · ')} />
+              <input type="hidden" name="sjNumber" value={state.preview.sjNumber} />
+              <input type="hidden" name="sjQty" value={state.preview.sjQty} />
+              <input type="hidden" name="sjWeight" value={state.preview.sjWeight} />
+              <input type="hidden" name="product" value={state.preview.product} />
+              <input type="hidden" name="sjNote" value={state.preview.sjNote ?? ''} />
+              {confirmState.error ? <p className="form-error" role="alert">{confirmState.error}</p> : null}
+              {confirmState.success ? <p className="form-success" role="status">{confirmState.success}</p> : null}
+              <button type="submit" disabled={confirmPending}>{confirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Penugasan'}</button>
+            </form>
+          </div>
+        ) : null}
       </section>
 
       <section className="metric-card">
