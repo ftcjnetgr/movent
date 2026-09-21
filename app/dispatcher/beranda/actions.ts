@@ -82,7 +82,7 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
     const transactionId = await nextTransaction(admin)
     if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
-    return { success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.', preview: { transactionId, flow: 'tgr', startPoint: schedule.start_point, destination: schedule.destination, externalExecutor: executor.full_name, externalFleet: fleet.plat_number, sjNumber: '', sjQty: 0, sjWeight: 0, product: '', sjNote: null, scheduleId: schedule.schedule_id, executorNik: executor.executor_nik, platNumber: fleet.plat_number } }
+    return { success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.', preview: { transactionId, flow: 'distribusi', startPoint, destination, externalExecutor: executor.full_name, externalFleet: fleet.plat_number, sjNumber: '', sjQty: 0, sjWeight: 0, product: '', sjNote: null, executorNik: executor.executor_nik, platNumber: fleet.plat_number, std, sta } }
   }
 
   if (taskType === 'Supply' && ownership === 'Non-TGR') {
