@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState } from 'react'
 import { jsPDF } from 'jspdf'
 import SearchableMasterSelect from '@/components/searchable-master-select'
-import { createDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
+import { createDispatcherTaskAction, confirmDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
 
 const initialState: {
   error?: string
@@ -11,6 +11,7 @@ const initialState: {
   transactionId?: string
   preview?: {
     transactionId: string
+    flow: 'tgr' | 'distribusi'
     startPoint: string
     destination: string
     externalExecutor: string
@@ -20,6 +21,9 @@ const initialState: {
     sjWeight: number
     product: string
     sjNote: string | null
+    scheduleId?: string
+    executorNik?: string
+    platNumber?: string
   }
 } = {}
 
@@ -334,23 +338,30 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
       {state.preview ? (
         <div className="metric-card section-block">
-          <div className="card-title">Pratinjau surat jalan</div>
+          <div className="card-title">Preview Tugas</div>
           <div className="task-summary-grid">
             <div><span>ID Transaksi</span><strong>{state.preview.transactionId}</strong></div>
-            <div><span>Titik Mulai</span><strong>{state.preview.startPoint}</strong></div>
-            <div><span>Destinasi</span><strong>{state.preview.destination}</strong></div>
-            <div><span>Executor Eksternal</span><strong>{state.preview.externalExecutor}</strong></div>
-            <div><span>Armada Eksternal</span><strong>{state.preview.externalFleet}</strong></div>
-            <div><span>Nomor SJ</span><strong>{state.preview.sjNumber}</strong></div>
-            <div><span>Qty</span><strong>{state.preview.sjQty}</strong></div>
-            <div><span>Berat</span><strong>{state.preview.sjWeight}</strong></div>
-            <div><span>Produk</span><strong>{state.preview.product}</strong></div>
-            <div><span>Catatan</span><strong>{state.preview.sjNote ?? '-'}</strong></div>
+            <div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div>
+            <div><span>Executor</span><strong>{state.preview.externalExecutor}</strong></div>
+            <div><span>Armada</span><strong>{state.preview.externalFleet}</strong></div>
+            {state.preview.scheduleId ? <div><span>Schedule</span><strong>{state.preview.scheduleId}</strong></div> : null}
           </div>
-          <div className="form-row">
-            <button type="button" onClick={printNonTgrSj}>Cetak PDF</button>
-            <button type="button" className="secondary-button" onClick={shareNonTgrSj}>Bagikan ke WhatsApp</button>
-          </div>
+          <p className="muted">Periksa data sebelum penugasan dikonfirmasi.</p>
+          <form action={confirmDispatcherTaskAction} className="compact-form">
+            <input type="hidden" name="transactionId" value={state.preview.transactionId}/>
+            <input type="hidden" name="flow" value={state.preview.flow}/>
+            <input type="hidden" name="startPoint" value={state.preview.startPoint}/>
+            <input type="hidden" name="destination" value={state.preview.destination}/>
+            <input type="hidden" name="executorNik" value={state.preview.executorNik ?? ''}/>
+            <input type="hidden" name="platNumber" value={state.preview.platNumber ?? ''}/>
+            <input type="hidden" name="scheduleId" value={state.preview.scheduleId ?? ''}/>
+            <input type="hidden" name="std" value="00:00"/>
+            <input type="hidden" name="sta" value="00:00"/>
+            <div className="form-actions">
+              <button type="submit">Konfirmasi Penugasan</button>
+              <button type="button" className="secondary-button" onClick={resetCreateFlow}>Edit Tugas</button>
+            </div>
+          </form>
         </div>
       ) : null}
     </section>
