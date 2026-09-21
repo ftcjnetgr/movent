@@ -40,12 +40,16 @@ export async function changePasswordAction(_state: { error?: string }, formData:
   const admin = createAdminClient()
   const { data: profile } = await admin
     .from('user_profiles')
-    .select('id, role')
+    .select('id, role, status')
     .eq('auth_user_id', userData.user.id)
     .maybeSingle()
 
   if (!profile) {
     return { error: 'Data profil pengguna belum ditemukan.' }
+  }
+
+  if (profile.status === 'Locked') {
+    return { error: 'Akun kamu sedang terkunci. Hubungi Super User untuk membukanya lagi.' }
   }
 
   const { error: passwordError } = await supabase.auth.updateUser({ password: newPassword })
