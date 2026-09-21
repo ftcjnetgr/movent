@@ -142,13 +142,13 @@ export default function TimetableView({
   const pointOptions = useMemo(() => {
     const source = view === 'database' ? selectedPlanSchedules : schedules
     const values = direction === 'start-point'
-      ? source.filter((item) => Boolean(item.start_point)).map((item) => item.destination)
-      : source.filter((item) => Boolean(item.destination)).map((item) => item.start_point)
+      ? source.map((item) => item.start_point)
+      : source.map((item) => item.destination)
     return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b))
   }, [selectedPlanSchedules, schedules, view, direction])
 
   const filteredSchedules = useMemo(() => selectedPlanSchedules.filter((item) => {
-    const filterPoint = direction === 'start-point' ? item.destination : item.start_point
+    const filterPoint = direction === 'start-point' ? item.start_point : item.destination
     if (route && item.route !== route) return false
     if (category && item.category !== category) return false
     if (point && filterPoint !== point) return false
@@ -156,7 +156,7 @@ export default function TimetableView({
   }), [selectedPlanSchedules, direction, route, category, point])
 
   const filteredTasks = useMemo(() => todayTasks.filter((task) => {
-    const filterPoint = direction === 'start-point' ? task.destination : task.start_point
+    const filterPoint = direction === 'start-point' ? task.start_point : task.destination
     const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
     if (route && schedule && schedule.route !== route) return false
     if (category && schedule && schedule.category !== category) return false
