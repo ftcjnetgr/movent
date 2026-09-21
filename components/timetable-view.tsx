@@ -343,38 +343,47 @@ export default function TimetableView({
           ))}
         </div>
 
-        <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Destination' : 'Filter Start Point'}>
-          <button
-            type="button"
-            className={!point ? 'active' : ''}
-            onClick={() => { setPoint(''); setSummaryFilter('all') }}
-          >
-            Semua
-          </button>
-          {pointOptions.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={point === item ? 'active' : ''}
-              onClick={() => { setPoint(item); setSummaryFilter('all') }}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
       </div>
 
-      <div className="schedule-route-tabs">
-        {routes.map((item) => (
-          <button
-            key={item}
-            type="button"
-            className={route === item ? 'active' : ''}
-            onClick={() => { setRoute(item); setSummaryFilter('all') }}
-          >
-            {routeLabels[item] ?? item}
-          </button>
-        ))}
+      <div className="schedule-filter-bar">
+        <div className="schedule-filter-group">
+          <span className="schedule-filter-label">Rute</span>
+          <div className="schedule-route-tabs">
+            {routes.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={route === item ? 'active' : ''}
+                onClick={() => { setRoute(item); setSummaryFilter('all') }}
+              >
+                {routeLabels[item] ?? item}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="schedule-filter-group">
+          <span className="schedule-filter-label">{direction === 'start-point' ? 'Destination' : 'Start Point'}</span>
+          <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Destination' : 'Filter Start Point'}>
+            <button
+              type="button"
+              className={!point ? 'active' : ''}
+              onClick={() => { setPoint(''); setSummaryFilter('all') }}
+            >
+              Semua
+            </button>
+            {pointOptions.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={point === item ? 'active' : ''}
+                onClick={() => { setPoint(item); setSummaryFilter('all') }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="schedule-summary-inline">
