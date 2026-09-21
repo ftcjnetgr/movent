@@ -126,6 +126,8 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     if (new Date(timestamps[1]!).getTime() <= new Date(timestamps[0]!).getTime()) return { error: 'STA harus lebih besar dari STD.' }
     const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
     if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
+    const transactionId = await nextTransaction(admin)
+    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
     return { success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.', preview: { transactionId, flow: 'distribusi', startPoint, destination, externalExecutor: executor.full_name, externalFleet: fleet.plat_number, sjNumber: '', sjQty: 0, sjWeight: 0, product: '', sjNote: null, executorNik: executor.executor_nik, platNumber: fleet.plat_number, std, sta } }
   }
 
