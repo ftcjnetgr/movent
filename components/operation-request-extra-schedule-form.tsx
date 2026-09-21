@@ -3,7 +3,7 @@
 import { useActionState } from 'react'
 import { createExtraScheduleAction, confirmExtraScheduleAction } from '@/app/operation/request-extra-schedule/actions'
 
-type State={error?:string;success?:string;preview?:{transactionId:string;startPoint:string;destination:string;std:string;sta:string}}
+type State={error?:string;success?:string;preview?:{transactionId:string;confirmationKey:string;startPoint:string;destination:string;std:string;sta:string}}
 
 export default function OperationRequestExtraScheduleForm({locations}:{locations:string[]}){
  const [state,formAction,pending]=useActionState(createExtraScheduleAction,{} as State)
@@ -20,7 +20,7 @@ export default function OperationRequestExtraScheduleForm({locations}:{locations
    <div className="task-summary-grid"><div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div><div><span>STD</span><strong>{state.preview.std.slice(11,16)}</strong></div><div><span>STA</span><strong>{state.preview.sta.slice(11,16)}</strong></div></div>
    <p className="muted">Periksa data sebelum request dikonfirmasi.</p>
    <form action={confirmExtraScheduleAction} className="compact-form">
-    <input type="hidden" name="transactionId" value={state.preview.transactionId}/><input type="hidden" name="startPoint" value={state.preview.startPoint}/><input type="hidden" name="destination" value={state.preview.destination}/><input type="hidden" name="std" value={state.preview.std.slice(11,16)}/><input type="hidden" name="sta" value={state.preview.sta.slice(11,16)}/>
+    <input type="hidden" name="transactionId" value={state.preview.transactionId}/><input type="hidden" name="confirmationKey" value={state.preview.confirmationKey}/><input type="hidden" name="startPoint" value={state.preview.startPoint}/><input type="hidden" name="destination" value={state.preview.destination}/><input type="hidden" name="std" value={state.preview.std.slice(11,16)}/><input type="hidden" name="sta" value={state.preview.sta.slice(11,16)}/>
     <div className="form-actions"><button type="submit">Konfirmasi Request</button><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Edit Request</button></div>
    </form>
   </div>:null}
