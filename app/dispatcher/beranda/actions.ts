@@ -45,6 +45,13 @@ async function activeExecutorAndFleet(admin: ReturnType<typeof createAdminClient
   return { executor, fleet }
 }
 
+
+function scheduleStdNotPassed(std: string) {
+  const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
+  const stdAt = new Date(`${date}T${std}+07:00`)
+  return new Date() <= stdAt
+}
+
 async function nextTransaction(admin: ReturnType<typeof createAdminClient>) {
   const { data, error } = await admin.rpc('movent_next_transaction_id')
   if (error || !data) return null
@@ -70,6 +77,7 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
 
     const { data: schedule } = await admin.from('schedules').select('*').eq('schedule_id', scheduleId).eq('status', 'Active').maybeSingle()
     if (!schedule) return { error: 'Schedule tidak tersedia.' }
+    if (!scheduleStdNotPassed(schedule.std)) return { error: 'Schedule sudah melewati STD dan tidak bisa dipakai lagi.' }
 
     const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
     if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
@@ -137,7 +145,7 @@ export async function confirmDispatcherTaskAction(_state: State, formData: FormD
   const flow=String(formData.get('flow')??''), transactionId=String(formData.get('transactionId')??'').trim(), executorNik=String(formData.get('executorNik')??'').trim(), platNumber=String(formData.get('platNumber')??'').trim(), scheduleId=String(formData.get('scheduleId')??'').trim()
   const admin=createAdminClient(); const {executor,fleet}=await activeExecutorAndFleet(admin,executorNik,platNumber); if(!executor||!fleet)return{error:'Executor atau Armada belum tersedia.'}
   if(flow==='tgr'){
-    const {data:schedule}=await admin.from('schedules').select('*').eq('schedule_id',scheduleId).eq('status','Active').maybeSingle(); if(!schedule)return{error:'Schedule tidak tersedia.'}
+    const {data:schedule}=await admin.from('schedules').select('*').eq('schedule_id',scheduleId).eq('status','Active').maybeSingle(); if(!schedule)return{error:'Schedule tidak tersedia.'}; if(!scheduleStdNotPassed(schedule.std))return{error:'Schedule sudah melewati STD dan tidak bisa dipakai lagi.'}
     const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); const std=`${date}T${schedule.std}+07:00`,sta=`${date}T${schedule.sta}+07:00`
     const {error}=await admin.from('tasks').insert({transaction_id:transactionId,source_type:'Schedule',task_type:'Supply',fleet_ownership:'TGR',status:'Assigned',created_by:profile.id,assigned_by:profile.id,executor_nik:executor.executor_nik,executor_snapshot:executor,fleet_snapshot:fleet,schedule_id:schedule.schedule_id,schedule_snapshot:schedule,start_point:schedule.start_point,start_point_snapshot:schedule,destination:schedule.destination,destination_snapshot:schedule,std,sta,assigned_at:new Date().toISOString()});if(error)return{error:'Tugas belum berhasil dikonfirmasi.'}
   } else if(flow==='distribusi'){
