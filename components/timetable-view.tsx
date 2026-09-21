@@ -125,9 +125,8 @@ export default function TimetableView({
   const options = useMemo(() => {
     const source = view === 'database' ? selectedPlanSchedules : schedules
     return {
-      routes: [...new Set(source.map((item) => item.route).filter(Boolean))],
-      hubs: [...new Set(source.map((item) => item.schedule_hub_id).filter(Boolean) as string[])],
-      points: [...new Set(source.map((item) => direction === 'origin' ? item.destination : item.start_point).filter(Boolean))],
+      routes: [...new Set(source.map((item) => item.route).filter(Boolean))].sort((a, b) => a.localeCompare(b)),
+      points: [...new Set(source.map((item) => direction === 'origin' ? item.destination : item.start_point).filter(Boolean))].sort((a, b) => a.localeCompare(b)),
     }
   }, [selectedPlanSchedules, schedules, view, direction])
 
@@ -135,7 +134,6 @@ export default function TimetableView({
     const displayPoint = direction === 'origin' ? item.destination : item.start_point
     if (route && item.route !== route) return false
     if (category && item.category !== category) return false
-    if (hub && item.schedule_hub_id !== hub) return false
     if (point && displayPoint !== point) return false
     return true
   }), [selectedPlanSchedules, direction, route, category, hub, point])
@@ -144,7 +142,6 @@ export default function TimetableView({
     const displayPoint = direction === 'origin' ? task.destination : task.start_point
     const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
     if (point && displayPoint !== point) return false
-    if (hub && (schedule?.schedule_hub_id ?? '') !== hub) return false
     if (route && (schedule?.route ?? '') !== route) return false
     if (category && schedule && schedule.category !== category) return false
     return true
@@ -175,7 +172,7 @@ export default function TimetableView({
       const key = item.schedule_hub_id || 'Tanpa Hub'
       groups.set(key, [...(groups.get(key) ?? []), item])
     }
-    return [...groups.entries()]
+    return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [filteredSchedules])
 
   const liveHubs = useMemo(() => {
@@ -185,7 +182,7 @@ export default function TimetableView({
       const key = schedule?.schedule_hub_id || 'Tanpa Hub'
       groups.set(key, [...(groups.get(key) ?? []), task])
     }
-    return [...groups.entries()]
+    return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [filteredTasks, scheduleById])
 
   function renderPlanTable(items: Schedule[]) {
@@ -195,17 +192,19 @@ export default function TimetableView({
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
 
+    const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+    const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
     return (
       <div className="schedule-grid-scroll">
         <table className="schedule-grid-table">
           <thead>
             <tr>
-              <th>{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</th>
+              <th>{direction === 'origin' ? 'Destination' : 'Start Point'}</th>
               {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
             </tr>
           </thead>
           <tbody>
-            {[...rows.entries()].map(([row, rowItems]) => (
+            {sortedRows.map(([row, rowItems]) => (
               <tr key={row}>
                 <th>{row}</th>
                 {Array.from({ length: 24 }, (_, hour) => {
@@ -257,7 +256,7 @@ export default function TimetableView({
             </tr>
           </thead>
           <tbody>
-            {[...rows.entries()].map(([row, rowItems]) => (
+            {sortedRows.map(([row, rowItems]) => (
               <tr key={row}>
                 <th>{row}</th>
                 {Array.from({ length: 24 }, (_, hour) => {
@@ -309,7 +308,6 @@ export default function TimetableView({
               }}
             >
               {day.label}
-              {day.value === todayDay ? <small>Hari ini</small> : null}
             </button>
           ))}
         </div>
@@ -334,13 +332,8 @@ export default function TimetableView({
           ))}
         </div>
 
-        <select value={hub} onChange={(e) => setHub(e.target.value)}>
-          <option value="">{direction === 'origin' ? 'Hub Origin' : 'Hub Destinasi'}</option>
-          {options.hubs.map((item) => <option key={item}>{item}</option>)}
-        </select>
-
         <select value={point} onChange={(e) => setPoint(e.target.value)}>
-          <option value="">{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</option>
+          <option value="">{direction === 'origin' ? 'Destination' : 'Start Point'}</option>
           {options.points.map((item) => <option key={item}>{item}</option>)}
         </select>
 
@@ -358,9 +351,9 @@ export default function TimetableView({
 
       <section className="schedule-grid-shell">
         {hubs.map(([hubName, items], index) => (
-          <details className="schedule-hub" key={hubName} open={index === 0}>
+          <details className="schedule-hub" key={hubName}>
             <summary>
-              <span>Hub {direction === 'origin' ? 'Origin' : 'Destinasi'}</span>
+              <span>Hub {direction === 'origin' ? 'Start Point' : 'Destination'}</span>
               <b>{hubName}</b>
               <small>{items.length} {view === 'database' ? 'schedule' : 'assignment'}</small>
             </summary>
