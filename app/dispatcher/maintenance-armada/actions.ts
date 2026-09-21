@@ -1,111 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
-type State = {
-  error?: string
-  success?: string
-  transactionId?: string
-  preview?: {
-    transactionId: string
-    maintenanceList: string
-    location: string
-    platNumber: string
-  }
-}
+type State={error?:string;success?:string;transactionId?:string;preview?:{transactionId:string;maintenanceList:string;location:string;platNumber:string}}
 
-export async function createMaintenanceTicketAction(_state: State, formData: FormData): Promise<State> {
-  const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
+async function validate(formData:FormData){const maintenanceList=String(formData.get('maintenanceList')??'').trim(),location=String(formData.get('location')??'').trim(),platNumber=String(formData.get('platNumber')??'').trim();if(!maintenanceList||!location||!platNumber)return{error:'Kebutuhan Maintenance, lokasi, dan armada perlu diisi dulu, ya.'}as const;const admin=createAdminClient();const[{data:m},{data:l},{data:f}]=await Promise.all([admin.from('maintenance_lists').select('maintenance_list,status').eq('maintenance_list',maintenanceList).eq('status','Active').maybeSingle(),admin.from('locations').select('location,grouping,status').eq('location',location).eq('status','Active').maybeSingle(),admin.from('fleets').select('plat_number,fleet_type,status').eq('plat_number',platNumber).eq('status','Active').maybeSingle()]);if(!m||!l||!f)return{error:'Data maintenance, lokasi, atau armada belum tersedia.'}as const;const{data:transactionId,error}=await admin.rpc('movent_next_transaction_id');if(error||!transactionId)return{error:'ID transaksi belum berhasil dibuat.'}as const;return{value:{transactionId,maintenanceList:m.maintenance_list,location:l.location,platNumber:f.plat_number},snapshots:{m,l,f}}as const}
 
-  const maintenanceList = String(formData.get('maintenanceList') ?? '').trim()
-  const location = String(formData.get('location') ?? '').trim()
-  const platNumber = String(formData.get('platNumber') ?? '').trim()
+export async function createMaintenanceTicketAction(_state:State,formData:FormData):Promise<State>{const profile=await getCurrentProfile();if(!['Dispatcher','Super User'].includes(profile.role))return{error:'Kamu belum punya akses ke bagian ini.'};const v=await validate(formData);if('error'in v)return v;return{success:'Preview ticketing sudah siap. Periksa sebelum konfirmasi.',preview:v.value}}
 
-  if (!maintenanceList || !location || !platNumber) {
-    return { error: 'Daftar Maintenance, lokasi, dan armada perlu diisi dulu, ya.' }
-  }
+export async function confirmMaintenanceTicketAction(_state:State,formData:FormData):Promise<State>{const profile=await getCurrentProfile();if(!['Dispatcher','Super User'].includes(profile.role))return{error:'Kamu belum punya akses ke bagian ini.'};const transactionId=String(formData.get('transactionId')??'').trim(),maintenanceList=String(formData.get('maintenanceList')??'').trim(),location=String(formData.get('location')??'').trim(),platNumber=String(formData.get('platNumber')??'').trim();const admin=createAdminClient();const v=await validate(formData);if('error'in v)return v;if(transactionId!==v.value.transactionId)return{error:'Preview ticketing sudah kedaluwarsa. Buat preview baru.'};const{snapshots}=v;const{error}=await admin.from('ticketings').insert({transaction_id:transactionId,status:'Requested',created_by:profile.id,maintenance_list:snapshots.m.maintenance_list,maintenance_snapshot:snapshots.m,fleet_plat_number:snapshots.f.plat_number,fleet_snapshot:snapshots.f,location:snapshots.l.location,location_snapshot:snapshots.l,requested_at:new Date().toISOString()});if(error)return{error:'Ticketing belum berhasil dibuat.'};revalidatePath('/dispatcher/maintenance-armada');revalidatePath('/maintainer/tiket-maintenance');revalidatePath('/controller/beranda');return{success:`Ticketing ${transactionId} berhasil dikonfirmasi.`,transactionId}}
 
-  const admin = createAdminClient()
-  const [{ data: maintenance }, { data: locationData }, { data: fleet }] = await Promise.all([
-    admin.from('maintenance_lists').select('maintenance_list, status').eq('maintenance_list', maintenanceList).eq('status', 'Active').maybeSingle(),
-    admin.from('locations').select('location, grouping, status').eq('location', location).eq('status', 'Active').maybeSingle(),
-    admin.from('fleets').select('plat_number, fleet_type, status').eq('plat_number', platNumber).eq('status', 'Active').maybeSingle(),
-  ])
-
-  if (!maintenance) return { error: 'Daftar Maintenance belum tersedia.' }
-  if (!locationData) return { error: 'Lokasi belum tersedia.' }
-  if (!fleet) return { error: 'Armada belum tersedia.' }
-
-  const { data: transactionId, error: transactionError } = await admin.rpc('movent_next_transaction_id')
-  if (transactionError || !transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
-
-  const { error } = await admin.from('ticketings').insert({
-    transaction_id: transactionId,
-    status: 'Requested',
-    created_by: profile.id,
-    maintenance_list: maintenance.maintenance_list,
-    maintenance_snapshot: maintenance,
-    fleet_plat_number: fleet.plat_number,
-    fleet_snapshot: fleet,
-    location: locationData.location,
-    location_snapshot: locationData,
-  })
-
-  if (error) return { error: 'Tiket maintenance belum berhasil dibuat.' }
-
-  revalidatePath('/dispatcher/maintenance-armada')
-  revalidatePath('/maintainer/tiket-maintenance')
-  revalidatePath('/controller/beranda')
-  revalidatePath('/dispatcher/beranda')
-  revalidatePath('/maintainer/beranda')
-
-  return {
-    success: `Tiket ${transactionId} berhasil dibuat.`,
-    transactionId,
-    preview: {
-      transactionId,
-      maintenanceList: maintenance.maintenance_list,
-      location: locationData.location,
-      platNumber: fleet.plat_number,
-    },
-  }
-}
-
-export async function cancelMaintenanceTicketAction(formData: FormData) {
-  const profile = await getCurrentProfile()
-  const transactionId = String(formData.get('transactionId') ?? '').trim()
-  const note = String(formData.get('note') ?? '').trim()
-
-  if (!transactionId || !note) return { error: 'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.' }
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
-
-  const admin = createAdminClient()
-  let query = admin.from('ticketings')
-    .select('id, status, created_by')
-    .eq('transaction_id', transactionId)
-    .eq('status', 'Requested')
-
-  if (profile.role !== 'Super User') query = query.eq('created_by', profile.id)
-
-  const { data: ticket } = await query.maybeSingle()
-  if (!ticket) return { error: 'Tiket tidak ditemukan atau sudah tidak bisa dibatalkan.' }
-
-  const { error } = await admin.from('ticketings').update({
-    status: 'Canceled',
-    canceled_at: new Date().toISOString(),
-    canceled_from_status: 'Requested',
-    cancellation_note: note,
-  }).eq('id', ticket.id).eq('status', 'Requested')
-
-  if (error) return { error: 'Tiket belum berhasil dibatalkan.' }
-
-  revalidatePath('/dispatcher/maintenance-armada')
-  revalidatePath('/maintainer/tiket-maintenance')
-  revalidatePath('/controller/beranda')
-  redirect('/dispatcher/maintenance-armada')
-}
+export async function cancelMaintenanceTicketAction(formData:FormData){const profile=await getCurrentProfile();const transactionId=String(formData.get('transactionId')??'').trim(),note=String(formData.get('note')??'').trim();if(!transactionId||!note)return{error:'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.'};if(!['Dispatcher','Super User'].includes(profile.role))return{error:'Kamu belum punya akses ke bagian ini.'};const admin=createAdminClient();let q=admin.from('ticketings').select('id,status,created_by').eq('transaction_id',transactionId).eq('status','Requested');if(profile.role!=='Super User')q=q.eq('created_by',profile.id);const{data:ticket}=await q.maybeSingle();if(!ticket)return{error:'Tiket tidak ditemukan atau sudah tidak bisa dibatalkan.'};const{error}=await admin.from('ticketings').update({status:'Canceled',canceled_at:new Date().toISOString(),canceled_from_status:'Requested',cancellation_note:note}).eq('id',ticket.id).eq('status','Requested');if(error)return{error:'Tiket belum berhasil dibatalkan.'};revalidatePath('/dispatcher/maintenance-armada');revalidatePath('/maintainer/tiket-maintenance');revalidatePath('/controller/beranda');return{success:'Ticketing berhasil dibatalkan.'}}
