@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
@@ -12,6 +13,7 @@ function formatDateTime(value: string | null) {
 
 export default async function ExecutorHistoryPage() {
   const profile = await getCurrentProfile()
+  if (!['Executor', 'Super User'].includes(profile.role)) notFound()
   const admin = createAdminClient()
   let query = admin
     .from('tasks')
