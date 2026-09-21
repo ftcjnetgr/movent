@@ -42,6 +42,7 @@ type SupplyOwnership = 'TGR' | 'Non-TGR' | null
 
 export default function DispatcherCreateTask({ locations, schedules, executors, fleets, products }: Props) {
   const [state, formAction, pending] = useActionState(createDispatcherTaskAction, initialState)
+  const [confirmState, confirmAction, confirmPending] = useActionState(confirmDispatcherTaskAction, initialState)
   const [activeFlow, setActiveFlow] = useState<Flow>(null)
   const [supplyOwnership, setSupplyOwnership] = useState<SupplyOwnership>(null)
   const [scheduleId, setScheduleId] = useState('')
@@ -349,7 +350,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             {state.preview.scheduleId ? <div><span>Schedule</span><strong>{state.preview.scheduleId}</strong></div> : null}
           </div>
           <p className="muted">Periksa data sebelum penugasan dikonfirmasi.</p>
-          <form action={confirmDispatcherTaskAction} className="compact-form">
+          <form action={confirmAction} className="compact-form">
             <input type="hidden" name="transactionId" value={state.preview.transactionId}/>
             <input type="hidden" name="flow" value={state.preview.flow}/>
             <input type="hidden" name="startPoint" value={state.preview.startPoint}/>
@@ -360,7 +361,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             <input type="hidden" name="std" value={state.preview.std ?? ""}/>
             <input type="hidden" name="sta" value={state.preview.sta ?? ""}/>
             <div className="form-actions">
-              <button type="submit">Konfirmasi Penugasan</button>
+              <button type="submit" disabled={confirmPending}>{confirmPending ? "Mengonfirmasi..." : "Konfirmasi Penugasan"}</button>
               <button type="button" className="secondary-button" onClick={resetCreateFlow}>Edit Tugas</button>
             </div>
           </form>
