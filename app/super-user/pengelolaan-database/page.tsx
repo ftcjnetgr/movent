@@ -128,6 +128,7 @@ export default async function DatabaseManagementPage({
                     <td key={column}>{row[column] === null || row[column] === undefined ? '-' : String(row[column])}</td>
                   ))}
                   <td>
+                    <div className="admin-row-actions">
                     <details>
                       <summary className="link-button">Edit</summary>
                       <form action={updateMasterRowFormAction} className="compact-form" style={{marginTop:12}}>
@@ -139,11 +140,12 @@ export default async function DatabaseManagementPage({
                         <button type="submit">Simpan perubahan</button>
                       </form>
                     </details>
-                    <form action={deleteMasterRowFormAction} style={{marginTop:8}}>
+                    <form action={deleteMasterRowFormAction} className="admin-row-action-secondary">
                       <input type="hidden" name="database" value={db} />
                       <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
                       <button type="submit" className="secondary-button">Hapus data</button>
                     </form>
+                    </div>
                   </td>
                 </tr>
               ))}
