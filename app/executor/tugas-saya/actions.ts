@@ -75,6 +75,21 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
   if (!productData) return { error: 'Produk tidak tersedia.' }
 
   const { error } = await admin
+    .from('task_sj_items')
+    .insert({
+      task_id: task.id,
+      sj_number: sjNumber,
+      sj_qty: qty,
+      sj_weight: weight,
+      product,
+      product_snapshot: productData,
+      note: note || null,
+    })
+
+  if (error) return { error: 'SJ belum berhasil disimpan.' }
+
+  // Keep the legacy task-level fields populated for existing reports/records.
+  const { error: legacyError } = await admin
     .from('tasks')
     .update({
       sj_number: sjNumber,
@@ -87,7 +102,7 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
     .eq('id', task.id)
     .eq('status', 'Confirmed')
 
-  if (error) return { error: 'SJ belum berhasil disimpan.' }
+  if (legacyError) return { error: 'SJ tersimpan, tetapi data tugas belum berhasil diperbarui.' }
 
   revalidateExecutorPaths()
   return { success: 'SJ berhasil disimpan.' }
@@ -101,7 +116,10 @@ export async function saveOdometerStartAction(formData: FormData): Promise<Resul
 
   const { admin, task } = await getTask(transactionId, ['Confirmed'])
   if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik)) return { error: 'Tugas tidak tersedia untuk kamu.' }
-  if (requiresSj(task) && !task.sj_number) return { error: 'Submit SJ terlebih dahulu.' }
+  if (requiresSj(task)) {
+    const { count } = await admin.from('task_sj_items').select('id', { count: 'exact', head: true }).eq('task_id', task.id)
+    if (!count) return { error: 'Submit SJ terlebih dahulu.' }
+  }
 
   const { error } = await admin.from('tasks').update({ odometer_start: value }).eq('id', task.id).eq('status', 'Confirmed')
   if (error) return { error: 'Odometer Awal belum berhasil disimpan.' }
@@ -114,7 +132,10 @@ export async function confirmDrivingAction(formData: FormData): Promise<Result> 
   const transactionId = String(formData.get('transactionId') ?? '').trim()
   const { admin, task } = await getTask(transactionId, ['Confirmed'])
   if (!task || task.fleet_ownership === 'Non-TGR' || !allowedExecutor(profile.role, task.executor_nik, profile.nik)) return { error: 'Tugas tidak tersedia untuk kamu.' }
-  if (requiresSj(task) && !task.sj_number) return { error: 'Submit SJ terlebih dahulu.' }
+  if (requiresSj(task)) {
+    const { count } = await admin.from('task_sj_items').select('id', { count: 'exact', head: true }).eq('task_id', task.id)
+    if (!count) return { error: 'Submit SJ terlebih dahulu.' }
+  }
   if (task.odometer_start === null) return { error: 'Isi Odometer Awal terlebih dahulu.' }
 
   const { error } = await admin
