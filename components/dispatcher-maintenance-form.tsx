@@ -25,6 +25,7 @@ type MaintenanceFormState = {
   transactionId?: string
   preview?: {
     transactionId: string
+    confirmationKey: string
     maintenanceList: string
     location: string
     platNumber: string
@@ -124,7 +125,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                   setState(result)
                 })
               }} className="compact-form">
-                <input type="hidden" name="transactionId" value={state.preview.transactionId} />
+                <input type="hidden" name="transactionId" value={state.preview.transactionId} /><input type="hidden" name="confirmationKey" value={state.preview.confirmationKey} />
                 <input type="hidden" name="maintenanceList" value={state.preview.maintenanceList} />
                 <input type="hidden" name="location" value={state.preview.location} />
                 <input type="hidden" name="platNumber" value={state.preview.platNumber} />
