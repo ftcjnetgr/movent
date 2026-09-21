@@ -11,7 +11,7 @@ type State = {
   success?: string
   transactionId?: string
   preview?: {
-    transactionId: string
+    transactionId?: string
     flow: 'tgr' | 'distribusi'
     startPoint: string
     destination: string
@@ -82,9 +82,6 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
     if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
 
-    const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
-
     return {
       success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.',
       preview: {
@@ -127,8 +124,6 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     if (new Date(timestamps[1]!).getTime() <= new Date(timestamps[0]!).getTime()) return { error: 'STA harus lebih besar dari STD.' }
     const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
     if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
-    const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
     return { success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.', preview: { transactionId, flow: 'distribusi', startPoint, destination, externalExecutor: executor.full_name, externalFleet: fleet.plat_number, sjNumber: '', sjQty: 0, sjWeight: 0, product: '', sjNote: null, executorNik: executor.executor_nik, platNumber: fleet.plat_number, std, sta } }
   }
 
@@ -143,8 +138,8 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
 export async function confirmDispatcherTaskAction(_state: State, formData: FormData): Promise<State> {
   const profile = await getCurrentProfile()
   if (!['Dispatcher','Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
-  const flow=String(formData.get('flow')??''), transactionId=String(formData.get('transactionId')??'').trim(), executorNik=String(formData.get('executorNik')??'').trim(), platNumber=String(formData.get('platNumber')??'').trim(), scheduleId=String(formData.get('scheduleId')??'').trim()
-  const admin=createAdminClient(); const {executor,fleet}=await activeExecutorAndFleet(admin,executorNik,platNumber); if(!executor||!fleet)return{error:'Executor atau Armada belum tersedia.'}
+  const flow=String(formData.get('flow')??''), suppliedTransactionId=String(formData.get('transactionId')??'').trim(), executorNik=String(formData.get('executorNik')??'').trim(), platNumber=String(formData.get('platNumber')??'').trim(), scheduleId=String(formData.get('scheduleId')??'').trim()
+  const admin=createAdminClient(); const transactionId=suppliedTransactionId || await nextTransaction(admin); if(!transactionId)return{error:'ID transaksi belum berhasil dibuat. Coba lagi, ya.'}; const {executor,fleet}=await activeExecutorAndFleet(admin,executorNik,platNumber); if(!executor||!fleet)return{error:'Executor atau Armada belum tersedia.'}
   if(flow==='tgr'){
     const {data:schedule}=await admin.from('schedules').select('*').eq('schedule_id',scheduleId).eq('status','Active').maybeSingle(); if(!schedule)return{error:'Schedule tidak tersedia.'}; if(!scheduleStdNotPassed(schedule.std))return{error:'Schedule sudah melewati STD dan tidak bisa dipakai lagi.'}
     const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); const std=`${date}T${schedule.std}+07:00`,sta=`${date}T${schedule.sta}+07:00`
