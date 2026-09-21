@@ -165,14 +165,19 @@ export default function TimetableView({
   }), [todayTasks, direction, route, category, point, scheduleById])
 
   const summary = useMemo(() => ({
+    all: filteredSchedules.length,
+    assigned: filteredSchedules.filter((item) => {
+      const task = taskBySchedule[item.schedule_id]
+      return Boolean(task) && task.status !== 'Canceled'
+    }).length,
     unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
-    assigned: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status !== 'Canceled').length,
     canceled: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status === 'Canceled').length,
   }), [filteredSchedules, taskBySchedule])
 
   const liveSummary = useMemo(() => ({
-    unassigned: 0,
+    all: filteredTasks.length,
     assigned: filteredTasks.filter((task) => task.status !== 'Canceled').length,
+    unassigned: 0,
     canceled: filteredTasks.filter((task) => task.status === 'Canceled').length,
   }), [filteredTasks])
 
@@ -387,8 +392,9 @@ export default function TimetableView({
       </div>
 
       <div className="schedule-summary-inline">
-        <button type="button" className={summaryFilter === 'unassigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}>Belum ditugaskan <b>{summaries.unassigned}</b></button>
-        <button type="button" className={summaryFilter === 'assigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}>Sudah ditugaskan <b>{summaries.assigned}</b></button>
+        <button type="button" className={summaryFilter === 'all' ? 'active' : ''} onClick={() => setSummaryFilter('all')}>Semua Tugas <b>{summaries.all}</b></button>
+        <button type="button" className={summaryFilter === 'assigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}>Sudah Ditugaskan <b>{summaries.assigned}</b></button>
+        <button type="button" className={summaryFilter === 'unassigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}>Belum Ditugaskan <b>{summaries.unassigned}</b></button>
         <button type="button" className={summaryFilter === 'canceled' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}>Dibatalkan <b>{summaries.canceled}</b></button>
       </div>
 
