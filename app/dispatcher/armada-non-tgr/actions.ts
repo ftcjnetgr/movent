@@ -46,7 +46,6 @@ export async function submitNonTgrArrivalAction(formData: FormData): Promise<Res
     .update({
       status: 'Completed',
       external_arrival_at: timestamp,
-      completed_at: new Date().toISOString(),
     })
     .eq('id', task.id)
     .eq('status', 'Driving')
