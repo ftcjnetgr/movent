@@ -1,6 +1,7 @@
 'use client'
 
 import { useActionState, useState } from 'react'
+import { jsPDF } from 'jspdf'
 import SearchableMasterSelect from '@/components/searchable-master-select'
 import { createNonTgrSupplyAction, confirmNonTgrDepartureByOperationAction, confirmNonTgrSupplyAction } from '@/app/operation/beranda/actions'
 
@@ -48,6 +49,21 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
   const locationOptions: Option[] = locations.map((value) => ({ value, label: value, searchText: value }))
   function sharePreview() {
     if (!state.preview) return
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [210, 110] })
+    doc.setFontSize(16)
+    doc.text('SURAT JALAN', 10, 14)
+    doc.setFontSize(10)
+    doc.text('ID Transaksi: ' + state.preview.transactionId, 10, 22)
+    doc.text('Titik Mulai: ' + state.preview.startPoint, 10, 30)
+    doc.text('Destinasi: ' + state.preview.destination, 10, 38)
+    doc.text('STD: ' + timeValue(state.preview.std), 10, 46)
+    doc.text('STA: ' + timeValue(state.preview.sta), 10, 54)
+    doc.text('Executor: ' + state.preview.externalExecutor, 10, 62)
+    doc.text('Armada: ' + state.preview.externalFleet, 10, 70)
+    let y = 78
+    state.preview.sjs.forEach((sj, i) => { doc.text('SJ ' + (i + 1) + ': ' + sj.sjNumber + ' | Qty: ' + sj.sjQty + ' | Berat: ' + sj.sjWeight + ' | Produk: ' + sj.product, 10, y); y += 7 })
+    doc.save(state.preview.transactionId + '-SJ.pdf')
+
     const lines = [
       'MOVENT - Surat Jalan',
       'ID Transaksi: ' + state.preview.transactionId,
