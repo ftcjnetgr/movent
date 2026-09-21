@@ -298,95 +298,96 @@ export default function TimetableView({
 
   return (
     <div className="schedule-page">
-      <div className="schedule-day-row">
-        {DAYS.map((day) => (
-          <button
-            key={day.value}
-            type="button"
-            disabled={view === 'live' && day.value !== todayDay}
-            className={selectedDay === day.value ? 'active' : ''}
-            onClick={() => {
-              if (view === 'live') return
-              setSelectedDay(day.value)
-              setPoint('')
-              setSummaryFilter('all')
-            }}
-          >
-            {day.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="schedule-toolbar">
-        <div className="schedule-direction">
-          <button
-            type="button"
-            className={direction === 'start-point' ? 'active' : ''}
-            onClick={() => { setDirection('start-point'); setPoint('') }}
-          >
-            AS Start Point
-          </button>
-          <button
-            type="button"
-            className={direction === 'destination' ? 'active' : ''}
-            onClick={() => { setDirection('destination'); setPoint('') }}
-          >
-            AS Destination
-          </button>
-        </div>
-
-        <div className="schedule-category-buttons">
-          {categories.map((item) => (
+      <div className="schedule-control-line">
+        <div className="schedule-day-row">
+          {DAYS.map((day) => (
             <button
-              key={item}
+              key={day.value}
               type="button"
-              className={category === item ? 'active' : ''}
-              onClick={() => { setCategory(item); setSummaryFilter('all') }}
+              disabled={view === 'live' && day.value !== todayDay}
+              className={selectedDay === day.value ? 'active' : ''}
+              onClick={() => {
+                if (view === 'live') return
+                setSelectedDay(day.value)
+                setPoint('')
+                setSummaryFilter('all')
+              }}
             >
-              {item}
+              {day.label}
             </button>
           ))}
         </div>
 
-      </div>
+        <div className="schedule-toolbar">
+          <div className="schedule-direction">
+            <button
+              type="button"
+              className={direction === 'start-point' ? 'active' : ''}
+              onClick={() => { setDirection('start-point'); setPoint('') }}
+            >
+              AS Start Point
+            </button>
+            <button
+              type="button"
+              className={direction === 'destination' ? 'active' : ''}
+              onClick={() => { setDirection('destination'); setPoint('') }}
+            >
+              AS Destination
+            </button>
+          </div>
 
-      <div className="schedule-filter-bar">
-        <div className="schedule-filter-group">
-          <span className="schedule-filter-label">Rute</span>
-          <div className="schedule-route-tabs">
-            {routes.map((item) => (
+          <div className="schedule-category-buttons">
+            {categories.map((item) => (
               <button
                 key={item}
                 type="button"
-                className={route === item ? 'active' : ''}
-                onClick={() => { setRoute(item); setSummaryFilter('all') }}
+                className={category === item ? 'active' : ''}
+                onClick={() => { setCategory(item); setSummaryFilter('all') }}
               >
-                {routeLabels[item] ?? item}
+                {item}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="schedule-filter-group schedule-filter-group-point">
-          <span className="schedule-filter-label">{direction === 'start-point' ? 'Start Point' : 'Destination'}</span>
-          <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
-            <button
-              type="button"
-              className={!point ? 'active' : ''}
-              onClick={() => { setPoint(''); setSummaryFilter('all') }}
-            >
-              Semua
-            </button>
-            {pointOptions.map((item) => (
+        <div className="schedule-filter-bar">
+          <div className="schedule-filter-group">
+            <span className="schedule-filter-label">Rute</span>
+            <div className="schedule-route-tabs">
+              {routes.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={route === item ? 'active' : ''}
+                  onClick={() => { setRoute(item); setSummaryFilter('all') }}
+                >
+                  {routeLabels[item] ?? item}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="schedule-filter-group schedule-filter-group-point">
+            <span className="schedule-filter-label">{direction === 'start-point' ? 'Start Point' : 'Destination'}</span>
+            <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
               <button
-                key={item}
                 type="button"
-                className={point === item ? 'active' : ''}
-                onClick={() => { setPoint(item); setSummaryFilter('all') }}
+                className={!point ? 'active' : ''}
+                onClick={() => { setPoint(''); setSummaryFilter('all') }}
               >
-                {item}
+                Semua
               </button>
-            ))}
+              {pointOptions.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={point === item ? 'active' : ''}
+                  onClick={() => { setPoint(item); setSummaryFilter('all') }}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
