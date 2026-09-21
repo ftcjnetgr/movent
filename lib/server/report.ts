@@ -69,8 +69,8 @@ export async function queryOperationalReport(filters: ReportFilters) {
     'Executor Name': task.executor_snapshot?.full_name ?? '',
     'Fleet': task.fleet_snapshot?.plat_number ?? '',
     'Fleet Type': task.fleet_snapshot?.fleet_type ?? '',
-    'ATD': formatReportDateTime(task.fleet_ownership === 'Non-TGR' ? task.external_departure_at : null),
-    'ATA': formatReportDateTime(task.fleet_ownership === 'Non-TGR' ? task.external_arrival_at : null),
+    'ATD': formatReportDateTime(task.task_type === 'Supply' && task.fleet_ownership === 'Non-TGR' ? task.external_departure_at : null),
+    'ATA': formatReportDateTime(task.task_type === 'Supply' && task.fleet_ownership === 'Non-TGR' ? task.external_arrival_at : null),
     'Canceled At': formatReportDateTime(task.canceled_at),
     'Cancellation Reason': task.cancellation_note,
   }))
