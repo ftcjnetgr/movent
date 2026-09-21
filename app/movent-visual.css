@@ -3520,24 +3520,24 @@ body{overflow-x:hidden!important}
 .super-activity-list{padding:0 15px 15px}.super-activity-list>div{display:grid;grid-template-columns:8px 1fr auto;align-items:center;gap:7px;padding:9px 0;border-bottom:1px solid #eef2f6;color:#45546a;font-size:9px}.super-activity-list>div:last-child{border-bottom:0}.activity-dot{width:7px;height:7px;border-radius:50%}.activity-dot.blue{background:#1769e0}.activity-dot.green{background:#1db779}.activity-dot.orange{background:#efaf2d}.activity-dot.purple{background:#7657d9}.super-activity-list time{color:#9aa5b3;font-size:8px}
 
 /* super user sidebar / product shell */
-.app-shell.role-controller .sidebar-brand-logo{filter:brightness(0) saturate(100%) invert(11%) sepia(17%) saturate(1263%) hue-rotate(181deg) brightness(89%) contrast(92%)!important;width:148px!important;height:auto!important}
-.app-shell.role-controller .sidebar{padding:18px 12px 14px!important;background:#fff!important}
-.app-shell.role-controller .sidebar-top{padding:0 5px 16px!important;border-bottom:1px solid #edf1f5!important}
-.app-shell.role-controller .sidebar-role{margin-top:14px!important;padding:10px 10px!important;border:1px solid #dce5ef!important;border-radius:11px!important;background:#fff!important}
-.app-shell.role-controller .sidebar-role-name{color:#243149!important;font-size:11px!important;font-weight:800!important}
-.app-shell.role-controller .mode-select{margin-top:8px!important}
-.app-shell.role-controller .mode-select span{color:#8592a3!important;font-size:8px!important}
-.app-shell.role-controller .mode-select select{height:30px!important;border:1px solid #d9e3ef!important;border-radius:8px!important;background:#f9fbfd!important;color:#34445a!important;font-size:9px!important}
-.app-shell.role-controller .sidebar-nav{gap:5px!important}
-.app-shell.role-controller .nav-group-title{min-height:34px!important;padding:7px 9px!important;color:#748196!important;background:transparent!important;box-shadow:none!important;font-size:10px!important}
-.app-shell.role-controller .nav-group-title:hover{background:#f7f9fc!important;color:#26354b!important}
-.app-shell.role-controller .nav-group-items{margin:2px 0 5px 0!important;padding:3px 0 3px 8px!important;border-left:1px solid #edf1f5!important}
-.app-shell.role-controller .nav-link{min-height:34px!important;padding:7px 9px!important;color:#6f7f92!important;font-size:10px!important;border-radius:8px!important}
-.app-shell.role-controller .nav-link.active{background:#eaf2ff!important;color:#1769e0!important;box-shadow:inset 2px 0 0 #1769e0!important}
-.app-shell.role-controller .nav-link:hover{background:#f6f8fb!important;color:#243149!important}
-.app-shell.role-controller .sidebar-footer{margin-top:auto!important;padding-top:12px!important}
-.app-shell.role-controller .sidebar-logout{min-height:34px!important;color:#7e8c9d!important;background:transparent!important;box-shadow:none!important}
-.app-shell.role-controller .sidebar-logout:hover{background:#fff3f3!important;color:#c83b3b!important}
+.app-shell.is-super-user .sidebar-brand-logo{filter:brightness(0) saturate(100%) invert(11%) sepia(17%) saturate(1263%) hue-rotate(181deg) brightness(89%) contrast(92%)!important;width:148px!important;height:auto!important}
+.app-shell.is-super-user .sidebar{padding:18px 12px 14px!important;background:#fff!important}
+.app-shell.is-super-user .sidebar-top{padding:0 5px 16px!important;border-bottom:1px solid #edf1f5!important}
+.app-shell.is-super-user .sidebar-role{margin-top:14px!important;padding:10px 10px!important;border:1px solid #dce5ef!important;border-radius:11px!important;background:#fff!important}
+.app-shell.is-super-user .sidebar-role-name{color:#243149!important;font-size:11px!important;font-weight:800!important}
+.app-shell.is-super-user .mode-select{margin-top:8px!important}
+.app-shell.is-super-user .mode-select span{color:#8592a3!important;font-size:8px!important}
+.app-shell.is-super-user .mode-select select{height:30px!important;border:1px solid #d9e3ef!important;border-radius:8px!important;background:#f9fbfd!important;color:#34445a!important;font-size:9px!important}
+.app-shell.is-super-user .sidebar-nav{gap:5px!important}
+.app-shell.is-super-user .nav-group-title{min-height:34px!important;padding:7px 9px!important;color:#748196!important;background:transparent!important;box-shadow:none!important;font-size:10px!important}
+.app-shell.is-super-user .nav-group-title:hover{background:#f7f9fc!important;color:#26354b!important}
+.app-shell.is-super-user .nav-group-items{margin:2px 0 5px 0!important;padding:3px 0 3px 8px!important;border-left:1px solid #edf1f5!important}
+.app-shell.is-super-user .nav-link{min-height:34px!important;padding:7px 9px!important;color:#6f7f92!important;font-size:10px!important;border-radius:8px!important}
+.app-shell.is-super-user .nav-link.active{background:#eaf2ff!important;color:#1769e0!important;box-shadow:inset 2px 0 0 #1769e0!important}
+.app-shell.is-super-user .nav-link:hover{background:#f6f8fb!important;color:#243149!important}
+.app-shell.is-super-user .sidebar-footer{margin-top:auto!important;padding-top:12px!important}
+.app-shell.is-super-user .sidebar-logout{min-height:34px!important;color:#7e8c9d!important;background:transparent!important;box-shadow:none!important}
+.app-shell.is-super-user .sidebar-logout:hover{background:#fff3f3!important;color:#c83b3b!important}
 
 @media(max-width:1100px){
   .super-kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
