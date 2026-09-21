@@ -31,8 +31,17 @@ type Task = {
   odometer_start: number | null
   odometer_end: number | null
   arrived_at: string | null
+  id: string
   executor_snapshot: { full_name?: string; executor_nik?: string } | null
   fleet_snapshot: { plat_number?: string; fleet_type?: string } | null
+}
+
+type SjItem = {
+  sj_number: string
+  sj_qty: number
+  sj_weight: number
+  product: string
+  note: string | null
 }
 
 function requiresSj(task: Task) {
@@ -61,9 +70,10 @@ function nextActionLabel(task: Task) {
   return 'Lanjutkan tugas'
 }
 
-export default function ExecutorTaskCard({ task, products }: { task: Task; products: string[] }) {
+export default function ExecutorTaskCard({ task, products, sjItems }: { task: Task; products: string[]; sjItems: SjItem[] }) {
   const [message, setMessage] = useState('')
   const [isPending, startTransition] = useTransition()
+  const [showSjForm, setShowSjForm] = useState(sjItems.length === 0)
 
   function submit(action: (formData: FormData) => Promise<{ error?: string; success?: string }>, form: HTMLFormElement) {
     const formData = new FormData(form)
@@ -112,6 +122,8 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
   const needsSj = requiresSj(task)
   const productOptions = products.map((product) => ({ value: product, label: product, searchText: product }))
 
+  const hasSj = needsSj && sjItems.length > 0
+
   function shareText() {
     const lines = [
       'MOVENT - Tugas',
@@ -120,13 +132,15 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
       'Rute: ' + (task.start_point ?? '-') + ' → ' + (task.destination ?? '-'),
     ]
     if (needsSj) {
-      lines.push(
-        'Nomor SJ: ' + (task.sj_number ?? '-'),
-        'Qty: ' + (task.sj_qty ?? '-'),
-        'Berat: ' + (task.sj_weight ?? '-'),
-        'Produk: ' + (task.product ?? '-'),
-        'Catatan: ' + (task.sj_note ?? '-')
-      )
+      sjItems.forEach((item, index) => {
+        lines.push(
+          'SJ ' + (index + 1) + ': ' + item.sj_number,
+          'Qty: ' + item.sj_qty,
+          'Berat: ' + item.sj_weight,
+          'Produk: ' + item.product,
+          'Catatan: ' + (item.note ?? '-')
+        )
+      })
     }
     return lines.join('\n')
   }
@@ -136,22 +150,22 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
   }
 
   function handlePrintSj() {
-    if (!task.sj_number) return
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: [210, 110],
+    if (!sjItems.length) return
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [210, 110] })
+    sjItems.forEach((item, index) => {
+      if (index > 0) doc.addPage([210, 110], 'landscape')
+      doc.setFontSize(16)
+      doc.text('SURAT JALAN', 10, 14)
+      doc.setFontSize(10)
+      doc.text('Transaction ID: ' + task.transaction_id, 10, 22)
+      doc.text('SJ ke-' + (index + 1), 10, 30)
+      doc.text('Nomor SJ: ' + item.sj_number, 10, 38)
+      doc.text('Qty: ' + item.sj_qty, 10, 46)
+      doc.text('Berat: ' + item.sj_weight, 10, 54)
+      doc.text('Produk: ' + item.product, 10, 62)
+      const note = doc.splitTextToSize('Catatan: ' + (item.note ?? '-'), 185)
+      doc.text(note, 10, 70)
     })
-    doc.setFontSize(16)
-    doc.text('SURAT JALAN', 10, 14)
-    doc.setFontSize(10)
-    doc.text('Transaction ID: ' + task.transaction_id, 10, 22)
-    doc.text('Nomor SJ: ' + task.sj_number, 10, 30)
-    doc.text('Qty: ' + (task.sj_qty ?? '-'), 10, 38)
-    doc.text('Berat: ' + (task.sj_weight ?? '-'), 10, 46)
-    doc.text('Produk: ' + (task.product ?? '-'), 10, 54)
-    const note = doc.splitTextToSize('Catatan: ' + (task.sj_note ?? '-'), 185)
-    doc.text(note, 10, 62)
     doc.save(task.transaction_id + '-SJ.pdf')
   }
 
@@ -179,18 +193,21 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
 
       {message ? <div className="inline-feedback">{message}</div> : null}
 
-      {needsSj && task.sj_number ? (
+      {needsSj && hasSj ? (
         <div className="metric-card section-block">
           <div className="card-title">Pratinjau surat jalan</div>
-          <div className="task-summary-grid">
-            <div><span>Transaction ID</span><strong>{task.transaction_id}</strong></div>
-            <div><span>Nomor SJ</span><strong>{task.sj_number}</strong></div>
-            <div><span>Qty</span><strong>{task.sj_qty ?? '-'}</strong></div>
-            <div><span>Berat</span><strong>{task.sj_weight ?? '-'}</strong></div>
-            <div><span>Produk</span><strong>{task.product ?? '-'}</strong></div>
-            <div><span>Catatan</span><strong>{task.sj_note ?? '-'}</strong></div>
-          </div>
+          {sjItems.map((item, index) => (
+            <div className="task-summary-grid" key={item.sj_number + index}>
+              <div><span>SJ</span><strong>#{index + 1}</strong></div>
+              <div><span>Nomor SJ</span><strong>{item.sj_number}</strong></div>
+              <div><span>Qty</span><strong>{item.sj_qty}</strong></div>
+              <div><span>Berat</span><strong>{item.sj_weight}</strong></div>
+              <div><span>Produk</span><strong>{item.product}</strong></div>
+              <div><span>Catatan</span><strong>{item.note ?? '-'}</strong></div>
+            </div>
+          ))}
           <div className="form-row">
+            <button type="button" onClick={() => setShowSjForm(true)}>Tambah SJ</button>
             <button type="button" onClick={handlePrintSj}>Cetak PDF</button>
             <button type="button" className="secondary-button" onClick={handleShare}>Bagikan ke WhatsApp</button>
           </div>
@@ -217,7 +234,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Confirmed' && needsSj && !task.sj_number ? (
+      {task.status === 'Confirmed' && needsSj && showSjForm ? (
         <form onSubmit={handleSj} className="data-form compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <div className="form-row">
@@ -227,11 +244,11 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
           </div>
           <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih Produk" required />
           <label>Catatan<textarea name="note" rows={3} /></label>
-          <button type="submit" disabled={isPending}>Kirim surat jalan</button>
+          <button type="submit" disabled={isPending}>Submit SJ</button>
         </form>
       ) : null}
 
-      {task.status === 'Confirmed' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start === null ? (
+      {task.status === 'Confirmed' && (!needsSj || hasSj) && task.odometer_start === null ? (
         <form onSubmit={handleOdometerStart} className="compact-form">
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <label>Odometer Awal<input name="odometerStart" type="number" min="0" step="any" required /></label>
@@ -239,7 +256,7 @@ export default function ExecutorTaskCard({ task, products }: { task: Task; produ
         </form>
       ) : null}
 
-      {task.status === 'Confirmed' && (!needsSj || Boolean(task.sj_number)) && task.odometer_start !== null ? (
+      {task.status === 'Confirmed' && (!needsSj || hasSj) && task.odometer_start !== null ? (
         <form onSubmit={handleDriving}>
           <input type="hidden" name="transactionId" value={task.transaction_id} />
           <button type="submit" disabled={isPending}>Konfirmasi Berangkat</button>
