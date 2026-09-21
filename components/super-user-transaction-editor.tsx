@@ -30,6 +30,8 @@ type Task = {
   odometer_end: number | null
 }
 
+type SjItem = { id: string; task_id: string; sj_number: string; sj_qty: number; sj_weight: number; product: string; note: string | null }
+
 type Ticket = {
   transaction_id: string
   status: string
@@ -44,7 +46,7 @@ function timeValue(value: string | null) {
   return Number.isNaN(date.getTime()) ? '' : new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false }).format(date)
 }
 
-export function SuperUserTaskEditor({ task, locations, executors, fleets, schedules, products }: { task: Task; locations: Master[]; executors: Master[]; fleets: Master[]; schedules: Master[]; products: Master[] }) {
+export function SuperUserTaskEditor({ task, locations, executors, fleets, schedules, products, sjItems }: { task: Task; locations: Master[]; executors: Master[]; fleets: Master[]; schedules: Master[]; products: Master[]; sjItems: SjItem[] }) {
   const [state, formAction, pending] = useActionState(updateTaskTransactionAction, {})
   const isSchedule = Boolean(task.schedule_id)
   return (
@@ -78,17 +80,26 @@ export function SuperUserTaskEditor({ task, locations, executors, fleets, schedu
               <SearchableMasterSelect label="Armada" name="platNumber" options={fleets} placeholder="Pilih armada" defaultValue={task.fleet_snapshot?.plat_number ?? ''} required />
             </div>
           )}
+          {task.task_type === 'Supply' ? (
+            <>
+              <div className="card-title">Surat Jalan</div>
+              <input type="hidden" name="sjItemsJson" value={JSON.stringify(sjItems)} />
+              {sjItems.length ? sjItems.map((item, index) => (
+                <div className="form-row" key={item.id}>
+                  <label>SJ {index + 1}<input value={item.sj_number} readOnly /></label>
+                  <label>Qty<input value={item.sj_qty} readOnly /></label>
+                  <label>Berat<input value={item.sj_weight} readOnly /></label>
+                  <label>Produk<input value={item.product} readOnly /></label>
+                </div>
+              )) : (
+                <p className="muted">Belum ada data SJ.</p>
+              )}
+            </>
+          ) : null}
           <div className="form-row">
-            <label>Nomor SJ<input name="sjNumber" defaultValue={task.sj_number ?? ''} /></label>
-            <label>Qty<input name="sjQty" type="number" min="0" step="any" defaultValue={task.sj_qty ?? ''} /></label>
-            <label>Berat<input name="sjWeight" type="number" min="0" step="any" defaultValue={task.sj_weight ?? ''} /></label>
-          </div>
-          <div className="form-row">
-            <SearchableMasterSelect label="Produk" name="product" options={products} placeholder="Pilih produk" defaultValue={task.product ?? ''} />
             <label>Odometer Awal<input name="odometerStart" type="number" min="0" step="any" defaultValue={task.odometer_start ?? ''} /></label>
             <label>Odometer Akhir<input name="odometerEnd" type="number" min="0" step="any" defaultValue={task.odometer_end ?? ''} /></label>
           </div>
-          <label>Catatan SJ<textarea name="sjNote" rows={2} defaultValue={task.sj_note ?? ''} /></label>
           {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
           {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
           <button type="submit" disabled={pending}>{pending ? 'Sedang menyimpan...' : 'Simpan perubahan'}</button>
