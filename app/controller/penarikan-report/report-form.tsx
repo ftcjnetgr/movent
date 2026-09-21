@@ -6,18 +6,17 @@ type Option = { value: string; label: string }
 type Row = Record<string, string | null>
 
 const reportTypes = [
-  { value: 'STD', label: 'Laporan STD', description: 'Keberangkatan sesuai jadwal.' },
-  { value: 'STA', label: 'Laporan STA', description: 'Kedatangan sesuai jadwal.' },
-  { value: 'CANCELED', label: 'Tugas Dibatalkan', description: 'Daftar tugas yang dibatalkan.' },
+  { value: 'STD', label: 'Berdasarkan STD', description: 'Keberangkatan sesuai jadwal.' },
+  { value: 'STA', label: 'Berdasarkan STA', description: 'Kedatangan sesuai jadwal.' },
+  { value: 'CANCELED', label: 'Berdasarkan Pembatalan', description: 'Daftar tugas yang dibatalkan.' },
 ]
 
-export default function ReportForm({ startPoints, destinations, executors }: { startPoints: Option[]; destinations: Option[]; executors: Option[] }) {
+export default function ReportForm({ startPoints, destinations }: { startPoints: Option[]; destinations: Option[] }) {
   const [type, setType] = useState('STD')
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [startPoint, setStartPoint] = useState('')
   const [destination, setDestination] = useState('')
-  const [executorNik, setExecutorNik] = useState('')
   const [rows, setRows] = useState<Row[]>([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -26,9 +25,8 @@ export default function ReportForm({ startPoints, destinations, executors }: { s
     const search = new URLSearchParams({ type, from, to, format: 'json' })
     if (startPoint) search.set('startPoint', startPoint)
     if (destination) search.set('destination', destination)
-    if (executorNik) search.set('executorNik', executorNik)
     return search
-  }, [type, from, to, startPoint, destination, executorNik])
+  }, [type, from, to, startPoint, destination])
 
   async function preview() {
     setLoading(true)
@@ -73,7 +71,6 @@ export default function ReportForm({ startPoints, destinations, executors }: { s
           <label>Sampai tanggal<input type="date" value={to} onChange={(event) => setTo(event.target.value)} /></label>
           <label>Titik mulai<select value={startPoint} onChange={(event) => setStartPoint(event.target.value)}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
           <label>Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
-          <label>Executor<select value={executorNik} onChange={(event) => setExecutorNik(event.target.value)}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
         </div>
         {message ? <p className="form-error" role="alert">{message}</p> : null}
         <div className="report-actions">
