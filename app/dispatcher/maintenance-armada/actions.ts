@@ -85,8 +85,13 @@ export async function cancelMaintenanceTicketAction(formData: FormData) {
   if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
 
   const admin = createAdminClient()
-  let query = admin.from('ticketings').select('id, status, created_by').eq('transaction_id', transactionId).eq('status', 'Created')
+  let query = admin.from('ticketings')
+    .select('id, status, created_by')
+    .eq('transaction_id', transactionId)
+    .eq('status', 'Requested')
+
   if (profile.role !== 'Super User') query = query.eq('created_by', profile.id)
+
   const { data: ticket } = await query.maybeSingle()
   if (!ticket) return { error: 'Tiket tidak ditemukan atau sudah tidak bisa dibatalkan.' }
 
@@ -95,7 +100,7 @@ export async function cancelMaintenanceTicketAction(formData: FormData) {
     canceled_at: new Date().toISOString(),
     canceled_from_status: 'Requested',
     cancellation_note: note,
-  }).eq('id', ticket.id).eq('status', 'Created')
+  }).eq('id', ticket.id).eq('status', 'Requested')
 
   if (error) return { error: 'Tiket belum berhasil dibatalkan.' }
 
