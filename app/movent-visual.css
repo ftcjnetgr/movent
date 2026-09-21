@@ -2900,3 +2900,30 @@ td{color:#33445a!important}
   .schedule-toolbar{overflow-x:auto!important;flex-wrap:nowrap!important}
   .schedule-grid-shell{overflow-x:auto!important}
 }
+
+
+/* final polish — compact accordion, alerts, reports, actions and schedule grid */
+.nav-group-items.is-closed{display:none!important}
+.nav-group-items.is-open{display:grid!important}
+.alert-detail-main{display:grid;gap:2px;min-width:0}
+.alert-detail-main strong{font-size:10px!important;color:#1d2a40!important}
+.alert-detail-main span{font-size:9px!important;color:#506178!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alert-detail-main small{font-size:8px!important;color:#8895a5!important}
+.alert-detail-timer{min-width:90px;display:grid;justify-items:end;align-content:center;gap:2px;text-align:right}
+.alert-detail-timer span{font-size:8px!important;color:#7a899b!important;font-weight:600!important}
+.alert-detail-timer b{font-size:10px!important;color:#5f7084!important;white-space:nowrap}
+.alert-detail-timer.is-late span,.alert-detail-timer.is-late b{color:#d71920!important}
+.alert-detail-item{padding:10px 12px!important;align-items:center!important}
+.report-filter-fields{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.admin-row-actions{display:flex!important;align-items:center!important;gap:6px!important;white-space:nowrap!important}
+.admin-row-actions>details{margin:0!important}
+.admin-row-actions>details>.link-button,.admin-row-actions>form button,.admin-row-action-secondary button{white-space:nowrap!important}
+.admin-row-action-secondary{margin:0!important}
+.admin-row-actions .link-button{display:inline-flex!important;align-items:center!important;min-height:34px!important}
+.schedule-grid-table{min-width:1190px!important}
+.schedule-grid-table thead th:not(:first-child){width:42px!important;min-width:42px!important;max-width:42px!important}
+.schedule-grid-table td{width:42px!important;min-width:42px!important;max-width:42px!important}
+.schedule-grid-table thead th:first-child,.schedule-grid-table tbody th{width:180px!important}
+.schedule-grid-cell{justify-content:flex-start!important;overflow:hidden!important}
+.schedule-trip{font-variant-numeric:tabular-nums!important}
+@media(max-width:900px){.report-filter-fields{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
