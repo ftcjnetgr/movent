@@ -155,7 +155,6 @@ export async function confirmNonTgrDepartureByOperationAction(_state: State, for
   const { error } = await admin.from('tasks').update({
     status: 'Driving',
     external_departure_at: timestamp,
-    driving_at: new Date().toISOString(),
   }).eq('id', task.id).eq('status', 'Assigned')
 
   if (error) return { error: 'Konfirmasi berangkat belum berhasil.' }
