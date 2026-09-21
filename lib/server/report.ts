@@ -6,7 +6,6 @@ export type ReportFilters = {
   to: string
   startPoint?: string
   destination?: string
-  executorNik?: string
 }
 
 function escapeCsv(value: unknown) {
@@ -51,7 +50,6 @@ export async function queryOperationalReport(filters: ReportFilters) {
 
   if (filters.startPoint) query = query.eq('start_point', filters.startPoint)
   if (filters.destination) query = query.eq('destination', filters.destination)
-  if (filters.executorNik) query = query.eq('executor_nik', filters.executorNik)
   if (filters.type === 'CANCELED') query = query.eq('status', 'Canceled')
 
   const { data, error } = await query
