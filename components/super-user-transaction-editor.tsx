@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import SearchableMasterSelect from '@/components/searchable-master-select'
 import { updateTaskTransactionAction, updateTicketTransactionAction } from '@/app/super-user/pengelolaan-transaksi/actions'
 
@@ -48,6 +48,7 @@ function timeValue(value: string | null) {
 
 export function SuperUserTaskEditor({ task, locations, executors, fleets, schedules, products, sjItems }: { task: Task; locations: Master[]; executors: Master[]; fleets: Master[]; schedules: Master[]; products: Master[]; sjItems: SjItem[] }) {
   const [state, formAction, pending] = useActionState(updateTaskTransactionAction, {})
+  const [editableSjItems, setEditableSjItems] = useState(sjItems)
   const isSchedule = Boolean(task.schedule_id)
   return (
     <details className="transaction-editor">
@@ -83,13 +84,14 @@ export function SuperUserTaskEditor({ task, locations, executors, fleets, schedu
           {task.task_type === 'Supply' ? (
             <>
               <div className="card-title">Surat Jalan</div>
-              <input type="hidden" name="sjItemsJson" value={JSON.stringify(sjItems)} />
+              <input type="hidden" name="sjItemsJson" value={JSON.stringify(editableSjItems)} />
               {sjItems.length ? sjItems.map((item, index) => (
                 <div className="form-row" key={item.id}>
-                  <label>SJ {index + 1}<input value={item.sj_number} readOnly /></label>
-                  <label>Qty<input value={item.sj_qty} readOnly /></label>
-                  <label>Berat<input value={item.sj_weight} readOnly /></label>
-                  <label>Produk<input value={item.product} readOnly /></label>
+                  <label>SJ {index + 1}<input value={item.sj_number} onChange={(e) => setEditableSjItems((items) => items.map((x) => x.id === item.id ? {...x, sj_number: e.target.value} : x))} /></label>
+                  <label>Qty<input type="number" min="0" step="any" value={item.sj_qty} onChange={(e) => setEditableSjItems((items) => items.map((x) => x.id === item.id ? {...x, sj_qty: Number(e.target.value)} : x))} /></label>
+                  <label>Berat<input type="number" min="0" step="any" value={item.sj_weight} onChange={(e) => setEditableSjItems((items) => items.map((x) => x.id === item.id ? {...x, sj_weight: Number(e.target.value)} : x))} /></label>
+                  <label>Produk<input value={item.product} onChange={(e) => setEditableSjItems((items) => items.map((x) => x.id === item.id ? {...x, product: e.target.value} : x))} /></label>
+                  <label>Catatan<textarea value={item.note ?? ''} onChange={(e) => setEditableSjItems((items) => items.map((x) => x.id === item.id ? {...x, note: e.target.value} : x))} /></label>
                 </div>
               )) : (
                 <p className="muted">Belum ada data SJ.</p>
