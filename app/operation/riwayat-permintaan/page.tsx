@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import OperasionalExtraScheduleAlert from '@/components/operation-extra-schedule-alert'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -31,6 +32,7 @@ function formatDateTime(value: string | null) {
 
 export default async function OperasionalHistoryPage() {
   const profile = await getCurrentProfile()
+  if (!['Operation', 'Super User'].includes(profile.role)) notFound()
   const admin = createAdminClient()
   const { data: requests } = await admin
     .from('tasks')
