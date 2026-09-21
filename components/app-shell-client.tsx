@@ -46,16 +46,56 @@ const navByRole: Record<string, NavGroup[]> = {
   ],
 }
 
-const superUserGroup: NavGroup = {
-  label: 'Super User',
-  icon: 'settings',
-  items: [
-    { label: 'Setting', href: '/super-user/profil', icon: 'user' },
-    { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
-    { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
-    { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
-  ],
-}
+const superUserNav: NavGroup[] = [
+  {
+    label: 'Beranda',
+    icon: 'home',
+    items: [{ label: 'Beranda', href: '/controller/beranda', icon: 'home' }],
+  },
+  {
+    label: 'Operasional',
+    icon: 'calendar',
+    items: [
+      { label: 'Schedule', href: '/controller/timetable?view=plan', icon: 'calendar' },
+      { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
+      { label: 'Ticketing', href: '/controller/beranda/ticketing', icon: 'ticket' },
+      { label: 'Monitoring', href: '/controller/timetable?view=live', icon: 'truck' },
+      { label: 'Alert', href: '/controller/alert', icon: 'bell' },
+    ],
+  },
+  {
+    label: 'Master Data',
+    icon: 'database',
+    items: [
+      { label: 'Armada', href: '/super-user/pengelolaan-database?db=fleets', icon: 'truck' },
+      { label: 'Executor', href: '/super-user/pengelolaan-database?db=executors', icon: 'user' },
+      { label: 'Lokasi', href: '/super-user/pengelolaan-database?db=locations', icon: 'location' },
+      { label: 'Produk', href: '/super-user/pengelolaan-database?db=products', icon: 'box' },
+      { label: 'List Maintenance', href: '/super-user/pengelolaan-database?db=maintenance_lists', icon: 'wrench' },
+      { label: 'Schedule', href: '/super-user/pengelolaan-database?db=schedules', icon: 'calendar' },
+    ],
+  },
+  {
+    label: 'Management',
+    icon: 'settings',
+    items: [
+      { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
+      { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
+      { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
+      { label: 'Import Data', href: '/super-user/pengelolaan-database', icon: 'upload' },
+    ],
+  },
+  {
+    label: 'Laporan',
+    icon: 'report',
+    items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }],
+  },
+  {
+    label: 'Pengaturan',
+    icon: 'settings',
+    items: [{ label: 'Pengaturan Sistem', href: '/super-user/profil', icon: 'settings' }],
+  },
+]
 
 const modeRoutes: Record<string, string> = {
   Controller: '/controller/beranda',
@@ -93,7 +133,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<string[]>([])
   const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
-  const navGroups = useMemo(() => profile.role === 'Super User' ? [...(navByRole[currentRole] ?? []), superUserGroup] : (navByRole[currentRole] ?? []), [currentRole, profile.role])
+  const navGroups = useMemo(() => profile.role === 'Super User' ? superUserNav : (navByRole[currentRole] ?? []), [currentRole, profile.role])
   const activeItem = useMemo(() => {
     return navGroups
       .flatMap(group => group.items.map(item => ({ ...item, group: group.label })))
