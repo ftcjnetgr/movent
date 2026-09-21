@@ -8,7 +8,6 @@ import { createNonTgrSupplyAction, confirmNonTgrDepartureByOperationAction, conf
 type Option = { value: string; label: string; searchText?: string }
 type Preview = {
   transactionId: string
-  confirmationKey: string
   startPoint: string
   destination: string
   std: string
@@ -141,7 +140,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
             </div>
             <p className="muted">Periksa data penugasan dan hasil SJ sebelum dilanjutkan.</p>
             <form action={confirmAction} className="compact-form">
-              <input type="hidden" name="transactionId" value={state.preview.transactionId} /><input type="hidden" name="confirmationKey" value={state.preview.confirmationKey} />
+              <input type="hidden" name="transactionId" value={state.preview.transactionId} />
               <input type="hidden" name="startPoint" value={state.preview.startPoint} />
               <input type="hidden" name="destination" value={state.preview.destination} />
               <input type="hidden" name="std" value={timeValue(state.preview.std)} />
