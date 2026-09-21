@@ -82,7 +82,7 @@ function statusClass(status: string | undefined) {
 
 const routeLabels: Record<string, string> = {
   Interhub: 'Interhub',
-  Transit: 'Gateway',
+  Transit: 'Transit',
   Direct: 'Direct',
 }
 
