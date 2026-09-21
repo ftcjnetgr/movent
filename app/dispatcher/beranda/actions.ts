@@ -82,6 +82,8 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
     if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
 
+    const transactionId = await nextTransaction(admin)
+    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
     return {
       success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.',
       preview: {
