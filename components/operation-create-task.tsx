@@ -12,11 +12,7 @@ type Preview = {
   sta: string
   externalExecutor: string
   externalFleet: string
-  sjNumber: string
-  sjQty: number
-  sjWeight: number
-  product: string
-  sjNote: string | null
+  sjs: { sjNumber: string; sjQty: number; sjWeight: number; product: string; sjNote: string | null }[]
 }
 
 type Task = {
@@ -46,6 +42,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
   const [confirmState, confirmAction, confirmPending] = useActionState(confirmNonTgrSupplyAction, {})
   const [departureState, departureAction, departurePending] = useActionState(confirmNonTgrDepartureByOperationAction, {})
   const [preview, setPreview] = useState<Preview | null>(null)
+  const [sjRows, setSjRows] = useState([0])
 
   const locationOptions: Option[] = locations.map((value) => ({ value, label: value, searchText: value }))
   const productOptions: Option[] = products.map((value) => ({ value, label: value, searchText: value }))
@@ -72,13 +69,19 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
             <label>No. Plat Armada<input name="fleetPlate" required /></label>
             <label>Tipe Armada<input name="fleetType" required /></label>
           </div>
-          <div className="form-row">
-            <label>Nomor SJ<input name="sjNumber" required /></label>
-            <label>Qty SJ<input name="sjQty" type="number" min="0" step="any" required /></label>
-            <label>Weight SJ<input name="sjWeight" type="number" min="0" step="any" required /></label>
-          </div>
-          <SearchableMasterSelect label="Produk SJ" name="product" options={productOptions} placeholder="Pilih produk" required />
-          <label>Catatan SJ<textarea name="sjNote" rows={3} /></label>
+          {sjRows.map((row) => (
+            <div key={row} className="metric-card compact-form">
+              <div className="card-title">SJ {row + 1}</div>
+              <div className="form-row">
+                <label>Nomor SJ<input name="sjNumber" required /></label>
+                <label>Qty SJ<input name="sjQty" type="number" min="0" step="any" required /></label>
+                <label>Weight SJ<input name="sjWeight" type="number" min="0" step="any" required /></label>
+              </div>
+              <SearchableMasterSelect label="Produk SJ" name="product" options={productOptions} placeholder="Pilih produk" required />
+              <label>Catatan SJ<textarea name="sjNote" rows={3} /></label>
+            </div>
+          ))}
+          <button type="button" className="secondary-button" onClick={() => setSjRows((rows) => [...rows, rows.length])}>Tambah SJ</button>
           {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
           {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
           <button type="submit" disabled={pending}>{pending ? 'Menyiapkan preview...' : 'Preview Tugas'}</button>
@@ -93,7 +96,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
               <div><span>STA</span><strong>{timeValue(state.preview.sta)}</strong></div>
               <div><span>Executor</span><strong>{state.preview.externalExecutor}</strong></div>
               <div><span>Armada</span><strong>{state.preview.externalFleet}</strong></div>
-              <div><span>SJ</span><strong>{state.preview.sjNumber} · {state.preview.product}</strong></div>
+              <div><span>Jumlah SJ</span><strong>{state.preview.sjs.length}</strong></div>
             </div>
             <p className="muted">Periksa data sebelum konfirmasi. Jika ada yang salah, kembali ke form untuk mengedit.</p>
             <form action={confirmAction} className="compact-form">
@@ -105,11 +108,15 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
               <input type="hidden" name="executorPhone" value={state.preview.externalExecutor.split(' · ').slice(1).join(' · ')} />
               <input type="hidden" name="fleetPlate" value={state.preview.externalFleet.split(' · ')[0]} />
               <input type="hidden" name="fleetType" value={state.preview.externalFleet.split(' · ').slice(1).join(' · ')} />
-              <input type="hidden" name="sjNumber" value={state.preview.sjNumber} />
-              <input type="hidden" name="sjQty" value={state.preview.sjQty} />
-              <input type="hidden" name="sjWeight" value={state.preview.sjWeight} />
-              <input type="hidden" name="product" value={state.preview.product} />
-              <input type="hidden" name="sjNote" value={state.preview.sjNote ?? ''} />
+              {state.preview.sjs.map((sj, index) => (
+                <span key={index}>
+                  <input type="hidden" name="sjNumber" value={sj.sjNumber} />
+                  <input type="hidden" name="sjQty" value={sj.sjQty} />
+                  <input type="hidden" name="sjWeight" value={sj.sjWeight} />
+                  <input type="hidden" name="product" value={sj.product} />
+                  <input type="hidden" name="sjNote" value={sj.sjNote ?? ''} />
+                </span>
+              ))}
               {confirmState.error ? <p className="form-error" role="alert">{confirmState.error}</p> : null}
               {confirmState.success ? <p className="form-success" role="status">{confirmState.success}</p> : null}
               <button type="submit" disabled={confirmPending}>{confirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Penugasan'}</button>
