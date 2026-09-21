@@ -11,11 +11,7 @@ type Preview = {
   sta: string
   externalExecutor: string
   externalFleet: string
-  sjNumber: string
-  sjQty: number
-  sjWeight: number
-  product: string
-  sjNote: string | null
+  sjs: { sjNumber: string; sjQty: number; sjWeight: number; product: string; sjNote: string | null }[]
 }
 
 type State = { error?: string; success?: string; transactionId?: string; preview?: Preview }
@@ -36,14 +32,17 @@ async function validateNonTgrInput(formData: FormData) {
   const executorPhone = String(formData.get('executorPhone') ?? '').trim()
   const fleetPlate = String(formData.get('fleetPlate') ?? '').trim()
   const fleetType = String(formData.get('fleetType') ?? '').trim()
-  const sjNumber = String(formData.get('sjNumber') ?? '').trim()
-  const sjQty = Number(formData.get('sjQty'))
-  const sjWeight = Number(formData.get('sjWeight'))
-  const product = String(formData.get('product') ?? '').trim()
-  const sjNote = String(formData.get('sjNote') ?? '').trim()
+  const sjNumbers = formData.getAll('sjNumber').map(String).map((v) => v.trim())
+  const sjQtys = formData.getAll('sjQty').map((v) => Number(v))
+  const sjWeights = formData.getAll('sjWeight').map((v) => Number(v))
+  const products = formData.getAll('product').map(String).map((v) => v.trim())
+  const sjNotes = formData.getAll('sjNote').map(String).map((v) => v.trim())
 
-  if (!startPoint || !destination || !std || !sta || !executorName || !executorPhone || !fleetPlate || !fleetType || !sjNumber || !product || !Number.isFinite(sjQty) || !Number.isFinite(sjWeight)) {
-    return { error: 'Data perjalanan, executor, armada, dan SJ perlu diisi lengkap dulu, ya.' } as const
+  if (!startPoint || !destination || !std || !sta || !executorName || !executorPhone || !fleetPlate || !fleetType || !sjNumbers.length) {
+    return { error: 'Data perjalanan, executor, armada, dan minimal satu SJ perlu diisi lengkap dulu, ya.' } as const
+  }
+  if (sjNumbers.length !== sjQtys.length || sjNumbers.length !== sjWeights.length || sjNumbers.length !== products.length) {
+    return { error: 'Data setiap SJ belum lengkap.' } as const
   }
 
   const stdTimestamp = jakartaTimestamp(std)
@@ -51,14 +50,19 @@ async function validateNonTgrInput(formData: FormData) {
   if (!stdTimestamp || !staTimestamp) return { error: 'Format STD atau STA belum benar.' } as const
 
   const admin = createAdminClient()
-  const [{ data: startLocation }, { data: destinationLocation }, { data: productData }] = await Promise.all([
+  const [{ data: startLocation }, { data: destinationLocation }] = await Promise.all([
     admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle(),
     admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle(),
-    admin.from('products').select('product, status').eq('product', product).eq('status', 'Active').maybeSingle(),
   ])
-
   if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' } as const
-  if (!productData) return { error: 'Produk belum tersedia.' } as const
+
+  const sjs: { sjNumber: string; sjQty: number; sjWeight: number; product: string; sjNote: string | null }[] = []
+  for (let i = 0; i < sjNumbers.length; i++) {
+    if (!sjNumbers[i] || !products[i] || !Number.isFinite(sjQtys[i]) || !Number.isFinite(sjWeights[i])) return { error: 'Nomor SJ, Qty, Berat, dan Produk wajib diisi pada setiap SJ.' } as const
+    const { data: productData } = await admin.from('products').select('product, status').eq('product', products[i]).eq('status', 'Active').maybeSingle()
+    if (!productData) return { error: `Produk pada SJ ke-${i + 1} belum tersedia.` } as const
+    sjs.push({ sjNumber: sjNumbers[i], sjQty: sjQtys[i], sjWeight: sjWeights[i], product: products[i], sjNote: sjNotes[i] || null })
+  }
 
   return {
     value: {
@@ -68,13 +72,9 @@ async function validateNonTgrInput(formData: FormData) {
       sta: staTimestamp,
       externalExecutor: `${executorName} · ${executorPhone}`,
       externalFleet: `${fleetPlate} · ${fleetType}`,
-      sjNumber,
-      sjQty,
-      sjWeight,
-      product,
-      sjNote: sjNote || null,
+      sjs,
     } satisfies Preview,
-    snapshots: { startLocation, destinationLocation, productData },
+    snapshots: { startLocation, destinationLocation },
   }
 }
 
@@ -120,16 +120,21 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
     destination_snapshot: snapshots.destinationLocation,
     std: value.std,
     sta: value.sta,
-    sj_number: value.sjNumber,
-    sj_qty: value.sjQty,
-    sj_weight: value.sjWeight,
-    product: value.product,
-    product_snapshot: snapshots.productData,
-    sj_note: value.sjNote,
+    sj_number: value.sjs[0].sjNumber,
+    sj_qty: value.sjs[0].sjQty,
+    sj_weight: value.sjs[0].sjWeight,
+    product: value.sjs[0].product,
+    sj_note: value.sjs[0].sjNote,
     assigned_at: new Date().toISOString(),
   })
 
   if (error) return { error: 'Tugas Supply Non-TGR belum berhasil dibuat. Coba lagi, ya.' }
+
+  const { data: taskRow } = await admin.from('tasks').select('id').eq('transaction_id', transactionId).maybeSingle()
+  if (!taskRow) return { error: 'Tugas dibuat, tetapi detail SJ belum ditemukan.' }
+  const sjRows = value.sjs.map((sj) => ({ task_id: taskRow.id, sj_number: sj.sjNumber, sj_qty: sj.sjQty, sj_weight: sj.sjWeight, product: sj.product, note: sj.sjNote }))
+  const { error: sjError } = await admin.from('task_sj_items').insert(sjRows)
+  if (sjError) return { error: 'Tugas dibuat, tetapi detail SJ belum berhasil disimpan.' }
 
   revalidateOperationPaths()
   return { success: `Tugas ${transactionId} berhasil dikonfirmasi dan ditugaskan.`, transactionId }
