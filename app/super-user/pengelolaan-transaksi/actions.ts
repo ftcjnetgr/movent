@@ -111,7 +111,16 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
     const removeIds = (currentItems ?? []).map((item) => item.id).filter((id) => !keepIds.has(id))
     if (removeIds.length) { const result = await admin.from('task_sj_items').delete().in('id', removeIds).eq('task_id', task.id); if (result.error) return { error: 'SJ lama belum berhasil dihapus.' } }
     const latest = sjItems[sjItems.length - 1]
-    if (latest) { update.sj_number = latest.sj_number; update.sj_qty = Number(latest.sj_qty); update.sj_weight = Number(latest.sj_weight); update.product = latest.product; update.sj_note = latest.note?.trim() || null }
+    if (latest) {
+      const { data: latestProduct } = await admin.from('products').select('product, status').eq('product', latest.product).eq('status', 'Active').maybeSingle()
+      if (!latestProduct) return { error: 'Produk SJ tidak tersedia.' }
+      update.sj_number = latest.sj_number
+      update.sj_qty = Number(latest.sj_qty)
+      update.sj_weight = Number(latest.sj_weight)
+      update.product = latest.product
+      update.product_snapshot = latestProduct
+      update.sj_note = latest.note?.trim() || null
+    }
   } else {
   update.sj_number = text(formData, 'sjNumber')
   update.sj_qty = numberOrNull(formData, 'sjQty')
