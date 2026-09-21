@@ -48,6 +48,7 @@ async function validateNonTgrInput(formData: FormData) {
   const stdTimestamp = jakartaTimestamp(std)
   const staTimestamp = jakartaTimestamp(sta)
   if (!stdTimestamp || !staTimestamp) return { error: 'Format STD atau STA belum benar.' } as const
+  if (new Date(staTimestamp).getTime() <= new Date(stdTimestamp).getTime()) return { error: 'STA harus lebih besar dari STD.' } as const
 
   const admin = createAdminClient()
   const [{ data: startLocation }, { data: destinationLocation }] = await Promise.all([
