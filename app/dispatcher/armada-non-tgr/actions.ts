@@ -40,6 +40,7 @@ export async function submitNonTgrArrivalAction(formData: FormData): Promise<Res
     .maybeSingle()
 
   if (!task || !task.external_departure_at) return { error: 'Tugas belum memiliki waktu keberangkatan.' }
+  if (new Date(timestamp).getTime() < new Date(task.external_departure_at).getTime()) return { error: 'ATA tidak boleh lebih awal dari ATD.' }
 
   const { error } = await admin
     .from('tasks')
