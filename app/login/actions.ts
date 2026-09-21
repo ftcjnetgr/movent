@@ -37,13 +37,11 @@ export async function loginAction(
     .maybeSingle()
 
   if (profileError) {
-    return {
-      error: `Login diagnostic: PROFILE_QUERY | ${profileError.code ?? 'no_code'} | ${profileError.message}`,
-    }
+    return { error: 'Login belum berhasil. Coba lagi, ya.' }
   }
 
   if (!profile) {
-    return { error: 'Login diagnostic: PROFILE_NOT_FOUND' }
+    return { error: 'Username atau password belum benar.' }
   }
 
   if (profile.status === 'Locked') {
@@ -109,11 +107,7 @@ export async function loginAction(
       }
     }
 
-    const diagnostic = signInError
-      ? `Login diagnostic: ${signInError.code ?? 'no_code'} | ${signInError.status ?? 'no_status'} | ${signInError.message}`
-      : 'Login diagnostic: Auth berhasil tetapi user tidak dikembalikan.'
-
-    return { error: diagnostic }
+    return { error: 'Username atau password belum benar.' }
   }
 
   await admin
