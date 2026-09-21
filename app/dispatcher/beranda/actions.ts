@@ -25,6 +25,8 @@ type State = {
     scheduleId?: string
     executorNik?: string
     platNumber?: string
+    std?: string
+    sta?: string
   }
 }
 
