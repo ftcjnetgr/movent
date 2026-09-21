@@ -2974,3 +2974,56 @@ td{color:#33445a!important}
 .schedule-grid-table td{width:42px!important;min-width:42px!important;max-width:42px!important}
 .schedule-grid-table thead th:first-child,.schedule-grid-table tbody th{width:180px!important}
 @media(max-width:760px){.schedule-route-tabs{gap:16px!important}}
+
+
+/* timetable point buttons + stable vertical scrollbar */
+html{overflow-y:scroll!important}
+body{overflow-x:hidden!important}
+.schedule-route-tabs,
+.schedule-point-tabs{
+  display:flex!important;
+  align-items:center!important;
+  gap:4px!important;
+  flex:0 0 auto!important;
+  overflow-x:auto!important;
+  scrollbar-width:none!important;
+  border-bottom:1px solid #e7edf3!important;
+}
+.schedule-route-tabs::-webkit-scrollbar,
+.schedule-point-tabs::-webkit-scrollbar{display:none!important}
+.schedule-route-tabs{margin:2px 0 0!important;padding:0 2px!important;max-width:100%!important}
+.schedule-point-tabs{margin:0!important;padding:0!important;border-bottom:0!important;max-width:100%!important}
+.schedule-filter-bar{
+  display:flex!important;
+  align-items:flex-end!important;
+  gap:18px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:2px 0 10px!important;
+  overflow-x:auto!important;
+  scrollbar-width:none!important;
+}
+.schedule-filter-bar::-webkit-scrollbar{display:none!important}
+.schedule-filter-group{display:flex!important;align-items:center!important;gap:12px!important;min-width:0!important;flex:0 0 auto!important}
+.schedule-filter-label{font-size:8px!important;font-weight:800!important;color:#8794a7!important;white-space:nowrap!important}
+.schedule-point-tabs button{
+  position:relative!important;
+  flex:0 0 auto!important;
+  min-height:32px!important;
+  padding:6px 9px!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:transparent!important;
+  color:#7d8b9d!important;
+  box-shadow:none!important;
+  font-size:8px!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+}
+.schedule-point-tabs button:hover{background:#f2f5f8!important;color:#25364d!important}
+.schedule-point-tabs button.active{background:#fff!important;color:var(--ui-primary)!important;box-shadow:0 1px 3px rgba(20,32,51,.08)!important}
+.schedule-route-tabs{flex:0 0 auto!important;max-width:none!important;border-bottom:0!important;margin:0!important;padding:0!important}
+.schedule-route-tabs button{min-height:32px!important;padding:6px 9px 7px!important}
+.schedule-route-tabs button.active:after{bottom:-1px!important}
+.schedule-grid-table thead th:first-child,
+.schedule-grid-table tbody th{width:180px!important;min-width:180px!important;max-width:180px!important}
