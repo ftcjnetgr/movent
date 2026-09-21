@@ -62,6 +62,44 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
   }
   const admin = createAdminClient()
 
+  if (taskType === 'Supply' && ownership === 'TGR') {
+    const scheduleId = String(formData.get('scheduleId') ?? '').trim()
+    const executorNik = String(formData.get('executorNik') ?? '').trim()
+    const platNumber = String(formData.get('platNumber') ?? '').trim()
+    if (!scheduleId || !executorNik || !platNumber) return { error: 'Schedule, Executor, dan Armada perlu diisi dulu, ya.' }
+
+    const { data: schedule } = await admin.from('schedules').select('*').eq('schedule_id', scheduleId).eq('status', 'Active').maybeSingle()
+    if (!schedule) return { error: 'Schedule tidak tersedia.' }
+
+    const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
+    if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
+
+    const transactionId = await nextTransaction(admin)
+    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
+
+    return {
+      success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.',
+      preview: {
+        transactionId,
+        flow: 'tgr',
+        startPoint: schedule.start_point,
+        destination: schedule.destination,
+        externalExecutor: executor.full_name,
+        externalFleet: fleet.plat_number,
+        sjNumber: '',
+        sjQty: 0,
+        sjWeight: 0,
+        product: '',
+        sjNote: null,
+        scheduleId: schedule.schedule_id,
+        executorNik: executor.executor_nik,
+        platNumber: fleet.plat_number,
+        std: schedule.std,
+        sta: schedule.sta,
+      },
+    }
+  }
+
   if (taskType === 'Distribusi Mobil') {
     const startPoint = String(formData.get('startPoint') ?? '').trim()
     const destination = String(formData.get('destination') ?? '').trim()
