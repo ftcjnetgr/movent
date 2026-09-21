@@ -8,7 +8,7 @@ export default async function ExecutorTugasSayaPage() {
 
   let taskQuery = admin
     .from('tasks')
-    .select('transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end, arrived_at, executor_snapshot, fleet_snapshot')
+    .select('id, transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end, arrived_at, executor_snapshot, fleet_snapshot')
     .not('status', 'in', '(Completed,Canceled)')
     .order('created_at', { ascending: false })
 
@@ -18,6 +18,17 @@ export default async function ExecutorTugasSayaPage() {
     taskQuery,
     admin.from('products').select('product').eq('status', 'Active').order('product'),
   ])
+
+  const taskIds = (tasks ?? []).map((task) => task.id)
+  const { data: sjItems } = taskIds.length
+    ? await admin.from('task_sj_items').select('task_id, sj_number, sj_qty, sj_weight, product, note').in('task_id', taskIds).order('created_at')
+    : { data: [] as any[] }
+  const sjByTask = new Map<string, any[]>()
+  for (const item of sjItems ?? []) {
+    const list = sjByTask.get(item.task_id) ?? []
+    list.push(item)
+    sjByTask.set(item.task_id, list)
+  }
 
   const activeCount = tasks?.length ?? 0
   const waitingCount = (tasks ?? []).filter((task) => task.status === 'Assigned').length
@@ -49,7 +60,7 @@ export default async function ExecutorTugasSayaPage() {
         </div>
         <section className="task-list">
           {(tasks ?? []).map((task) => (
-            <ExecutorTaskCard key={task.transaction_id} task={task} products={(products ?? []).map((item) => item.product)} />
+            <ExecutorTaskCard key={task.transaction_id} task={task} products={(products ?? []).map((item) => item.product)} sjItems={sjByTask.get(task.id) ?? []} />
           ))}
           {!tasks?.length ? (
             <div className="metric-card">
