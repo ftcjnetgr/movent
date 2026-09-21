@@ -103,7 +103,6 @@ export default function TimetableView({
   const [direction, setDirection] = useState<'origin' | 'destination'>('origin')
   const [route, setRoute] = useState('')
   const [category, setCategory] = useState('Normal')
-  const [hub, setHub] = useState('')
   const [point, setPoint] = useState('')
   const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>('all')
 
@@ -136,7 +135,7 @@ export default function TimetableView({
     if (category && item.category !== category) return false
     if (point && displayPoint !== point) return false
     return true
-  }), [selectedPlanSchedules, direction, route, category, hub, point])
+  }), [selectedPlanSchedules, direction, route, category, point])
 
   const filteredTasks = useMemo(() => todayTasks.filter((task) => {
     const displayPoint = direction === 'origin' ? task.destination : task.start_point
@@ -145,7 +144,7 @@ export default function TimetableView({
     if (route && (schedule?.route ?? '') !== route) return false
     if (category && schedule && schedule.category !== category) return false
     return true
-  }), [todayTasks, direction, point, hub, route, category, scheduleById])
+  }), [todayTasks, direction, point, route, category, scheduleById])
 
   const summary = useMemo(() => ({
     unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
@@ -192,7 +191,6 @@ export default function TimetableView({
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
 
-    const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
     const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
     return (
       <div className="schedule-grid-scroll">
@@ -315,7 +313,7 @@ export default function TimetableView({
 
       <div className="schedule-toolbar">
         <div className="schedule-direction">
-          <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setHub(''); setPoint('') }}>AS Origin</button>
+          <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setPoint('') }}>AS Origin</button>
           <button type="button" className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setHub(''); setPoint('') }}>AS Destination</button>
         </div>
 
