@@ -3800,3 +3800,75 @@ html:has(.app-shell.is-super-user){overflow:hidden!important}
   .app-shell.is-super-user .super-dashboard-table-grid,
   .app-shell.is-super-user .super-dashboard-bottom-grid{flex:none!important;height:auto!important;max-height:none!important}
 }
+
+
+/* =========================================================
+   SUPER USER — FINAL GRID FIT / NO CLIPPED PANELS
+   ========================================================= */
+.app-shell.is-super-user .page-content{
+  overflow:hidden!important;
+}
+.app-shell.is-super-user .super-dashboard{
+  display:grid!important;
+  grid-template-rows:auto auto minmax(210px,1.55fr) minmax(145px,1fr) minmax(135px,1fr)!important;
+  align-content:stretch!important;
+  height:100%!important;
+  max-height:100%!important;
+  gap:7px!important;
+  overflow:hidden!important;
+}
+.app-shell.is-super-user .super-dashboard-heading,
+.app-shell.is-super-user .super-kpi-grid,
+.app-shell.is-super-user .super-dashboard-main-grid,
+.app-shell.is-super-user .super-dashboard-table-grid,
+.app-shell.is-super-user .super-dashboard-bottom-grid{
+  min-height:0!important;
+  max-height:none!important;
+  height:auto!important;
+  flex:none!important;
+}
+.app-shell.is-super-user .super-dashboard-heading{margin:0!important}
+.app-shell.is-super-user .super-kpi-card{height:100%!important;min-height:0!important}
+.app-shell.is-super-user .super-panel{height:100%!important;min-height:0!important}
+.app-shell.is-super-user .super-chart-panel,
+.app-shell.is-super-user .super-fleet-panel,
+.app-shell.is-super-user .super-info-panel,
+.app-shell.is-super-user .super-table-panel,
+.app-shell.is-super-user .super-quick-panel,
+.app-shell.is-super-user .super-activity-panel{
+  height:100%!important;
+  min-height:0!important;
+}
+.app-shell.is-super-user .super-chart{
+  height:calc(100% - 52px)!important;
+  min-height:110px!important;
+}
+.app-shell.is-super-user .super-chart-stack{height:calc(100% - 18px)!important}
+.app-shell.is-super-user .super-table-wrap{
+  height:calc(100% - 43px)!important;
+  max-height:none!important;
+  overflow:auto!important;
+}
+.app-shell.is-super-user .super-quick-grid{
+  height:calc(100% - 43px)!important;
+  align-content:stretch!important;
+}
+.app-shell.is-super-user .super-activity-list{
+  height:calc(100% - 43px)!important;
+  overflow:auto!important;
+}
+.app-shell.is-super-user .super-fleet-body{min-height:0!important}
+.app-shell.is-super-user .super-info-list{min-height:0!important}
+
+@media(max-width:1100px){
+  .app-shell.is-super-user .page-content{overflow:auto!important}
+  .app-shell.is-super-user .super-dashboard{
+    display:flex!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+}
+@media(max-width:760px){
+  .app-shell.is-super-user .super-dashboard{display:flex!important}
+}
