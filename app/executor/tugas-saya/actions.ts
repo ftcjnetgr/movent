@@ -23,7 +23,7 @@ function allowedExecutor(profileRole: string, taskNik: string | null | undefined
 }
 
 function requiresSj(task: Record<string, any>) {
-  return task.task_type === 'Extra Schedule' || (task.task_type === 'Supply' && task.fleet_ownership === 'TGR')
+  return task.task_type === 'Supply' && task.fleet_ownership === 'TGR'
 }
 
 export async function acceptExtraScheduleAction(formData: FormData): Promise<Result> {
