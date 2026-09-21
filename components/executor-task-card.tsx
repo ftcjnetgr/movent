@@ -36,7 +36,7 @@ type Task = {
 }
 
 function requiresSj(task: Task) {
-  return task.task_type === 'Extra Schedule' || (task.task_type === 'Supply' && task.fleet_ownership === 'TGR')
+  return task.task_type === 'Supply' && task.fleet_ownership === 'TGR'
 }
 
 function statusLabel(status: string) {
