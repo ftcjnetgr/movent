@@ -86,73 +86,7 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
   }
 
   if (taskType === 'Supply' && ownership === 'Non-TGR') {
-    const startPoint = String(formData.get('startPoint') ?? '').trim()
-    const destination = String(formData.get('destination') ?? '').trim()
-    const std = String(formData.get('std') ?? '').trim()
-    const sta = String(formData.get('sta') ?? '').trim()
-    const externalExecutor = String(formData.get('externalExecutor') ?? '').trim()
-    const externalFleet = String(formData.get('externalFleet') ?? '').trim()
-    const sjNumber = String(formData.get('sjNumber') ?? '').trim()
-    const sjQty = Number(formData.get('sjQty'))
-    const sjWeight = Number(formData.get('sjWeight'))
-    const product = String(formData.get('product') ?? '').trim()
-    const sjNote = String(formData.get('sjNote') ?? '').trim()
-
-    if (!startPoint || !destination || !std || !sta || !externalExecutor || !externalFleet || !sjNumber || !product || !Number.isFinite(sjQty) || !Number.isFinite(sjWeight)) {
-      return { error: 'Semua data Supply Non-TGR perlu diisi dulu, ya.' }
-    }
-    const timestamps = [todayTimestamp(std), todayTimestamp(sta)]
-    if (!timestamps[0] || !timestamps[1]) return { error: 'STD atau STA belum benar.' }
-    const { data: startLocation } = await admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle()
-    const { data: destinationLocation } = await admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle()
-    if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' }
-    const { data: productData } = await admin.from('products').select('product, status').eq('product', product).eq('status', 'Active').maybeSingle()
-    if (!productData) return { error: 'Produk belum tersedia.' }
-    const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
-
-    const { error } = await admin.from('tasks').insert({
-      transaction_id: transactionId,
-      source_type: 'Manual',
-      task_type: 'Supply',
-      fleet_ownership: 'Non-TGR',
-      status: 'Assigned',
-      created_by: profile.id,
-      assigned_by: profile.id,
-      external_executor: externalExecutor,
-      external_fleet: externalFleet,
-      start_point: startPoint,
-      start_point_snapshot: startLocation,
-      destination,
-      destination_snapshot: destinationLocation,
-      std: timestamps[0],
-      sta: timestamps[1],
-      sj_number: sjNumber,
-      sj_qty: sjQty,
-      sj_weight: sjWeight,
-      product,
-      product_snapshot: productData,
-      sj_note: sjNote || null,
-      assigned_at: new Date().toISOString(),
-    })
-    if (error) return { error: 'Tugas Supply Non-TGR belum berhasil dibuat.' }
-    revalidateTaskPaths()
-    return {
-      success: `Tugas ${transactionId} berhasil dibuat.`,
-      transactionId,
-      preview: {
-        transactionId,
-        startPoint,
-        destination,
-        externalExecutor,
-        externalFleet,
-        sjNumber,
-        sjQty,
-        sjWeight,
-        product,
-        sjNote: sjNote || null,
-      },
-    }
+    return { error: 'Tugas Supply Non-TGR dibuat oleh Operation.' }
   }
 
   return { error: 'Jenis tugasnya belum lengkap. Coba cek lagi, ya.' }
@@ -169,7 +103,7 @@ export async function confirmDispatcherTaskAction(_state: State, formData: FormD
     const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); const std=`${date}T${schedule.std}+07:00`,sta=`${date}T${schedule.sta}+07:00`
     const {error}=await admin.from('tasks').insert({transaction_id:transactionId,source_type:'Schedule',task_type:'Supply',fleet_ownership:'TGR',status:'Assigned',created_by:profile.id,assigned_by:profile.id,executor_nik:executor.executor_nik,executor_snapshot:executor,fleet_snapshot:fleet,schedule_id:schedule.schedule_id,schedule_snapshot:schedule,start_point:schedule.start_point,start_point_snapshot:schedule,destination:schedule.destination,destination_snapshot:schedule,std,sta,assigned_at:new Date().toISOString()});if(error)return{error:'Tugas belum berhasil dikonfirmasi.'}
   } else if(flow==='distribusi'){
-    const startPoint=String(formData.get('startPoint')??'').trim(),destination=String(formData.get('destination')??'').trim(),std=String(formData.get('std')??'').trim(),sta=String(formData.get('sta')??'').trim();const ts1=todayTimestamp(std),ts2=todayTimestamp(sta);if(!startPoint||!destination||!ts1||!ts2)return{error:'Data tugas belum lengkap.'};const[{data:s},{data:d}]=await Promise.all([admin.from('locations').select('location,grouping,status').eq('location',startPoint).eq('status','Active').maybeSingle(),admin.from('locations').select('location,grouping,status').eq('location',destination).eq('status','Active').maybeSingle()]);if(!s||!d)return{error:'Lokasi belum tersedia.'};const{error}=await admin.from('tasks').insert({transaction_id:transactionId,source_type:'Manual',task_type:'Distribusi Mobil',status:'Assigned',created_by:profile.id,assigned_by:profile.id,executor_nik:executor.executor_nik,executor_snapshot:executor,fleet_snapshot:fleet,start_point:startPoint,start_point_snapshot:s,destination,destination_snapshot:d,std:ts1,sta:ts2,assigned_at:new Date().toISOString()});if(error)return{error:'Tugas belum berhasil dikonfirmasi.'}
+    const startPoint=String(formData.get('startPoint')??'').trim(),destination=String(formData.get('destination')??'').trim(),std=String(formData.get('std')??'').trim(),sta=String(formData.get('sta')??'').trim();const ts1=todayTimestamp(std),ts2=todayTimestamp(sta);if(!startPoint||!destination||!ts1||!ts2)return{error:'Data tugas belum lengkap.'};const[{data:s},{data:d}]=await Promise.all([admin.from('locations').select('location,grouping,status').eq('location',startPoint).eq('status','Active').maybeSingle(),admin.from('locations').select('location,grouping,status').eq('location',destination).eq('status','Active').maybeSingle()]);if(!s||!d)return{error:'Lokasi belum tersedia.'};const{error}=await admin.from('tasks').insert({transaction_id:transactionId,source_type:'Manual',task_type:'Distribusi Mobil',fleet_ownership:'Non-TGR',status:'Assigned',created_by:profile.id,assigned_by:profile.id,executor_nik:executor.executor_nik,executor_snapshot:executor,fleet_snapshot:fleet,start_point:startPoint,start_point_snapshot:s,destination,destination_snapshot:d,std:ts1,sta:ts2,assigned_at:new Date().toISOString()});if(error)return{error:'Tugas belum berhasil dikonfirmasi.'}
   } else return{error:'Preview tugas tidak valid.'}
   revalidateTaskPaths(); return{success:`Tugas ${transactionId} berhasil dikonfirmasi.`,transactionId}
 }
