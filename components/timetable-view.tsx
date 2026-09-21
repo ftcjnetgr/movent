@@ -313,7 +313,7 @@ export default function TimetableView({
 
       <div className="schedule-toolbar">
         <div className="schedule-direction">
-          <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setPoint('') }}>AS Origin</button>
+          <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setPoint('') }}>AS Start Point</button>
           <button type="button" className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setPoint('') }}>AS Destination</button>
         </div>
 
