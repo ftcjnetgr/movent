@@ -3282,3 +3282,71 @@ body{overflow-x:hidden!important}
   .schedule-filter-bar{grid-template-columns:1fr!important}
   .schedule-filter-group-point{justify-content:flex-start!important}
 }
+
+
+/* timetable all controls on one line */
+.schedule-control-line{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0 0 8px!important;
+  overflow-x:auto!important;
+  scrollbar-width:none!important;
+}
+.schedule-control-line::-webkit-scrollbar{display:none!important}
+.schedule-control-line>.schedule-day-row,
+.schedule-control-line>.schedule-toolbar,
+.schedule-control-line>.schedule-filter-bar{
+  flex:0 0 auto!important;
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:3px!important;
+  border:1px solid var(--ui-border)!important;
+  border-radius:9px!important;
+  background:#f8fafc!important;
+}
+.schedule-control-line>.schedule-day-row{
+  display:flex!important;
+  align-items:center!important;
+  gap:2px!important;
+}
+.schedule-control-line>.schedule-toolbar{
+  display:flex!important;
+  align-items:center!important;
+  gap:4px!important;
+  overflow:visible!important;
+}
+.schedule-control-line>.schedule-filter-bar{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  overflow:visible!important;
+}
+.schedule-control-line .schedule-filter-group{
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:auto!important;
+}
+.schedule-control-line .schedule-filter-group-point{margin-left:0!important}
+.schedule-control-line .schedule-route-tabs,
+.schedule-control-line .schedule-point-tabs{
+  max-width:none!important;
+  overflow:visible!important;
+}
+.schedule-control-line .schedule-day-row button,
+.schedule-control-line .schedule-direction button,
+.schedule-control-line .schedule-category-buttons button,
+.schedule-control-line .schedule-route-tabs button,
+.schedule-control-line .schedule-point-tabs button{
+  min-height:30px!important;
+  padding:5px 9px!important;
+  white-space:nowrap!important;
+}
+.schedule-control-line .schedule-filter-label{font-size:8px!important}
+@media(max-width:900px){
+  .schedule-control-line{overflow-x:auto!important}
+}
