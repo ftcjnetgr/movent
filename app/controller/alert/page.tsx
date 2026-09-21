@@ -1,9 +1,11 @@
+import { notFound } from 'next/navigation'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
 
 export default async function ControllerAlertPage() {
   const profile = await getCurrentProfile()
+  if (!['Controller', 'Super User'].includes(profile.role)) notFound()
   const data = await getDashboardData(profile)
 
   return (
