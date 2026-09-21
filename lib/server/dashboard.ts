@@ -11,6 +11,8 @@ type TaskRow = {
   schedule_id: string | null
   std: string | null
   sta: string | null
+  start_point: string | null
+  destination: string | null
   assigned_at: string | null
   accepted_at: string | null
   driving_at: string | null
@@ -58,6 +60,10 @@ type TaskAlert = {
   scheduleId: string
   transactionId?: string
   status?: string
+  startPoint: string | null
+  destination: string | null
+  std: string | null
+  sta: string | null
   targetAt: Date
 }
 
@@ -96,7 +102,7 @@ export async function getDashboardData(profile: AppProfile) {
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
     admin
       .from('tasks')
-      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, std, sta, assigned_at, accepted_at, driving_at, completed_at, canceled_at')
+      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, canceled_at')
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
@@ -128,6 +134,10 @@ export async function getDashboardData(profile: AppProfile) {
     .map((schedule) => ({
       kind: 'unassigned' as const,
       scheduleId: schedule.schedule_id,
+      startPoint: schedule.start_point,
+      destination: schedule.destination,
+      std: schedule.std,
+      sta: schedule.sta,
       targetAt: scheduleTimestamp(date, schedule.std),
     }))
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000)
@@ -138,6 +148,10 @@ export async function getDashboardData(profile: AppProfile) {
       kind: 'assigned' as const,
       transactionId: task.transaction_id,
       scheduleId: task.schedule_id as string,
+      startPoint: task.start_point,
+      destination: task.destination,
+      std: task.std,
+      sta: task.sta,
       targetAt: new Date(task.sta as string),
       status: task.status,
     }))
