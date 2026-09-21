@@ -4,6 +4,7 @@ import { FormEvent, useState, useTransition } from 'react'
 import {
   cancelMaintenanceTicketAction,
   createMaintenanceTicketAction,
+  confirmMaintenanceTicketAction,
 } from '@/app/dispatcher/maintenance-armada/actions'
 import SearchableMasterSelect from '@/components/searchable-master-select'
 function ticketStatusLabel(status: string) {
@@ -56,6 +57,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
   const [cancelMessage, setCancelMessage] = useState('')
   const [showCreate, setShowCreate] = useState(false)
   const [isCancelPending, startCancelTransition] = useTransition()
+  const [isConfirmPending, startConfirmTransition] = useTransition()
   const maintenanceOptions = maintenanceLists.map((item) => ({ value: item, label: item, searchText: item }))
   const locationOptions = locations.map((item) => ({ value: item, label: item, searchText: item }))
   const fleetOptions = fleets.map((fleet) => ({
@@ -115,23 +117,24 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                 <div><span className="muted">Lokasi</span><strong>{state.preview.location}</strong></div>
                 <div><span className="muted">Armada</span><strong>{state.preview.platNumber}</strong></div>
               </div>
-              <p className="muted">Tiketnya sudah siap dibagikan ke WhatsApp.</p>
-              <a
-                className="button-link"
-                href={'https://wa.me/?text=' + encodeURIComponent(
-                  [
-                    'Tiket Maintenance MOVENT',
-                    'ID Transaksi: ' + state.preview.transactionId,
-                    'Daftar Maintenance: ' + state.preview.maintenanceList,
-                    'Lokasi: ' + state.preview.location,
-                    'Armada: ' + state.preview.platNumber,
-                  ].join('\n')
-                )}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Bagikan ke WhatsApp
-              </a>
+              <p className="muted">Periksa kembali data sebelum dikonfirmasi.</p>
+              <form action={(formData) => {
+                startConfirmTransition(async () => {
+                  const result = await confirmMaintenanceTicketAction({}, formData)
+                  setState(result)
+                })
+              }} className="compact-form">
+                <input type="hidden" name="transactionId" value={state.preview.transactionId} />
+                <input type="hidden" name="maintenanceList" value={state.preview.maintenanceList} />
+                <input type="hidden" name="location" value={state.preview.location} />
+                <input type="hidden" name="platNumber" value={state.preview.platNumber} />
+                {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
+                {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
+                <div className="form-actions">
+                  <button type="submit" disabled={isConfirmPending}>{isConfirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Ticket'}</button>
+                  <button type="button" className="secondary-button" onClick={() => setState({})}>Edit Ticket</button>
+                </div>
+              </form>
             </>
           ) : (
             <p className="muted">Preview ticketing akan muncul setelah data berhasil disimpan.</p>
