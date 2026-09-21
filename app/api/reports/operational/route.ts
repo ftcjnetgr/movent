@@ -4,7 +4,10 @@ import { getCurrentProfile } from '@/lib/server/profile'
 import { queryOperationalReport, type ReportFilters } from '@/lib/server/report'
 
 function validDate(value: string) {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const parsed = new Date(`${value}T00:00:00+07:00`)
+  if (Number.isNaN(parsed.getTime())) return false
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(parsed) === value
 }
 
 function normalizeType(value: string): ReportFilters['type'] | null {
