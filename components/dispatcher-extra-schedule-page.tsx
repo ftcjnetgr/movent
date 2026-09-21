@@ -2,15 +2,17 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import SearchableMasterSelect from '@/components/searchable-master-select'
-import { assignExtraScheduleAction, confirmExtraScheduleRequestAction } from '@/app/dispatcher/extra-schedule/actions'
+import { confirmExtraScheduleAssignmentAction, confirmExtraScheduleRequestAction, previewExtraScheduleAssignmentAction } from '@/app/dispatcher/extra-schedule/actions'
 
 type Row = { transaction_id: string; start_point: string; destination: string; std: string | null; sta: string | null; created_at: string | null }
+type Preview = { transactionId: string; executorNik: string; executorName: string; platNumber: string; fleetType: string }
 
 export default function DispatcherExtraSchedulePage() {
   const [data, setData] = useState<{ requests: Row[]; confirmed: Row[]; executors: Array<{ executor_nik: string; full_name: string }>; fleets: Array<{ plat_number: string; fleet_type: string }> }>({ requests: [], confirmed: [], executors: [], fleets: [] })
   const [selectedExecutor, setSelectedExecutor] = useState<Record<string, string>>({})
   const [selectedFleet, setSelectedFleet] = useState<Record<string, string>>({})
   const [feedback, setFeedback] = useState<Record<string, string>>({})
+  const [preview, setPreview] = useState<Preview | null>(null)
   const [loading, setLoading] = useState(true)
 
   const executorOptions = useMemo(() => data.executors.map((item) => ({ value: item.executor_nik, label: item.executor_nik + ' - ' + item.full_name, searchText: item.executor_nik + ' ' + item.full_name })), [data.executors])
@@ -33,21 +35,39 @@ export default function DispatcherExtraSchedulePage() {
     if (result.success) reload()
   }
 
-  async function assign(transactionId: string) {
+  async function previewAssignment(transactionId: string) {
     const executorNik = selectedExecutor[transactionId]
     const platNumber = selectedFleet[transactionId]
     if (!executorNik || !platNumber) {
       setFeedback((current) => ({ ...current, [transactionId]: 'Executor dan armada perlu dipilih dulu, ya.' }))
       return
     }
-    setFeedback((current) => ({ ...current, [transactionId]: 'Sedang menugaskan...' }))
+    setFeedback((current) => ({ ...current, [transactionId]: 'Menyiapkan preview...' }))
     const formData = new FormData()
     formData.set('transactionId', transactionId)
     formData.set('executorNik', executorNik)
     formData.set('platNumber', platNumber)
-    const result = await assignExtraScheduleAction({}, formData)
-    setFeedback((current) => ({ ...current, [transactionId]: result.success ?? result.error ?? '' }))
-    if (result.success) reload()
+    const result = await previewExtraScheduleAssignmentAction(formData)
+    if (result.preview) {
+      setPreview(result.preview)
+      setFeedback((current) => ({ ...current, [transactionId]: '' }))
+    } else {
+      setFeedback((current) => ({ ...current, [transactionId]: result.error ?? '' }))
+    }
+  }
+
+  async function confirmAssignment() {
+    if (!preview) return
+    const formData = new FormData()
+    formData.set('transactionId', preview.transactionId)
+    formData.set('executorNik', preview.executorNik)
+    formData.set('platNumber', preview.platNumber)
+    const result = await confirmExtraScheduleAssignmentAction(formData)
+    setFeedback((current) => ({ ...current, [preview.transactionId]: result.success ?? result.error ?? '' }))
+    if (result.success) {
+      setPreview(null)
+      reload()
+    }
   }
 
   function time(value: string | null) {
@@ -61,6 +81,21 @@ export default function DispatcherExtraSchedulePage() {
         <h1>Extra Schedule</h1>
         <p>Konfirmasi request terlebih dahulu, lalu pilih Executor dan Armada.</p>
       </div>
+
+      {preview ? (
+        <section className="metric-card section-block">
+          <div className="card-title">Preview Penugasan</div>
+          <div className="task-summary-grid">
+            <div><span>ID Transaksi</span><strong>{preview.transactionId}</strong></div>
+            <div><span>Executor</span><strong>{preview.executorNik} - {preview.executorName}</strong></div>
+            <div><span>Armada</span><strong>{preview.platNumber} - {preview.fleetType}</strong></div>
+          </div>
+          <div className="inline-actions">
+            <button type="button" onClick={confirmAssignment}>Konfirmasi Penugasan</button>
+            <button type="button" className="secondary" onClick={() => setPreview(null)}>Edit Penugasan</button>
+          </div>
+        </section>
+      ) : null}
 
       <section className="data-table-card section-block">
         <div className="section-heading"><div><h2>Request baru</h2><p>Terima request dari Operation sebelum melakukan assignment.</p></div></div>
@@ -93,7 +128,7 @@ export default function DispatcherExtraSchedulePage() {
                 <td>{time(row.std)}</td><td>{time(row.sta)}</td>
                 <td><SearchableMasterSelect label="Executor" name={'executor-' + row.transaction_id} options={executorOptions} placeholder="Pilih executor" value={selectedExecutor[row.transaction_id] ?? ''} onValueChange={(value) => setSelectedExecutor((current) => ({ ...current, [row.transaction_id]: value }))} /></td>
                 <td><SearchableMasterSelect label="Armada" name={'fleet-' + row.transaction_id} options={fleetOptions} placeholder="Pilih armada" value={selectedFleet[row.transaction_id] ?? ''} onValueChange={(value) => setSelectedFleet((current) => ({ ...current, [row.transaction_id]: value }))} /></td>
-                <td><button type="button" onClick={() => assign(row.transaction_id)}>Submit Tugas</button>{feedback[row.transaction_id] ? <div className="inline-feedback">{feedback[row.transaction_id]}</div> : null}</td>
+                <td><button type="button" onClick={() => previewAssignment(row.transaction_id)}>Preview Tugas</button>{feedback[row.transaction_id] ? <div className="inline-feedback">{feedback[row.transaction_id]}</div> : null}</td>
               </tr>
             ))}</tbody>
           </table></div>
