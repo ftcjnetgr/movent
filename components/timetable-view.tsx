@@ -186,7 +186,7 @@ export default function TimetableView({
   function renderPlanTable(items: Schedule[]) {
     const rows = new Map<string, Schedule[]>()
     for (const item of items) {
-      const row = direction === 'start-point' ? item.start_point : item.destination
+      const row = direction === 'start-point' ? item.destination : item.start_point
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
 
@@ -197,7 +197,7 @@ export default function TimetableView({
         <table className="schedule-grid-table">
           <thead>
             <tr>
-              <th>{direction === 'start-point' ? 'Start Point' : 'Destination'}</th>
+              <th>{direction === 'start-point' ? 'Destination' : 'Start Point'}</th>
               {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
             </tr>
           </thead>
@@ -240,7 +240,7 @@ export default function TimetableView({
   function renderLiveTable(items: Task[]) {
     const rows = new Map<string, Task[]>()
     for (const item of items) {
-      const row = direction === 'start-point' ? (item.start_point ?? '-') : (item.destination ?? '-')
+      const row = direction === 'start-point' ? (item.destination ?? '-') : (item.start_point ?? '-')
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
 
@@ -343,10 +343,25 @@ export default function TimetableView({
           ))}
         </div>
 
-        <select value={point} onChange={(e) => setPoint(e.target.value)}>
-          <option value="">{direction === 'start-point' ? 'Destination' : 'Start Point'}</option>
-          {pointOptions.map((item) => <option key={item}>{item}</option>)}
-        </select>
+        <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Destination' : 'Filter Start Point'}>
+          <button
+            type="button"
+            className={!point ? 'active' : ''}
+            onClick={() => { setPoint(''); setSummaryFilter('all') }}
+          >
+            Semua
+          </button>
+          {pointOptions.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={point === item ? 'active' : ''}
+              onClick={() => { setPoint(item); setSummaryFilter('all') }}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="schedule-route-tabs">
