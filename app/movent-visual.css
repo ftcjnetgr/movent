@@ -3284,69 +3284,94 @@ body{overflow-x:hidden!important}
 }
 
 
-/* timetable all controls on one line */
-.schedule-control-line{
-  display:flex!important;
-  align-items:center!important;
+/* timetable two-column filter layout */
+.schedule-control-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
   gap:8px!important;
   width:100%!important;
-  min-width:0!important;
   margin:0 0 8px!important;
-  overflow-x:auto!important;
-  scrollbar-width:none!important;
 }
-.schedule-control-line::-webkit-scrollbar{display:none!important}
-.schedule-control-line>.schedule-day-row,
-.schedule-control-line>.schedule-toolbar,
-.schedule-control-line>.schedule-filter-bar{
-  flex:0 0 auto!important;
-  width:auto!important;
-  max-width:none!important;
-  margin:0!important;
-  padding:3px!important;
+.schedule-control-cell{
+  min-width:0!important;
+  padding:8px 9px!important;
   border:1px solid var(--ui-border)!important;
   border-radius:9px!important;
   background:#f8fafc!important;
 }
-.schedule-control-line>.schedule-day-row{
+.schedule-control-label{
+  display:block!important;
+  margin:0 0 5px!important;
+  color:#7d8b9d!important;
+  font-size:8px!important;
+  font-weight:800!important;
+}
+.schedule-control-cell .schedule-day-row,
+.schedule-control-cell .schedule-category-row,
+.schedule-control-cell .schedule-route-tabs,
+.schedule-control-cell .schedule-point-tabs{
+  min-width:0!important;
+  max-width:none!important;
+}
+.schedule-control-cell .schedule-day-row{
   display:flex!important;
   align-items:center!important;
   gap:2px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+  overflow:visible!important;
+  width:100%!important;
 }
-.schedule-control-line>.schedule-toolbar{
+.schedule-control-cell .schedule-day-row button{
+  flex:1 1 0!important;
+  min-height:30px!important;
+  padding:5px 7px!important;
+  font-size:8px!important;
+}
+.schedule-category-row{
   display:flex!important;
   align-items:center!important;
   gap:4px!important;
-  overflow:visible!important;
+  min-width:0!important;
 }
-.schedule-control-line>.schedule-filter-bar{
-  display:flex!important;
-  align-items:center!important;
-  gap:8px!important;
-  overflow:visible!important;
+.schedule-category-row .schedule-direction,
+.schedule-category-row .schedule-category-buttons{
+  padding:2px!important;
+  min-height:34px!important;
+  border-radius:8px!important;
+  flex:0 0 auto!important;
 }
-.schedule-control-line .schedule-filter-group{
-  display:flex!important;
-  align-items:center!important;
-  gap:6px!important;
-  width:auto!important;
-}
-.schedule-control-line .schedule-filter-group-point{margin-left:0!important}
-.schedule-control-line .schedule-route-tabs,
-.schedule-control-line .schedule-point-tabs{
-  max-width:none!important;
-  overflow:visible!important;
-}
-.schedule-control-line .schedule-day-row button,
-.schedule-control-line .schedule-direction button,
-.schedule-control-line .schedule-category-buttons button,
-.schedule-control-line .schedule-route-tabs button,
-.schedule-control-line .schedule-point-tabs button{
-  min-height:30px!important;
-  padding:5px 9px!important;
+.schedule-category-row .schedule-direction button,
+.schedule-category-row .schedule-category-buttons button{
+  min-height:29px!important;
+  padding:5px 8px!important;
+  font-size:8px!important;
   white-space:nowrap!important;
 }
-.schedule-control-line .schedule-filter-label{font-size:8px!important}
-@media(max-width:900px){
-  .schedule-control-line{overflow-x:auto!important}
+.schedule-control-cell>.schedule-route-tabs,
+.schedule-control-cell>.schedule-point-tabs{
+  display:flex!important;
+  align-items:center!important;
+  gap:2px!important;
+  overflow-x:auto!important;
+  scrollbar-width:none!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+}
+.schedule-control-cell>.schedule-route-tabs::-webkit-scrollbar,
+.schedule-control-cell>.schedule-point-tabs::-webkit-scrollbar{display:none!important}
+.schedule-control-cell .schedule-route-tabs button,
+.schedule-control-cell .schedule-point-tabs button{
+  flex:0 0 auto!important;
+  min-height:30px!important;
+  padding:5px 9px!important;
+  font-size:8px!important;
+}
+.schedule-control-cell .schedule-route-tabs button.active:after{bottom:0!important}
+@media(max-width:760px){
+  .schedule-control-grid{grid-template-columns:1fr!important}
+  .schedule-category-row{flex-wrap:wrap!important}
 }
