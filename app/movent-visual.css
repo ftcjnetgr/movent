@@ -3653,3 +3653,150 @@ body{overflow-x:hidden!important}
   .app-shell.is-super-user .super-quick-panel,
   .app-shell.is-super-user .super-activity-panel{height:auto!important}
 }
+
+
+/* =========================================================
+   SUPER USER — FINAL FIT FOR 16:9 DESKTOP VIEWPORT
+   ========================================================= */
+body:has(.app-shell.is-super-user){overflow:hidden!important}
+html:has(.app-shell.is-super-user){overflow:hidden!important}
+.app-shell.is-super-user{
+  height:100vh!important;
+  max-height:100vh!important;
+  overflow:hidden!important;
+}
+.app-shell.is-super-user .app-content{
+  height:100vh!important;
+  max-height:100vh!important;
+  overflow:hidden!important;
+}
+.app-shell.is-super-user .topbar{
+  flex-basis:56px!important;
+  height:56px!important;
+  min-height:56px!important;
+  padding:0 18px!important;
+}
+.app-shell.is-super-user .page-content{
+  height:calc(100vh - 56px)!important;
+  max-height:calc(100vh - 56px)!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  padding:10px 18px 8px!important;
+}
+.app-shell.is-super-user .super-dashboard{
+  height:100%!important;
+  max-height:100%!important;
+  min-height:0!important;
+  gap:6px!important;
+}
+.app-shell.is-super-user .super-dashboard-heading{
+  flex:0 0 47px!important;
+  min-height:47px!important;
+  max-height:47px!important;
+  align-items:center!important;
+}
+.app-shell.is-super-user .super-dashboard-heading h1{
+  font-size:21px!important;
+  line-height:1.05!important;
+  margin:2px 0 2px!important;
+}
+.app-shell.is-super-user .super-dashboard-heading p{font-size:9px!important}
+.app-shell.is-super-user .super-dashboard-date{
+  min-width:145px!important;
+  padding:7px 9px!important;
+  border-radius:9px!important;
+}
+.app-shell.is-super-user .super-dashboard-date strong{font-size:9px!important}
+.app-shell.is-super-user .super-dashboard-date small{font-size:8px!important}
+
+.app-shell.is-super-user .super-kpi-grid{
+  flex:0 0 70px!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:7px!important;
+}
+.app-shell.is-super-user .super-kpi-card{
+  min-height:70px!important;
+  height:70px!important;
+  padding:8px 9px!important;
+  border-radius:10px!important;
+}
+.app-shell.is-super-user .super-kpi-icon{width:27px!important;height:27px!important;font-size:12px!important}
+.app-shell.is-super-user .super-kpi-card span{font-size:8px!important}
+.app-shell.is-super-user .super-kpi-card strong{font-size:20px!important;margin-top:1px!important}
+.app-shell.is-super-user .super-kpi-card small{font-size:6.5px!important;margin-top:2px!important}
+
+.app-shell.is-super-user .super-dashboard-main-grid{
+  flex:0 0 178px!important;
+  height:178px!important;
+  grid-template-columns:minmax(0,2fr) minmax(215px,.86fr) minmax(215px,.82fr)!important;
+  gap:7px!important;
+}
+.app-shell.is-super-user .super-chart-panel,
+.app-shell.is-super-user .super-fleet-panel,
+.app-shell.is-super-user .super-info-panel{
+  min-height:178px!important;height:178px!important;border-radius:10px!important;
+}
+.app-shell.is-super-user .super-panel-heading{padding:9px 11px 5px!important}
+.app-shell.is-super-user .super-panel-heading h2{font-size:11px!important}
+.app-shell.is-super-user .super-panel-heading p{font-size:7px!important;margin-top:2px!important}
+.app-shell.is-super-user .super-chart{height:139px!important;padding:0 9px 7px 7px!important}
+.app-shell.is-super-user .super-chart-stack{height:109px!important}
+.app-shell.is-super-user .super-chart-column small{font-size:6px!important}
+.app-shell.is-super-user .super-chart-legend{font-size:6.5px!important;gap:6px!important}
+.app-shell.is-super-user .super-chart-y{font-size:6px!important}
+.app-shell.is-super-user .super-fleet-body{grid-template-columns:92px 1fr!important;padding:3px 9px 3px!important}
+.app-shell.is-super-user .super-donut{width:88px!important;height:88px!important}
+.app-shell.is-super-user .super-donut:after{inset:18px!important}
+.app-shell.is-super-user .super-donut strong{font-size:16px!important}
+.app-shell.is-super-user .super-donut span{font-size:7px!important}
+.app-shell.is-super-user .super-fleet-list{gap:4px!important}
+.app-shell.is-super-user .super-fleet-list span{font-size:7px!important}
+.app-shell.is-super-user .super-fleet-list strong{font-size:8px!important}
+.app-shell.is-super-user .super-panel-link{padding:0 11px 8px!important;font-size:7px!important}
+.app-shell.is-super-user .super-info-list{padding:0 10px 5px!important}
+.app-shell.is-super-user .super-info-item{padding:5px 0!important;grid-template-columns:24px 1fr 8px!important;gap:6px!important}
+.app-shell.is-super-user .super-info-icon{width:22px!important;height:22px!important;border-radius:6px!important;font-size:9px!important}
+.app-shell.is-super-user .super-info-item strong{font-size:7px!important}
+.app-shell.is-super-user .super-info-item small{font-size:6.5px!important}
+.app-shell.is-super-user .super-info-item>b{font-size:10px!important}
+
+.app-shell.is-super-user .super-dashboard-table-grid{
+  flex:0 0 126px!important;
+  height:126px!important;
+  grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)!important;
+  gap:7px!important;
+}
+.app-shell.is-super-user .super-table-panel{height:126px!important;border-radius:10px!important}
+.app-shell.is-super-user .super-table-wrap{height:82px!important;max-height:82px!important;overflow:hidden!important}
+.app-shell.is-super-user .super-table-wrap th{padding:5px 7px!important;font-size:6.5px!important}
+.app-shell.is-super-user .super-table-wrap td{padding:6px 7px!important;font-size:7px!important}
+.app-shell.is-super-user .super-table-wrap td strong{font-size:7px!important}
+.app-shell.is-super-user .super-table-panel .super-panel-heading{padding-bottom:4px!important}
+
+.app-shell.is-super-user .super-dashboard-bottom-grid{
+  flex:0 0 99px!important;
+  height:99px!important;
+  grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)!important;
+  gap:7px!important;
+}
+.app-shell.is-super-user .super-quick-panel,
+.app-shell.is-super-user .super-activity-panel{height:99px!important;border-radius:10px!important}
+.app-shell.is-super-user .super-quick-grid{gap:4px!important;padding:0 9px 8px!important}
+.app-shell.is-super-user .super-quick-grid a{padding:6px 3px!important;gap:3px!important;border-radius:8px!important}
+.app-shell.is-super-user .super-quick-grid a>span{width:23px!important;height:23px!important;font-size:10px!important;border-radius:6px!important}
+.app-shell.is-super-user .super-quick-grid strong{font-size:6.5px!important}
+.app-shell.is-super-user .super-activity-list{padding:0 10px 5px!important}
+.app-shell.is-super-user .super-activity-list>div{padding:5px 0!important;font-size:7px!important}
+.app-shell.is-super-user .super-activity-list time{font-size:6.5px!important}
+
+@media(max-width:1100px){
+  body:has(.app-shell.is-super-user),html:has(.app-shell.is-super-user){overflow:auto!important}
+  .app-shell.is-super-user,.app-shell.is-super-user .app-content{height:auto!important;max-height:none!important;overflow:visible!important}
+  .app-shell.is-super-user .page-content{height:auto!important;max-height:none!important;overflow:visible!important}
+  .app-shell.is-super-user .super-dashboard{height:auto!important;max-height:none!important;overflow:visible!important}
+  .app-shell.is-super-user .super-dashboard-heading,
+  .app-shell.is-super-user .super-kpi-grid,
+  .app-shell.is-super-user .super-dashboard-main-grid,
+  .app-shell.is-super-user .super-dashboard-table-grid,
+  .app-shell.is-super-user .super-dashboard-bottom-grid{flex:none!important;height:auto!important;max-height:none!important}
+}
