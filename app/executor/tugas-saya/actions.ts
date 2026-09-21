@@ -74,7 +74,7 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
 
   if (!productData) return { error: 'Produk tidak tersedia.' }
 
-  const { error } = await admin
+  const { data: insertedSj, error } = await admin
     .from('task_sj_items')
     .insert({
       task_id: task.id,
@@ -85,8 +85,10 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
       product_snapshot: productData,
       note: note || null,
     })
+    .select('id')
+    .single()
 
-  if (error) return { error: 'SJ belum berhasil disimpan.' }
+  if (error || !insertedSj) return { error: 'SJ belum berhasil disimpan.' }
 
   // Keep the legacy task-level fields populated for existing reports/records.
   const { error: legacyError } = await admin
@@ -102,7 +104,10 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
     .eq('id', task.id)
     .eq('status', 'Confirmed')
 
-  if (legacyError) { await admin.from('task_sj_items').delete().eq('id', (await admin.from('task_sj_items').select('id').eq('task_id', task.id).eq('sj_number', sjNumber).eq('sj_qty', qty).eq('sj_weight', weight).eq('product', product).order('created_at', { ascending: false }).limit(1).maybeSingle()).data?.id ?? '') ; return { error: 'SJ belum berhasil disimpan. Silakan coba lagi.' } }
+  if (legacyError) {
+    await admin.from('task_sj_items').delete().eq('id', insertedSj.id).eq('task_id', task.id)
+    return { error: 'SJ belum berhasil disimpan. Silakan coba lagi.' }
+  }
 
   revalidateExecutorPaths()
   return { success: 'SJ berhasil disimpan.' }
