@@ -110,15 +110,19 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   }, [navGroups, pathname, searchParams.toString()])
   const isItemActive = (item: NavItem) => activeItem?.href === item.href
   const activeGroup = activeItem?.group ?? ''
+  const searchKey = searchParams.toString()
+  const currentUrl = searchKey ? `${pathname}?${searchKey}` : pathname
 
-  useEffect(() => { setNavigating(false); setMobileOpen(false) }, [pathname])
+  useEffect(() => { setNavigating(false); setMobileOpen(false) }, [pathname, searchKey])
   useEffect(() => { if (activeGroup && !openGroups.includes(activeGroup)) setOpenGroups((v) => [...v, activeGroup]) }, [activeGroup])
 
   async function logout() { const supabase = createClient(); await supabase.auth.signOut(); router.replace('/login') }
 
   function navigateTo(href: string) {
-    if (href === pathname) return
-    setNavigating(true); setMobileOpen(false); router.push(href)
+    if (href === currentUrl) return
+    setNavigating(true)
+    setMobileOpen(false)
+    router.push(href)
   }
 
   return (
