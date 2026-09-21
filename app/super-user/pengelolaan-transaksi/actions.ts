@@ -88,12 +88,36 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
     update.sta = date + 'T' + sta + ':00+07:00'
   }
 
+  const sjItemsRaw = text(formData, 'sjItemsJson')
+  if (sjItemsRaw) {
+    let sjItems: Array<{ id?: string; sj_number: string; sj_qty: number; sj_weight: number; product: string; note?: string | null }>
+    try { sjItems = JSON.parse(sjItemsRaw) } catch { return { error: 'Data SJ tidak valid.' } }
+    if (!Array.isArray(sjItems)) return { error: 'Data SJ tidak valid.' }
+    for (const item of sjItems) {
+      if (!item.sj_number || !Number.isFinite(Number(item.sj_qty)) || Number(item.sj_qty) < 0 || !Number.isFinite(Number(item.sj_weight)) || Number(item.sj_weight) < 0 || !item.product) return { error: 'Data SJ belum lengkap.' }
+      const { data: productData } = await admin.from('products').select('product, status').eq('product', item.product).eq('status', 'Active').maybeSingle()
+      if (!productData) return { error: 'Produk SJ tidak tersedia.' }
+      const payload = { task_id: task.id, sj_number: item.sj_number.trim(), sj_qty: Number(item.sj_qty), sj_weight: Number(item.sj_weight), product: item.product, product_snapshot: productData, note: item.note?.trim() || null }
+      const result = item.id
+        ? await admin.from('task_sj_items').update(payload).eq('id', item.id).eq('task_id', task.id)
+        : await admin.from('task_sj_items').insert(payload)
+      if (result.error) return { error: 'Data SJ belum berhasil diperbarui.' }
+    }
+    const { data: currentItems } = await admin.from('task_sj_items').select('id').eq('task_id', task.id)
+    const keepIds = new Set(sjItems.filter((item) => item.id).map((item) => item.id))
+    const removeIds = (currentItems ?? []).map((item) => item.id).filter((id) => !keepIds.has(id))
+    if (removeIds.length) { const result = await admin.from('task_sj_items').delete().in('id', removeIds).eq('task_id', task.id); if (result.error) return { error: 'SJ lama belum berhasil dihapus.' } }
+    const latest = sjItems[sjItems.length - 1]
+    if (latest) { update.sj_number = latest.sj_number; update.sj_qty = Number(latest.sj_qty); update.sj_weight = Number(latest.sj_weight); update.product = latest.product; update.sj_note = latest.note?.trim() || null }
+  } else {
   update.sj_number = text(formData, 'sjNumber')
   update.sj_qty = numberOrNull(formData, 'sjQty')
   update.sj_weight = numberOrNull(formData, 'sjWeight')
   update.sj_note = text(formData, 'sjNote')
   update.odometer_start = numberOrNull(formData, 'odometerStart')
   update.odometer_end = numberOrNull(formData, 'odometerEnd')
+
+  }
 
   const product = text(formData, 'product')
   if (product) {
