@@ -346,6 +346,22 @@ export default function TimetableView({
       </div>
 
       <div className="schedule-filter-bar">
+        <div className="schedule-filter-group">
+          <span className="schedule-filter-label">Rute</span>
+          <div className="schedule-route-tabs">
+            {routes.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={route === item ? 'active' : ''}
+                onClick={() => { setRoute(item); setSummaryFilter('all') }}
+              >
+                {routeLabels[item] ?? item}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="schedule-filter-group schedule-filter-group-point">
           <span className="schedule-filter-label">{direction === 'start-point' ? 'Start Point' : 'Destination'}</span>
           <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
