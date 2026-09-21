@@ -102,9 +102,8 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
   if ('error' in validated) return validated
 
   const admin = createAdminClient()
-  let transactionId = String(formData.get('transactionId') ?? '').trim()
-
-  if (!transactionId) { const { data, error: transactionError } = await admin.rpc('movent_next_transaction_id'); if (transactionError || !data) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }; transactionId = String(data) }
+  const transactionId = String(formData.get('transactionId') ?? '').trim()
+  if (!transactionId) return { error: 'ID transaksi preview belum tersedia. Silakan buat preview tugas terlebih dahulu.' }
 
   const { snapshots } = validated
   const { value } = validated
@@ -128,6 +127,7 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
     sj_qty: value.sjs[0].sjQty,
     sj_weight: value.sjs[0].sjWeight,
     product: value.sjs[0].product,
+    product_snapshot: value.sjs[0].productSnapshot,
     sj_note: value.sjs[0].sjNote,
     assigned_at: new Date().toISOString(),
   })
