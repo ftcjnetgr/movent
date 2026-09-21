@@ -244,12 +244,13 @@ export default function TimetableView({
       rows.set(row, [...(rows.get(row) ?? []), item])
     }
 
+    const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
     return (
       <div className="schedule-grid-scroll">
         <table className="schedule-grid-table">
           <thead>
             <tr>
-              <th>{direction === 'origin' ? 'Destination' : 'Origin / Start Point'}</th>
+              <th>{direction === 'origin' ? 'Destination' : 'Start Point'}</th>
               {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
             </tr>
           </thead>
@@ -300,7 +301,6 @@ export default function TimetableView({
               className={selectedDay === day.value ? 'active' : ''}
               onClick={() => {
                 setSelectedDay(day.value)
-                setHub('')
                 setPoint('')
                 setSummaryFilter('all')
               }}
@@ -314,7 +314,7 @@ export default function TimetableView({
       <div className="schedule-toolbar">
         <div className="schedule-direction">
           <button type="button" className={direction === 'origin' ? 'active' : ''} onClick={() => { setDirection('origin'); setPoint('') }}>AS Origin</button>
-          <button type="button" className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setHub(''); setPoint('') }}>AS Destination</button>
+          <button type="button" className={direction === 'destination' ? 'active' : ''} onClick={() => { setDirection('destination'); setPoint('') }}>AS Destination</button>
         </div>
 
         <div className="schedule-category-buttons">
