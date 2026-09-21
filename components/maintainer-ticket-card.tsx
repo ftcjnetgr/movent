@@ -91,8 +91,9 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
       ) : null}
 
       {ticket.status === 'In Progress' ? (
-        <form onSubmit={(event) => handleSubmit(event, completeMaintenanceAction)}>
+        <form onSubmit={(event) => handleSubmit(event, completeMaintenanceAction)} className="compact-form">
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
+          <label>Nama PIC Maintenance<input name="picMaintenance" required placeholder="Masukkan nama PIC" /></label>
           <button type="submit" disabled={isPending}>Konfirmasi Maintenance Selesai</button>
         </form>
       ) : null}
