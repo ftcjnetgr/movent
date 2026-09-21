@@ -106,7 +106,7 @@ export async function getDashboardData(profile: AppProfile) {
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
-      .select('schedule_id, schedule_day, std, status')
+      .select('schedule_id, schedule_day, start_point, destination, std, sta, status')
       .eq('status', 'Active'),
     admin
       .from('ticketings')
