@@ -24,6 +24,8 @@ const initialState: {
     scheduleId?: string
     executorNik?: string
     platNumber?: string
+    std?: string
+    sta?: string
   }
 } = {}
 
