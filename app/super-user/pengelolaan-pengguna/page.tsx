@@ -69,6 +69,7 @@ export default async function UserManagementPage() {
                   <td>{user.auth_user_id ? 'Terhubung' : 'Belum terhubung'}</td>
                   <td>{user.failed_login_attempts}</td>
                   <td>
+                    <div className="admin-row-actions">
                     <details>
                       <summary className="link-button">Edit</summary>
                       <form action={updateUserProfileFormAction} className="data-form compact-form" style={{marginTop:12}}>
@@ -82,12 +83,13 @@ export default async function UserManagementPage() {
                         <button type="submit">Simpan perubahan</button>
                       </form>
                     </details>
-                    <div style={{marginTop:8}}>
+                    <div className="admin-row-action-secondary">
                       {user.status === 'Locked' ? (
                         <form action={unlockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit">Buka akses</button></form>
                       ) : (
                         <form action={lockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit" className="secondary-button">Kunci akun</button></form>
                       )}
+                    </div>
                     </div>
                   </td>
                 </tr>
