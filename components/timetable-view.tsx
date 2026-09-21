@@ -346,6 +346,28 @@ export default function TimetableView({
       </div>
 
       <div className="schedule-filter-bar">
+        <div className="schedule-filter-group schedule-filter-group-point">
+          <span className="schedule-filter-label">{direction === 'start-point' ? 'Start Point' : 'Destination'}</span>
+          <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
+            <button
+              type="button"
+              className={!point ? 'active' : ''}
+              onClick={() => { setPoint(''); setSummaryFilter('all') }}
+            >
+              Semua
+            </button>
+            {pointOptions.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={point === item ? 'active' : ''}
+                onClick={() => { setPoint(item); setSummaryFilter('all') }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="schedule-summary-inline">
@@ -355,33 +377,8 @@ export default function TimetableView({
       </div>
 
       <section className="schedule-grid-shell">
-        <div className="schedule-grid-main">
-          {view === 'database' ? renderPlanTable(activeRows as Schedule[]) : renderLiveTable(activeRows as Task[])}
-          {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
-        </div>
-
-        <aside className="schedule-point-rail" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
-          <div className="schedule-point-rail-heading">
-            {direction === 'start-point' ? 'Start Point' : 'Destination'}
-          </div>
-          <button
-            type="button"
-            className={!point ? 'active' : ''}
-            onClick={() => { setPoint(''); setSummaryFilter('all') }}
-          >
-            Semua
-          </button>
-          {pointOptions.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={point === item ? 'active' : ''}
-              onClick={() => { setPoint(item); setSummaryFilter('all') }}
-            >
-              {item}
-            </button>
-          ))}
-        </aside>
+        {view === 'database' ? renderPlanTable(activeRows as Schedule[]) : renderLiveTable(activeRows as Task[])}
+        {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
 
       <div className="schedule-date">
