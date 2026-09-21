@@ -12,6 +12,7 @@ type State = {
   transactionId?: string
   preview?: {
     transactionId: string
+    flow: 'tgr' | 'distribusi'
     startPoint: string
     destination: string
     externalExecutor: string
@@ -21,6 +22,9 @@ type State = {
     sjWeight: number
     product: string
     sjNote: string | null
+    scheduleId?: string
+    executorNik?: string
+    platNumber?: string
   }
 }
 
@@ -76,71 +80,7 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
     if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
     const transactionId = await nextTransaction(admin)
     if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
-
-    const { error } = await admin.from('tasks').insert({
-      transaction_id: transactionId,
-      source_type: 'Manual',
-      task_type: 'Distribusi Mobil',
-      status: 'Assigned',
-      created_by: profile.id,
-      assigned_by: profile.id,
-      executor_nik: executor.executor_nik,
-      executor_snapshot: executor,
-      fleet_snapshot: fleet,
-      start_point: startPoint,
-      start_point_snapshot: startLocation.data,
-      destination,
-      destination_snapshot: destinationLocation.data,
-      std: timestamps[0],
-      sta: timestamps[1],
-      assigned_at: new Date().toISOString(),
-    })
-    if (error) return { error: 'Tugas Distribusi Mobil belum berhasil dibuat.' }
-    revalidateTaskPaths()
-    return { success: `Tugas ${transactionId} berhasil dibuat.`, transactionId }
-  }
-
-  if (taskType === 'Supply' && ownership === 'TGR') {
-    const scheduleId = String(formData.get('scheduleId') ?? '').trim()
-    const executorNik = String(formData.get('executorNik') ?? '').trim()
-    const platNumber = String(formData.get('platNumber') ?? '').trim()
-    if (!scheduleId || !executorNik || !platNumber) return { error: 'Schedule, Executor, dan Armada perlu dipilih dulu, ya.' }
-
-    const [{ data: schedule }, { executor, fleet }] = await Promise.all([
-      admin.from('schedules').select('*').eq('schedule_id', scheduleId).eq('status', 'Active').maybeSingle(),
-      activeExecutorAndFleet(admin, executorNik, platNumber),
-    ])
-    if (!schedule || !executor || !fleet) return { error: 'Schedule, Executor, atau Armada belum tersedia.' }
-    const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
-    const std = `${date}T${schedule.std}+07:00`
-    const sta = `${date}T${schedule.sta}+07:00`
-    const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
-
-    const { error } = await admin.from('tasks').insert({
-      transaction_id: transactionId,
-      source_type: 'Schedule',
-      task_type: 'Supply',
-      fleet_ownership: 'TGR',
-      status: 'Assigned',
-      created_by: profile.id,
-      assigned_by: profile.id,
-      executor_nik: executor.executor_nik,
-      executor_snapshot: executor,
-      fleet_snapshot: fleet,
-      schedule_id: schedule.schedule_id,
-      schedule_snapshot: schedule,
-      start_point: schedule.start_point,
-      start_point_snapshot: schedule,
-      destination: schedule.destination,
-      destination_snapshot: schedule,
-      std,
-      sta,
-      assigned_at: new Date().toISOString(),
-    })
-    if (error) return { error: 'Tugas Supply TGR belum berhasil dibuat.' }
-    revalidateTaskPaths()
-    return { success: `Tugas ${transactionId} berhasil dibuat.`, transactionId }
+    return { success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.', preview: { transactionId, flow: 'tgr', startPoint: schedule.start_point, destination: schedule.destination, externalExecutor: executor.full_name, externalFleet: fleet.plat_number, sjNumber: '', sjQty: 0, sjWeight: 0, product: '', sjNote: null, scheduleId: schedule.schedule_id, executorNik: executor.executor_nik, platNumber: fleet.plat_number } }
   }
 
   if (taskType === 'Supply' && ownership === 'Non-TGR') {
@@ -216,6 +156,21 @@ export async function createDispatcherTaskAction(_state: State, formData: FormDa
   return { error: 'Jenis tugasnya belum lengkap. Coba cek lagi, ya.' }
 }
 
+
+export async function confirmDispatcherTaskAction(_state: State, formData: FormData): Promise<State> {
+  const profile = await getCurrentProfile()
+  if (!['Dispatcher','Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
+  const flow=String(formData.get('flow')??''), transactionId=String(formData.get('transactionId')??'').trim(), executorNik=String(formData.get('executorNik')??'').trim(), platNumber=String(formData.get('platNumber')??'').trim(), scheduleId=String(formData.get('scheduleId')??'').trim()
+  const admin=createAdminClient(); const {executor,fleet}=await activeExecutorAndFleet(admin,executorNik,platNumber); if(!executor||!fleet)return{error:'Executor atau Armada belum tersedia.'}
+  if(flow==='tgr'){
+    const {data:schedule}=await admin.from('schedules').select('*').eq('schedule_id',scheduleId).eq('status','Active').maybeSingle(); if(!schedule)return{error:'Schedule tidak tersedia.'}
+    const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); const std=`${date}T${schedule.std}+07:00`,sta=`${date}T${schedule.sta}+07:00`
+    const {error}=await admin.from('tasks').insert({transaction_id:transactionId,source_type:'Schedule',task_type:'Supply',fleet_ownership:'TGR',status:'Assigned',created_by:profile.id,assigned_by:profile.id,executor_nik:executor.executor_nik,executor_snapshot:executor,fleet_snapshot:fleet,schedule_id:schedule.schedule_id,schedule_snapshot:schedule,start_point:schedule.start_point,start_point_snapshot:schedule,destination:schedule.destination,destination_snapshot:schedule,std,sta,assigned_at:new Date().toISOString()});if(error)return{error:'Tugas belum berhasil dikonfirmasi.'}
+  } else if(flow==='distribusi'){
+    const startPoint=String(formData.get('startPoint')??'').trim(),destination=String(formData.get('destination')??'').trim(),std=String(formData.get('std')??'').trim(),sta=String(formData.get('sta')??'').trim();const ts1=todayTimestamp(std),ts2=todayTimestamp(sta);if(!startPoint||!destination||!ts1||!ts2)return{error:'Data tugas belum lengkap.'};const[{data:s},{data:d}]=await Promise.all([admin.from('locations').select('location,grouping,status').eq('location',startPoint).eq('status','Active').maybeSingle(),admin.from('locations').select('location,grouping,status').eq('location',destination).eq('status','Active').maybeSingle()]);if(!s||!d)return{error:'Lokasi belum tersedia.'};const{error}=await admin.from('tasks').insert({transaction_id:transactionId,source_type:'Manual',task_type:'Distribusi Mobil',status:'Assigned',created_by:profile.id,assigned_by:profile.id,executor_nik:executor.executor_nik,executor_snapshot:executor,fleet_snapshot:fleet,start_point:startPoint,start_point_snapshot:s,destination,destination_snapshot:d,std:ts1,sta:ts2,assigned_at:new Date().toISOString()});if(error)return{error:'Tugas belum berhasil dikonfirmasi.'}
+  } else return{error:'Preview tugas tidak valid.'}
+  revalidateTaskPaths(); return{success:`Tugas ${transactionId} berhasil dikonfirmasi.`,transactionId}
+}
 export async function cancelDispatcherTaskAction(formData: FormData) {
   const profile = await getCurrentProfile()
   const transactionId = String(formData.get('transactionId') ?? '').trim()
