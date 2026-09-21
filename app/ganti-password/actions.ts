@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 const roleHome: Record<string, string> = {
   'Controller': '/controller/beranda',
   'Dispatcher': '/dispatcher/beranda',
-  'Operation': '/operation/request-extra-schedule',
+  'Operation': '/operation/beranda',
   'Executor': '/executor/tugas-saya',
   'Maintainer': '/maintainer/beranda',
   'Super User': '/controller/beranda',
