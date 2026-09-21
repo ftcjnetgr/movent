@@ -125,8 +125,10 @@ export async function getDashboardData(profile: AppProfile) {
 
   const usedScheduleIds = new Set(
     all
+      .filter((task) => task.status !== 'Canceled')
       .map((task) => task.schedule_id)
       .filter((scheduleId): scheduleId is string => Boolean(scheduleId)),
+
   )
 
   const unassignedAlerts: TaskAlert[] = (schedules ?? [])
