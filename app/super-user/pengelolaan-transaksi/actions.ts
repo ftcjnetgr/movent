@@ -59,6 +59,7 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
     if (!update.start_point || !update.destination || !std || !sta) return { error: 'Titik Mulai, Destinasi, STD, dan STA wajib diisi.' }
     const toJakartaTimestamp = (value: string) => /^\d{2}:\d{2}$/.test(value) ? value : null
     if (!toJakartaTimestamp(std) || !toJakartaTimestamp(sta)) return { error: 'STD atau STA belum benar.' }
+    if (sta <= std) return { error: 'STA harus lebih besar dari STD.' }
   }
 
   if (task.fleet_ownership === 'Non-TGR') {
