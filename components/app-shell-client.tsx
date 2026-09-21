@@ -168,7 +168,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   }
 
   return (
-    <div className={'app-shell role-' + currentRole.toLowerCase().replace(/[^a-z0-9]+/g, '-') + (mobileOpen ? ' sidebar-mobile-open' : '') + (navigating ? ' is-navigating' : '')}>
+    <div className={'app-shell role-' + currentRole.toLowerCase().replace(/[^a-z0-9]+/g, '-') + (profile.role === 'Super User' ? ' is-super-user' : '') + (mobileOpen ? ' sidebar-mobile-open' : '') + (navigating ? ' is-navigating' : '')}>
       {navigating ? <div className="route-progress" /> : null}
       <aside className="sidebar">
         <div className="sidebar-top">
