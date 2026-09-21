@@ -61,11 +61,11 @@ export default async function ControllerPenugasanDashboardPage() {
   const todayEnd = new Date(new Date(`${today}T00:00:00+07:00`).getTime() + 86400000).toISOString()
   const todayDay = ((new Date(`${today}T12:00:00+07:00`).getUTCDay() + 6) % 7) + 1
 
-  const [data, tasksResult, ticketsResult, fleetResult, scheduleResult, activityResult] = await Promise.all([
+  const [data, tasksResult, ticketsResult, fleetResult, scheduleResult, activityResult, totalTaskResult] = await Promise.all([
     getDashboardData(profile),
     admin
       .from('tasks')
-      .select('transaction_id, task_type, status, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, created_at')
+      .select('transaction_id, task_type, status, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, created_at')
       .order('created_at', { ascending: false })
       .limit(8),
     admin
@@ -87,6 +87,7 @@ export default async function ControllerPenugasanDashboardPage() {
       .select('status, std')
       .gte('std', todayStart)
       .lt('std', todayEnd),
+    admin.from('tasks').select('*', { count: 'exact', head: true }),
   ])
 
   const tasks = tasksResult.data ?? []
@@ -102,9 +103,9 @@ export default async function ControllerPenugasanDashboardPage() {
   }, {})
 
   const usedScheduleIds = new Set(
-    tasksResult.data
-      ?.map((task) => task.transaction_id ? null : null)
-      .filter(Boolean) ?? [],
+    (tasksResult.data ?? [])
+      .map((task) => task.schedule_id)
+      .filter((value): value is string => Boolean(value)),
   )
 
   const activeTasks =
@@ -157,7 +158,7 @@ export default async function ControllerPenugasanDashboardPage() {
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">▤</div>
           <span>Total Tugas</span>
-          <strong>{tasks.length}</strong>
+          <strong>{totalTaskResult.count ?? 0}</strong>
           <small>Data terbaru</small>
         </div>
         <div className="super-kpi-card kpi-green">
