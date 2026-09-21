@@ -7,6 +7,10 @@ type TaskAlert = {
   scheduleId: string
   transactionId?: string
   status?: string
+  startPoint: string | null
+  destination: string | null
+  std: string | null
+  sta: string | null
   targetAt: string
 }
 
@@ -56,11 +60,15 @@ function taskDetail(alert: TaskAlert, now: number) {
   const threshold = alert.kind === 'unassigned' ? 30 * 60 * 1000 : 10 * 60 * 1000
   const countdown = target - now
   return {
-    title: alert.kind === 'unassigned' ? alert.scheduleId : alert.transactionId ?? '-',
-    detail: alert.kind === 'unassigned'
-      ? 'Jadwal belum digunakan Dispatcher'
-      : `Jadwal ${alert.scheduleId} • Status ${alert.status ?? '-'}`,
-    time: countdown > 0 ? `Sisa waktu ${formatDuration(countdown / 1000)}` : `Lewat ${formatDuration((now - target) / 1000)}`,
+    scheduleId: alert.scheduleId,
+    transactionId: alert.transactionId,
+    startPoint: alert.startPoint ?? '-',
+    destination: alert.destination ?? '-',
+    std: alert.std ?? '-',
+    sta: alert.sta ?? '-',
+    label: countdown > 0 ? 'Sisa waktu' : 'Lewat',
+    time: formatDuration(Math.abs(countdown) / 1000),
+    late: countdown <= 0,
     inWindow: now >= target - threshold,
   }
 }
@@ -98,9 +106,9 @@ export default function DashboardAlertList({
       return {
         transactionId: ticket.transaction_id,
         status: ticketStatusLabel(ticket.status),
-        indicator: elapsed < thresholdSeconds
-          ? `Countdown ${formatDuration(thresholdSeconds - elapsed)}`
-          : `Count After ${formatDuration(elapsed - thresholdSeconds)}`,
+        label: elapsed < thresholdSeconds ? 'Sisa waktu' : 'Count After',
+        indicator: formatDuration(Math.abs(thresholdSeconds - elapsed)),
+        late: elapsed >= thresholdSeconds,
       }
     }).filter((item): item is NonNullable<typeof item> => item !== null),
     [ticketAlertRows, now],
@@ -140,14 +148,27 @@ export default function DashboardAlertList({
 
             <div className="alert-detail-list">
               {open === 'task' ? taskItems.map((item) => (
-                <div className="alert-detail-item" key={`${item.title}-${item.time}`}>
-                  <div><strong>{item.title}</strong><span>{item.detail}</span></div>
-                  <b>{item.time}</b>
+                <div className="alert-detail-item" key={`${item.scheduleId}-${item.transactionId ?? 'schedule'}`}>
+                  <div className="alert-detail-main">
+                    <strong>{item.scheduleId}</strong>
+                    <span>{item.startPoint} → {item.destination}</span>
+                    <small>STD {item.std} · STA {item.sta}{item.transactionId ? ` · ${item.transactionId}` : ''}</small>
+                  </div>
+                  <div className={`alert-detail-timer ${item.late ? 'is-late' : ''}`}>
+                    <span>{item.label}</span>
+                    <b>{item.time}</b>
+                  </div>
                 </div>
               )) : ticketItems.map((item) => (
                 <div className="alert-detail-item" key={item.transactionId}>
-                  <div><strong>{item.transactionId}</strong><span>Status {item.status}</span></div>
-                  <b>{item.indicator}</b>
+                  <div className="alert-detail-main">
+                    <strong>{item.transactionId}</strong>
+                    <span>Status {item.status}</span>
+                  </div>
+                  <div className={`alert-detail-timer ${item.late ? 'is-late' : ''}`}>
+                    <span>{item.label}</span>
+                    <b>{item.indicator}</b>
+                  </div>
                 </div>
               ))}
               {!((open === 'task' ? taskItems : ticketItems).length) ? (
