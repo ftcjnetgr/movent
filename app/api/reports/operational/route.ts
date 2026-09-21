@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
   const to = params.get('to') ?? ''
   const startPoint = params.get('startPoint') ?? ''
   const destination = params.get('destination') ?? ''
+  const executorNik = params.get('executorNik') ?? ''
 
   if (!type || !validDate(from) || !validDate(to)) {
     return NextResponse.json({ error: 'Periode report belum benar.' }, { status: 400 })
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const report = await queryOperationalReport({ type, from, to, startPoint, destination })
+    const report = await queryOperationalReport({ type, from, to, startPoint, destination, executorNik })
     const format = params.get('format') ?? 'json'
 
     if (format === 'csv') {
