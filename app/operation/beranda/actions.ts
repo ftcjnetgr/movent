@@ -106,7 +106,7 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
 
   if (!transactionId) { const { data, error: transactionError } = await admin.rpc('movent_next_transaction_id'); if (transactionError || !data) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }; transactionId = String(data) }
 
-  const { snapshots }
+  const { snapshots } = validated
   const { value } = validated
   const { error } = await admin.from('tasks').insert({
     transaction_id: transactionId,
