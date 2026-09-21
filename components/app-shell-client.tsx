@@ -19,7 +19,7 @@ const navByRole: Record<string, NavGroup[]> = {
       { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
     ]},
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/controller/profil', icon: 'user' }, { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' }] },
+    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/controller/profil', icon: 'user' }] },
   ],
   Dispatcher: [
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/dispatcher/beranda', icon: 'home' }] },
@@ -27,22 +27,22 @@ const navByRole: Record<string, NavGroup[]> = {
     { label: 'Extra Schedule', icon: 'calendar', items: [{ label: 'Extra Schedule', href: '/dispatcher/extra-schedule', icon: 'calendar' }] },
     { label: 'Armada Non TGR', icon: 'truck', items: [{ label: 'Armada Non TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' }] },
     { label: 'Maintenance Armada', icon: 'wrench', items: [{ label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/dispatcher/profil', icon: 'user' }, { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' }] },
+    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/dispatcher/profil', icon: 'user' }] },
   ],
   Executor: [
     { label: 'Tugas', icon: 'clipboard', items: [{ label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' }, { label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/executor/profil', icon: 'user' }, { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' }] },
+    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/executor/profil', icon: 'user' }] },
   ],
   Maintainer: [
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
     { label: 'Ticketing', icon: 'ticket', items: [{ label: 'Ticketing', href: '/maintainer/tiket-maintenance', icon: 'ticket' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/maintainer/profil', icon: 'user' }, { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' }] },
+    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/maintainer/profil', icon: 'user' }] },
   ],
   Operation: [
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/operation/beranda', icon: 'home' }] },
     { label: 'Extra Schedule', icon: 'calendar', items: [{ label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/operation/profil', icon: 'user' }, { label: 'Ganti Kata Sandi', href: '/ganti-password', icon: 'lock' }] },
+    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/operation/profil', icon: 'user' }] },
   ],
 }
 
@@ -109,12 +109,10 @@ export default function AppShellClient({ profile, children }: { profile: { usern
       .sort((a, b) => b.href.length - a.href.length)[0]
   }, [navGroups, pathname, searchParams.toString()])
   const isItemActive = (item: NavItem) => activeItem?.href === item.href
-  const activeGroup = activeItem?.group ?? ''
   const searchKey = searchParams.toString()
   const currentUrl = searchKey ? `${pathname}?${searchKey}` : pathname
 
   useEffect(() => { setNavigating(false); setMobileOpen(false) }, [pathname, searchKey])
-  useEffect(() => { if (activeGroup && !openGroups.includes(activeGroup)) setOpenGroups((v) => [...v, activeGroup]) }, [activeGroup])
 
   async function logout() { const supabase = createClient(); await supabase.auth.signOut(); router.replace('/login') }
 
