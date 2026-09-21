@@ -1,0 +1,28 @@
+import DashboardAlertList from '@/components/dashboard-alert-list'
+import { getCurrentProfile } from '@/lib/server/profile'
+import { getDashboardData } from '@/lib/server/dashboard'
+
+export default async function ControllerAlertPage() {
+  const profile = await getCurrentProfile()
+  const data = await getDashboardData(profile)
+
+  return (
+    <div className="role-page alert-page">
+      <div className="page-heading">
+        <div>
+          <span className="eyebrow">Controller</span>
+          <h1>Alert</h1>
+          <p>Semua alert operasional yang perlu diperhatikan saat ini.</p>
+        </div>
+      </div>
+
+      <DashboardAlertList
+        taskAlerts={data.taskAlerts.map((alert) => ({
+          ...alert,
+          targetAt: alert.targetAt.toISOString(),
+        }))}
+        ticketAlerts={data.ticketAlerts}
+      />
+    </div>
+  )
+}
