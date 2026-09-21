@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
@@ -21,6 +22,7 @@ async function cancelDispatcherTaskFormAction(formData: FormData) {
 
 export default async function DispatcherAssignmentHistoryPage() {
   const profile = await getCurrentProfile()
+  if (!['Dispatcher', 'Super User'].includes(profile.role)) notFound()
   const admin = createAdminClient()
   const { data: tasks } = await admin
     .from('tasks')
