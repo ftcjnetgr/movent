@@ -35,6 +35,7 @@ export default async function SuperUserTransactionManagementPage() {
   const admin = createAdminClient()
   const [
     { data: tasks },
+    { data: sjItems },
     { data: ticketings },
     { data: locations },
     { data: executors },
@@ -43,7 +44,8 @@ export default async function SuperUserTransactionManagementPage() {
     { data: schedules },
     { data: maintenanceLists },
   ] = await Promise.all([
-    admin.from('tasks').select('transaction_id, status, task_type, source_type, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, external_executor, external_fleet, fleet_snapshot, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end').order('created_at', { ascending: false }),
+    admin.from('tasks').select('transaction_id, id, status, task_type, source_type, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, external_executor, external_fleet, fleet_snapshot, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end').order('created_at', { ascending: false }),
+    admin.from('task_sj_items').select('id, task_id, sj_number, sj_qty, sj_weight, product, note').order('created_at'),
     admin.from('ticketings').select('transaction_id, status, maintenance_list, location, fleet_plat_number').order('created_at', { ascending: false }),
     admin.from('locations').select('location').eq('status', 'Active').order('location'),
     admin.from('executors').select('executor_nik, full_name').eq('status', 'Active').order('full_name'),
@@ -82,7 +84,7 @@ export default async function SuperUserTransactionManagementPage() {
                   <td>{task.task_type}</td>
                   <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
                   <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(task.status)}</span></td>
-                  <td><SuperUserTaskEditor task={task} locations={locationOptions} executors={executorOptions} fleets={fleetOptions} schedules={scheduleOptions} products={productOptions} /></td>
+                  <td><SuperUserTaskEditor task={task} locations={locationOptions} executors={executorOptions} fleets={fleetOptions} schedules={scheduleOptions} products={productOptions} sjItems={(sjItems ?? []).filter((item) => item.task_id === task.id)} /></td>
                 </tr>
               ))}
               {!(tasks ?? []).length ? <tr><td colSpan={5}><div className="empty-state">Belum ada transaksi tugas untuk sekarang.</div></td></tr> : null}
