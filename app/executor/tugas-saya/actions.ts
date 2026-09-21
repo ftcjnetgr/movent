@@ -56,7 +56,7 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
   const product = String(formData.get('product') ?? '').trim()
   const note = String(formData.get('note') ?? '').trim()
 
-  if (!sjNumber || !Number.isFinite(qty) || !Number.isFinite(weight) || !product) {
+  if (!sjNumber || !Number.isFinite(qty) || qty < 0 || !Number.isFinite(weight) || weight < 0 || !product) {
     return { error: 'Nomor SJ, Qty, Berat, dan Produk wajib diisi.' }
   }
 
@@ -102,7 +102,7 @@ export async function submitExtraScheduleSjAction(formData: FormData): Promise<R
     .eq('id', task.id)
     .eq('status', 'Confirmed')
 
-  if (legacyError) return { error: 'SJ tersimpan, tetapi data tugas belum berhasil diperbarui.' }
+  if (legacyError) { await admin.from('task_sj_items').delete().eq('id', (await admin.from('task_sj_items').select('id').eq('task_id', task.id).eq('sj_number', sjNumber).eq('sj_qty', qty).eq('sj_weight', weight).eq('product', product).order('created_at', { ascending: false }).limit(1).maybeSingle()).data?.id ?? '') ; return { error: 'SJ belum berhasil disimpan. Silakan coba lagi.' } }
 
   revalidateExecutorPaths()
   return { success: 'SJ berhasil disimpan.' }
