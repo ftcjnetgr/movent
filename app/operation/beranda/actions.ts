@@ -5,7 +5,7 @@ import { getCurrentProfile } from '@/lib/server/profile'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 type Preview = {
-  transactionId: string
+  transactionId?: string
   startPoint: string
   destination: string
   std: string
@@ -58,14 +58,6 @@ async function validateNonTgrInput(formData: FormData) {
   ])
   if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' } as const
 
-  const suppliedTransactionId = String(formData.get('transactionId') ?? '').trim()
-  let transactionId = suppliedTransactionId
-  if (!transactionId) {
-    const { data, error: transactionError } = await admin.rpc('movent_next_transaction_id')
-    if (transactionError || !data) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' } as const
-    transactionId = String(data)
-  }
-
   const sjs: { sjNumber: string; sjQty: number; sjWeight: number; product: string; sjNote: string | null }[] = []
   for (let i = 0; i < sjNumbers.length; i++) {
     if (!sjNumbers[i] || !products[i] || !Number.isFinite(sjQtys[i]) || sjQtys[i] < 0 || !Number.isFinite(sjWeights[i]) || sjWeights[i] < 0) return { error: 'Nomor SJ, Qty, Berat, dan Produk wajib diisi pada setiap SJ.' } as const
@@ -110,10 +102,11 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
   if ('error' in validated) return validated
 
   const admin = createAdminClient()
-  const transactionId = String(formData.get('transactionId') ?? '').trim()
-  if (!transactionId) return { error: 'ID transaksi tidak ditemukan. Buat preview terlebih dahulu.' }
+  let transactionId = String(formData.get('transactionId') ?? '').trim()
 
-  const { snapshots } = validated
+  if (!transactionId) { const { data, error: transactionError } = await admin.rpc('movent_next_transaction_id'); if (transactionError || !data) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }; transactionId = String(data) }
+
+  const { snapshots }
   const { value } = validated
   const { error } = await admin.from('tasks').insert({
     transaction_id: transactionId,
