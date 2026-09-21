@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import DashboardAlertList from '@/components/dashboard-alert-list'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
