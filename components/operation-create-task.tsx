@@ -6,6 +6,7 @@ import { createNonTgrSupplyAction, confirmNonTgrDepartureByOperationAction, conf
 
 type Option = { value: string; label: string; searchText?: string }
 type Preview = {
+  transactionId: string
   startPoint: string
   destination: string
   std: string
@@ -45,6 +46,29 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
   const [sjRows, setSjRows] = useState([0])
 
   const locationOptions: Option[] = locations.map((value) => ({ value, label: value, searchText: value }))
+  function sharePreview() {
+    if (!state.preview) return
+    const lines = [
+      'MOVENT - Surat Jalan',
+      'ID Transaksi: ' + state.preview.transactionId,
+      'Titik Mulai: ' + state.preview.startPoint,
+      'Destinasi: ' + state.preview.destination,
+      'STD: ' + timeValue(state.preview.std),
+      'STA: ' + timeValue(state.preview.sta),
+      'Executor: ' + state.preview.externalExecutor,
+      'Armada: ' + state.preview.externalFleet,
+      ...state.preview.sjs.flatMap((sj, i) => [
+        'SJ ' + (i + 1) + ': ' + sj.sjNumber,
+        'Qty: ' + sj.sjQty,
+        'Berat: ' + sj.sjWeight,
+        'Produk: ' + sj.product,
+        'Catatan: ' + (sj.sjNote || '-'),
+      ]),
+    ]
+    window.open('https://wa.me/?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener,noreferrer')
+  }
+
+
   const productOptions: Option[] = products.map((value) => ({ value, label: value, searchText: value }))
 
   return (
@@ -84,12 +108,12 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
           <button type="button" className="secondary-button" onClick={() => setSjRows((rows) => [...rows, rows.length])}>Tambah SJ</button>
           {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
           {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
-          <button type="submit" disabled={pending}>{pending ? 'Menyiapkan preview...' : 'Preview Tugas'}</button>
+          <button type="submit" disabled={pending}>{pending ? 'Menyiapkan preview...' : 'Submit SJ'}</button>
         </form>
 
         {state.preview ? (
           <div className="metric-card compact-form" style={{ marginTop: 16 }}>
-            <div className="card-title">Preview Tugas Supply Non-TGR</div>
+            <div className="card-title">Preview Penugasan dan Hasil SJ</div>
             <div className="task-summary-grid">
               <div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div>
               <div><span>STD</span><strong>{timeValue(state.preview.std)}</strong></div>
@@ -98,8 +122,9 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
               <div><span>Armada</span><strong>{state.preview.externalFleet}</strong></div>
               <div><span>Jumlah SJ</span><strong>{state.preview.sjs.length}</strong></div>
             </div>
-            <p className="muted">Periksa data sebelum konfirmasi. Jika ada yang salah, kembali ke form untuk mengedit.</p>
+            <p className="muted">Periksa data penugasan dan hasil SJ sebelum dilanjutkan.</p>
             <form action={confirmAction} className="compact-form">
+              <input type="hidden" name="transactionId" value={state.preview.transactionId} />
               <input type="hidden" name="startPoint" value={state.preview.startPoint} />
               <input type="hidden" name="destination" value={state.preview.destination} />
               <input type="hidden" name="std" value={timeValue(state.preview.std)} />
@@ -119,7 +144,10 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
               ))}
               {confirmState.error ? <p className="form-error" role="alert">{confirmState.error}</p> : null}
               {confirmState.success ? <p className="form-success" role="status">{confirmState.success}</p> : null}
-              <button type="submit" disabled={confirmPending}>{confirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Penugasan'}</button>
+              <div className="inline-actions">
+                <button type="button" className="secondary-button" onClick={sharePreview}>Share</button>
+                <button type="submit" disabled={confirmPending}>{confirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Penugasan'}</button>
+              </div>
             </form>
           </div>
         ) : null}
