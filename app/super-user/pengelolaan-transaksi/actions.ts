@@ -88,6 +88,9 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
     update.sta = date + 'T' + sta + ':00+07:00'
   }
 
+  update.odometer_start = numberOrNull(formData, 'odometerStart')
+  update.odometer_end = numberOrNull(formData, 'odometerEnd')
+
   const sjItemsRaw = text(formData, 'sjItemsJson')
   if (sjItemsRaw) {
     let sjItems: Array<{ id?: string; sj_number: string; sj_qty: number; sj_weight: number; product: string; note?: string | null }>
@@ -120,12 +123,12 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
   }
 
   const product = text(formData, 'product')
-  if (product) {
+  if (!sjItemsRaw && product) {
     const { data: productData } = await admin.from('products').select('product, status').eq('product', product).eq('status', 'Active').maybeSingle()
     if (!productData) return { error: 'Produk tidak tersedia.' }
     update.product = product
     update.product_snapshot = productData
-  } else {
+  } else if (!sjItemsRaw) {
     update.product = null
     update.product_snapshot = null
   }
