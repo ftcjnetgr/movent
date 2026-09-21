@@ -141,27 +141,26 @@ export default function TimetableView({
 
   const pointOptions = useMemo(() => {
     const source = view === 'database' ? selectedPlanSchedules : schedules
-    return [...new Set(
-      source
-        .map((item) => direction === 'start-point' ? item.start_point : item.destination)
-        .filter(Boolean),
-    )].sort((a, b) => a.localeCompare(b))
+    const values = direction === 'start-point'
+      ? source.filter((item) => Boolean(item.start_point)).map((item) => item.destination)
+      : source.filter((item) => Boolean(item.destination)).map((item) => item.start_point)
+    return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b))
   }, [selectedPlanSchedules, schedules, view, direction])
 
   const filteredSchedules = useMemo(() => selectedPlanSchedules.filter((item) => {
-    const displayPoint = direction === 'start-point' ? item.start_point : item.destination
+    const filterPoint = direction === 'start-point' ? item.destination : item.start_point
     if (route && item.route !== route) return false
     if (category && item.category !== category) return false
-    if (point && displayPoint !== point) return false
+    if (point && filterPoint !== point) return false
     return true
   }), [selectedPlanSchedules, direction, route, category, point])
 
   const filteredTasks = useMemo(() => todayTasks.filter((task) => {
-    const displayPoint = direction === 'start-point' ? task.start_point : task.destination
+    const filterPoint = direction === 'start-point' ? task.destination : task.start_point
     const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
     if (route && schedule && schedule.route !== route) return false
     if (category && schedule && schedule.category !== category) return false
-    if (point && displayPoint !== point) return false
+    if (point && filterPoint !== point) return false
     return true
   }), [todayTasks, direction, route, category, point, scheduleById])
 
@@ -345,7 +344,7 @@ export default function TimetableView({
         </div>
 
         <select value={point} onChange={(e) => setPoint(e.target.value)}>
-          <option value="">{direction === 'start-point' ? 'Start Point' : 'Destination'}</option>
+          <option value="">{direction === 'start-point' ? 'Destination' : 'Start Point'}</option>
           {pointOptions.map((item) => <option key={item}>{item}</option>)}
         </select>
       </div>
