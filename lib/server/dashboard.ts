@@ -187,9 +187,15 @@ export async function getDashboardData(profile: AppProfile) {
     status: task.status,
     assignedAccepted: task.fleet_ownership === 'Non-TGR' ? null : minutesBetween(task.assigned_at, task.accepted_at),
     acceptedDriving: task.fleet_ownership === 'Non-TGR' ? null : minutesBetween(task.accepted_at, task.driving_at),
-    drivingCompleted: minutesBetween(task.driving_at, task.completed_at),
-    assignedDriving: task.fleet_ownership === 'Non-TGR' ? minutesBetween(task.assigned_at, task.driving_at) : null,
-    totalCompleted: minutesBetween(task.assigned_at, task.completed_at),
+    drivingCompleted: task.fleet_ownership === 'Non-TGR'
+      ? minutesBetween(task.external_departure_at, task.external_arrival_at)
+      : minutesBetween(task.driving_at, task.completed_at),
+    assignedDriving: task.fleet_ownership === 'Non-TGR'
+      ? minutesBetween(task.assigned_at, task.external_departure_at)
+      : null,
+    totalCompleted: task.fleet_ownership === 'Non-TGR'
+      ? minutesBetween(task.assigned_at, task.external_arrival_at)
+      : minutesBetween(task.assigned_at, task.completed_at),
     canceledFromPrevious: task.status === 'Canceled'
       ? minutesBetween(canceledFromTimestamp(task), task.canceled_at)
       : null,
