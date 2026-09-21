@@ -4,11 +4,21 @@ import { revalidatePath } from 'next/cache'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-type State = {
-  error?: string
-  success?: string
-  transactionId?: string
+type Preview = {
+  startPoint: string
+  destination: string
+  std: string
+  sta: string
+  externalExecutor: string
+  externalFleet: string
+  sjNumber: string
+  sjQty: number
+  sjWeight: number
+  product: string
+  sjNote: string | null
 }
+
+type State = { error?: string; success?: string; transactionId?: string; preview?: Preview }
 
 function jakartaTimestamp(value: string) {
   if (!/^\d{2}:\d{2}$/.test(value)) return null
@@ -17,10 +27,7 @@ function jakartaTimestamp(value: string) {
   return `${date}T${value}:00+07:00`
 }
 
-export async function createNonTgrSupplyAction(_state: State, formData: FormData): Promise<State> {
-  const profile = await getCurrentProfile()
-  if (!['Operation', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
-
+async function validateNonTgrInput(formData: FormData) {
   const startPoint = String(formData.get('startPoint') ?? '').trim()
   const destination = String(formData.get('destination') ?? '').trim()
   const std = String(formData.get('std') ?? '').trim()
@@ -36,28 +43,67 @@ export async function createNonTgrSupplyAction(_state: State, formData: FormData
   const sjNote = String(formData.get('sjNote') ?? '').trim()
 
   if (!startPoint || !destination || !std || !sta || !executorName || !executorPhone || !fleetPlate || !fleetType || !sjNumber || !product || !Number.isFinite(sjQty) || !Number.isFinite(sjWeight)) {
-    return { error: 'Data perjalanan, executor, armada, dan SJ perlu diisi lengkap dulu, ya.' }
+    return { error: 'Data perjalanan, executor, armada, dan SJ perlu diisi lengkap dulu, ya.' } as const
   }
 
   const stdTimestamp = jakartaTimestamp(std)
   const staTimestamp = jakartaTimestamp(sta)
-  if (!stdTimestamp || !staTimestamp) return { error: 'Format STD atau STA belum benar.' }
+  if (!stdTimestamp || !staTimestamp) return { error: 'Format STD atau STA belum benar.' } as const
 
   const admin = createAdminClient()
-  const [{ data: startLocation }, { data: destinationLocation }, { data: productData }, { data: transactionId }] = await Promise.all([
+  const [{ data: startLocation }, { data: destinationLocation }, { data: productData }] = await Promise.all([
     admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle(),
     admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle(),
     admin.from('products').select('product, status').eq('product', product).eq('status', 'Active').maybeSingle(),
-    admin.rpc('movent_next_transaction_id'),
   ])
 
-  if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' }
-  if (!productData) return { error: 'Produk belum tersedia.' }
-  if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
+  if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' } as const
+  if (!productData) return { error: 'Produk belum tersedia.' } as const
 
-  const externalExecutor = `${executorName} · ${executorPhone}`
-  const externalFleet = `${fleetPlate} · ${fleetType}`
+  return {
+    value: {
+      startPoint,
+      destination,
+      std: stdTimestamp,
+      sta: staTimestamp,
+      externalExecutor: `${executorName} · ${executorPhone}`,
+      externalFleet: `${fleetPlate} · ${fleetType}`,
+      sjNumber,
+      sjQty,
+      sjWeight,
+      product,
+      sjNote: sjNote || null,
+    } satisfies Preview,
+    snapshots: { startLocation, destinationLocation, productData },
+  }
+}
 
+export async function createNonTgrSupplyAction(_state: State, formData: FormData): Promise<State> {
+  const profile = await getCurrentProfile()
+  if (!['Operation', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
+
+  const validated = await validateNonTgrInput(formData)
+  if ('error' in validated) return validated
+
+  return {
+    success: 'Data sudah divalidasi. Periksa preview sebelum mengonfirmasi penugasan.',
+    preview: validated.value,
+  }
+}
+
+export async function confirmNonTgrSupplyAction(_state: State, formData: FormData): Promise<State> {
+  const profile = await getCurrentProfile()
+  if (!['Operation', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
+
+  const validated = await validateNonTgrInput(formData)
+  if ('error' in validated) return validated
+
+  const admin = createAdminClient()
+  const { data: transactionId, error: transactionError } = await admin.rpc('movent_next_transaction_id')
+  if (transactionError || !transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
+
+  const { snapshots } = validated
+  const { value } = validated
   const { error } = await admin.from('tasks').insert({
     transaction_id: transactionId,
     source_type: 'Manual',
@@ -66,27 +112,27 @@ export async function createNonTgrSupplyAction(_state: State, formData: FormData
     status: 'Assigned',
     created_by: profile.id,
     assigned_by: profile.id,
-    external_executor: externalExecutor,
-    external_fleet: externalFleet,
-    start_point: startPoint,
-    start_point_snapshot: startLocation,
-    destination,
-    destination_snapshot: destinationLocation,
-    std: stdTimestamp,
-    sta: staTimestamp,
-    sj_number: sjNumber,
-    sj_qty: sjQty,
-    sj_weight: sjWeight,
-    product,
-    product_snapshot: productData,
-    sj_note: sjNote || null,
+    external_executor: value.externalExecutor,
+    external_fleet: value.externalFleet,
+    start_point: value.startPoint,
+    start_point_snapshot: snapshots.startLocation,
+    destination: value.destination,
+    destination_snapshot: snapshots.destinationLocation,
+    std: value.std,
+    sta: value.sta,
+    sj_number: value.sjNumber,
+    sj_qty: value.sjQty,
+    sj_weight: value.sjWeight,
+    product: value.product,
+    product_snapshot: snapshots.productData,
+    sj_note: value.sjNote,
     assigned_at: new Date().toISOString(),
   })
 
   if (error) return { error: 'Tugas Supply Non-TGR belum berhasil dibuat. Coba lagi, ya.' }
 
   revalidateOperationPaths()
-  return { success: `Tugas ${transactionId} siap untuk konfirmasi berangkat.`, transactionId }
+  return { success: `Tugas ${transactionId} berhasil dikonfirmasi dan ditugaskan.`, transactionId }
 }
 
 export async function confirmNonTgrDepartureByOperationAction(_state: State, formData: FormData): Promise<State> {
@@ -109,6 +155,7 @@ export async function confirmNonTgrDepartureByOperationAction(_state: State, for
   const { error } = await admin.from('tasks').update({
     status: 'Driving',
     external_departure_at: timestamp,
+    driving_at: new Date().toISOString(),
   }).eq('id', task.id).eq('status', 'Assigned')
 
   if (error) return { error: 'Konfirmasi berangkat belum berhasil.' }
