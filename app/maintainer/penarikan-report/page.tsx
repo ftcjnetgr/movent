@@ -1,7 +1,11 @@
+import { notFound } from 'next/navigation'
 import ReportForm from '@/app/controller/penarikan-report/report-form'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getCurrentProfile } from '@/lib/server/profile'
 
 export default async function MaintainerReportPage() {
+  const profile = await getCurrentProfile()
+  if (!['Maintainer', 'Super User'].includes(profile.role)) notFound()
   const admin = createAdminClient()
   const [{ data: locations }, { data: executors }] = await Promise.all([
     admin.from('locations').select('location').eq('status', 'Active').order('location'),
