@@ -355,8 +355,8 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             <input type="hidden" name="executorNik" value={state.preview.executorNik ?? ''}/>
             <input type="hidden" name="platNumber" value={state.preview.platNumber ?? ''}/>
             <input type="hidden" name="scheduleId" value={state.preview.scheduleId ?? ''}/>
-            <input type="hidden" name="std" value="00:00"/>
-            <input type="hidden" name="sta" value="00:00"/>
+            <input type="hidden" name="std" value={state.preview.std ?? ""}/>
+            <input type="hidden" name="sta" value={state.preview.sta ?? ""}/>
             <div className="form-actions">
               <button type="submit">Konfirmasi Penugasan</button>
               <button type="button" className="secondary-button" onClick={resetCreateFlow}>Edit Tugas</button>
