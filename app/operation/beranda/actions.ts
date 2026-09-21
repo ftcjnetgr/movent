@@ -132,7 +132,7 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
     assigned_at: new Date().toISOString(),
   })
 
-  if (error) return { error: 'Tugas Supply Non-TGR belum berhasil dibuat. Coba lagi, ya.' }
+  if (error) { const { data: existing } = await admin.from('tasks').select('transaction_id').eq('transaction_id', transactionId).maybeSingle(); if (existing) return { success: `Tugas ${existing.transaction_id} sudah dikonfirmasi dan ditugaskan.`, transactionId: existing.transaction_id }; return { error: 'Tugas Supply Non-TGR belum berhasil dibuat. Coba lagi, ya.' } }
 
   const { data: taskRow } = await admin.from('tasks').select('id').eq('transaction_id', transactionId).maybeSingle()
   if (!taskRow) return { error: 'Tugas dibuat, tetapi detail SJ belum ditemukan.' }
