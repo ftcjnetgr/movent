@@ -5,7 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
 type Preview={transactionId?:string;startPoint:string;destination:string;std:string;sta:string}
-type State={error?:string;success?:string;preview?:Preview}
+type State={error?:string;success?:string;transactionId?:string;preview?:Preview}
 
 function jakartaTimestamp(time:string){if(!/^\d{2}:\d{2}$/.test(time))return null;const now=new Date();const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);return `${date}T${time}:00+07:00`}
 
@@ -14,7 +14,7 @@ async function validate(formData:FormData){
  if(!startPoint||!destination||!std||!sta)return {error:'Start Point, Destinasi, STD, dan STA perlu diisi dulu, ya.'} as const
  const stdTimestamp=jakartaTimestamp(std),staTimestamp=jakartaTimestamp(sta);if(!stdTimestamp||!staTimestamp)return {error:'Format STD atau STA belum benar.'} as const;if(new Date(staTimestamp).getTime()<=new Date(stdTimestamp).getTime())return {error:'STA harus lebih besar dari STD.'} as const
  const admin=createAdminClient();const {data:transactionId,error:transactionError}=await admin.rpc('movent_next_transaction_id');if(transactionError||!transactionId)return {error:'ID transaksi belum berhasil dibuat.'} as const;const {data:locations}=await admin.from('locations').select('location, grouping, status').eq('status','Active').in('location',[startPoint,destination]);const names=new Set((locations??[]).map(x=>x.location));if(!names.has(startPoint)||!names.has(destination))return {error:'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.'} as const
- return {value:{startPoint,destination,std:stdTimestamp,sta:staTimestamp} satisfies Preview} as const
+ return {value:{transactionId:String(transactionId),startPoint,destination,std:stdTimestamp,sta:staTimestamp} satisfies Preview} as const
 }
 
 export async function createExtraScheduleAction(_state:State,formData:FormData):Promise<State>{const profile=await getCurrentProfile();if(!['Operation','Super User'].includes(profile.role))return{error:'Kamu belum punya akses ke bagian ini.'};const v=await validate(formData);if('error'in v)return v;return{success:'Preview request sudah siap. Periksa sebelum konfirmasi.',preview:v.value}}
