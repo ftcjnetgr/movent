@@ -3,12 +3,16 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 export default async function MaintainerReportPage() {
   const admin = createAdminClient()
-  const { data: locations } = await admin.from('locations').select('location').eq('status', 'Active').order('location')
+  const [{ data: locations }, { data: executors }] = await Promise.all([
+    admin.from('locations').select('location').eq('status', 'Active').order('location'),
+    admin.from('executors').select('executor_nik, full_name').eq('status', 'Active').order('full_name'),
+  ])
   const options = (locations ?? []).map((item) => ({ value: item.location, label: item.location }))
+  const executorOptions = (executors ?? []).map((item) => ({ value: item.executor_nik, label: `${item.full_name} (${item.executor_nik})` }))
   return (
     <>
       <div className="page-heading"><div><span className="eyebrow">Maintainer</span><h1>Penarikan Report</h1><p>Tarik laporan operasional berdasarkan STD, STA, atau tugas yang dibatalkan.</p></div></div>
-      <section className="section-block"><div className="metric-card report-card"><ReportForm startPoints={options} destinations={options} /></div></section>
+      <section className="section-block"><div className="metric-card report-card"><ReportForm startPoints={options} destinations={options} executors={executorOptions} /></div></section>
     </>
   )
 }
