@@ -66,12 +66,15 @@ export async function completeMaintenanceAction(formData: FormData): Promise<Res
   const profile = await getCurrentProfile()
   if (!allowedMaintainer(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
   const transactionId = String(formData.get('transactionId') ?? '').trim()
+  const pic = String(formData.get('picMaintenance') ?? '').trim()
+  if (!pic) return { error: 'Nama PIC Maintenance wajib dipilih.' }
   const { admin, ticket } = await findTicket(transactionId, ['In Progress'])
   if (!ticket) return { error: 'Tiket nggak ditemukan.' }
   if (profile.role !== 'Super User' && ticket.maintainer_user_id !== profile.id) return { error: 'Tiket ini bukan tanggung jawab kamu.' }
 
   const { error } = await admin.from('ticketings').update({
     status: 'Completed',
+    maintenance_pic: pic,
     completed_at: new Date().toISOString(),
   }).eq('id', ticket.id).eq('status', 'In Progress')
 
