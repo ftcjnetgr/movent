@@ -11,6 +11,7 @@ const initialState: {
   transactionId?: string
   preview?: {
     transactionId: string
+    confirmationKey: string
     flow: 'tgr' | 'distribusi'
     startPoint: string
     destination: string
@@ -350,7 +351,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
           </div>
           <p className="muted">Periksa data sebelum penugasan dikonfirmasi.</p>
           <form action={confirmDispatcherTaskAction} className="compact-form">
-            <input type="hidden" name="transactionId" value={state.preview.transactionId}/>
+            <input type="hidden" name="transactionId" value={state.preview.transactionId}/><input type="hidden" name="confirmationKey" value={state.preview.confirmationKey}/>
             <input type="hidden" name="flow" value={state.preview.flow}/>
             <input type="hidden" name="startPoint" value={state.preview.startPoint}/>
             <input type="hidden" name="destination" value={state.preview.destination}/>
