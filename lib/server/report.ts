@@ -44,7 +44,7 @@ export async function queryOperationalReport(filters: ReportFilters) {
 
   let query = admin
     .from('tasks')
-    .select('transaction_id, task_type, status, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, canceled_at, cancellation_note')
+    .select('transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, external_executor, external_fleet, external_departure_at, external_arrival_at, canceled_at, cancellation_note')
     .gte(dateField, `${filters.from}T00:00:00+07:00`)
     .lt(dateField, endExclusiveIso(filters.to))
     .order(dateField, { ascending: true })
@@ -69,6 +69,8 @@ export async function queryOperationalReport(filters: ReportFilters) {
     'Executor Name': task.executor_snapshot?.full_name ?? '',
     'Fleet': task.fleet_snapshot?.plat_number ?? '',
     'Fleet Type': task.fleet_snapshot?.fleet_type ?? '',
+    'ATD': formatReportDateTime(task.fleet_ownership === 'Non-TGR' ? task.external_departure_at : null),
+    'ATA': formatReportDateTime(task.fleet_ownership === 'Non-TGR' ? task.external_arrival_at : null),
     'Canceled At': formatReportDateTime(task.canceled_at),
     'Cancellation Reason': task.cancellation_note,
   }))
