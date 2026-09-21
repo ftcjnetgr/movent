@@ -68,7 +68,7 @@ async function validateNonTgrInput(formData: FormData) {
 
   return {
     value: {
-      transactionId,
+      transactionId: (await createAdminClient().rpc('movent_next_transaction_id')).data as string,
       startPoint,
       destination,
       std: stdTimestamp,
