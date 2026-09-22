@@ -4043,3 +4043,356 @@ tbody tr:hover{background:#fbfdff}
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* =========================================================
+   MOVENT FINAL UI PASS
+   shared visual system + role-specific responsive behavior
+   ========================================================= */
+
+:root {
+  --ux-bg: #f5f7fa;
+  --ux-surface: #ffffff;
+  --ux-border: #e5e9ef;
+  --ux-text: #172033;
+  --ux-muted: #748095;
+  --ux-primary: #1769e0;
+  --ux-primary-soft: #edf4ff;
+  --ux-success-soft: #ebfaf3;
+  --ux-warning-soft: #fff7e8;
+  --ux-danger-soft: #fff0f0;
+  --ux-radius: 16px;
+}
+
+body {
+  background:
+    radial-gradient(circle at 100% 0, rgba(23, 105, 224, .035), transparent 28%),
+    var(--ux-bg);
+}
+
+.app-shell {
+  color: var(--ux-text);
+}
+
+.page-content {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.page-heading h1 {
+  letter-spacing: -.045em;
+}
+
+.page-heading p,
+.section-heading p {
+  max-width: 760px;
+}
+
+.metric-card,
+.data-table-card,
+.task-card,
+.report-card,
+.super-panel,
+.timetable-shell {
+  border-color: var(--ux-border);
+  border-radius: var(--ux-radius);
+  box-shadow: 0 5px 22px rgba(20, 32, 51, .035);
+}
+
+.metric-card {
+  min-height: 112px;
+}
+
+.data-table-card,
+.report-card {
+  overflow: hidden;
+}
+
+.data-form,
+.compact-form {
+  width: 100%;
+}
+
+.data-form input,
+.data-form select,
+.data-form textarea,
+.compact-form input,
+.compact-form select,
+.compact-form textarea {
+  min-height: 44px;
+  border-color: #dce3eb;
+  background: #fff;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.data-form input:focus,
+.data-form select:focus,
+.data-form textarea:focus,
+.compact-form input:focus,
+.compact-form select:focus,
+.compact-form textarea:focus {
+  border-color: #8db4ef;
+  box-shadow: 0 0 0 4px rgba(23, 105, 224, .08);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge {
+  white-space: nowrap;
+}
+
+.empty-state {
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  border: 1px dashed #dfe5ec;
+  border-radius: 12px;
+  background: #fafbfd;
+}
+
+.inline-feedback,
+.form-error,
+.form-success {
+  border-radius: 10px;
+}
+
+.app-footer {
+  color: #8a95a5;
+}
+
+@media (min-width: 1025px) {
+  .app-content {
+    margin-left: 260px;
+    min-width: 0;
+  }
+
+  .sidebar {
+    width: 260px !important;
+  }
+
+  .topbar {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+/* controller: information-dense control room */
+.role-controller .page-content {
+  padding-top: 26px;
+}
+
+.role-controller .metric-card {
+  background: #fff;
+}
+
+.role-controller .alert-card {
+  background: var(--ux-warning-soft);
+}
+
+.role-controller .dashboard-table-card th,
+.role-controller .super-table-panel th {
+  white-space: nowrap;
+}
+
+.role-controller .super-dashboard-main-grid {
+  gap: 12px;
+}
+
+/* pc-first operational roles */
+.role-controller .task-card,
+.role-maintainer .task-card {
+  min-width: 0;
+}
+
+.role-controller .data-form,
+.role-maintainer .data-form {
+  max-width: 1200px;
+}
+
+/* mobile-first roles */
+@media (max-width: 1024px) {
+  .role-dispatcher .page-content,
+  .role-executor .page-content,
+  .role-operation .page-content {
+    padding: 18px 14px 30px;
+  }
+
+  .role-dispatcher .page-heading,
+  .role-executor .page-heading,
+  .role-operation .page-heading {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .role-dispatcher .page-heading h1,
+  .role-executor .page-heading h1,
+  .role-operation .page-heading h1 {
+    font-size: 25px;
+  }
+
+  .role-dispatcher .task-card,
+  .role-executor .task-card,
+  .role-operation .task-card {
+    padding: 15px;
+  }
+
+  .role-dispatcher .task-summary-grid,
+  .role-executor .task-summary-grid,
+  .role-operation .task-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .role-dispatcher .form-actions,
+  .role-executor .form-actions,
+  .role-operation .form-actions {
+    justify-content: stretch;
+  }
+
+  .role-dispatcher .form-actions > *,
+  .role-executor .form-actions > *,
+  .role-operation .form-actions > * {
+    flex: 1 1 160px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-content {
+    padding: 16px 12px 28px;
+  }
+
+  .topbar {
+    height: 62px;
+    padding: 0 12px;
+  }
+
+  .mobile-menu {
+    width: 40px;
+    min-width: 40px;
+    padding: 0;
+  }
+
+  .topbar-actions {
+    min-width: 0;
+  }
+
+  .topbar-user {
+    max-width: 42vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .topbar-user small,
+  .user-chevron {
+    display: none;
+  }
+
+  .page-heading {
+    margin-bottom: 18px;
+  }
+
+  .page-heading h1 {
+    font-size: 24px;
+  }
+
+  .page-heading p {
+    font-size: 12px;
+  }
+
+  .section-block {
+    margin-top: 22px;
+  }
+
+  .metric-card {
+    min-height: 96px;
+    padding: 14px;
+  }
+
+  .task-summary-grid {
+    grid-template-columns: 1fr !important;
+    gap: 4px;
+  }
+
+  .task-card-top {
+    gap: 10px;
+  }
+
+  .task-card-top .status-badge {
+    align-self: flex-start;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions > * {
+    width: 100%;
+  }
+
+  .data-table-card {
+    border-radius: 13px;
+  }
+
+  table {
+    min-width: 720px;
+  }
+
+  .report-card {
+    padding: 15px;
+  }
+
+  .alert-modal {
+    width: 100%;
+    max-height: 88vh;
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .app-footer {
+    padding: 16px 12px 22px;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* make the drawer feel native on mobile-first roles */
+@media (max-width: 1024px) {
+  .role-dispatcher .sidebar,
+  .role-executor .sidebar,
+  .role-operation .sidebar {
+    width: min(310px, 88vw);
+  }
+
+  .role-dispatcher .nav-link,
+  .role-executor .nav-link,
+  .role-operation .nav-link {
+    min-height: 42px;
+    padding: 10px 11px;
+  }
+
+  .role-dispatcher .nav-group-title,
+  .role-executor .nav-group-title,
+  .role-operation .nav-group-title {
+    min-height: 44px;
+  }
+}
+
+/* super user remains desktop-oriented but keeps the same mobile drawer */
+@media (max-width: 1024px) {
+  .is-super-user .page-content {
+    padding: 20px 16px 30px;
+  }
+
+  .is-super-user .super-kpi-grid {
+    gap: 10px;
+  }
+}

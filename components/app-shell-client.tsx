@@ -235,15 +235,15 @@ export default function AppShellClient({ profile, children }: { profile: { usern
         </nav>
 
         <div className="sidebar-footer">
-          <button type="button" className="sidebar-logout" onClick={logout}><span className="nav-icon"><Icon name="logout" /></span><span>Logout</span></button>
+          <button type="button" className="sidebar-logout" onClick={logout}><span className="nav-icon"><Icon name="logout" /></span><span>Keluar</span></button>
         </div>
       </aside>
 
       <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />
       <main className="app-content">
         <header className="topbar">
-          <button className="mobile-menu" type="button" onClick={() => setMobileOpen(v => !v)} aria-label="Buka menu">☰</button>
-          <div className="topbar-search"><span className="search-icon">⌕</span><input aria-label="Pencarian" placeholder="Cari tugas, armada, atau lokasi..." /></div>
+          <button className="mobile-menu" type="button" onClick={() => setMobileOpen(v => !v)} aria-label="Buka menu navigasi">☰</button>
+          <div className="topbar-search"><span className="search-icon">⌕</span><input aria-label="Pencarian" placeholder="Cari tugas, armada, lokasi..." /></div>
           <div className="topbar-actions">
             <button className="icon-button" type="button" aria-label="Notifikasi">♧</button>
             <div className="topbar-user"><span className="topbar-avatar">{(profile.full_name || profile.username || 'U').slice(0,1).toUpperCase()}</span><span>{profile.full_name || profile.username}</span><small>{currentRole}</small><span className="user-chevron">⌄</span></div>
