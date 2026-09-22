@@ -10,7 +10,10 @@ type NavGroup = { label: string; icon: string; items: NavItem[] }
 
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
-    { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }] },
+    { label: 'Alert', icon: 'bell', items: [
+      { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
+    ] },
     { label: 'Dashboard', icon: 'home', items: [
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
       { label: 'Ticketing', href: '/controller/beranda/ticketing', icon: 'ticket' },
@@ -52,7 +55,10 @@ const superUserNav: NavGroup[] = [
   {
     label: 'Alert',
     icon: 'bell',
-    items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }],
+    items: [
+      { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
+    ],
   },
   {
     label: 'Beranda',
