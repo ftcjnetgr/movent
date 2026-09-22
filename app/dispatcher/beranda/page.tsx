@@ -6,7 +6,7 @@ import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
 
 function statusLabel(status: string) {
-  return ({ Requested:'Diajukan', Confirmed:'Dikonfirmasi', Assigned:'Ditugaskan', Driving:'Berangkat', Selesai:'Selesai', Dibatalkan:'Dibatalkan' } as Record<string,string>)[status] ?? status
+  return ({ Requested:'Diajukan', Confirmed:'Dikonfirmasi', Assigned:'Ditugaskan', Driving:'Berangkat', Completed:'Selesai', Dibatalkan:'Dibatalkan' } as Record<string,string>)[status] ?? status
 }
 
 export default async function DispatcherBerandaPage() {
