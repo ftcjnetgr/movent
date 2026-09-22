@@ -72,8 +72,8 @@ const superUserNav: NavGroup[] = [
     label: 'Alert',
     icon: 'bell',
     items: [
-      { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
     ],
   },
   {
