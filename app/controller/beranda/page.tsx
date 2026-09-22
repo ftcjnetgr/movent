@@ -205,26 +205,26 @@ export default async function ControllerPenugasanDashboardPage() {
         </div>
       </section>
 
-      <section className="super-dashboard-table-grid">
+      <section className="super-dashboard-table-grid controller-detail-tables">
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
-            <div><h2>Penugasan Terbaru</h2><p>Tugas yang paling baru masuk.</p></div>
+            <div><h2>Penugasan Terbaru</h2><p>Ringkasan penugasan terbaru tanpa membuka detail halaman.</p></div>
           </div>
           <div className="super-table-wrap">
-            <table>
-              <thead><tr><th>ID Tugas</th><th>Rute</th><th>Executor</th><th>Armada</th><th>Status</th><th>Waktu</th></tr></thead>
+            <table className="controller-detail-table">
+              <thead><tr><th>Penugasan</th><th>Rute</th><th>Driver</th><th>Armada</th><th>Jadwal</th><th>Status</th></tr></thead>
               <tbody>
                 {tasks.map((task) => (
                   <tr key={task.transaction_id}>
-                    <td><strong>{task.transaction_id}</strong></td>
-                    <td>{task.start_point ?? '-'} <b>→</b> {task.destination ?? '-'}</td>
+                    <td><strong>{task.transaction_id}</strong><small>{task.task_type}</small></td>
+                    <td><strong>{task.start_point ?? '-'} → {task.destination ?? '-'}</strong></td>
                     <td>{task.executor_snapshot?.full_name ?? '-'}</td>
                     <td>{task.fleet_snapshot?.plat_number ?? '-'}</td>
+                    <td><strong>{timeLabel(task.std)}</strong><small>STA {timeLabel(task.sta)}</small></td>
                     <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(task.status)}</span></td>
-                    <td>{timeLabel(task.std)}</td>
                   </tr>
                 ))}
-                {!tasks.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada tugas yang masuk.</td></tr> : null}
+                {!tasks.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada penugasan.</td></tr> : null}
               </tbody>
             </table>
           </div>
@@ -232,22 +232,23 @@ export default async function ControllerPenugasanDashboardPage() {
 
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
-            <div><h2>Tiket Maintenance Terbaru</h2><p>Ticket yang baru masuk.</p></div>
+            <div><h2>Tiket Maintenance Terbaru</h2><p>Ringkasan ticket terbaru beserta lokasi dan armada.</p></div>
           </div>
           <div className="super-table-wrap">
-            <table>
-              <thead><tr><th>ID Ticket</th><th>Armada</th><th>Maintenance</th><th>Status</th><th>Waktu</th></tr></thead>
+            <table className="controller-detail-table">
+              <thead><tr><th>Ticket</th><th>Lokasi</th><th>Armada</th><th>Maintenance</th><th>Status</th><th>Waktu</th></tr></thead>
               <tbody>
                 {tickets.map((ticket) => (
                   <tr key={ticket.transaction_id}>
                     <td><strong>{ticket.transaction_id}</strong></td>
+                    <td>{ticket.location ?? '-'}</td>
                     <td>{ticket.fleet_plat_number ?? '-'}</td>
                     <td>{ticket.maintenance_list ?? '-'}</td>
                     <td><span className={'status-badge status-' + ticket.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(ticket.status)}</span></td>
-                    <td>{shortTime(ticket.created_at)}</td>
+                    <td><strong>{shortTime(ticket.created_at)}</strong></td>
                   </tr>
                 ))}
-                {!tickets.length ? <tr><td colSpan={5} className="super-empty-cell">Belum ada ticketing.</td></tr> : null}
+                {!tickets.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada ticketing.</td></tr> : null}
               </tbody>
             </table>
           </div>
