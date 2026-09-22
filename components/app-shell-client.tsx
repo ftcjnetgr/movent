@@ -111,7 +111,6 @@ const superUserNav: NavGroup[] = [
       { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
       { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
       { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
-      { label: 'Import Data', href: '/super-user/pengelolaan-database', icon: 'upload' },
     ],
   },
   {
@@ -177,7 +176,6 @@ export default function AppShellClient({ profile, children }: { profile: { usern
           { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
           { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
           { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
-          { label: 'Import Data', href: '/super-user/pengelolaan-database', icon: 'upload' },
         ],
       },
     ]

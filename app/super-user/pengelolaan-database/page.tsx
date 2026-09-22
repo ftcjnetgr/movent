@@ -86,19 +86,28 @@ export default async function DatabaseManagementPage({
         </form>
       </section>
 
-      <section className="section-grid two-column section-block">
-        <div className="metric-card">
-          <h2>Import banyak data</h2>
-          <p className="muted">Data dengan ID yang sama akan diperbarui, ID baru akan ditambahkan, dan data lain tetap aman.</p>
-          <form action={importMasterDatabaseFormAction} className="data-form">
-            <input type="hidden" name="database" value={db} />
-            <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
-            <button type="submit">Import data</button>
-          </form>
+      <section className="management-create-grid section-block">
+        <div className="management-create-card">
+          <details open>
+            <summary>
+              <span className="management-create-icon">↥</span>
+              <span><strong>Import banyak data</strong><small>CSV / XLSX · update dan tambah data sekaligus.</small></span>
+              <b>⌄</b>
+            </summary>
+            <form action={importMasterDatabaseFormAction} className="data-form">
+              <input type="hidden" name="database" value={db} />
+              <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
+              <button type="submit">Import data</button>
+            </form>
+          </details>
         </div>
 
-        <div className="metric-card">
-          <h2>Tambah data</h2>
+        <details className="management-create-card">
+          <summary>
+            <span className="management-create-icon">+</span>
+            <span><strong>Tambah data</strong><small>Form dibuka hanya saat kamu ingin menambah data.</small></span>
+            <b>⌄</b>
+          </summary>
           <form action={addMasterRowFormAction} className="data-form compact-form">
             <input type="hidden" name="database" value={db} />
             {config.map((column) => (
@@ -106,7 +115,7 @@ export default async function DatabaseManagementPage({
             ))}
             <button type="submit">Tambah data</button>
           </form>
-        </div>
+        </details>
       </section>
 
       <section className="data-table-card section-block">

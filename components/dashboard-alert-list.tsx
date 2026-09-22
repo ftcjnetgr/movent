@@ -78,14 +78,18 @@ export default function DashboardAlertList({
   taskAlerts,
   ticketAlerts,
   mode = 'all',
+  roleLabel = 'Controller',
 }: {
   taskAlerts?: TaskAlert[]
   ticketAlerts?: TicketAlert[]
   mode?: 'all' | 'task' | 'ticket'
+  roleLabel?: string
 }) {
   const taskAlertRows = taskAlerts ?? []
   const ticketAlertRows = ticketAlerts ?? []
   const [now, setNow] = useState(() => Date.now())
+  const [openHubs, setOpenHubs] = useState<string[]>([])
+  const [openLocations, setOpenLocations] = useState<string[]>([])
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -146,6 +150,7 @@ export default function DashboardAlertList({
     <div className="alert-dashboard">
       <div className="page-heading alert-content-heading">
         <div>
+          <span className="eyebrow">{roleLabel}</span>
           <h1>{heroTitle}</h1>
           <p>{totalAlerts} kondisi aktif{lateCount ? ` · ${lateCount} melewati batas` : ''}.</p>
         </div>
@@ -156,57 +161,57 @@ export default function DashboardAlertList({
           <div className="section-heading alert-content-section-heading">
             <div>
               <span className="eyebrow">Penugasan</span>
-              <h2>Alert Tugas</h2>
+              <h2>Alert Penugasan</h2>
             </div>
             <strong>{taskItems.length}</strong>
           </div>
 
-          {taskGroups.length ? taskGroups.map(([hub, items]) => (
-            <div className="alert-group" key={hub}>
-              <div className="alert-group-heading">
-                <span>Schedule Hub</span>
-                <strong>{hub}</strong>
-                <small>{items.length} schedule</small>
+          {taskGroups.length ? taskGroups.map(([hub, items]) => {
+            const open = openHubs.includes(hub)
+            return (
+              <div className="alert-group" key={hub}>
+                <button
+                  type="button"
+                  className="alert-group-toggle"
+                  aria-expanded={open}
+                  onClick={() => setOpenHubs((current) => open ? current.filter((item) => item !== hub) : [...current, hub])}
+                >
+                  <span>
+                    <small>Schedule Hub</small>
+                    <strong>{hub}</strong>
+                  </span>
+                  <span>
+                    <em>{items.length} schedule</em>
+                    <b>{open ? '−' : '+'}</b>
+                  </span>
+                </button>
+                {open ? (
+                  <div className="table-wrap">
+                    <table className="alert-table alert-group-table">
+                      <thead>
+                        <tr>
+                          <th>Schedule</th><th>Status</th><th>Driver</th><th>Armada</th><th>Rute</th><th>STD</th><th>STA</th><th>Target</th><th>Waktu</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {items.map((item) => (
+                          <tr key={`${item.scheduleId}-${item.transactionId ?? 'schedule'}`} className={item.late ? 'is-alert-late' : ''}>
+                            <td><strong>{item.scheduleId}</strong>{item.transactionId ? <small>{item.transactionId}</small> : null}</td>
+                            <td><span className={`alert-kind-badge ${item.kind}`}>{item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'}</span><small className="alert-context">{item.kind === 'unassigned' ? 'Schedule belum punya penugasan' : 'Melewati batas STA'}</small></td>
+                            <td>{item.driverName ?? 'Belum ada driver'}</td>
+                            <td>{item.fleetPlat ?? '-'}</td>
+                            <td>{item.startPoint} → {item.destination}</td>
+                            <td>{item.std}</td><td>{item.sta}</td><td>{item.label}</td>
+                            <td><b className={item.late ? 'is-late' : ''}>{item.time}</b></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
               </div>
-              <div className="table-wrap">
-                <table className="alert-table alert-group-table">
-                  <thead>
-                    <tr>
-                      <th>Schedule</th>
-                      <th>Status</th>
-                      <th>Driver</th>
-                      <th>Armada</th>
-                      <th>Rute</th>
-                      <th>STD</th>
-                      <th>STA</th>
-                      <th>Target</th>
-                      <th>Waktu</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item) => (
-                      <tr key={`${item.scheduleId}-${item.transactionId ?? 'schedule'}`} className={item.late ? 'is-alert-late' : ''}>
-                        <td><strong>{item.scheduleId}</strong>{item.transactionId ? <small>{item.transactionId}</small> : null}</td>
-                        <td>
-                          <span className={`alert-kind-badge ${item.kind}`}>{item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'}</span>
-                          <small className="alert-context">{item.kind === 'unassigned' ? 'Schedule belum punya penugasan' : 'Melewati batas STA'}</small>
-                        </td>
-                        <td>{item.driverName ?? 'Belum ada driver'}</td>
-                        <td>{item.fleetPlat ?? '-'}</td>
-                        <td>{item.startPoint} → {item.destination}</td>
-                        <td>{item.std}</td>
-                        <td>{item.sta}</td>
-                        <td>{item.label}</td>
-                        <td><b className={item.late ? 'is-late' : ''}>{item.time}</b></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )) : (
-            <div className="alert-empty-inline">Tidak ada alert tugas saat ini.</div>
-          )}
+            )
+          }) : <div className="alert-empty-inline">Tidak ada alert tugas saat ini.</div>}
         </section>
       ) : null}
 
@@ -220,41 +225,44 @@ export default function DashboardAlertList({
             <strong>{ticketItems.length}</strong>
           </div>
 
-          {ticketGroups.length ? ticketGroups.map(([location, items]) => (
-            <div className="alert-group" key={location}>
-              <div className="alert-group-heading">
-                <span>Lokasi</span>
-                <strong>{location}</strong>
-                <small>{items.length} ticket</small>
+          {ticketGroups.length ? ticketGroups.map(([location, items]) => {
+            const open = openLocations.includes(location)
+            return (
+              <div className="alert-group" key={location}>
+                <button
+                  type="button"
+                  className="alert-group-toggle"
+                  aria-expanded={open}
+                  onClick={() => setOpenLocations((current) => open ? current.filter((item) => item !== location) : [...current, location])}
+                >
+                  <span>
+                    <small>Lokasi</small>
+                    <strong>{location}</strong>
+                  </span>
+                  <span>
+                    <em>{items.length} ticket</em>
+                    <b>{open ? '−' : '+'}</b>
+                  </span>
+                </button>
+                {open ? (
+                  <div className="table-wrap">
+                    <table className="alert-table alert-group-table">
+                      <thead><tr><th>Transaction ID</th><th>Maintenance</th><th>Status</th><th>Batas</th><th>Waktu</th></tr></thead>
+                      <tbody>
+                        {items.map((item) => (
+                          <tr key={item.transactionId} className={item.late ? 'is-alert-late' : ''}>
+                            <td><strong>{item.transactionId}</strong></td><td>{item.maintenance}</td>
+                            <td><span className="alert-kind-badge ticket">{item.status}</span></td><td>{item.threshold}</td>
+                            <td><b className={item.late ? 'is-late' : ''}>{item.label} · {item.indicator}</b></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
               </div>
-              <div className="table-wrap">
-                <table className="alert-table alert-group-table">
-                  <thead>
-                    <tr>
-                      <th>Transaction ID</th>
-                      <th>Maintenance</th>
-                      <th>Status</th>
-                      <th>Batas</th>
-                      <th>Waktu</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item) => (
-                      <tr key={item.transactionId} className={item.late ? 'is-alert-late' : ''}>
-                        <td><strong>{item.transactionId}</strong></td>
-                        <td>{item.maintenance}</td>
-                        <td><span className="alert-kind-badge ticket">{item.status}</span></td>
-                        <td>{item.threshold}</td>
-                        <td><b className={item.late ? 'is-late' : ''}>{item.label} · {item.indicator}</b></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )) : (
-            <div className="alert-empty-inline">Tidak ada alert maintenance saat ini.</div>
-          )}
+            )
+          }) : <div className="alert-empty-inline">Tidak ada alert maintenance saat ini.</div>}
         </section>
       ) : null}
     </div>

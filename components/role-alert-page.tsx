@@ -10,6 +10,7 @@ export default async function RoleAlertPage({ type }: { type: string }) {
   return (
     <div className="role-page alert-page">
       <DashboardAlertList
+        roleLabel={profile.role}
         mode={mode}
         taskAlerts={data.taskAlerts.map((alert) => ({
           ...alert,

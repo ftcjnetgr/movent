@@ -11,6 +11,7 @@ export default async function ControllerAlertPage() {
   return (
     <div className="role-page alert-page">
       <DashboardAlertList
+        roleLabel={profile.role}
         taskAlerts={data.taskAlerts.map((alert) => ({
           ...alert,
           targetAt: alert.targetAt.toISOString(),
