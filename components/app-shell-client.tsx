@@ -50,6 +50,11 @@ const navByRole: Record<string, NavGroup[]> = {
 
 const superUserNav: NavGroup[] = [
   {
+    label: 'Alert',
+    icon: 'bell',
+    items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }],
+  },
+  {
     label: 'Beranda',
     icon: 'home',
     items: [{ label: 'Beranda', href: '/controller/beranda', icon: 'home' }],
