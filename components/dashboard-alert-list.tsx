@@ -12,6 +12,8 @@ type TaskAlert = {
   std: string | null
   sta: string | null
   targetAt: string
+  driverName: string | null
+  fleetPlat: string | null
 }
 
 type TicketAlert = {
@@ -148,6 +150,8 @@ export default function DashboardAlertList({
                 <tr>
                   <th>Schedule</th>
                   <th>Status</th>
+                  <th>Driver</th>
+                  <th>Armada</th>
                   <th>Rute</th>
                   <th>STD</th>
                   <th>STA</th>
@@ -159,7 +163,12 @@ export default function DashboardAlertList({
                 {taskItems.map((item) => (
                   <tr key={`${item.scheduleId}-${item.transactionId ?? 'schedule'}`} className={item.late ? 'is-alert-late' : ''}>
                     <td><strong>{item.scheduleId}</strong>{item.transactionId ? <small>{item.transactionId}</small> : null}</td>
-                    <td><span className={`alert-kind-badge ${item.kind}`}>{item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'}</span></td>
+                    <td>
+                      <span className={`alert-kind-badge ${item.kind}`}>{item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'}</span>
+                      <small className="alert-context">{item.kind === 'unassigned' ? 'Schedule belum punya penugasan' : 'Melewati batas STA'}</small>
+                    </td>
+                    <td>{item.driverName ?? 'Belum ada driver'}</td>
+                    <td>{item.fleetPlat ?? '-'}</td>
                     <td>{item.startPoint} → {item.destination}</td>
                     <td>{item.std}</td>
                     <td>{item.sta}</td>
@@ -167,7 +176,7 @@ export default function DashboardAlertList({
                     <td><b className={item.late ? 'is-late' : ''}>{item.time}</b></td>
                   </tr>
                 ))}
-                {!taskItems.length ? <tr><td colSpan={7}><div className="empty-state">Tidak ada alert tugas saat ini.</div></td></tr> : null}
+                {!taskItems.length ? <tr><td colSpan={9}><div className="empty-state">Tidak ada alert tugas saat ini.</div></td></tr> : null}
               </tbody>
             </table>
           </div>
