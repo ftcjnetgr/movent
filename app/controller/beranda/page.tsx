@@ -64,9 +64,6 @@ export default async function ControllerPenugasanDashboardPage() {
       .order('created_at', { ascending: false })
       .limit(6),
     admin
-      .from('fleets')
-      .select('status', { count: 'exact', head: false }),
-    admin
       .from('schedules')
       .select('schedule_id, std')
       .eq('status', 'Active')
@@ -83,16 +80,9 @@ export default async function ControllerPenugasanDashboardPage() {
 
   const tasks = tasksResult.data ?? []
   const tickets = ticketsResult.data ?? []
-  const fleetRows = fleetResult.data ?? []
   const schedules = scheduleResult.data ?? []
   const activities = activityResult.data ?? []
   const usedScheduleIds = new Set((usedScheduleResult.data ?? []).map((task) => task.schedule_id).filter((value): value is string => Boolean(value)))
-
-  const fleetStatus = fleetRows.reduce<Record<string, number>>((acc, row) => {
-    const key = row.status ?? 'Unknown'
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
 
   const activeTasks =
     (data.taskCounts.Assigned ?? 0) +
@@ -122,8 +112,6 @@ export default async function ControllerPenugasanDashboardPage() {
   })
 
   const maxHour = Math.max(1, ...byHour.map((item) => item.total))
-  const fleetTotal = fleetRows.length
-
   return (
     <div className="super-dashboard">
       <div className="super-dashboard-heading">
@@ -205,20 +193,6 @@ export default async function ControllerPenugasanDashboardPage() {
           </div>
         </div>
 
-        <div className="super-panel super-info-panel">
-          <div className="super-panel-heading">
-            <div><h2>Armada</h2><p>Ringkasan armada yang terdaftar.</p></div>
-            <Link href="/super-user/pengelolaan-database?db=fleets">Kelola →</Link>
-          </div>
-          <div className="super-info-list">
-            <div className="super-info-item">
-              <span className="super-info-icon green">✓</span>
-              <div><strong>{fleetTotal} armada terdaftar</strong><small>Data master armada</small></div>
-              <b>›</b>
-            </div>
-          </div>
-        </div>
-
         <div className="super-panel super-activity-panel">
           <div className="super-panel-heading">
             <div><h2>Aktivitas Sistem</h2><p>Aktivitas terbaru di sistem.</p></div>
@@ -227,7 +201,6 @@ export default async function ControllerPenugasanDashboardPage() {
             <div><span className="activity-dot blue" /><span>{tickets.length} tiket maintenance terbaru</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot green" /><span>{schedules.length} schedule aktif hari ini</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot orange" /><span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
-            <div><span className="activity-dot purple" /><span>{fleetTotal} armada terdaftar</span><time>{shortTime(now.toISOString())}</time></div>
           </div>
         </div>
       </section>
