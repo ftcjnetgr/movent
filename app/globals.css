@@ -4035,3 +4035,426 @@ small {
 .alert-page .alert-hero {
   display: none !important;
 }
+
+
+/* final role-wide polish */
+.role-page > * + * {
+  margin-top: 16px;
+}
+
+.super-dashboard > * + * {
+  margin-top: 16px !important;
+}
+
+/* alert: plain page title + collapsed groups */
+.alert-page .alert-content-heading {
+  padding: 0;
+  margin: 0 !important;
+}
+
+.alert-page .alert-content-heading h1 {
+  font-size: 30px;
+  letter-spacing: -.04em;
+}
+
+.alert-page .alert-content-heading p {
+  font-size: 11px;
+}
+
+.alert-page .alert-content-section + .alert-content-section {
+  margin-top: 22px;
+}
+
+.alert-page .alert-group {
+  margin-top: 8px;
+  border-radius: 11px;
+}
+
+.alert-page .alert-group-toggle {
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  border: 0;
+  background: #fff;
+  color: #24344b;
+  text-align: left;
+  box-shadow: none;
+}
+
+.alert-page .alert-group-toggle:hover {
+  background: #f8fafc;
+  color: #1557b0;
+  transform: none;
+}
+
+.alert-page .alert-group-toggle > span:first-child {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.alert-page .alert-group-toggle small {
+  color: #7a8799;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.alert-page .alert-group-toggle strong {
+  overflow: hidden;
+  color: #24344b;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alert-page .alert-group-toggle > span:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.alert-page .alert-group-toggle em {
+  color: #7b889a;
+  font-size: 8px;
+  font-style: normal;
+}
+
+.alert-page .alert-group-toggle b {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #dbe2ea;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #516176;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.alert-page .alert-group .table-wrap {
+  border-top: 1px solid #e8edf3;
+}
+
+.alert-page .alert-group-table {
+  min-width: 900px;
+}
+
+/* dashboard penugasan KPI: shorter and vertically centered */
+.dashboard-page .metric-grid,
+.dashboard-ticketing-page .metric-grid {
+  align-items: stretch;
+}
+
+.dashboard-page .metric-card,
+.dashboard-ticketing-page .metric-card {
+  min-height: 92px;
+  height: 92px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.dashboard-page .metric-card strong,
+.dashboard-ticketing-page .metric-card strong {
+  margin-top: 4px;
+}
+
+.dashboard-page .metric-card small,
+.dashboard-ticketing-page .metric-card small {
+  margin-top: 2px;
+}
+
+/* ticketing gets a little more breathing room */
+.dashboard-ticketing-page .dashboard-table-section {
+  margin-top: 22px !important;
+}
+
+.dashboard-ticketing-page .dashboard-table-card {
+  margin-top: 10px;
+}
+
+/* schedule grid: clearer lines, left-middle route values, compact full-width filters */
+.schedule-grid-shell {
+  border-color: #cfd8e4 !important;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(15,35,65,.04) !important;
+}
+
+.schedule-grid-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.schedule-grid-table th,
+.schedule-grid-table td {
+  border-right: 1px solid #e2e7ee;
+  border-bottom: 1px solid #e2e7ee;
+}
+
+.schedule-grid-table tr > *:last-child {
+  border-right: 0;
+}
+
+.schedule-grid-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.schedule-grid-table thead th {
+  height: 34px;
+  border-bottom-color: #cfd8e4;
+  background: #f3f6fa;
+  color: #526278;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.schedule-grid-table thead th:first-child {
+  border-right-color: #cfd8e4;
+}
+
+.schedule-grid-table tbody th {
+  background: #fff;
+  color: #25364d;
+  font-size: 9px;
+  font-weight: 750;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.schedule-grid-table td {
+  height: 42px;
+  background: #fff;
+  vertical-align: middle;
+}
+
+.schedule-grid-table tbody tr:hover td,
+.schedule-grid-table tbody tr:hover th {
+  background: #fafcff;
+}
+
+.schedule-grid-cell {
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* every filter button fills its available card width */
+.schedule-page .schedule-day-row,
+.schedule-page .schedule-direction,
+.schedule-page .schedule-category-buttons,
+.schedule-page .schedule-point-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(82px, 1fr));
+  width: 100%;
+}
+
+.schedule-page .schedule-day-row button,
+.schedule-page .schedule-direction button,
+.schedule-page .schedule-category-buttons button,
+.schedule-page .schedule-point-tabs button {
+  width: 100%;
+  min-width: 0;
+}
+
+.schedule-page .schedule-day-row {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.schedule-page .schedule-direction {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.schedule-page .schedule-category-buttons {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.schedule-page .schedule-point-tabs {
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+}
+
+/* live tracking uses the same grid treatment as by plan */
+.schedule-view-live .schedule-grid-shell {
+  border-color: #cfd8e4 !important;
+}
+
+.schedule-view-live .schedule-grid-table tbody th {
+  background: #fff;
+  color: #25364d;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* report: one visual container, not card on top of card */
+.report-workspace {
+  gap: 16px;
+}
+
+.report-type-picker {
+  padding: 0 0 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.report-type-picker .report-type-buttons {
+  margin-top: 10px;
+}
+
+.report-filter-card {
+  box-shadow: 0 6px 18px rgba(15,35,65,.04);
+}
+
+/* settings: android-like list */
+.setting-grid {
+  grid-template-columns: 1fr !important;
+  gap: 1px !important;
+  overflow: hidden;
+  border: 1px solid #e1e7ef;
+  border-radius: 14px;
+  background: #e1e7ef;
+}
+
+.setting-grid .metric-card {
+  min-height: 68px;
+  height: 68px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: #fff;
+}
+
+.setting-grid .metric-card > span {
+  color: #718095;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.setting-grid .metric-card > strong {
+  margin: 0;
+  color: #20314a;
+  font-size: 13px;
+  font-weight: 750;
+  text-align: right;
+}
+
+/* management user: actions stay on one line */
+.admin-row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.admin-row-actions > details {
+  position: relative;
+}
+
+.admin-row-actions .admin-row-action-secondary {
+  display: inline-flex;
+}
+
+.admin-row-actions button,
+.admin-row-actions .link-button {
+  min-height: 30px;
+  padding: 6px 9px;
+  white-space: nowrap;
+}
+
+/* management database: compact chooser cards, add form hidden until requested */
+.management-create-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+}
+
+.management-create-card {
+  overflow: hidden;
+  border: 1px solid #dfe5ed;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.management-create-card > summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 38px minmax(0,1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.management-create-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.management-create-card > summary:hover {
+  background: #f8fafc;
+}
+
+.management-create-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #edf4ff;
+  color: #1557b0;
+  font-weight: 900;
+}
+
+.management-create-card > summary strong {
+  color: #24344b;
+  font-size: 12px;
+}
+
+.management-create-card > summary small {
+  display: block;
+  margin-top: 2px;
+  color: #7a8799;
+  font-size: 9px;
+}
+
+.management-create-card > summary b {
+  color: #718095;
+  font-size: 17px;
+}
+
+.management-create-card[open] > summary {
+  border-bottom: 1px solid #e7ebf0;
+  background: #f8fafc;
+}
+
+.management-create-card .data-form {
+  padding: 14px;
+}
+
+@media (max-width: 760px) {
+  .management-create-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-page .schedule-day-row {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+}
