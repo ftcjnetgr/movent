@@ -1734,3 +1734,127 @@ tbody tr:hover td { background: #fbfdff; }
     width: 100%;
   }
 }
+
+
+/* dedicated alert center remains the only alert surface */
+.alert-card { display: grid; }
+.alert-page .alert-summary-grid { display: grid; }
+.alert-page .alert-summary-card {
+  min-height: 112px;
+}
+.alert-page .alert-summary-card:hover {
+  transform: translateY(-1px);
+}
+
+/* profile/settings: compact, calm, useful */
+.setting-grid {
+  gap: 10px;
+}
+
+.setting-grid .metric-card {
+  min-height: 92px;
+  padding: 16px 18px;
+}
+
+.setting-grid .metric-card > span {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.setting-grid .metric-card > strong {
+  margin-top: 7px;
+  font-size: 20px;
+  letter-spacing: -.03em;
+}
+
+.password-card-wrap {
+  width: 100%;
+}
+
+.password-card {
+  width: min(100%, 780px);
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.password-card-heading h1 {
+  margin: 5px 0 0;
+  color: var(--text);
+  font-size: 18px;
+  letter-spacing: -.03em;
+}
+
+.password-card-heading p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.password-form {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.password-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--text-2);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.password-form input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  outline: 0;
+  background: #fbfcfe;
+  color: var(--text);
+}
+
+.password-form input:focus {
+  background: #fff;
+  border-color: #8db4ef;
+  box-shadow: 0 0 0 4px rgba(23,105,224,.07);
+}
+
+.password-form .form-error {
+  grid-column: 1 / -1;
+}
+
+.password-form button {
+  justify-self: start;
+  min-height: 40px;
+}
+
+.password-card-footer {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+@media (max-width: 680px) {
+  .password-form {
+    grid-template-columns: 1fr;
+  }
+
+  .password-form button,
+  .password-form .form-error {
+    grid-column: auto;
+  }
+
+  .password-form button {
+    width: 100%;
+  }
+}
