@@ -21,6 +21,12 @@ export default async function OperationBerandaPage() {
         </div>
       </div>
 
+      <OperationCreationHub
+        locations={(locations ?? []).map((item) => item.location)}
+        products={(products ?? []).map((item) => item.product)}
+        tasks={tasks ?? []}
+      />
+
       <section className="section-block">
         <div className="metric-grid">
           <div className="metric-card"><span>Non-TGR Menunggu</span><strong>{tasks?.length ?? 0}</strong></div>
@@ -30,11 +36,7 @@ export default async function OperationBerandaPage() {
         </div>
       </section>
 
-      <OperationCreationHub
-        locations={(locations ?? []).map((item) => item.location)}
-        products={(products ?? []).map((item) => item.product)}
-        tasks={tasks ?? []}
-      />
+
     </div>
   )
 }
