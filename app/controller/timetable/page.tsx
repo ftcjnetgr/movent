@@ -18,7 +18,7 @@ export default async function ControllerTimetablePage({
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Schedule</h1>
-          <p>{view === 'live' ? 'Penugasan hari ini sesuai waktu sistem.' : 'Rencana schedule berdasarkan hari yang dipilih.'}</p>
+          <p>{view === 'live' ? 'Pantau posisi penugasan hari ini secara real-time.' : 'Lihat rencana schedule berdasarkan hari yang kamu pilih.'}</p>
         </div>
       </div>
       <TimetableView
