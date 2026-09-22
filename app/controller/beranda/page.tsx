@@ -27,16 +27,6 @@ function timeLabel(value: string | null) {
   })
 }
 
-function dateLabel(date: Date) {
-  return new Intl.DateTimeFormat('id-ID', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'Asia/Jakarta',
-  }).format(date)
-}
-
 function shortTime(value: string | null) {
   if (!value) return '-'
   return new Date(value).toLocaleTimeString('id-ID', {
@@ -143,11 +133,6 @@ export default async function ControllerPenugasanDashboardPage() {
           <h1>Selamat datang, {profile.full_name}! <span aria-hidden="true">👋</span></h1>
           <p>Ini ringkasan operasional hari ini. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
-        <div className="super-dashboard-date">
-          <span>Kalender</span>
-          <strong>{dateLabel(now)}</strong>
-          <small>{now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })} WIB</small>
-        </div>
       </div>
 
       <section className="super-kpi-grid">
@@ -183,6 +168,20 @@ export default async function ControllerPenugasanDashboardPage() {
         </Link>
       </section>
 
+      <section className="super-quick-row">
+        <div className="super-panel super-quick-panel">
+          <div className="super-panel-heading"><div><h2>Akses Cepat</h2><p>Langsung ke yang sering kamu pakai.</p></div></div>
+          <div className="super-quick-grid">
+            <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
+            <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Tiket</strong></Link>
+            <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Schedule</strong></Link>
+            <Link href="/super-user/pengelolaan-database"><span className="quick-orange">↥</span><strong>Import Data</strong></Link>
+            <Link href="/super-user/pengelolaan-pengguna"><span className="quick-navy">♙</span><strong>Manajemen User</strong></Link>
+            <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
+          </div>
+        </div>
+      </section>
+
       <section className="super-dashboard-main-grid">
         <div className="super-panel super-chart-panel">
           <div className="super-panel-heading">
@@ -213,26 +212,6 @@ export default async function ControllerPenugasanDashboardPage() {
               ))}
             </div>
           </div>
-        </div>
-
-        <div className="super-panel super-fleet-panel">
-          <div className="super-panel-heading">
-            <div>
-              <h2>Status Armada</h2>
-              <p>Ringkasan armada yang terdaftar.</p>
-            </div>
-          </div>
-          <div className="super-fleet-body">
-            <div className="super-donut" style={{ background: fleetTotal ? `conic-gradient(#1fc37c 0deg 360deg)` : '#edf1f5' }}>
-              <div><strong>{fleetTotal}</strong><span>Total Armada</span></div>
-            </div>
-            <div className="super-fleet-list">
-              {Object.entries(fleetStatus).length ? Object.entries(fleetStatus).map(([status, count]) => (
-                <div key={status}><span><i className="fleet-dot" /> {status}</span><strong>{count}</strong></div>
-              )) : <div className="muted">Belum ada data armada.</div>}
-            </div>
-          </div>
-          <Link href="/super-user/pengelolaan-database?db=fleets" className="super-panel-link">Lihat detail →</Link>
         </div>
 
         <div className="super-panel super-info-panel">
@@ -310,29 +289,6 @@ export default async function ControllerPenugasanDashboardPage() {
         </div>
       </section>
 
-      <section className="super-dashboard-bottom-grid">
-        <div className="super-panel super-quick-panel">
-          <div className="super-panel-heading"><div><h2>Akses Cepat</h2><p>Aksi yang paling sering dipakai.</p></div></div>
-          <div className="super-quick-grid">
-            <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
-            <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Tiket</strong></Link>
-            <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Schedule</strong></Link>
-            <Link href="/super-user/pengelolaan-database"><span className="quick-orange">↥</span><strong>Import Data</strong></Link>
-            <Link href="/super-user/pengelolaan-pengguna"><span className="quick-navy">♙</span><strong>Manajemen User</strong></Link>
-            <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
-          </div>
-        </div>
-
-        <div className="super-panel super-activity-panel">
-          <div className="super-panel-heading"><div><h2>Aktivitas Sistem</h2><p>Aktivitas terbaru di sistem.</p></div></div>
-          <div className="super-activity-list">
-            <div><span className="activity-dot blue" /> <span>{data.taskAlerts.length} alert tugas aktif</span><time>{shortTime(now.toISOString())}</time></div>
-            <div><span className="activity-dot green" /> <span>{schedules.length} schedule aktif hari ini</span><time>{shortTime(now.toISOString())}</time></div>
-            <div><span className="activity-dot orange" /> <span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
-            <div><span className="activity-dot purple" /> <span>{fleetTotal} armada terdaftar</span><time>{shortTime(now.toISOString())}</time></div>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
