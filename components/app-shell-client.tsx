@@ -12,37 +12,38 @@ const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     { label: 'Dashboard', icon: 'home', items: [
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/controller/beranda/ticketing', icon: 'ticket' },
+      { label: 'Ticketing', href: '/controller/beranda/ticketing', icon: 'ticket' },
     ] },
     { label: 'Schedule', icon: 'calendar', items: [
       { label: 'By Plan', href: '/controller/timetable?view=plan', icon: 'calendar' },
       { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
     ]},
+    { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/controller/profil', icon: 'user' }] },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
   Dispatcher: [
-    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/dispatcher/beranda', icon: 'home' }] },
-    { label: 'Penugasan', icon: 'clipboard', items: [{ label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' }] },
+    { label: 'Penugasan Saya', icon: 'clipboard', items: [{ label: 'Penugasan Saya', href: '/dispatcher/riwayat-penugasan', icon: 'history' }] },
+    { label: 'Ticketing Saya', icon: 'ticket', items: [{ label: 'Ticketing Saya', href: '/dispatcher/maintenance-armada', icon: 'ticket' }] },
     { label: 'Extra Schedule', icon: 'calendar', items: [{ label: 'Extra Schedule', href: '/dispatcher/extra-schedule', icon: 'calendar' }] },
     { label: 'Armada Non TGR', icon: 'truck', items: [{ label: 'Armada Non TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' }] },
-    { label: 'Maintenance Armada', icon: 'wrench', items: [{ label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/dispatcher/profil', icon: 'user' }] },
+    { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance', href: '/dispatcher/maintenance-armada', icon: 'wrench' }] },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },
   ],
   Executor: [
-    { label: 'Tugas', icon: 'clipboard', items: [{ label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' }, { label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/executor/profil', icon: 'user' }] },
+    { label: 'Tugas Saya', icon: 'clipboard', items: [{ label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' }] },
+    { label: 'Riwayat Tugas', icon: 'history', items: [{ label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' }] },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/executor/profil', icon: 'user' }] },
   ],
   Maintainer: [
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
-    { label: 'Ticketing', icon: 'ticket', items: [{ label: 'Ticketing', href: '/maintainer/tiket-maintenance', icon: 'ticket' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/maintainer/profil', icon: 'user' }] },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/maintainer/profil', icon: 'user' }] },
   ],
   Operation: [
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/operation/beranda', icon: 'home' }] },
-    { label: 'Extra Schedule', icon: 'calendar', items: [{ label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' }] },
-    { label: 'Setting', icon: 'user', items: [{ label: 'Setting', href: '/operation/profil', icon: 'user' }] },
+    { label: 'Riwayat Extra Schedule', icon: 'calendar', items: [{ label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' }] },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/operation/profil', icon: 'user' }] },
   ],
 }
 
