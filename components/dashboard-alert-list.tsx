@@ -22,6 +22,7 @@ type TicketAlert = {
   created_at: string
   accepted_at: string | null
   in_progress_at: string | null
+  location: string | null
 }
 
 function formatDuration(totalSeconds: number) {
@@ -108,6 +109,7 @@ export default function DashboardAlertList({
         indicator: formatDuration(Math.abs(thresholdSeconds - elapsed)),
         late: elapsed >= thresholdSeconds,
         threshold: ticket.status === 'Requested' ? '3 jam' : ticket.status === 'Confirmed' ? '1 hari' : '3 hari',
+        location: ticket.location ?? 'Lokasi tidak tersedia',
       }
     }).filter((item): item is NonNullable<typeof item> => item !== null),
     [ticketAlertRows, now],
