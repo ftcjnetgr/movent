@@ -23,6 +23,7 @@ type TicketAlert = {
   accepted_at: string | null
   in_progress_at: string | null
   location: string | null
+  maintenance_list: string | null
 }
 
 function formatDuration(totalSeconds: number) {
@@ -110,6 +111,7 @@ export default function DashboardAlertList({
         late: elapsed >= thresholdSeconds,
         threshold: ticket.status === 'Requested' ? '3 jam' : ticket.status === 'Confirmed' ? '1 hari' : '3 hari',
         location: ticket.location ?? 'Lokasi tidak tersedia',
+        maintenance: ticket.maintenance_list ?? 'Maintenance tidak tersedia',
       }
     }).filter((item): item is NonNullable<typeof item> => item !== null),
     [ticketAlertRows, now],
@@ -240,7 +242,7 @@ export default function DashboardAlertList({
                     {items.map((item) => (
                       <tr key={item.transactionId} className={item.late ? 'is-alert-late' : ''}>
                         <td><strong>{item.transactionId}</strong></td>
-                        <td>Maintenance</td>
+                        <td>{item.maintenance}</td>
                         <td><span className="alert-kind-badge ticket">{item.status}</span></td>
                         <td>{item.threshold}</td>
                         <td><b className={item.late ? 'is-late' : ''}>{item.label} · {item.indicator}</b></td>
