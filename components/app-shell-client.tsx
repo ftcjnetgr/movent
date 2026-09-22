@@ -10,6 +10,7 @@ type NavGroup = { label: string; icon: string; items: NavItem[] }
 
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
+    { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }] },
     { label: 'Dashboard', icon: 'home', items: [
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
       { label: 'Ticketing', href: '/controller/beranda/ticketing', icon: 'ticket' },
@@ -18,7 +19,6 @@ const navByRole: Record<string, NavGroup[]> = {
       { label: 'By Plan', href: '/controller/timetable?view=plan', icon: 'calendar' },
       { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
     ]},
-    { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
@@ -62,7 +62,6 @@ const superUserNav: NavGroup[] = [
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
       { label: 'Ticketing', href: '/controller/beranda/ticketing', icon: 'ticket' },
       { label: 'Monitoring', href: '/controller/timetable?view=live', icon: 'truck' },
-      { label: 'Alert', href: '/controller/alert', icon: 'bell' },
     ],
   },
   {
