@@ -2857,3 +2857,94 @@ small {
     justify-items: start;
   }
 }
+
+
+/* =========================================================
+   dashboard layout + report selector contrast
+   ========================================================= */
+
+.super-dashboard-main-grid {
+  grid-template-columns: minmax(0, 1.7fr) minmax(300px, .8fr);
+  gap: 14px;
+}
+
+.super-dashboard-table-grid {
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.super-dashboard-table-grid .super-table-panel {
+  width: 100%;
+}
+
+.super-table-panel .super-table-wrap {
+  width: 100%;
+}
+
+.super-table-panel table {
+  width: 100%;
+}
+
+.super-activity-panel {
+  min-height: 260px;
+}
+
+.report-type-button,
+.report-type-button:hover {
+  background: #fff !important;
+  border-color: #d7dee8 !important;
+  color: #334257 !important;
+  box-shadow: none !important;
+}
+
+.report-type-button strong {
+  color: #26364d !important;
+}
+
+.report-type-button small {
+  color: #68778c !important;
+}
+
+.report-type-button.active {
+  background: #eaf2ff !important;
+  border-color: #8fb5ee !important;
+  color: #174ea6 !important;
+}
+
+.report-type-button.active strong {
+  color: #174ea6 !important;
+}
+
+.report-type-button.active small {
+  color: #45678f !important;
+}
+
+.report-type-button.active .report-type-radio {
+  border-color: #2563eb !important;
+  background: #2563eb !important;
+  color: #fff !important;
+}
+
+.alert-dashboard-summary.is-focused {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.alert-overview-grid.is-focused {
+  grid-template-columns: 1fr;
+}
+
+.alert-overview-grid.is-focused .alert-panel {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .alert-dashboard-summary.is-focused {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 820px) {
+  .super-dashboard-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
