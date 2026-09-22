@@ -100,7 +100,6 @@ export default async function ControllerPenugasanDashboardPage() {
     (data.taskCounts.Driving ?? 0)
 
   const completedTasks = activities.filter((task) => task.status === 'Completed').length
-  const alertCount = data.taskAlerts.length + data.ticketAlertCount
   const unassignedSchedules = Math.max(0, schedules.length - usedScheduleIds.size)
 
   const byHour = Array.from({ length: 24 }, (_, hour) => {
@@ -160,12 +159,6 @@ export default async function ControllerPenugasanDashboardPage() {
           <strong>{unassignedSchedules}</strong>
           <small>Schedule hari ini</small>
         </div>
-        <Link href="/controller/alert" className="super-kpi-card kpi-red super-kpi-link">
-          <div className="super-kpi-icon">!</div>
-          <span>Alert</span>
-          <strong>{alertCount}</strong>
-          <small>Cek alert</small>
-        </Link>
       </section>
 
       <section className="super-quick-row">
@@ -174,7 +167,6 @@ export default async function ControllerPenugasanDashboardPage() {
             <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
             <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Tiket</strong></Link>
             <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Jadwal</strong></Link>
-            <Link href="/controller/alert"><span className="quick-orange">!</span><strong>Cek Alert</strong></Link>
             <Link href="/controller/beranda/ticketing"><span className="quick-navy">⌁</span><strong>Tiket Maintenance</strong></Link>
             <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
           </div>
@@ -215,24 +207,15 @@ export default async function ControllerPenugasanDashboardPage() {
 
         <div className="super-panel super-info-panel">
           <div className="super-panel-heading">
-            <div><h2>Perlu Dicek</h2><p>Beberapa hal yang perlu kamu cek.</p></div>
+            <div><h2>Armada</h2><p>Ringkasan armada yang terdaftar.</p></div>
+            <Link href="/super-user/pengelolaan-database?db=fleets">Kelola →</Link>
           </div>
           <div className="super-info-list">
-            <Link href="/controller/alert" className="super-info-item">
-              <span className="super-info-icon danger">!</span>
-              <div><strong>{data.taskAlerts.length} alert tugas</strong><small>Perlu diperhatikan</small></div>
-              <b>›</b>
-            </Link>
-            <Link href="/controller/alert?type=ticketing" className="super-info-item">
-              <span className="super-info-icon blue">▣</span>
-              <div><strong>{data.ticketAlertCount} ticket maintenance</strong><small>Dalam batas alert</small></div>
-              <b>›</b>
-            </Link>
-            <Link href="/super-user/pengelolaan-database?db=fleets" className="super-info-item">
+            <div className="super-info-item">
               <span className="super-info-icon green">✓</span>
-              <div><strong>{fleetTotal} armada tersedia</strong><small>Master armada</small></div>
+              <div><strong>{fleetTotal} armada terdaftar</strong><small>Data master armada</small></div>
               <b>›</b>
-            </Link>
+            </div>
           </div>
         </div>
 
@@ -277,7 +260,7 @@ export default async function ControllerPenugasanDashboardPage() {
 
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
-            <div><h2>Tiket Maintenance Maintenance Terbaru</h2><p>Ticket yang baru masuk.</p></div>
+            <div><h2>Tiket Maintenance Terbaru</h2><p>Ticket yang baru masuk.</p></div>
             <Link href="/controller/beranda/ticketing">Lihat semua →</Link>
           </div>
           <div className="super-table-wrap">
