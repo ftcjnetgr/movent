@@ -10,14 +10,6 @@ export default async function ControllerAlertPage() {
 
   return (
     <div className="role-page alert-page">
-      <div className="page-heading">
-        <div>
-          <span className="eyebrow">Controller</span>
-          <h1>Alert</h1>
-          <p>Semua hal yang sedang perlu kamu cek sekarang.</p>
-        </div>
-      </div>
-
       <DashboardAlertList
         taskAlerts={data.taskAlerts.map((alert) => ({
           ...alert,
