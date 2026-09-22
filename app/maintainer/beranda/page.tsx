@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import DashboardAlertList from '@/components/dashboard-alert-list'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -29,10 +28,7 @@ export default async function MaintainerBerandaPage() {
         <div className="metric-card"><span>In Progress</span><strong>{data.ticketCounts['In Progress'] ?? 0}</strong></div>
         <div className="metric-card"><span>Selesai</span><strong>{data.ticketCounts.Completed ?? 0}</strong></div>
         <div className="metric-card"><span>Total Aktif</span><strong>{tickets.length}</strong></div>
-        <div className="metric-card alert-card"><span>Alert</span><strong>{data.ticketAlertCount}</strong></div>
       </section>
-
-      <DashboardAlertList taskAlerts={[]} ticketAlerts={data.ticketAlerts} />
 
       <section className="section-block">
         <div className="section-heading"><div><h2>Tiket Maintenance</h2><p>Tiket yang perlu kamu tindak sekarang.</p></div><Link className="link-button" href="/maintainer/tiket-maintenance">Lihat semua</Link></div>
