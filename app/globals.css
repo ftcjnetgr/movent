@@ -3159,3 +3159,72 @@ small {
 .sidebar .sidebar-logout:hover {
   color: #ffffff !important;
 }
+
+
+/* =========================================================
+   clean sidebar + shared alert shell
+   ========================================================= */
+
+.sidebar .nav-group-title,
+.sidebar .nav-group-title:hover,
+.sidebar .nav-group.has-active > .nav-group-title {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.sidebar .nav-group-title:hover {
+  background: rgba(255,255,255,.055) !important;
+}
+
+.sidebar .nav-group.has-active > .nav-group-title {
+  color: #ffffff !important;
+}
+
+.sidebar .sidebar-logout,
+.sidebar .sidebar-logout:hover {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.sidebar .sidebar-logout:hover {
+  background: rgba(248,113,113,.08) !important;
+}
+
+.alert-page .alert-hero {
+  border-color: #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15,23,42,.045);
+}
+
+.alert-page .alert-hero .eyebrow {
+  color: #2563eb;
+}
+
+.alert-page .alert-dashboard-summary .alert-summary-card {
+  border-color: #e3e8ef;
+  box-shadow: 0 8px 24px rgba(15,23,42,.045);
+}
+
+.alert-page .alert-dashboard-summary .alert-summary-card::before {
+  background: #dbe4ef;
+}
+
+.alert-page .alert-dashboard-summary .alert-total::before {
+  background: #2563eb;
+}
+
+.alert-page .alert-dashboard-summary .alert-task-summary::before,
+.alert-page .alert-dashboard-summary .alert-ticket-summary::before {
+  background: #dbe4ef;
+}
+
+.alert-page .alert-detail-item.is-alert-late {
+  background: #ffffff;
+  border: 1px solid #e7ebf0;
+  margin: 3px 0;
+  padding-inline: 11px;
+}
+
+.alert-page .alert-panel {
+  box-shadow: 0 8px 24px rgba(15,23,42,.045);
+}
