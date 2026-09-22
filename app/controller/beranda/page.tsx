@@ -141,7 +141,7 @@ export default async function ControllerPenugasanDashboardPage() {
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Selamat datang, {profile.full_name}! <span aria-hidden="true">👋</span></h1>
-          <p>Berikut ringkasan operasional hari ini. Tetap pantau dan pastikan semuanya berjalan lancar.</p>
+          <p>Ini ringkasan operasional hari ini. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
         <div className="super-dashboard-date">
           <span>Kalender</span>
@@ -155,13 +155,13 @@ export default async function ControllerPenugasanDashboardPage() {
           <div className="super-kpi-icon">▤</div>
           <span>Total Tugas</span>
           <strong>{totalTaskResult.count ?? 0}</strong>
-          <small>Data terbaru</small>
+          <small>Semua data</small>
         </div>
         <div className="super-kpi-card kpi-green">
           <div className="super-kpi-icon">▰</div>
           <span>Sedang Berjalan</span>
           <strong>{activeTasks}</strong>
-          <small>Assigned sampai Driving</small>
+          <small>Sedang diproses</small>
         </div>
         <div className="super-kpi-card kpi-cyan">
           <div className="super-kpi-icon">✓</div>
@@ -179,7 +179,7 @@ export default async function ControllerPenugasanDashboardPage() {
           <div className="super-kpi-icon">!</div>
           <span>Alert</span>
           <strong>{alertCount}</strong>
-          <small>Lihat semua alert</small>
+          <small>Cek alert</small>
         </Link>
       </section>
 
@@ -188,7 +188,7 @@ export default async function ControllerPenugasanDashboardPage() {
           <div className="super-panel-heading">
             <div>
               <h2>Aktivitas Tugas Hari Ini</h2>
-              <p>Distribusi tugas berdasarkan jam STD.</p>
+              <p>Lihat ritme keberangkatan berdasarkan jam STD.</p>
             </div>
             <div className="super-chart-legend">
               <span><i className="legend-blue" /> Selesai</span>
@@ -219,7 +219,7 @@ export default async function ControllerPenugasanDashboardPage() {
           <div className="super-panel-heading">
             <div>
               <h2>Status Armada</h2>
-              <p>Total armada terdaftar.</p>
+              <p>Ringkasan armada yang terdaftar.</p>
             </div>
           </div>
           <div className="super-fleet-body">
@@ -237,7 +237,7 @@ export default async function ControllerPenugasanDashboardPage() {
 
         <div className="super-panel super-info-panel">
           <div className="super-panel-heading">
-            <div><h2>Informasi Cepat</h2><p>Hal yang perlu diperhatikan.</p></div>
+            <div><h2>Perlu Dilihat</h2><p>Beberapa hal yang perlu kamu cek.</p></div>
           </div>
           <div className="super-info-list">
             <Link href="/controller/alert" className="super-info-item">
@@ -262,8 +262,8 @@ export default async function ControllerPenugasanDashboardPage() {
       <section className="super-dashboard-table-grid">
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
-            <div><h2>Penugasan Terbaru</h2><p>Aktivitas tugas terbaru.</p></div>
-            <Link href="/dispatcher/riwayat-penugasan">Lihat Semua →</Link>
+            <div><h2>Penugasan Terbaru</h2><p>Tugas yang paling baru masuk.</p></div>
+            <Link href="/dispatcher/riwayat-penugasan">Lihat semua →</Link>
           </div>
           <div className="super-table-wrap">
             <table>
@@ -279,7 +279,7 @@ export default async function ControllerPenugasanDashboardPage() {
                     <td>{timeLabel(task.std)}</td>
                   </tr>
                 ))}
-                {!tasks.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada penugasan.</td></tr> : null}
+                {!tasks.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada tugas yang masuk.</td></tr> : null}
               </tbody>
             </table>
           </div>
@@ -288,7 +288,7 @@ export default async function ControllerPenugasanDashboardPage() {
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
             <div><h2>Ticketing Maintenance Terbaru</h2><p>Ticket yang baru masuk.</p></div>
-            <Link href="/controller/beranda/ticketing">Lihat Semua →</Link>
+            <Link href="/controller/beranda/ticketing">Lihat semua →</Link>
           </div>
           <div className="super-table-wrap">
             <table>
