@@ -175,8 +175,8 @@ export default async function ControllerPenugasanDashboardPage() {
             <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
             <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Tiket</strong></Link>
             <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Schedule</strong></Link>
-            <Link href="/super-user/pengelolaan-database"><span className="quick-orange">↥</span><strong>Import Data</strong></Link>
-            <Link href="/super-user/pengelolaan-pengguna"><span className="quick-navy">♙</span><strong>Manajemen User</strong></Link>
+            <Link href="/controller/alert"><span className="quick-orange">!</span><strong>Cek Alert</strong></Link>
+            <Link href="/controller/beranda/ticketing"><span className="quick-navy">⌁</span><strong>Ticketing</strong></Link>
             <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
           </div>
         </div>
@@ -234,6 +234,18 @@ export default async function ControllerPenugasanDashboardPage() {
               <div><strong>{fleetTotal} armada tersedia</strong><small>Master armada</small></div>
               <b>›</b>
             </Link>
+          </div>
+        </div>
+
+        <div className="super-panel super-activity-panel">
+          <div className="super-panel-heading">
+            <div><h2>Aktivitas Sistem</h2><p>Aktivitas terbaru di sistem.</p></div>
+          </div>
+          <div className="super-activity-list">
+            <div><span className="activity-dot blue" /><span>{data.taskAlerts.length} alert tugas aktif</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot green" /><span>{schedules.length} schedule aktif hari ini</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot orange" /><span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot purple" /><span>{fleetTotal} armada terdaftar</span><time>{shortTime(now.toISOString())}</time></div>
           </div>
         </div>
       </section>
