@@ -11,8 +11,8 @@ type NavGroup = { label: string; icon: string; items: NavItem[] }
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     { label: 'Alert', icon: 'bell', items: [
-      { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
@@ -26,6 +26,10 @@ const navByRole: Record<string, NavGroup[]> = {
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
   Dispatcher: [
+    { label: 'Alert', icon: 'bell', items: [
+      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+    ] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/dispatcher/beranda', icon: 'home' }] },
     { label: 'Penugasan', icon: 'clipboard', items: [{ label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' }] },
     { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' }] },
@@ -34,17 +38,29 @@ const navByRole: Record<string, NavGroup[]> = {
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },
   ],
   Executor: [
+    { label: 'Alert', icon: 'bell', items: [
+      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+    ] },
     { label: 'Tugas Saya', icon: 'clipboard', items: [{ label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' }] },
     { label: 'Riwayat Tugas', icon: 'history', items: [{ label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/executor/profil', icon: 'user' }] },
   ],
   Maintainer: [
+    { label: 'Alert', icon: 'bell', items: [
+      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+    ] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
     { label: 'Tiket Maintenance', icon: 'wrench', items: [{ label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/maintainer/profil', icon: 'user' }] },
   ],
   Operation: [
+    { label: 'Alert', icon: 'bell', items: [
+      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+    ] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/operation/beranda', icon: 'home' }] },
     { label: 'Riwayat Extra Schedule', icon: 'calendar', items: [{ label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/operation/profil', icon: 'user' }] },
@@ -56,8 +72,8 @@ const superUserNav: NavGroup[] = [
     label: 'Alert',
     icon: 'bell',
     items: [
-      { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
+      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
     ],
   },
   {

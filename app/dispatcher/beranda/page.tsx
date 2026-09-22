@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import DispatcherCreateTask from '@/components/dispatcher-create-task'
-import DispatcherMaintenanceForm from '@/components/dispatcher-maintenance-form'
+import DispatcherCreationHub from '@/components/dispatcher-creation-hub'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
@@ -60,15 +59,16 @@ export default async function DispatcherBerandaPage() {
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-heading"><div><h2>Penugasan Baru</h2><p>Buat assignment sesuai alur operasional yang sudah berjalan.</p></div></div>
-        <div className="dashboard-form-card"><DispatcherCreateTask locations={(locations ?? []).map(i=>i.location)} schedules={schedules ?? []} executors={executors ?? []} fleets={fleets ?? []} products={(products ?? []).map(i=>i.product)} /></div>
-      </section>
+      <DispatcherCreationHub
+        locations={(locations ?? []).map(i => i.location)}
+        schedules={schedules ?? []}
+        executors={executors ?? []}
+        fleets={fleets ?? []}
+        products={(products ?? []).map(i => i.product)}
+        maintenanceLists={(maintenanceLists ?? []).map(i => i.maintenance_list)}
+        tickets={tickets ?? []}
+      />
 
-      <section className="section-block">
-        <div className="section-heading"><div><h2>Tiket Maintenance</h2><p>Buat ticket untuk armada yang membutuhkan maintenance.</p></div></div>
-        <div className="dashboard-form-card"><DispatcherMaintenanceForm maintenanceLists={(maintenanceLists ?? []).map(i=>i.maintenance_list)} locations={(locations ?? []).map(i=>i.location)} fleets={fleets ?? []} tickets={tickets ?? []} /></div>
-      </section>
     </div>
   )
 }
