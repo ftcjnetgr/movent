@@ -28,7 +28,6 @@ export default async function OperationBerandaPage() {
           <div className="metric-card"><span>Jadwal Tambahan Diajukan</span><strong>{requested ?? 0}</strong></div>
           <div className="metric-card"><span>Jadwal Tambahan Selesai</span><strong>{completed ?? 0}</strong></div>
           <div className="metric-card"><span>Proses Berjalan</span><strong>{(tasks?.length ?? 0) + (requested ?? 0)}</strong></div>
-          <div className="metric-card alert-card"><span>Perlu Dicek</span><strong>{requested ?? 0}</strong></div>
         </div>
       </section>
 
