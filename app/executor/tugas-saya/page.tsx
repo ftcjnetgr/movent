@@ -49,14 +49,14 @@ export default async function ExecutorTugasSayaPage() {
           <div className="metric-card"><span>Tugas Aktif</span><strong>{activeCount}</strong></div>
           <div className="metric-card"><span>Menunggu Diterima</span><strong>{waitingCount}</strong></div>
           <div className="metric-card"><span>Sedang Berangkat</span><strong>{drivingCount}</strong></div>
-          <div className="metric-card"><span>Sudah Selesai</span><strong>—</strong></div>
+          <div className="metric-card"><span>Selesai</span><strong>—</strong></div>
           <div className="metric-card"><span>Hari Ini</span><strong>{activeCount}</strong></div>
         </div>
       </section>
 
       <section className="section-block">
         <div className="section-heading">
-          <div><h2>Antrian tugas</h2><p>Kerjakan dari status paling awal sampai selesai.</p></div>
+          <div><h2>Tugas yang Perlu Dikerjakan</h2><p>Kerjakan dari status paling awal sampai selesai.</p></div>
         </div>
         <section className="task-list">
           {(tasks ?? []).map((task) => (
