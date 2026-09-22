@@ -28,28 +28,28 @@ export default async function ControllerTicketingDashboardPage() {
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Ticketing Maintenance</h1>
-          <p>Pantau ticketing maintenance armada dari ticket dibuat sampai selesai.</p>
+          <p>Pantau proses maintenance dari ticket dibuat sampai selesai.</p>
         </div>
       </div>
 
       <section className="metric-grid controller-kpi-grid dashboard-kpi-row">
         <div className="metric-card"><span>Diajukan</span><strong>{data.ticketCounts.Requested ?? 0}</strong><small>Menunggu diterima</small></div>
         <div className="metric-card"><span>Dikonfirmasi</span><strong>{data.ticketCounts.Confirmed ?? 0}</strong><small>Sudah diterima</small></div>
-        <div className="metric-card"><span>Sedang dikerjakan</span><strong>{data.ticketCounts['In Progress'] ?? 0}</strong><small>Maintenance berjalan</small></div>
+        <div className="metric-card"><span>Sedang dikerjakan</span><strong>{data.ticketCounts['In Progress'] ?? 0}</strong><small>Sedang dikerjakan</small></div>
         <div className="metric-card metric-completed"><span>Selesai</span><strong>{data.ticketCounts.Completed ?? 0}</strong><small>Maintenance selesai</small></div>
-        <div className="metric-card metric-ticket"><span>Aktif</span><strong>{activeCount}</strong><small>Ticketing berjalan</small></div>
+        <div className="metric-card metric-ticket"><span>Aktif</span><strong>{activeCount}</strong><small>Masih berjalan</small></div>
       </section>
 
       <section className="dashboard-alert-section">
         <div className="section-heading">
-          <div><h2>Alert Ticketing</h2><p>Ticketing yang melewati batas waktu proses.</p></div>
+          <div><h2>Alert Ticketing</h2><p>Ada ticket yang perlu kamu cek karena sudah melewati batas waktu.</p></div>
         </div>
         <DashboardAlertList ticketAlerts={data.ticketAlerts} />
       </section>
 
       <section className="section-block dashboard-table-section">
         <div className="section-heading">
-          <div><h2>Ticketing Terbaru</h2><p>Ticket maintenance yang masuk dan sedang berjalan.</p></div>
+          <div><h2>Ticketing Terbaru</h2><p>Ticket terbaru yang masuk dan sedang diproses.</p></div>
           <span className="section-count">{tickets.length} data</span>
         </div>
         <div className="data-table-card dashboard-table-card">
@@ -68,7 +68,7 @@ export default async function ControllerTicketingDashboardPage() {
                   </tr>
                 ))}
                 {!tickets.length ? (
-                  <tr><td colSpan={6}><div className="dashboard-empty-state"><strong>Belum ada ticketing maintenance.</strong><span>Ticket yang masuk akan muncul di sini.</span></div></td></tr>
+                  <tr><td colSpan={6}><div className="dashboard-empty-state"><strong>Belum ada ticket maintenance.</strong><span>Kalau ada ticket baru, nanti muncul di sini.</span></div></td></tr>
                 ) : null}
               </tbody>
             </table>
