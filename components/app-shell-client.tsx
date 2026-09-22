@@ -138,7 +138,23 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<string[]>([])
   const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
-  const navGroups = useMemo(() => profile.role === 'Super User' ? superUserNav : (navByRole[currentRole] ?? []), [currentRole, profile.role])
+  const navGroups = useMemo(() => {
+    const roleNav = navByRole[currentRole] ?? []
+    if (profile.role !== 'Super User') return roleNav
+    return [
+      ...roleNav,
+      {
+        label: 'Management',
+        icon: 'settings',
+        items: [
+          { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
+          { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
+          { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
+          { label: 'Import Data', href: '/super-user/pengelolaan-database', icon: 'upload' },
+        ],
+      },
+    ]
+  }, [currentRole, profile.role])
   const activeItem = useMemo(() => {
     return navGroups
       .flatMap(group => group.items.map(item => ({ ...item, group: group.label })))
@@ -157,7 +173,12 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const searchKey = searchParams.toString()
   const currentUrl = searchKey ? `${pathname}?${searchKey}` : pathname
 
-  useEffect(() => { setNavigating(false); setMobileOpen(false) }, [pathname, searchKey])
+  useEffect(() => {
+    setNavigating(false)
+    setMobileOpen(false)
+    const activeGroups = navGroups.filter(group => group.items.some(isItemActive)).map(group => group.label)
+    setOpenGroups(current => Array.from(new Set([...current, ...activeGroups])))
+  }, [pathname, searchKey, navGroups])
 
   async function logout() { const supabase = createClient(); await supabase.auth.signOut(); router.replace('/login') }
 
