@@ -43,7 +43,7 @@ export default function DispatcherCreationHub(props: Props) {
           </button>
           <button type="button" className="creation-choice-card" onClick={() => setChoice('ticket')}>
             <span className="creation-choice-icon">⌁</span>
-            <span><strong>Buat Ticketing Maintenance</strong><small>Pilih kebutuhan maintenance, lokasi, dan armada.</small></span>
+            <span><strong>Buat Maintenance</strong><small>Pilih kebutuhan maintenance, lokasi, dan armada.</small></span>
             <b>→</b>
           </button>
         </div>
@@ -56,7 +56,7 @@ export default function DispatcherCreationHub(props: Props) {
       <div className="creation-flow-toolbar">
         <div>
           <span className="eyebrow">PROSES BARU</span>
-          <strong>{choice === 'task' ? 'Penugasan' : 'Ticketing Maintenance'}</strong>
+          <strong>{choice === 'task' ? 'Penugasan' : 'Maintenance'}</strong>
         </div>
         <button type="button" className="secondary-button" onClick={() => setChoice(null)}>Ganti proses</button>
       </div>

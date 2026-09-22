@@ -11,8 +11,8 @@ type NavGroup = { label: string; icon: string; items: NavItem[] }
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     { label: 'Alert', icon: 'bell', items: [
-      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
@@ -27,20 +27,21 @@ const navByRole: Record<string, NavGroup[]> = {
   ],
   Dispatcher: [
     { label: 'Alert', icon: 'bell', items: [
-      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/dispatcher/alert/penugasan', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/dispatcher/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
-    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/dispatcher/beranda', icon: 'home' }] },
-    { label: 'Penugasan', icon: 'clipboard', items: [{ label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' }] },
-    { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' }] },
+    { label: 'Dashboard', icon: 'home', items: [
+      { label: 'Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
+    ] },
     { label: 'Jadwal Tambahan', icon: 'calendar', items: [{ label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule', icon: 'calendar' }] },
     { label: 'Armada Non TGR', icon: 'truck', items: [{ label: 'Armada Non TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },
   ],
   Executor: [
     { label: 'Alert', icon: 'bell', items: [
-      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/executor/alert/penugasan', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/executor/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
     { label: 'Tugas Saya', icon: 'clipboard', items: [{ label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' }] },
     { label: 'Riwayat Tugas', icon: 'history', items: [{ label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' }] },
@@ -48,18 +49,18 @@ const navByRole: Record<string, NavGroup[]> = {
   ],
   Maintainer: [
     { label: 'Alert', icon: 'bell', items: [
-      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/maintainer/alert/penugasan', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/maintainer/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
-    { label: 'Tiket Maintenance', icon: 'wrench', items: [{ label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
+    { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/maintainer/profil', icon: 'user' }] },
   ],
   Operation: [
     { label: 'Alert', icon: 'bell', items: [
-      { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Penugasan', href: '/operation/alert/penugasan', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/operation/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/operation/beranda', icon: 'home' }] },
     { label: 'Riwayat Extra Schedule', icon: 'calendar', items: [{ label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' }] },
@@ -73,7 +74,7 @@ const superUserNav: NavGroup[] = [
     icon: 'bell',
     items: [
       { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
-      { label: 'Ticketing Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
     ],
   },
   {
@@ -161,7 +162,6 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [navigating, setNavigating] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<string[]>([])
   const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
@@ -201,7 +201,6 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const currentUrl = searchKey ? `${pathname}?${searchKey}` : pathname
 
   useEffect(() => {
-    setNavigating(false)
     setMobileOpen(false)
     const activeGroups = navGroups.filter(group => group.items.some(isItemActive)).map(group => group.label)
     setOpenGroups(current => Array.from(new Set([...current, ...activeGroups])))
@@ -211,18 +210,16 @@ export default function AppShellClient({ profile, children }: { profile: { usern
 
   function navigateTo(href: string) {
     if (href === currentUrl) return
-    setNavigating(true)
     setMobileOpen(false)
     router.push(href)
   }
 
   return (
-    <div className={'app-shell role-' + currentRole.toLowerCase().replace(/[^a-z0-9]+/g, '-') + (profile.role === 'Super User' ? ' is-super-user' : '') + (mobileOpen ? ' sidebar-mobile-open' : '') + (navigating ? ' is-navigating' : '')}>
-      {navigating ? <div className="route-progress" /> : null}
+    <div className={'app-shell role-' + currentRole.toLowerCase().replace(/[^a-z0-9]+/g, '-') + (profile.role === 'Super User' ? ' is-super-user' : '') + (mobileOpen ? ' sidebar-mobile-open' : '')}>
       <aside className="sidebar">
         <div className="sidebar-top">
-          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(e) => { e.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}>
-            <img src="/assets/branding/movent-light.svg" alt="MOVENT" className="sidebar-brand-logo" />
+          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} >
+            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
           </Link>
           <div className="sidebar-role">
             <div className="sidebar-role-name">{profile.role === 'Super User' ? 'Super User' : currentRole}</div>
@@ -238,7 +235,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
             return (
               <div className={'nav-group ' + (hasActive ? 'has-active' : '')} key={group.label}>
                 {group.items.length === 1 ? (
-                  <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(group.items[0].href) }}>
+                  <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} >
                     <span className="nav-icon"><Icon name={group.items[0].icon} /></span><span>{group.label}</span>
                   </Link>
                 ) : (
@@ -249,7 +246,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
                     <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
                       {group.items.map(item => {
                         const active = isItemActive(item)
-                        return <Link key={item.href} href={item.href} className={'nav-link ' + (active ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(item.href) }}>
+                        return <Link key={item.href} href={item.href} className={'nav-link ' + (active ? 'active' : '')} >
                           <span className="nav-icon"><Icon name={item.icon} /></span><span>{item.label}</span>
                         </Link>
                       })}

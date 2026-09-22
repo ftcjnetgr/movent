@@ -1,5 +1,4 @@
-import OperationCreateTask from '@/components/operation-create-task'
-import OperationRequestExtraScheduleForm from '@/components/operation-request-extra-schedule-form'
+import OperationCreationHub from '@/components/operation-creation-hub'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export default async function OperationBerandaPage() {
@@ -22,6 +21,12 @@ export default async function OperationBerandaPage() {
         </div>
       </div>
 
+      <OperationCreationHub
+        locations={(locations ?? []).map((item) => item.location)}
+        products={(products ?? []).map((item) => item.product)}
+        tasks={tasks ?? []}
+      />
+
       <section className="section-block">
         <div className="metric-grid">
           <div className="metric-card"><span>Non-TGR Menunggu</span><strong>{tasks?.length ?? 0}</strong></div>
@@ -31,35 +36,7 @@ export default async function OperationBerandaPage() {
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-heading"><div><h2>Buat tugas baru</h2><p>Pilih proses sesuai kebutuhan operasional.</p></div></div>
-        <OperationCreateTask
-          locations={(locations ?? []).map((item) => item.location)}
-          products={(products ?? []).map((item) => item.product)}
-          tasks={tasks ?? []}
-        />
-      </section>
 
-      <section className="section-block">
-        <div className="section-heading"><div><h2>Buat request baru</h2><p>Ajukan Jadwal Tambahan ke Dispatcher.</p></div></div>
-        <div className="section-grid two-column">
-          <div className="metric-card">
-            <div className="card-title">Jadwal Tambahan</div>
-            <p className="muted">Isi Start Point, Destination, STD, dan STA. Setelah dikonfirmasi, request masuk ke Dispatcher.</p>
-            <OperationRequestExtraScheduleForm locations={(locations ?? []).map((item) => item.location)} />
-          </div>
-          <div className="metric-card">
-            <div className="card-title">Setelah request dikirim</div>
-            <div className="flow-list">
-              <div><strong>1. Diajukan</strong><span>Request tersimpan sebagai Requested.</span></div>
-              <div><strong>2. Diterima</strong><span>Dispatcher mengonfirmasi request.</span></div>
-              <div><strong>3. Ditugaskan</strong><span>Dispatcher memilih Executor dan Armada.</span></div>
-              <div><strong>4. Berjalan</strong><span>Executor menerima dan menjalankan tugas.</span></div>
-              <div><strong>5. Selesai</strong><span>Perjalanan ditutup setelah tiba.</span></div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
