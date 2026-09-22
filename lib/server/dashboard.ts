@@ -32,6 +32,7 @@ type TicketRow = {
   in_progress_at: string | null
   completed_at: string | null
   canceled_at: string | null
+  location: string | null
 }
 
 type TaskDurationRow = {
@@ -117,7 +118,7 @@ export async function getDashboardData(profile: AppProfile) {
       .eq('status', 'Active'),
     admin
       .from('ticketings')
-      .select('transaction_id, status, created_at, accepted_at, in_progress_at, completed_at, canceled_at')
+      .select('transaction_id, status, created_at, accepted_at, in_progress_at, completed_at, canceled_at, location')
       .order('created_at', { ascending: false }),
   ])
 
