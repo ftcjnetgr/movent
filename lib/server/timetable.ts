@@ -46,11 +46,31 @@ export async function getTimetableData(profile: AppProfile) {
     return value >= new Date(startIso).getTime() && value < new Date(endIso).getTime()
   })
 
-  const taskBySchedule = new Map(
-    tasks
-      .filter((task) => task.schedule_id)
-      .map((task) => [task.schedule_id as string, task])
-  )
+  // A schedule can be reused before STD, including after cancellation.
+  // Keep a non-canceled assignment when several transactions reference the same schedule,
+  // so a later canceled transaction cannot hide an earlier active assignment in the plan view.
+  const taskBySchedule = new Map<string, (typeof tasks)[number]>()
+  for (const task of tasks) {
+    if (!task.schedule_id) continue
+    const current = taskBySchedule.get(task.schedule_id)
+    if (!current) {
+      taskBySchedule.set(task.schedule_id, task)
+      continue
+    }
+
+    const currentIsCanceled = current.status === 'Canceled'
+    const taskIsCanceled = task.status === 'Canceled'
+    if (currentIsCanceled && !taskIsCanceled) {
+      taskBySchedule.set(task.schedule_id, task)
+      continue
+    }
+
+    if (currentIsCanceled === taskIsCanceled) {
+      const currentTime = current.std ? new Date(current.std).getTime() : 0
+      const taskTime = task.std ? new Date(task.std).getTime() : 0
+      if (taskTime >= currentTime) taskBySchedule.set(task.schedule_id, task)
+    }
+  }
 
   return {
     date,
