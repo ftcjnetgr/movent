@@ -33,8 +33,6 @@ type Task = {
   sj_number: string | null
 }
 
-type SummaryFilter = 'all' | 'unassigned' | 'assigned' | 'canceled'
-
 const DAYS = [
   { value: 1, label: 'Senin' },
   { value: 2, label: 'Selasa' },
@@ -109,7 +107,6 @@ export default function TimetableView({
   const [route, setRoute] = useState('Interhub')
   const [category, setCategory] = useState('Normal')
   const [point, setPoint] = useState('')
-  const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>('all')
 
   const scheduleById = useMemo(
     () => new Map(schedules.map((item) => [item.schedule_id, item])),
@@ -164,30 +161,6 @@ export default function TimetableView({
     return true
   }), [todayTasks, direction, route, category, point, scheduleById])
 
-  const summary = useMemo(() => ({
-    all: filteredSchedules.length,
-    assigned: filteredSchedules.filter((item) => {
-      const task = taskBySchedule[item.schedule_id]
-      return Boolean(task) && task.status !== 'Canceled'
-    }).length,
-    unassigned: filteredSchedules.filter((item) => !taskBySchedule[item.schedule_id]).length,
-    canceled: filteredSchedules.filter((item) => taskBySchedule[item.schedule_id]?.status === 'Canceled').length,
-  }), [filteredSchedules, taskBySchedule])
-
-  const liveSummary = useMemo(() => ({
-    all: filteredTasks.length,
-    assigned: filteredTasks.filter((task) => task.status !== 'Canceled').length,
-    unassigned: 0,
-    canceled: filteredTasks.filter((task) => task.status === 'Canceled').length,
-  }), [filteredTasks])
-
-  const summaryMatch = (task: Task | undefined) => {
-    if (summaryFilter === 'all') return true
-    if (summaryFilter === 'canceled') return task?.status === 'Canceled'
-    if (summaryFilter === 'assigned') return !!task && task.status !== 'Canceled'
-    return !task
-  }
-
   function renderPlanTable(items: Schedule[]) {
     const rows = new Map<string, Schedule[]>()
     for (const item of items) {
@@ -223,7 +196,7 @@ export default function TimetableView({
                           return (
                             <span
                               key={item.schedule_id}
-                              className={`schedule-trip ${task ? statusClass(task.status) : 'unassigned'} ${!summaryMatch(task) ? 'faded' : ''}`}
+                              className={`schedule-trip ${task ? statusClass(task.status) : 'unassigned'}`}
                               title={`STD ${timeValue(item.std)} · ${item.route} · ${item.category}`}
                             >
                               {timeValue(item.std)}
@@ -275,7 +248,7 @@ export default function TimetableView({
                         {cellItems.map((item) => (
                           <span
                             key={item.transaction_id}
-                            className={`schedule-trip live-item ${statusClass(item.status)} ${summaryFilter !== 'all' && !summaryMatch(item) ? 'faded' : ''}`}
+                            className={`schedule-trip live-item ${statusClass(item.status)}`}
                             title={`${item.transaction_id} · STD ${timeValue(item.std)}`}
                           >
                             {timeValue(item.std)}
@@ -294,23 +267,12 @@ export default function TimetableView({
   }
 
   const activeRows = view === 'database' ? filteredSchedules : filteredTasks
-  const summaries = view === 'database' ? summary : liveSummary
 
   return (
     <div className={`schedule-page schedule-view-${view}`}>
-      <div className="schedule-view-banner">
-        <div className="schedule-view-icon">{view === 'live' ? '↗' : '▦'}</div>
-        <div>
-          <span>{view === 'live' ? 'LIVE TRACKING' : 'BY PLAN'}</span>
-          <strong>{view === 'live' ? 'Pantauan Perjalanan' : 'Rencana Schedule'}</strong>
-          <p>{view === 'live' ? 'Pantau penugasan yang sedang berjalan berdasarkan posisi operasional.' : 'Susun tampilan schedule berdasarkan hari, rute, kategori, dan titik perjalanan.'}</p>
-        </div>
-        <div className="schedule-view-status"><i />{view === 'live' ? 'Realtime' : 'Planning'}</div>
-      </div>
-
       <div className="schedule-control-compact">
-        <div className="schedule-control-row">
-          <div className="schedule-control-field">
+        <div className="schedule-filter-top">
+          <div className="schedule-control-field schedule-day-field">
             <span className="schedule-control-label">Hari</span>
             <div className="schedule-day-row">
               {DAYS.map((day) => (
@@ -323,7 +285,6 @@ export default function TimetableView({
                     if (view === 'live') return
                     setSelectedDay(day.value)
                     setPoint('')
-                    setSummaryFilter('all')
                   }}
                 >
                   {day.label}
@@ -350,15 +311,17 @@ export default function TimetableView({
                 AS Destination
               </button>
             </div>
+          </div>
 
-            <span className="schedule-control-label schedule-inline-label">Category</span>
+          <div className="schedule-control-field schedule-category-field">
+            <span className="schedule-control-label">Category</span>
             <div className="schedule-category-buttons">
               {categories.map((item) => (
                 <button
                   key={item}
                   type="button"
                   className={category === item ? 'active' : ''}
-                  onClick={() => { setCategory(item); setSummaryFilter('all') }}
+                  onClick={() => setCategory(item)}
                 >
                   {item}
                 </button>
@@ -367,53 +330,43 @@ export default function TimetableView({
           </div>
         </div>
 
-        <div className="schedule-control-row">
-          <div className="schedule-control-field">
-            <span className="schedule-control-label">Rute</span>
-            <div className="schedule-route-tabs">
-              {routes.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={route === item ? 'active' : ''}
-                  onClick={() => { setRoute(item); setSummaryFilter('all') }}
-                >
-                  {routeLabels[item] ?? item}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="schedule-control-field schedule-point-field">
-            <span className="schedule-control-label">{direction === 'start-point' ? 'Start Point' : 'Destination'}</span>
-            <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
+        <div className="schedule-point-card">
+          <span className="schedule-control-label">
+            {direction === 'start-point' ? 'Start Point / Destination' : 'Start Point / Destination'}
+          </span>
+          <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
+            <button
+              type="button"
+              className={!point ? 'active' : ''}
+              onClick={() => setPoint('')}
+            >
+              Semua
+            </button>
+            {pointOptions.map((item) => (
               <button
+                key={item}
                 type="button"
-                className={!point ? 'active' : ''}
-                onClick={() => { setPoint(''); setSummaryFilter('all') }}
+                className={point === item ? 'active' : ''}
+                onClick={() => setPoint(item)}
               >
-                Semua
+                {item}
               </button>
-              {pointOptions.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={point === item ? 'active' : ''}
-                  onClick={() => { setPoint(item); setSummaryFilter('all') }}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
-      </div>
 
-      <div className="schedule-summary-inline">
-        <button type="button" className={summaryFilter === 'all' ? 'active' : ''} onClick={() => setSummaryFilter('all')}>Semua Tugas <b>{summaries.all}</b></button>
-        <button type="button" className={summaryFilter === 'assigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'assigned' ? 'all' : 'assigned')}>Sudah Ditugaskan <b>{summaries.assigned}</b></button>
-        <button type="button" className={summaryFilter === 'unassigned' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'unassigned' ? 'all' : 'unassigned')}>Belum Ditugaskan <b>{summaries.unassigned}</b></button>
-        <button type="button" className={summaryFilter === 'canceled' ? 'active' : ''} onClick={() => setSummaryFilter(summaryFilter === 'canceled' ? 'all' : 'canceled')}>Dibatalkan <b>{summaries.canceled}</b></button>
+        <div className="schedule-route-tabs schedule-route-tabs-standalone">
+          {routes.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={route === item ? 'active' : ''}
+              onClick={() => setRoute(item)}
+            >
+              {routeLabels[item] ?? item}
+            </button>
+          ))}
+        </div>
       </div>
 
       <section className="schedule-grid-shell">
@@ -421,9 +374,7 @@ export default function TimetableView({
         {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
 
-      <div className="schedule-date">
-        {view === 'live' ? 'Live date' : 'Schedule date'} · {view === 'live' ? date : DAYS.find((day) => day.value === selectedDay)?.label}
-      </div>
+
     </div>
   )
 }
