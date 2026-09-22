@@ -73,9 +73,11 @@ function taskDetail(alert: TaskAlert, now: number) {
 export default function DashboardAlertList({
   taskAlerts,
   ticketAlerts,
+  mode = 'all',
 }: {
   taskAlerts?: TaskAlert[]
   ticketAlerts?: TicketAlert[]
+  mode?: 'all' | 'task' | 'ticket'
 }) {
   const taskAlertRows = taskAlerts ?? []
   const ticketAlertRows = ticketAlerts ?? []
@@ -111,15 +113,18 @@ export default function DashboardAlertList({
 
   const lateTaskCount = taskItems.filter((item) => item.late).length
   const lateTicketCount = ticketItems.filter((item) => item.late).length
-  const totalAlerts = taskItems.length + ticketItems.length
-  const lateCount = lateTaskCount + lateTicketCount
+  const showTasks = mode !== 'ticket'
+  const showTickets = mode !== 'task'
+  const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? ticketItems.length : 0)
+  const lateCount = (showTasks ? lateTaskCount : 0) + (showTickets ? lateTicketCount : 0)
+  const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'ticket' ? 'Alert Ticketing Maintenance' : 'Alert'
 
   return (
     <div className="alert-dashboard">
       <section className="alert-hero">
         <div>
           <span className="eyebrow">Pusat Perhatian Operasional</span>
-          <h1>Alert</h1>
+          <h1>{heroTitle}</h1>
           <p>Semua kondisi yang membutuhkan perhatian operasional dikumpulkan di sini.</p>
         </div>
         <div className="alert-live">
@@ -128,26 +133,30 @@ export default function DashboardAlertList({
         </div>
       </section>
 
-      <section className="metric-grid alert-summary-grid alert-dashboard-summary">
+      <section className={'metric-grid alert-summary-grid alert-dashboard-summary ' + (mode !== 'all' ? 'is-focused' : '')}>
         <div className="metric-card alert-summary-card alert-total">
           <span>Total Alert Aktif</span>
           <strong>{totalAlerts}</strong>
           <small>{lateCount} sudah melewati batas waktu</small>
         </div>
-        <div className="metric-card alert-summary-card alert-task-summary">
-          <span>Alert Tugas</span>
-          <strong>{taskItems.length}</strong>
-          <small>{lateTaskCount} sudah lewat target</small>
-        </div>
-        <div className="metric-card alert-summary-card alert-ticket-summary">
-          <span>Alert Ticketing</span>
-          <strong>{ticketItems.length}</strong>
-          <small>{lateTicketCount} sudah lewat batas</small>
-        </div>
+        {showTasks ? (
+          <div className="metric-card alert-summary-card alert-task-summary">
+            <span>Alert Tugas</span>
+            <strong>{taskItems.length}</strong>
+            <small>{lateTaskCount} sudah lewat target</small>
+          </div>
+        ) : null}
+        {showTickets ? (
+          <div className="metric-card alert-summary-card alert-ticket-summary">
+            <span>Alert Ticketing</span>
+            <strong>{ticketItems.length}</strong>
+            <small>{lateTicketCount} sudah lewat batas</small>
+          </div>
+        ) : null}
       </section>
 
-      <section className="alert-overview-grid">
-        <div className="alert-panel">
+      <section className={'alert-overview-grid ' + (mode !== 'all' ? 'is-focused' : '')}>
+        {showTasks ? <div className="alert-panel">
           <div className="alert-panel-heading">
             <div>
               <span className="eyebrow">Penugasan</span>
@@ -175,9 +184,9 @@ export default function DashboardAlertList({
             ))}
             {!taskItems.length ? <div className="empty-state">Tidak ada alert tugas saat ini.</div> : null}
           </div>
-        </div>
+        </div> : null}
 
-        <div className="alert-panel">
+        {showTickets ? <div className="alert-panel">
           <div className="alert-panel-heading">
             <div>
               <span className="eyebrow">Maintenance</span>
@@ -205,7 +214,7 @@ export default function DashboardAlertList({
             ))}
             {!ticketItems.length ? <div className="empty-state">Tidak ada alert ticketing saat ini.</div> : null}
           </div>
-        </div>
+        </div> : null}
       </section>
     </div>
   )
