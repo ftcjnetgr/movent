@@ -21,7 +21,7 @@ export default async function MaintainerBerandaPage() {
     <div className="role-page">
       <div className="page-heading">
         <div><h1>Halo, Maintainer!</h1><p>Kelola ticketing maintenance armada dan selesaikan sesuai urutan.</p></div>
-        <div className="page-heading-actions"><Link className="button-link" href="/maintainer/penarikan-report">Penarikan Report</Link></div>
+        <div className="page-heading-actions"><Link className="button-link" href="/maintainer/penarikan-report">Tarik Laporan</Link></div>
       </div>
 
       <section className="metric-grid">
@@ -35,7 +35,7 @@ export default async function MaintainerBerandaPage() {
       <DashboardAlertList taskAlerts={[]} ticketAlerts={data.ticketAlerts} />
 
       <section className="section-block">
-        <div className="section-heading"><div><h2>Ticket Maintenance</h2><p>Tiket yang perlu kamu tindak sekarang.</p></div><Link className="link-button" href="/maintainer/tiket-maintenance">Lihat semua</Link></div>
+        <div className="section-heading"><div><h2>Tiket Maintenance</h2><p>Tiket yang perlu kamu tindak sekarang.</p></div><Link className="link-button" href="/maintainer/tiket-maintenance">Lihat semua</Link></div>
         <div className="ticket-grid">
           {tickets.map(ticket => (
             <article className="ticket-row-card" key={ticket.transaction_id}>
@@ -43,7 +43,7 @@ export default async function MaintainerBerandaPage() {
               <div className="ticket-row-main"><strong>{ticket.transaction_id}</strong><span>{ticket.maintenance_list ?? '-'}</span></div>
               <div className="ticket-row-meta"><strong>{ticket.fleet_plat_number ?? '-'}</strong><span>Lokasi: {ticket.location ?? '-'}</span><small>{ticket.created_at ? new Date(ticket.created_at).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Jakarta'}) : '-'}</small></div>
               <span className={'status-badge status-'+ticket.status.toLowerCase().replaceAll(' ','-')}>{label(ticket.status)}</span>
-              <Link className="button-link ticket-action" href="/maintainer/tiket-maintenance">{ticket.status === 'Requested' ? 'Proses' : 'Lihat'}</Link>
+              <Link className="button-link ticket-action" href="/maintainer/tiket-maintenance">{ticket.status === 'Requested' ? 'Kerjakan' : 'Lihat'}</Link>
             </article>
           ))}
           {!tickets.length ? <div className="data-table-card"><div className="empty-state">Belum ada ticketing aktif.</div></div> : null}
