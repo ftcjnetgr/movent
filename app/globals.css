@@ -4153,3 +4153,70 @@ tbody tr:hover{background:#fbfdff}
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* controller dashboard polish */
+.role-controller .super-quick-panel {
+  height: 132px !important;
+  min-height: 132px !important;
+  box-sizing: border-box;
+}
+
+.role-controller .super-quick-panel .super-panel-heading {
+  padding: 12px 18px 6px;
+}
+
+.role-controller .super-quick-grid {
+  height: 66px;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 10px;
+  padding: 0 14px 10px;
+  box-sizing: border-box;
+}
+
+.role-controller .super-quick-grid a {
+  min-height: 52px;
+  height: 52px;
+  padding: 8px 11px;
+}
+
+.role-controller .sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+@media (max-width: 760px) {
+  .role-controller .super-quick-panel {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .role-controller .super-quick-grid {
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .role-controller .super-quick-grid a {
+    height: 52px;
+  }
+
+  .role-controller .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .role-controller .super-quick-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
