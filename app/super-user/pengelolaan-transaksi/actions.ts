@@ -33,7 +33,6 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
   const admin = createAdminClient()
   const { data: task } = await admin.from('tasks').select('*').eq('transaction_id', transactionId).maybeSingle()
   if (!task) return { error: 'Tugas tidak ditemukan.' }
-  if (task.status === 'Completed') return { error: 'Tugas Completed sudah immutable dan tidak dapat diubah.' }
 
   const update: Record<string, unknown> = {}
 
@@ -102,11 +101,7 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
   }> | null = null
 
   if (sjItemsRaw) {
-    try {
-      sjItems = JSON.parse(sjItemsRaw)
-    } catch {
-      return { error: 'Data SJ tidak valid.' }
-    }
+    try { sjItems = JSON.parse(sjItemsRaw) } catch { return { error: 'Data SJ tidak valid.' } }
     if (!Array.isArray(sjItems)) return { error: 'Data SJ tidak valid.' }
 
     const validatedSjItems: NonNullable<typeof sjItems> = []
@@ -114,16 +109,8 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
       if (!item.sj_number || !Number.isFinite(Number(item.sj_qty)) || Number(item.sj_qty) < 0 || !Number.isFinite(Number(item.sj_weight)) || Number(item.sj_weight) < 0 || !item.product) {
         return { error: 'Data SJ belum lengkap.' }
       }
-
-      const { data: productData } = await admin
-        .from('products')
-        .select('product, status')
-        .eq('product', item.product)
-        .eq('status', 'Active')
-        .maybeSingle()
-
+      const { data: productData } = await admin.from('products').select('product, status').eq('product', item.product).eq('status', 'Active').maybeSingle()
       if (!productData) return { error: 'Produk SJ tidak tersedia.' }
-
       validatedSjItems.push({
         ...(item.id ? { id: item.id } : {}),
         sj_number: item.sj_number.trim(),
@@ -134,9 +121,7 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
         note: item.note?.trim() || null,
       })
     }
-
     sjItems = validatedSjItems
-
     const latest = sjItems[sjItems.length - 1]
     if (latest) {
       update.sj_number = latest.sj_number
@@ -173,17 +158,9 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
     p_task_update: update,
     p_sj_items: sjItems,
   })
-
   if (error) return { error: error.message || 'Data tugas belum berhasil diperbarui.' }
 
-  revalidatePath('/super-user/pengelolaan-transaksi')
-  revalidatePath('/dispatcher/beranda')
-  revalidatePath('/dispatcher/riwayat-penugasan')
-  revalidatePath('/dispatcher/timetable')
-  revalidatePath('/controller/beranda')
-  revalidatePath('/controller/timetable')
-  revalidatePath('/operation/riwayat-permintaan')
-  revalidatePath('/executor/tugas-saya')
+  revalidateTaskPaths()
   return { success: 'Data tugas berhasil diperbarui.' }
 }
 
@@ -199,7 +176,6 @@ export async function updateTicketTransactionAction(_state: Result, formData: Fo
   const admin = createAdminClient()
   const { data: ticket } = await admin.from('ticketings').select('id, status').eq('transaction_id', transactionId).maybeSingle()
   if (!ticket) return { error: 'Ticketing tidak ditemukan.' }
-  if (ticket.status === 'Completed') return { error: 'Ticketing Completed sudah immutable dan tidak dapat diubah.' }
 
   const [{ data: maintenance }, { data: locationData }, { data: fleet }] = await Promise.all([
     admin.from('maintenance_lists').select('maintenance_list, status').eq('maintenance_list', maintenanceList).eq('status', 'Active').maybeSingle(),
@@ -208,19 +184,31 @@ export async function updateTicketTransactionAction(_state: Result, formData: Fo
   ])
   if (!maintenance || !locationData || !fleet) return { error: 'Master data ticketing tidak tersedia.' }
 
-  const { error } = await admin.from('ticketings').update({
-    maintenance_list: maintenance.maintenance_list,
-    maintenance_snapshot: maintenance,
-    location: locationData.location,
-    location_snapshot: locationData,
-    fleet_plat_number: fleet.plat_number,
-    fleet_snapshot: fleet,
-  }).eq('id', ticket.id).neq('status', 'Completed')
-  if (error) return { error: 'Data ticketing belum berhasil diperbarui.' }
+  const { error } = await admin.rpc('movent_update_ticket_transaction', {
+    p_ticket_id: ticket.id,
+    p_maintenance_list: maintenance.maintenance_list,
+    p_maintenance_snapshot: maintenance,
+    p_location: locationData.location,
+    p_location_snapshot: locationData,
+    p_fleet_plat_number: fleet.plat_number,
+    p_fleet_snapshot: fleet,
+  })
+  if (error) return { error: error.message || 'Data ticketing belum berhasil diperbarui.' }
 
   revalidatePath('/super-user/pengelolaan-transaksi')
   revalidatePath('/dispatcher/maintenance-armada')
   revalidatePath('/maintainer/tiket-maintenance')
   revalidatePath('/controller/beranda')
   return { success: 'Data ticketing berhasil diperbarui.' }
+}
+
+function revalidateTaskPaths() {
+  revalidatePath('/super-user/pengelolaan-transaksi')
+  revalidatePath('/dispatcher/beranda')
+  revalidatePath('/dispatcher/riwayat-penugasan')
+  revalidatePath('/dispatcher/timetable')
+  revalidatePath('/controller/beranda')
+  revalidatePath('/controller/timetable')
+  revalidatePath('/operation/riwayat-permintaan')
+  revalidatePath('/executor/tugas-saya')
 }
