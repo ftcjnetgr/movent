@@ -38,7 +38,6 @@ export default async function DispatcherBerandaPage() {
         <div className="metric-card"><span>Sedang Berjalan</span><strong>{(data.taskCounts.Confirmed ?? 0)+(data.taskCounts.Driving ?? 0)}</strong></div>
         <div className="metric-card"><span>Selesai</span><strong>{data.taskCounts.Completed ?? 0}</strong></div>
         <div className="metric-card alert-card"><span>Dibatalkan</span><strong>{canceledCount ?? 0}</strong></div>
-        <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length + data.ticketAlertCount}</strong></div>
       </section>
 
       <section className="section-block dashboard-main-grid">
