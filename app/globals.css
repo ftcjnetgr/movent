@@ -3519,3 +3519,10 @@ small {
     grid-template-columns: 1fr 1fr !important;
   }
 }
+
+
+.sidebar .mode-select select {
+  border-color: #d5dce6 !important;
+  background: #ffffff !important;
+  color: #25364d !important;
+}
