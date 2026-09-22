@@ -219,7 +219,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
       <aside className="sidebar">
         <div className="sidebar-top">
           <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(e) => { e.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}>
-            <img src="/assets/branding/movent-light.svg" alt="MOVENT" className="sidebar-brand-logo" />
+            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
           </Link>
           <div className="sidebar-role">
             <div className="sidebar-role-name">{profile.role === 'Super User' ? 'Super User' : currentRole}</div>
