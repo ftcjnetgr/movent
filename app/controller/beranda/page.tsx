@@ -170,7 +170,6 @@ export default async function ControllerPenugasanDashboardPage() {
 
       <section className="super-quick-row">
         <div className="super-panel super-quick-panel">
-          <div className="super-panel-heading"><div><h2>Akses Cepat</h2><p>Langsung ke yang sering kamu pakai.</p></div></div>
           <div className="super-quick-grid">
             <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
             <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Tiket</strong></Link>
