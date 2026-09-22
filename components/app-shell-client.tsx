@@ -218,7 +218,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
     <div className={'app-shell role-' + currentRole.toLowerCase().replace(/[^a-z0-9]+/g, '-') + (profile.role === 'Super User' ? ' is-super-user' : '') + (mobileOpen ? ' sidebar-mobile-open' : '')}>
       <aside className="sidebar">
         <div className="sidebar-top">
-          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} onClick={(e) => { e.preventDefault(); navigateTo(modeRoutes[currentRole] ?? '/controller/beranda') }}>
+          <Link className="sidebar-brand" href={modeRoutes[currentRole] ?? '/controller/beranda'} >
             <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="sidebar-brand-logo" />
           </Link>
           <div className="sidebar-role">
@@ -235,7 +235,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
             return (
               <div className={'nav-group ' + (hasActive ? 'has-active' : '')} key={group.label}>
                 {group.items.length === 1 ? (
-                  <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(group.items[0].href) }}>
+                  <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} >
                     <span className="nav-icon"><Icon name={group.items[0].icon} /></span><span>{group.label}</span>
                   </Link>
                 ) : (
@@ -246,7 +246,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
                     <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
                       {group.items.map(item => {
                         const active = isItemActive(item)
-                        return <Link key={item.href} href={item.href} className={'nav-link ' + (active ? 'active' : '')} onClick={(e) => { e.preventDefault(); navigateTo(item.href) }}>
+                        return <Link key={item.href} href={item.href} className={'nav-link ' + (active ? 'active' : '')} >
                           <span className="nav-icon"><Icon name={item.icon} /></span><span>{item.label}</span>
                         </Link>
                       })}
