@@ -209,7 +209,6 @@ export default async function ControllerPenugasanDashboardPage() {
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
             <div><h2>Penugasan Terbaru</h2><p>Tugas yang paling baru masuk.</p></div>
-            <Link href="/dispatcher/riwayat-penugasan">Lihat semua →</Link>
           </div>
           <div className="super-table-wrap">
             <table>
@@ -234,7 +233,6 @@ export default async function ControllerPenugasanDashboardPage() {
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
             <div><h2>Tiket Maintenance Terbaru</h2><p>Ticket yang baru masuk.</p></div>
-            <Link href="/controller/beranda/ticketing">Lihat semua →</Link>
           </div>
           <div className="super-table-wrap">
             <table>
