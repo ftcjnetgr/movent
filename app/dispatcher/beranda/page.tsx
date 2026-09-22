@@ -43,14 +43,12 @@ export default async function DispatcherBerandaPage() {
         tickets={tickets ?? []}
       />
 
-    </div>
       <section className="metric-grid">
         <div className="metric-card"><span>Penugasan Dibuat</span><strong>{active}</strong></div>
         <div className="metric-card"><span>Sedang Berjalan</span><strong>{(data.taskCounts.Confirmed ?? 0)+(data.taskCounts.Driving ?? 0)}</strong></div>
         <div className="metric-card"><span>Selesai</span><strong>{data.taskCounts.Completed ?? 0}</strong></div>
         <div className="metric-card danger-metric"><span>Dibatalkan</span><strong>{canceledCount ?? 0}</strong></div>
       </section>
-
 
       <section className="section-block dashboard-main-grid">
         <div className="data-table-card">
@@ -71,8 +69,6 @@ export default async function DispatcherBerandaPage() {
           ].map(([label,count]) => <div className="summary-bar-row" key={String(label)}><span>{label}</span><strong>{count}</strong><i><b style={{width:String(Math.min(100,Number(count)*8))+'%'}} /></i></div>)}
         </div>
       </section>
-
-
     </div>
   )
 }
