@@ -297,7 +297,17 @@ export default function TimetableView({
   const summaries = view === 'database' ? summary : liveSummary
 
   return (
-    <div className="schedule-page">
+    <div className={`schedule-page schedule-view-${view}`}>
+      <div className="schedule-view-banner">
+        <div className="schedule-view-icon">{view === 'live' ? '↗' : '▦'}</div>
+        <div>
+          <span>{view === 'live' ? 'LIVE TRACKING' : 'BY PLAN'}</span>
+          <strong>{view === 'live' ? 'Pantauan Perjalanan' : 'Rencana Schedule'}</strong>
+          <p>{view === 'live' ? 'Pantau penugasan yang sedang berjalan berdasarkan posisi operasional.' : 'Susun tampilan schedule berdasarkan hari, rute, kategori, dan titik perjalanan.'}</p>
+        </div>
+        <div className="schedule-view-status"><i />{view === 'live' ? 'Realtime' : 'Planning'}</div>
+      </div>
+
       <div className="schedule-control-compact">
         <div className="schedule-control-row">
           <div className="schedule-control-field">
