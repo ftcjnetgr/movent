@@ -3228,3 +3228,294 @@ small {
 .alert-page .alert-panel {
   box-shadow: 0 8px 24px rgba(15,23,42,.045);
 }
+
+
+/* =========================================================
+   final clean operational pass
+   ========================================================= */
+
+/* sidebar: clean light treatment */
+.sidebar {
+  background: #ffffff !important;
+  border-right: 1px solid #e5eaf0 !important;
+  box-shadow: 5px 0 24px rgba(15,23,42,.035) !important;
+}
+
+.sidebar .sidebar-top {
+  border-bottom-color: #edf1f5 !important;
+}
+
+.sidebar .sidebar-role {
+  border-color: #e1e7ef !important;
+  background: #f8fafc !important;
+  box-shadow: none !important;
+}
+
+.sidebar .sidebar-role-name {
+  color: #17243a !important;
+}
+
+.sidebar .mode-select,
+.sidebar .nav-group-title,
+.sidebar .nav-link,
+.sidebar .sidebar-logout {
+  color: #536278 !important;
+}
+
+.sidebar .nav-group-title:hover {
+  background: #f6f8fb !important;
+  color: #17243a !important;
+}
+
+.sidebar .nav-group.has-active > .nav-group-title {
+  background: #f4f7fc !important;
+  color: #1d5fd1 !important;
+}
+
+.sidebar .nav-group-chevron {
+  color: #94a3b8 !important;
+}
+
+.sidebar .nav-group-items {
+  border-left-color: #e5eaf0 !important;
+}
+
+.sidebar .nav-link:hover {
+  background: #f7f9fc !important;
+  color: #17243a !important;
+}
+
+.sidebar .nav-link.active {
+  background: #edf4ff !important;
+  color: #1557b0 !important;
+  box-shadow: inset 2px 0 0 #3b82f6 !important;
+}
+
+.sidebar .sidebar-logout {
+  border-top: 0 !important;
+}
+
+.sidebar .sidebar-logout:hover {
+  background: #fff5f5 !important;
+  color: #b4232d !important;
+}
+
+.mode-select select option {
+  color: #17243a !important;
+  background: #ffffff !important;
+}
+
+/* no route-loading bar: navigation stays visually continuous */
+.route-progress {
+  display: none !important;
+}
+
+/* alert: compact table, no repeated cards */
+.alert-page .alert-hero {
+  padding: 18px 20px;
+  border-color: #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(15,23,42,.035);
+}
+
+.alert-page .alert-hero h1 {
+  font-size: 24px;
+}
+
+.alert-page .alert-dashboard {
+  gap: 14px;
+}
+
+.alert-table-panel {
+  overflow: hidden;
+  border: 1px solid #e1e7ef;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(15,23,42,.035);
+}
+
+.alert-table-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 17px;
+  border-bottom: 1px solid #e8edf3;
+}
+
+.alert-table-heading h2 {
+  margin: 3px 0 0;
+  color: #17243a;
+  font-size: 16px;
+}
+
+.alert-table-heading > strong {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 9px;
+  background: #f3f6fa;
+  color: #26364d;
+}
+
+.alert-table {
+  min-width: 860px;
+}
+
+.alert-table th,
+.alert-table td {
+  padding: 10px 12px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+.alert-table th {
+  background: #f8fafc;
+  color: #607086 !important;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.alert-table td {
+  color: #33445c !important;
+}
+
+.alert-table td strong {
+  color: #1d2d44;
+}
+
+.alert-table td small {
+  display: block;
+  margin-top: 2px;
+  color: #7b889a;
+  font-size: 8px;
+}
+
+.alert-table tbody tr:hover td {
+  background: #fbfcfe;
+}
+
+.alert-table tbody tr.is-alert-late td {
+  background: #fffaf7;
+}
+
+.alert-table .alert-kind-badge {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.alert-table td > b {
+  color: #315d99;
+  white-space: nowrap;
+}
+
+.alert-table td > b.is-late {
+  color: #b4232d;
+}
+
+.alert-table .empty-state {
+  margin: 0;
+  padding: 22px 12px;
+  background: transparent;
+}
+
+/* schedule controls: neutral by default, blue only for selected */
+.schedule-day-row button,
+.schedule-direction button,
+.schedule-category-buttons button,
+.schedule-route-tabs button,
+.schedule-point-tabs button,
+.schedule-summary-inline button {
+  background: #f8fafc !important;
+  color: #46566d !important;
+  border-color: #dbe2ea !important;
+  box-shadow: none !important;
+}
+
+.schedule-day-row button:hover,
+.schedule-direction button:hover,
+.schedule-category-buttons button:hover,
+.schedule-route-tabs button:hover,
+.schedule-point-tabs button:hover,
+.schedule-summary-inline button:hover {
+  background: #f1f5f9 !important;
+  color: #1f3048 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.schedule-day-row button.active,
+.schedule-direction button.active,
+.schedule-category-buttons button.active,
+.schedule-route-tabs button.active,
+.schedule-point-tabs button.active,
+.schedule-summary-inline button.active {
+  background: #eaf2ff !important;
+  color: #1557b0 !important;
+  border-color: #9fc0ee !important;
+  box-shadow: inset 0 0 0 1px rgba(37,99,235,.05) !important;
+}
+
+.schedule-day-row button:disabled {
+  opacity: 1 !important;
+  color: #a1adbc !important;
+  background: #f8fafc !important;
+}
+
+/* dispatcher + operation metrics: use the whole row */
+.role-dispatcher .metric-grid,
+.role-operation .metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+/* creation cards are white, not blue button blocks */
+.creation-choice-card,
+.creation-choice-card:hover {
+  background: #ffffff !important;
+  color: #25364d !important;
+  border-color: #d9e1ec !important;
+  box-shadow: 0 6px 18px rgba(15,35,65,.045) !important;
+}
+
+.creation-choice-card:hover {
+  background: #f7faff !important;
+  border-color: #9bbcf0 !important;
+}
+
+.creation-choice-card strong {
+  color: #1e2f47 !important;
+}
+
+.creation-choice-card small {
+  color: #64748b !important;
+}
+
+.creation-choice-card b {
+  color: #4778ba !important;
+}
+
+/* operation request card */
+.operation-request-card {
+  min-height: 0;
+}
+
+/* keep dashboard creation blocks aligned */
+.role-dispatcher .creation-choice-grid,
+.role-operation .creation-choice-grid {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .role-dispatcher .metric-grid,
+  .role-operation .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .role-dispatcher .metric-grid,
+  .role-operation .metric-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
