@@ -4137,3 +4137,19 @@ tbody tr:hover{background:#fbfdff}
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+/* controller dashboard final desktop layout */
+.role-controller .super-quick-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+}
+@media (max-width: 760px) {
+  .role-controller .super-quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 480px) {
+  .role-controller .super-quick-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
