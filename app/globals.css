@@ -3940,3 +3940,150 @@ tbody tr:hover{background:#fbfdff}
     min-height: 108px;
   }
 }
+
+
+/* controller dashboard layout v2 */
+.role-controller .super-dashboard-heading {
+  margin-bottom: 22px;
+}
+
+.role-controller .super-dashboard-main-grid {
+  grid-template-columns: minmax(0, 1.7fr) minmax(245px, .8fr) minmax(245px, .8fr);
+  align-items: stretch;
+}
+
+.role-controller .super-quick-row {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.role-controller .super-quick-panel {
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.role-controller .super-quick-panel .super-panel-heading {
+  padding: 14px 18px 8px;
+}
+
+.role-controller .super-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0 14px 14px;
+}
+
+.role-controller .super-quick-grid a {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #edf1f6;
+  border-radius: 12px;
+  background: #fbfcfe;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease;
+}
+
+.role-controller .super-quick-grid a:hover {
+  transform: translateY(-1px);
+  border-color: #d8e5f7;
+  background: #fff;
+}
+
+.role-controller .super-quick-grid a span {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.role-controller .super-quick-grid a strong {
+  color: var(--controller-text);
+  font-size: 11px;
+}
+
+.role-controller .super-activity-panel {
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.role-controller .super-activity-list {
+  padding: 2px 18px 16px;
+}
+
+.role-controller .super-activity-list > div {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: 9px 1fr auto;
+  gap: 9px;
+  align-items: center;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.role-controller .super-activity-list > div:last-child {
+  border-bottom: 0;
+}
+
+.role-controller .super-activity-list > div > span:nth-child(2) {
+  color: #46546a;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.role-controller .super-activity-list time {
+  color: #9aa5b5;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.role-controller .activity-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+
+.role-controller .activity-dot.blue { background: #4b8df8; }
+.role-controller .activity-dot.green { background: #28b783; }
+.role-controller .activity-dot.orange { background: #f0a23a; }
+.role-controller .activity-dot.purple { background: #8b67df; }
+
+@media (max-width: 1180px) {
+  .role-controller .super-dashboard-main-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(240px, .8fr);
+  }
+
+  .role-controller .super-activity-panel {
+    grid-column: 1 / -1;
+  }
+
+  .role-controller .super-quick-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .role-controller .super-dashboard-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .role-controller .super-activity-panel {
+    grid-column: auto;
+  }
+
+  .role-controller .super-quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .role-controller .super-quick-grid {
+    grid-template-columns: 1fr;
+  }
+}
