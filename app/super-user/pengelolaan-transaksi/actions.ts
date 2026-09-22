@@ -57,8 +57,7 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
     const std = text(formData, 'std')
     const sta = text(formData, 'sta')
     if (!update.start_point || !update.destination || !std || !sta) return { error: 'Titik Mulai, Destinasi, STD, dan STA wajib diisi.' }
-    const toJakartaTimestamp = (value: string) => /^\d{2}:\d{2}$/.test(value) ? value : null
-    if (!toJakartaTimestamp(std) || !toJakartaTimestamp(sta)) return { error: 'STD atau STA belum benar.' }
+    if (!/^\d{2}:\d{2}$/.test(std) || !/^\d{2}:\d{2}$/.test(sta)) return { error: 'STD atau STA belum benar.' }
     if (sta <= std) return { error: 'STA harus lebih besar dari STD.' }
   }
 
@@ -92,43 +91,66 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
   update.odometer_end = numberOrNull(formData, 'odometerEnd')
 
   const sjItemsRaw = text(formData, 'sjItemsJson')
+  let sjItems: Array<{
+    id?: string
+    sj_number: string
+    sj_qty: number
+    sj_weight: number
+    product: string
+    product_snapshot?: { product: string; status: string }
+    note?: string | null
+  }> | null = null
+
   if (sjItemsRaw) {
-    let sjItems: Array<{ id?: string; sj_number: string; sj_qty: number; sj_weight: number; product: string; note?: string | null }>
-    try { sjItems = JSON.parse(sjItemsRaw) } catch { return { error: 'Data SJ tidak valid.' } }
-    if (!Array.isArray(sjItems)) return { error: 'Data SJ tidak valid.' }
-    for (const item of sjItems) {
-      if (!item.sj_number || !Number.isFinite(Number(item.sj_qty)) || Number(item.sj_qty) < 0 || !Number.isFinite(Number(item.sj_weight)) || Number(item.sj_weight) < 0 || !item.product) return { error: 'Data SJ belum lengkap.' }
-      const { data: productData } = await admin.from('products').select('product, status').eq('product', item.product).eq('status', 'Active').maybeSingle()
-      if (!productData) return { error: 'Produk SJ tidak tersedia.' }
-      const payload = { task_id: task.id, sj_number: item.sj_number.trim(), sj_qty: Number(item.sj_qty), sj_weight: Number(item.sj_weight), product: item.product, product_snapshot: productData, note: item.note?.trim() || null }
-      const result = item.id
-        ? await admin.from('task_sj_items').update(payload).eq('id', item.id).eq('task_id', task.id)
-        : await admin.from('task_sj_items').insert(payload)
-      if (result.error) return { error: 'Data SJ belum berhasil diperbarui.' }
+    try {
+      sjItems = JSON.parse(sjItemsRaw)
+    } catch {
+      return { error: 'Data SJ tidak valid.' }
     }
-    const { data: currentItems } = await admin.from('task_sj_items').select('id').eq('task_id', task.id)
-    const keepIds = new Set(sjItems.filter((item) => item.id).map((item) => item.id))
-    const removeIds = (currentItems ?? []).map((item) => item.id).filter((id) => !keepIds.has(id))
-    if (removeIds.length) { const result = await admin.from('task_sj_items').delete().in('id', removeIds).eq('task_id', task.id); if (result.error) return { error: 'SJ lama belum berhasil dihapus.' } }
+    if (!Array.isArray(sjItems)) return { error: 'Data SJ tidak valid.' }
+
+    const validatedSjItems: NonNullable<typeof sjItems> = []
+    for (const item of sjItems) {
+      if (!item.sj_number || !Number.isFinite(Number(item.sj_qty)) || Number(item.sj_qty) < 0 || !Number.isFinite(Number(item.sj_weight)) || Number(item.sj_weight) < 0 || !item.product) {
+        return { error: 'Data SJ belum lengkap.' }
+      }
+
+      const { data: productData } = await admin
+        .from('products')
+        .select('product, status')
+        .eq('product', item.product)
+        .eq('status', 'Active')
+        .maybeSingle()
+
+      if (!productData) return { error: 'Produk SJ tidak tersedia.' }
+
+      validatedSjItems.push({
+        ...(item.id ? { id: item.id } : {}),
+        sj_number: item.sj_number.trim(),
+        sj_qty: Number(item.sj_qty),
+        sj_weight: Number(item.sj_weight),
+        product: item.product,
+        product_snapshot: productData,
+        note: item.note?.trim() || null,
+      })
+    }
+
+    sjItems = validatedSjItems
+
     const latest = sjItems[sjItems.length - 1]
     if (latest) {
-      const { data: latestProduct } = await admin.from('products').select('product, status').eq('product', latest.product).eq('status', 'Active').maybeSingle()
-      if (!latestProduct) return { error: 'Produk SJ tidak tersedia.' }
       update.sj_number = latest.sj_number
-      update.sj_qty = Number(latest.sj_qty)
-      update.sj_weight = Number(latest.sj_weight)
+      update.sj_qty = latest.sj_qty
+      update.sj_weight = latest.sj_weight
       update.product = latest.product
-      update.product_snapshot = latestProduct
-      update.sj_note = latest.note?.trim() || null
+      update.product_snapshot = latest.product_snapshot
+      update.sj_note = latest.note ?? null
     }
   } else {
-  update.sj_number = text(formData, 'sjNumber')
-  update.sj_qty = numberOrNull(formData, 'sjQty')
-  update.sj_weight = numberOrNull(formData, 'sjWeight')
-  update.sj_note = text(formData, 'sjNote')
-  update.odometer_start = numberOrNull(formData, 'odometerStart')
-  update.odometer_end = numberOrNull(formData, 'odometerEnd')
-
+    update.sj_number = text(formData, 'sjNumber')
+    update.sj_qty = numberOrNull(formData, 'sjQty')
+    update.sj_weight = numberOrNull(formData, 'sjWeight')
+    update.sj_note = text(formData, 'sjNote')
   }
 
   const product = text(formData, 'product')
@@ -146,8 +168,13 @@ export async function updateTaskTransactionAction(_state: Result, formData: Form
   const odometerEnd = update.odometer_end as number | null
   if (odometerStart !== null && odometerEnd !== null && odometerEnd < odometerStart) return { error: 'Odometer Akhir tidak boleh lebih kecil dari Odometer Awal.' }
 
-  const { error } = await admin.from('tasks').update(update).eq('id', task.id).neq('status', 'Completed')
-  if (error) return { error: 'Data tugas belum berhasil diperbarui.' }
+  const { error } = await admin.rpc('movent_update_task_transaction', {
+    p_task_id: task.id,
+    p_task_update: update,
+    p_sj_items: sjItems,
+  })
+
+  if (error) return { error: error.message || 'Data tugas belum berhasil diperbarui.' }
 
   revalidatePath('/super-user/pengelolaan-transaksi')
   revalidatePath('/dispatcher/beranda')
