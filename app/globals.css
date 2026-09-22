@@ -4458,3 +4458,39 @@ small {
     grid-template-columns: repeat(4, minmax(0,1fr));
   }
 }
+
+
+/* controller penugasan summary cards */
+.super-dashboard .super-kpi-card {
+  min-height: 96px;
+  height: 96px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 40px minmax(0,1fr);
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  column-gap: 10px;
+}
+
+.super-dashboard .super-kpi-card .super-kpi-icon {
+  grid-row: 1 / 4;
+  align-self: center;
+}
+
+.super-dashboard .super-kpi-card > span,
+.super-dashboard .super-kpi-card > strong,
+.super-dashboard .super-kpi-card > small {
+  margin: 0;
+}
+
+.super-dashboard .super-kpi-card > span {
+  align-self: end;
+}
+
+.super-dashboard .super-kpi-card > strong {
+  line-height: 1;
+}
+
+.super-dashboard .super-kpi-card > small {
+  align-self: start;
+}
