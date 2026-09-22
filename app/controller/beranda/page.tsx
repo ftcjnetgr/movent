@@ -224,7 +224,7 @@ export default async function ControllerPenugasanDashboardPage() {
             <div><h2>Aktivitas Sistem</h2><p>Aktivitas terbaru di sistem.</p></div>
           </div>
           <div className="super-activity-list">
-            <div><span className="activity-dot blue" /><span>{data.taskAlerts.length} alert tugas aktif</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot blue" /><span>{tickets.length} tiket maintenance terbaru</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot green" /><span>{schedules.length} schedule aktif hari ini</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot orange" /><span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot purple" /><span>{fleetTotal} armada terdaftar</span><time>{shortTime(now.toISOString())}</time></div>
