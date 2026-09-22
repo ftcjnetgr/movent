@@ -20,6 +20,8 @@ type TaskRow = {
   external_departure_at: string | null
   external_arrival_at: string | null
   canceled_at: string | null
+  executor_snapshot: { full_name?: string; executor_nik?: string } | null
+  fleet_snapshot: { plat_number?: string; fleet_type?: string } | null
 }
 
 type TicketRow = {
@@ -67,6 +69,8 @@ type TaskAlert = {
   std: string | null
   sta: string | null
   targetAt: Date
+  driverName: string | null
+  fleetPlat: string | null
 }
 
 function jakartaDate(value: Date) {
@@ -105,7 +109,7 @@ export async function getDashboardData(profile: AppProfile) {
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
     admin
       .from('tasks')
-      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at')
+      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at, executor_snapshot, fleet_snapshot')
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
@@ -144,6 +148,8 @@ export async function getDashboardData(profile: AppProfile) {
       std: schedule.std,
       sta: schedule.sta,
       targetAt: scheduleTimestamp(date, schedule.std),
+      driverName: null,
+      fleetPlat: null,
     }))
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000)
 
@@ -159,6 +165,8 @@ export async function getDashboardData(profile: AppProfile) {
       sta: task.sta,
       targetAt: new Date(task.sta as string),
       status: task.status,
+      driverName: task.executor_snapshot?.full_name ?? null,
+      fleetPlat: task.fleet_snapshot?.plat_number ?? null,
     }))
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 10 * 60 * 1000)
 
