@@ -23,11 +23,11 @@ const navByRole: Record<string, NavGroup[]> = {
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
   Dispatcher: [
-    { label: 'Penugasan Saya', icon: 'clipboard', items: [{ label: 'Penugasan Saya', href: '/dispatcher/riwayat-penugasan', icon: 'history' }] },
-    { label: 'Ticketing Saya', icon: 'ticket', items: [{ label: 'Ticketing Saya', href: '/dispatcher/maintenance-armada', icon: 'ticket' }] },
-    { label: 'Extra Schedule', icon: 'calendar', items: [{ label: 'Extra Schedule', href: '/dispatcher/extra-schedule', icon: 'calendar' }] },
+    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/dispatcher/beranda', icon: 'home' }] },
+    { label: 'Penugasan', icon: 'clipboard', items: [{ label: 'Riwayat Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'history' }] },
+    { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance Armada', href: '/dispatcher/maintenance-armada', icon: 'wrench' }] },
+    { label: 'Jadwal Tambahan', icon: 'calendar', items: [{ label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule', icon: 'calendar' }] },
     { label: 'Armada Non TGR', icon: 'truck', items: [{ label: 'Armada Non TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' }] },
-    { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance', href: '/dispatcher/maintenance-armada', icon: 'wrench' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },
   ],
   Executor: [
@@ -37,6 +37,7 @@ const navByRole: Record<string, NavGroup[]> = {
   ],
   Maintainer: [
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
+    { label: 'Tiket Maintenance', icon: 'wrench', items: [{ label: 'Tiket Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/maintainer/profil', icon: 'user' }] },
   ],
