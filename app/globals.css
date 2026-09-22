@@ -3859,3 +3859,179 @@ small {
     flex: 0 0 auto;
   }
 }
+
+
+/* controller dashboard: tighter rhythm + compact quick access */
+.super-dashboard > * + * {
+  margin-top: 12px !important;
+}
+
+.super-dashboard .super-quick-panel {
+  padding: 10px 12px;
+}
+
+.super-dashboard .super-quick-grid {
+  gap: 8px;
+  padding: 0;
+}
+
+.super-dashboard .super-quick-grid a {
+  min-height: 54px;
+  height: 54px;
+  padding: 8px 12px;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 9px;
+  border-radius: 10px;
+}
+
+.super-dashboard .super-quick-grid a span {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+}
+
+.super-dashboard .super-quick-grid a strong {
+  font-size: 10px;
+  text-align: left;
+}
+
+.controller-detail-tables {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+}
+
+.controller-detail-table {
+  width: 100%;
+}
+
+.controller-detail-table td,
+.controller-detail-table th {
+  padding: 8px 10px !important;
+  font-size: 9px !important;
+}
+
+.controller-detail-table td small {
+  display: block;
+  margin-top: 2px;
+  color: #7a8799;
+  font-size: 8px;
+}
+
+.controller-detail-table td strong {
+  color: #26364d;
+}
+
+@media (max-width: 1000px) {
+  .controller-detail-tables {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* alert pages: content headings, not hero cards */
+.alert-page .alert-dashboard {
+  gap: 12px;
+}
+
+.alert-page .alert-content-heading {
+  margin: 0 !important;
+  padding: 0 2px;
+}
+
+.alert-page .alert-content-heading h1 {
+  margin: 0;
+  color: #17243a;
+  font-size: 22px;
+}
+
+.alert-page .alert-content-heading p {
+  margin: 4px 0 0;
+  color: #66758a;
+  font-size: 10px;
+}
+
+.alert-page .alert-content-section {
+  margin: 0;
+}
+
+.alert-page .alert-content-section-heading {
+  margin: 0 0 8px;
+  padding: 0 2px;
+}
+
+.alert-page .alert-content-section-heading h2 {
+  margin: 2px 0 0;
+  color: #17243a;
+  font-size: 15px;
+}
+
+.alert-page .alert-content-section-heading > strong {
+  min-width: 30px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #34445b;
+  font-size: 10px;
+}
+
+.alert-page .alert-group {
+  overflow: hidden;
+  margin-top: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.alert-page .alert-group-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e8edf3;
+  background: #f8fafc;
+}
+
+.alert-page .alert-group-heading span {
+  color: #708096;
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.alert-page .alert-group-heading strong {
+  color: #24344b;
+  font-size: 10px;
+}
+
+.alert-page .alert-group-heading small {
+  color: #8793a4;
+  font-size: 8px;
+}
+
+.alert-page .alert-group-table {
+  min-width: 900px;
+}
+
+.alert-page .alert-group-table th,
+.alert-page .alert-group-table td {
+  padding: 8px 10px;
+}
+
+.alert-page .alert-group + .alert-group {
+  margin-top: 8px;
+}
+
+.alert-page .alert-empty-inline {
+  padding: 18px 2px;
+  color: #68778c;
+  font-size: 10px;
+}
+
+.alert-page .alert-hero {
+  display: none !important;
+}
