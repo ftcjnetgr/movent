@@ -11,7 +11,8 @@ const reportTypes = [
   { value: 'CANCELED', label: 'Berdasarkan Pembatalan', description: 'Daftar tugas yang dibatalkan.' },
 ]
 
-export default function ReportForm({ startPoints, destinations, executors }: { startPoints: Option[]; destinations: Option[]; executors: Option[] }) {
+export default function ReportForm({ startPoints, destinations, executors, mode = 'operational' }: { startPoints: Option[]; destinations: Option[]; executors: Option[]; mode?: 'operational' | 'maintenance' }) {
+  const maintenanceOnly = mode === 'maintenance'
   const [type, setType] = useState('STD')
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
@@ -33,7 +34,7 @@ export default function ReportForm({ startPoints, destinations, executors }: { s
   async function preview() {
     setLoading(true)
     setMessage('')
-    const response = await fetch('/api/reports/operational?' + params.toString())
+    const response = await fetch((maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + params.toString())
     const data = await response.json()
     setLoading(false)
     if (!response.ok) {
@@ -47,33 +48,46 @@ export default function ReportForm({ startPoints, destinations, executors }: { s
   function download() {
     const search = new URLSearchParams(params)
     search.set('format', 'csv')
-    window.location.href = '/api/reports/operational?' + search.toString()
+    window.location.href = (maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + search.toString()
   }
 
   return (
     <div className="report-workspace">
-      <div className="report-type-picker">
-        <div className="report-type-heading">
-          <div><span className="eyebrow">JENIS LAPORAN</span><h2>Pilih laporan yang mau kamu tarik</h2><p>Satu pilihan aktif untuk setiap penarikan.</p></div>
+      {maintenanceOnly ? (
+        <div className="report-type-picker">
+          <div className="report-type-heading">
+            <div><span className="eyebrow">JENIS LAPORAN</span><h2>Penarikan Report Maintenance</h2><p>Report khusus ticketing maintenance.</p></div>
+          </div>
+          <div className="report-type-buttons report-type-single">
+            <div className="report-type-button active">
+              <span className="report-type-radio">✓</span>
+              <span><strong>Ticketing Maintenance</strong><small>Riwayat ticket dari dibuat sampai selesai atau dibatalkan.</small></span>
+            </div>
+          </div>
         </div>
-        <div className="report-type-buttons">
-          {reportTypes.map((item) => (
-            <button key={item.value} type="button" className={'report-type-button ' + (type === item.value ? 'active' : '')} onClick={() => setType(item.value)}>
-              <span className="report-type-radio">{type === item.value ? '✓' : ''}</span>
-              <span><strong>{item.label}</strong><small>{item.description}</small></span>
-            </button>
-          ))}
+      ) : (
+        <div className="report-type-picker">
+          <div className="report-type-heading">
+            <div><span className="eyebrow">JENIS LAPORAN</span><h2>Pilih laporan yang mau kamu tarik</h2><p>Satu pilihan aktif untuk setiap penarikan.</p></div>
+          </div>
+          <div className="report-type-buttons">
+            {reportTypes.map((item) => (
+              <button key={item.value} type="button" className={'report-type-button ' + (type === item.value ? 'active' : '')} onClick={() => setType(item.value)}>
+                <span className="report-type-radio">{type === item.value ? '✓' : ''}</span>
+                <span><strong>{item.label}</strong><small>{item.description}</small></span>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
-
+      )}
       <div className="report-filter-card">
         <div className="report-filter-heading"><div><h2>Filter Laporan</h2><p>Rentang waktu maksimal 7 hari.</p></div></div>
         <div className="report-filter-fields">
           <label>Dari tanggal<input type="date" value={from} onChange={(event) => setFrom(event.target.value)} /></label>
           <label>Sampai tanggal<input type="date" value={to} onChange={(event) => setTo(event.target.value)} /></label>
-          <label>Titik mulai<select value={startPoint} onChange={(event) => setStartPoint(event.target.value)}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
-          <label>Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
-          <label>Executor<select value={executorNik} onChange={(event) => setExecutorNik(event.target.value)}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
+          {!maintenanceOnly ? <label>Titik mulai<select value={startPoint} onChange={(event) => setStartPoint(event.target.value)}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
+          {!maintenanceOnly ? <label>Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
+          {!maintenanceOnly ? <label>Executor<select value={executorNik} onChange={(event) => setExecutorNik(event.target.value)}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
         </div>
         {message ? <p className="form-error" role="alert">{message}</p> : null}
         <div className="report-actions">
