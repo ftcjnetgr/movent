@@ -147,7 +147,7 @@ export default function DashboardAlertList({
       <div className="page-heading alert-content-heading">
         <div>
           <h1>{heroTitle}</h1>
-          <p>{totalAlerts} kondisi aktif{lateCount ? \` · \${lateCount} melewati batas\` : ''}.</p>
+          <p>{totalAlerts} kondisi aktif{lateCount ? ` · ${lateCount} melewati batas` : ''}.</p>
         </div>
       </div>
 
@@ -185,10 +185,10 @@ export default function DashboardAlertList({
                   </thead>
                   <tbody>
                     {items.map((item) => (
-                      <tr key={\`\${item.scheduleId}-\${item.transactionId ?? 'schedule'}\`} className={item.late ? 'is-alert-late' : ''}>
+                      <tr key={`${item.scheduleId}-${item.transactionId ?? 'schedule'}`} className={item.late ? 'is-alert-late' : ''}>
                         <td><strong>{item.scheduleId}</strong>{item.transactionId ? <small>{item.transactionId}</small> : null}</td>
                         <td>
-                          <span className={\`alert-kind-badge \${item.kind}\`}>{item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'}</span>
+                          <span className={`alert-kind-badge ${item.kind}`}>{item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'}</span>
                           <small className="alert-context">{item.kind === 'unassigned' ? 'Schedule belum punya penugasan' : 'Melewati batas STA'}</small>
                         </td>
                         <td>{item.driverName ?? 'Belum ada driver'}</td>
