@@ -1,4 +1,3 @@
-import DashboardAlertList from '@/components/dashboard-alert-list'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -38,13 +37,6 @@ export default async function ControllerTicketingDashboardPage() {
         <div className="metric-card"><span>Sedang dikerjakan</span><strong>{data.ticketCounts['In Progress'] ?? 0}</strong><small>Sedang dikerjakan</small></div>
         <div className="metric-card metric-completed"><span>Selesai</span><strong>{data.ticketCounts.Completed ?? 0}</strong><small>Maintenance selesai</small></div>
         <div className="metric-card metric-ticket"><span>Aktif</span><strong>{activeCount}</strong><small>Masih berjalan</small></div>
-      </section>
-
-      <section className="dashboard-alert-section">
-        <div className="section-heading">
-          <div><h2>Alert Ticketing</h2><p>Ada ticket yang perlu kamu cek karena sudah melewati batas waktu.</p></div>
-        </div>
-        <DashboardAlertList ticketAlerts={data.ticketAlerts} />
       </section>
 
       <section className="section-block dashboard-table-section">
