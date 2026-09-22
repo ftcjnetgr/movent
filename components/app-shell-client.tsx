@@ -245,7 +245,7 @@ export default function AppShellClient({ profile, children }: { profile: { usern
           <button className="mobile-menu" type="button" onClick={() => setMobileOpen(v => !v)} aria-label="Buka menu navigasi">☰</button>
           <div className="topbar-search"><span className="search-icon">⌕</span><input aria-label="Pencarian" placeholder="Cari tugas, armada, lokasi..." /></div>
           <div className="topbar-actions">
-            <button className="icon-button" type="button" aria-label="Notifikasi">♧</button>
+            <button className="icon-button" type="button" aria-label="Notifikasi"><Icon name="bell" /></button>
             <div className="topbar-user"><span className="topbar-avatar">{(profile.full_name || profile.username || 'U').slice(0,1).toUpperCase()}</span><span>{profile.full_name || profile.username}</span><small>{currentRole}</small><span className="user-chevron">⌄</span></div>
           </div>
         </header>

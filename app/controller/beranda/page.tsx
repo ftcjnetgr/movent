@@ -173,9 +173,9 @@ export default async function ControllerPenugasanDashboardPage() {
           <div className="super-quick-grid">
             <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
             <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Tiket</strong></Link>
-            <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Schedule</strong></Link>
+            <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Jadwal</strong></Link>
             <Link href="/controller/alert"><span className="quick-orange">!</span><strong>Cek Alert</strong></Link>
-            <Link href="/controller/beranda/ticketing"><span className="quick-navy">⌁</span><strong>Ticketing</strong></Link>
+            <Link href="/controller/beranda/ticketing"><span className="quick-navy">⌁</span><strong>Tiket Maintenance</strong></Link>
             <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
           </div>
         </div>
@@ -215,7 +215,7 @@ export default async function ControllerPenugasanDashboardPage() {
 
         <div className="super-panel super-info-panel">
           <div className="super-panel-heading">
-            <div><h2>Perlu Dilihat</h2><p>Beberapa hal yang perlu kamu cek.</p></div>
+            <div><h2>Perlu Dicek</h2><p>Beberapa hal yang perlu kamu cek.</p></div>
           </div>
           <div className="super-info-list">
             <Link href="/controller/alert" className="super-info-item">
@@ -277,7 +277,7 @@ export default async function ControllerPenugasanDashboardPage() {
 
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
-            <div><h2>Ticketing Maintenance Terbaru</h2><p>Ticket yang baru masuk.</p></div>
+            <div><h2>Tiket Maintenance Maintenance Terbaru</h2><p>Ticket yang baru masuk.</p></div>
             <Link href="/controller/beranda/ticketing">Lihat semua →</Link>
           </div>
           <div className="super-table-wrap">

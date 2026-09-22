@@ -6,7 +6,7 @@ import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
 
 function statusLabel(status: string) {
-  return ({ Requested:'Diajukan', Confirmed:'Dikonfirmasi', Assigned:'Ditugaskan', Driving:'Berangkat', Completed:'Selesai', Canceled:'Dibatalkan' } as Record<string,string>)[status] ?? status
+  return ({ Requested:'Diajukan', Confirmed:'Dikonfirmasi', Assigned:'Ditugaskan', Driving:'Berangkat', Selesai:'Selesai', Dibatalkan:'Dibatalkan' } as Record<string,string>)[status] ?? status
 }
 
 export default async function DispatcherBerandaPage() {
@@ -21,7 +21,7 @@ export default async function DispatcherBerandaPage() {
     admin.from('maintenance_lists').select('maintenance_list').eq('status', 'Active').order('maintenance_list'),
     admin.from('ticketings').select('transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note').eq('created_by', profile.id).order('created_at', { ascending: false }),
     admin.from('tasks').select('transaction_id, task_type, status, start_point, destination, executor_snapshot, fleet_snapshot').eq('created_by', profile.id).order('created_at', { ascending: false }).limit(6),
-    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('created_by', profile.id).eq('status', 'Canceled'),
+    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('created_by', profile.id).eq('status', 'Dibatalkan'),
   ])
   const data = await getDashboardData(profile)
   const active = (data.taskCounts.Requested ?? 0) + (data.taskCounts.Assigned ?? 0) + (data.taskCounts.Confirmed ?? 0) + (data.taskCounts.Driving ?? 0)
@@ -30,14 +30,14 @@ export default async function DispatcherBerandaPage() {
     <div className="role-page">
       <div className="page-heading">
         <div><h1>Halo, Dispatcher!</h1><p>Atur penugasan dan pastikan semua perjalanan sesuai rencana.</p></div>
-        <div className="page-heading-actions"><Link className="secondary-button button-link" href="/dispatcher/riwayat-penugasan">Lihat riwayat</Link><Link className="button-link" href="/dispatcher/extra-schedule">Extra Schedule</Link></div>
+        <div className="page-heading-actions"><Link className="secondary-button button-link" href="/dispatcher/riwayat-penugasan">Lihat riwayat</Link><Link className="button-link" href="/dispatcher/extra-schedule">Jadwal Tambahan</Link></div>
       </div>
 
       <section className="metric-grid">
         <div className="metric-card"><span>Penugasan Dibuat</span><strong>{active}</strong></div>
-        <div className="metric-card"><span>On Progress</span><strong>{(data.taskCounts.Confirmed ?? 0)+(data.taskCounts.Driving ?? 0)}</strong></div>
-        <div className="metric-card"><span>Completed</span><strong>{data.taskCounts.Completed ?? 0}</strong></div>
-        <div className="metric-card alert-card"><span>Canceled</span><strong>{canceledCount ?? 0}</strong></div>
+        <div className="metric-card"><span>Sedang Berjalan</span><strong>{(data.taskCounts.Confirmed ?? 0)+(data.taskCounts.Driving ?? 0)}</strong></div>
+        <div className="metric-card"><span>Selesai</span><strong>{data.taskCounts.Selesai ?? 0}</strong></div>
+        <div className="metric-card alert-card"><span>Dibatalkan</span><strong>{canceledCount ?? 0}</strong></div>
         <div className="metric-card alert-card"><span>Alert</span><strong>{data.taskAlerts.length + data.ticketAlertCount}</strong></div>
       </section>
 
@@ -56,7 +56,7 @@ export default async function DispatcherBerandaPage() {
             ['Supply (Non TGR)', data.taskCounts.Confirmed ?? 0],
             ['Distribusi', data.taskCounts.Driving ?? 0],
             ['Maintenance', Object.values(data.ticketCounts).reduce((a,b)=>a+b,0)],
-            ['Extra Schedule', 0],
+            ['Jadwal Tambahan', 0],
           ].map(([label,count]) => <div className="summary-bar-row" key={String(label)}><span>{label}</span><strong>{count}</strong><i><b style={{width:String(Math.min(100,Number(count)*8))+'%'}} /></i></div>)}
         </div>
       </section>
@@ -67,7 +67,7 @@ export default async function DispatcherBerandaPage() {
       </section>
 
       <section className="section-block">
-        <div className="section-heading"><div><h2>Ticketing Maintenance</h2><p>Buat ticket untuk armada yang membutuhkan maintenance.</p></div></div>
+        <div className="section-heading"><div><h2>Tiket Maintenance</h2><p>Buat ticket untuk armada yang membutuhkan maintenance.</p></div></div>
         <div className="dashboard-form-card"><DispatcherMaintenanceForm maintenanceLists={(maintenanceLists ?? []).map(i=>i.maintenance_list)} locations={(locations ?? []).map(i=>i.location)} fleets={fleets ?? []} tickets={tickets ?? []} /></div>
       </section>
     </div>

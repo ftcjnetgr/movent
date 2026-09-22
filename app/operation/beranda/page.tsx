@@ -8,8 +8,8 @@ export default async function OperationBerandaPage() {
     admin.from('locations').select('location').eq('status', 'Active').order('location'),
     admin.from('products').select('product').eq('status', 'Active').order('product'),
     admin.from('tasks').select('transaction_id, status, start_point, destination, std, sta, external_executor, external_fleet, sj_number, sj_qty, sj_weight, product, sj_note').eq('task_type', 'Supply').eq('fleet_ownership', 'Non-TGR').eq('status', 'Assigned').order('created_at', { ascending: false }),
-    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('source_type', 'Extra Schedule').eq('status', 'Requested'),
-    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('source_type', 'Extra Schedule').eq('status', 'Completed'),
+    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('source_type', 'Jadwal Tambahan').eq('status', 'Requested'),
+    admin.from('tasks').select('*', { count: 'exact', head: true }).eq('source_type', 'Jadwal Tambahan').eq('status', 'Completed'),
   ])
 
   return (
@@ -18,17 +18,17 @@ export default async function OperationBerandaPage() {
         <div>
           <span className="eyebrow">OPERATION</span>
           <h1>Operasional Harian</h1>
-          <p>Buat Supply Non-TGR dan ajukan Extra Schedule tanpa pindah-pindah halaman.</p>
+          <p>Buat Supply Non-TGR dan ajukan Jadwal Tambahan tanpa pindah-pindah halaman.</p>
         </div>
       </div>
 
       <section className="section-block">
         <div className="metric-grid">
           <div className="metric-card"><span>Non-TGR Menunggu</span><strong>{tasks?.length ?? 0}</strong></div>
-          <div className="metric-card"><span>Extra Schedule Diajukan</span><strong>{requested ?? 0}</strong></div>
-          <div className="metric-card"><span>Extra Schedule Selesai</span><strong>{completed ?? 0}</strong></div>
+          <div className="metric-card"><span>Jadwal Tambahan Diajukan</span><strong>{requested ?? 0}</strong></div>
+          <div className="metric-card"><span>Jadwal Tambahan Selesai</span><strong>{completed ?? 0}</strong></div>
           <div className="metric-card"><span>Proses Berjalan</span><strong>{(tasks?.length ?? 0) + (requested ?? 0)}</strong></div>
-          <div className="metric-card alert-card"><span>Perlu Follow Up</span><strong>{requested ?? 0}</strong></div>
+          <div className="metric-card alert-card"><span>Perlu Dicek</span><strong>{requested ?? 0}</strong></div>
         </div>
       </section>
 
@@ -42,10 +42,10 @@ export default async function OperationBerandaPage() {
       </section>
 
       <section className="section-block">
-        <div className="section-heading"><div><h2>Buat request baru</h2><p>Ajukan Extra Schedule ke Dispatcher.</p></div></div>
+        <div className="section-heading"><div><h2>Buat request baru</h2><p>Ajukan Jadwal Tambahan ke Dispatcher.</p></div></div>
         <div className="section-grid two-column">
           <div className="metric-card">
-            <div className="card-title">Extra Schedule</div>
+            <div className="card-title">Jadwal Tambahan</div>
             <p className="muted">Isi Start Point, Destination, STD, dan STA. Setelah dikonfirmasi, request masuk ke Dispatcher.</p>
             <OperationRequestExtraScheduleForm locations={(locations ?? []).map((item) => item.location)} />
           </div>
