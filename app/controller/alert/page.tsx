@@ -14,7 +14,7 @@ export default async function ControllerAlertPage() {
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Alert</h1>
-          <p>Semua alert operasional yang perlu diperhatikan saat ini.</p>
+          <p>Semua hal yang sedang perlu kamu cek sekarang.</p>
         </div>
       </div>
 
