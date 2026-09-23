@@ -256,23 +256,54 @@ export default function DashboardAlertList({
 
       {showTickets ? (
         <section className="alert-content-section">
-          {ticketGroups.length ? ticketGroups.map(([location, items]) => {
-            const groupKey = `maintenance:${location}`
-            const expanded = expandedGroups.has(groupKey)
+          {ticketGroups.length ? (() => {
+            const activeLocation = ticketGroups.some(([location]) => location === activeTicketLocation) ? activeTicketLocation : ticketGroups[0][0]
+            const activeItems = ticketGroups.find(([location]) => location === activeLocation)?.[1] ?? []
+            const late = activeItems.filter((item) => item.late).length
+            const approaching = activeItems.length - late
             return (
-            <div className={`alert-group${!expanded ? ' is-collapsed' : ''}`} key={location}>
-              <button type="button" className="alert-group-heading" onClick={() => setExpandedGroups((current) => {
-                const next = new Set(current)
-                if (next.has(groupKey)) next.delete(groupKey)
-                else next.add(groupKey)
-                return next
-              })} aria-expanded={expanded}>
-                <span className="alert-group-chevron" aria-hidden="true">{expanded ? '⌄' : '›'}</span>
-                <span>Lokasi</span>
-                <strong>{location}</strong>
-                <small>{items.length} maintenance</small>
-              </button>
-              {expanded ? <div className="table-wrap">
+              <div className="alert-hub-tabs">
+                <div className="alert-hub-tabs-list" role="tablist" aria-label="Lokasi Maintenance">
+                  {ticketGroups.map(([location, items]) => {
+                    const tabId = `maintenance-location-${location.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`
+                    const active = location === activeLocation
+                    return (
+                      <button
+                        key={location}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        aria-controls={tabId}
+                        className={`alert-hub-tab${active ? ' is-active' : ''}`}
+                        onClick={() => setActiveTicketLocation(location)}
+                      >
+                        <span>{location}</span>
+                        <small>{items.length} maintenance</small>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                <div className="alert-hub-summary">
+                  <div>
+                    <span>Lokasi</span>
+                    <h2>{activeLocation}</h2>
+                  </div>
+                  <div className="alert-hub-summary-stat">
+                    <strong>{activeItems.length}</strong>
+                    <span>maintenance</span>
+                  </div>
+                  <div className="alert-hub-summary-stat">
+                    <strong>{approaching}</strong>
+                    <span>mendekati batas</span>
+                  </div>
+                  <div className="alert-hub-summary-stat">
+                    <strong>{late}</strong>
+                    <span>melewati batas</span>
+                  </div>
+                </div>
+
+                <div id={`maintenance-location-${activeLocation.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`} role="tabpanel">
                 <table className="alert-table alert-group-table maintenance-alert-group-table">
                   <thead>
                     <tr>
@@ -295,10 +326,11 @@ export default function DashboardAlertList({
                     ))}
                   </tbody>
                 </table>
-              </div> : null}
-            </div>
+
+                </div>
+              </div>
             )
-          }) : (
+          })() : (
             <div className="alert-empty-inline">Tidak ada alert maintenance saat ini.</div>
           )}
         </section>
