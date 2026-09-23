@@ -4972,17 +4972,17 @@ html {
 }
 
 .topbar-date-filter .topbar-date-reset {
-  background: #fff;
-  color: var(--text-2);
-  border: 1px solid var(--line-strong);
-  box-shadow: none;
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+  box-shadow: 0 4px 12px rgba(23, 105, 224, .13);
 }
 
 .topbar-date-filter .topbar-date-reset:hover {
-  background: var(--surface-2);
-  color: var(--text);
-  border-color: #c3ccd8;
-  box-shadow: none;
+  background: var(--primary-dark);
+  color: #fff;
+  border-color: var(--primary-dark);
+  box-shadow: 0 8px 18px rgba(23, 105, 224, .16);
 }
 
 .topbar-date-filter + .topbar-actions {
