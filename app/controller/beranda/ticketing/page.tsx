@@ -136,8 +136,8 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
         <div className="super-panel super-chart-panel">
           <div className="super-panel-heading">
             <div>
-              <h2>Aktivitas Maintenance Hari Ini</h2>
-              <p>Maintenance yang dibuat hari ini berdasarkan jam.</p>
+              <h2>Aktivitas Maintenance</h2>
+              <p>Maintenance yang dibuat berdasarkan periode yang dipilih.</p>
             </div>
             <div className="super-chart-legend">
               <span><i className="legend-blue" /> Diajukan</span>
