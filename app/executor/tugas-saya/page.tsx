@@ -38,7 +38,6 @@ export default async function ExecutorTugasSayaPage() {
     <div className="role-page">
       <div className="page-heading">
         <div>
-          <span className="eyebrow">EXECUTOR</span>
           <h1>Tugas Saya</h1>
           <p>Fokus ke tugas yang perlu kamu selesaikan. Semua langkah berikutnya ada di setiap kartu.</p>
         </div>
