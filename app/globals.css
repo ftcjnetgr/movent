@@ -4963,9 +4963,10 @@ html {
 }
 
 .topbar-date-filter button {
+  width: 82px;
   height: 34px;
   min-height: 34px;
-  padding: 0 11px;
+  padding: 0;
   border-radius: 8px;
   font-size: 10px;
 }
