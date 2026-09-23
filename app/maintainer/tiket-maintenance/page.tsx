@@ -20,7 +20,6 @@ export default async function MaintainerTicketMaintenancePage() {
     <>
     <div className="page-heading">
         <div>
-          <span className="eyebrow">Maintainer</span>
           <h1>Maintenance</h1>
           <p>Terima lalu kerjakan maintenance armada.</p>
         </div>
