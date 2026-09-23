@@ -4,10 +4,10 @@ import { getDashboardData } from '@/lib/server/dashboard'
 
 function statusLabel(status: string) {
   return ({
-    Requested: 'Diajukan',
-    Confirmed: 'Dikonfirmasi',
-    'In Progress': 'Sedang dikerjakan',
-    Completed: 'Selesai',
+    Requested: 'Udah Diajukan',
+    Confirmed: 'Udah Diterima',
+    'In Progress': 'Lagi Dikerjain',
+    Completed: 'Udah Selesai',
     Canceled: 'Dibatalkan',
   } as Record<string, string>)[status] ?? status
 }
@@ -93,33 +93,33 @@ export default async function ControllerTicketingDashboardPage() {
       <section className="super-kpi-grid maintenance-kpi-grid">
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">⌁</div>
-          <span>Diajukan</span>
+          <span>Udah Udah Diajukan</span>
           <strong>{data.ticketCounts.Requested ?? 0}</strong>
-          <small>Menunggu diterima</small>
+          <small>Nunggu diterima</small>
         </div>
         <div className="super-kpi-card kpi-green">
           <div className="super-kpi-icon">✓</div>
-          <span>Dikonfirmasi</span>
+          <span>Udah Diterima</span>
           <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-          <small>Sudah diterima</small>
+          <small>Udah diterima</small>
         </div>
         <div className="super-kpi-card kpi-cyan">
           <div className="super-kpi-icon">◷</div>
-          <span>Sedang dikerjakan</span>
+          <span>Lagi Dikerjain</span>
           <strong>{data.ticketCounts['In Progress'] ?? 0}</strong>
-          <small>Sedang diproses</small>
+          <small>Lagi diproses</small>
         </div>
         <div className="super-kpi-card kpi-orange">
           <div className="super-kpi-icon">✓</div>
-          <span>Selesai</span>
+          <span>Udah Udah Selesai</span>
           <strong>{data.ticketCounts.Completed ?? 0}</strong>
-          <small>Maintenance selesai</small>
+          <small>Udah beres</small>
         </div>
         <div className="super-kpi-card kpi-red">
           <div className="super-kpi-icon">●</div>
-          <span>Aktif</span>
+          <span>Masih Aktif</span>
           <strong>{activeCount}</strong>
-          <small>Masih berjalan</small>
+          <small>Masih jalan</small>
         </div>
       </section>
 
@@ -133,8 +133,8 @@ export default async function ControllerTicketingDashboardPage() {
             </div>
             <div className="super-chart-legend">
               <span><i className="legend-blue" /> Diajukan</span>
-              <span><i className="legend-green" /> Dikonfirmasi</span>
-              <span><i className="legend-orange" /> Dikerjakan</span>
+              <span><i className="legend-green" /> Udah Diterima</span>
+              <span><i className="legend-orange" /> Lagi Dikerjain</span>
               <span><i className="legend-purple" /> Selesai</span>
               <span><i className="legend-red" /> Dibatalkan</span>
             </div>
