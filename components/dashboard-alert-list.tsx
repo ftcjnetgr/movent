@@ -130,7 +130,7 @@ export default function DashboardAlertList({
   const heroDescription = mode === 'task'
     ? 'Pantau schedule yang mendekati atau melewati batas waktu penugasan.'
     : mode === 'maintenance'
-      ? 'Pantau maintenance maintenance yang belum bergerak sesuai batas waktu proses.'
+      ? 'Pantau maintenance yang belum bergerak sesuai batas waktu proses.'
       : 'Pantau kondisi operasional yang membutuhkan perhatian.'
 
   const taskGroups = useMemo(() => {
@@ -223,7 +223,7 @@ export default function DashboardAlertList({
 
       {showTickets ? (
         <section className="alert-content-section">
-          {maintenanceGroups.length ? maintenanceGroups.map(([location, items]) => {
+          {ticketGroups.length ? ticketGroups.map(([location, items]) => {
             const groupKey = `maintenance:${location}`
             const expanded = expandedGroups.has(groupKey)
             return (
