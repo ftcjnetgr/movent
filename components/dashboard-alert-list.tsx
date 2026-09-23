@@ -256,15 +256,20 @@ export default function DashboardAlertList({
 
       {showTickets ? (
         <section className="alert-content-section">
-          {ticketGroups.length ? (() => {
-            const activeLocation = ticketGroups.some(([location]) => location === activeTicketLocation) ? activeTicketLocation : ticketGroups[0][0]
-            const activeItems = ticketGroups.find(([location]) => location === activeLocation)?.[1] ?? []
+          {(() => {
+            const hasGroups = ticketGroups.length > 0
+            const activeLocation = hasGroups
+              ? (ticketGroups.some(([location]) => location === activeTicketLocation) ? activeTicketLocation : ticketGroups[0][0])
+              : 'Belum ada lokasi'
+            const activeItems = hasGroups
+              ? (ticketGroups.find(([location]) => location === activeLocation)?.[1] ?? [])
+              : []
             const late = activeItems.filter((item) => item.late).length
             const approaching = activeItems.length - late
             return (
               <div className="alert-hub-tabs">
                 <div className="alert-hub-tabs-list" role="tablist" aria-label="Lokasi Maintenance">
-                  {ticketGroups.map(([location, items]) => {
+                  {hasGroups ? ticketGroups.map(([location, items]) => {
                     const tabId = `maintenance-location-${location.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`
                     const active = location === activeLocation
                     return (
@@ -281,7 +286,12 @@ export default function DashboardAlertList({
                         <small>{items.length} maintenance</small>
                       </button>
                     )
-                  })}
+                  }) : (
+                    <button type="button" role="tab" aria-selected="true" className="alert-hub-tab is-active" disabled>
+                      <span>Belum ada lokasi</span>
+                      <small>0 maintenance</small>
+                    </button>
+                  )}
                 </div>
 
                 <div className="alert-hub-summary">
@@ -304,35 +314,36 @@ export default function DashboardAlertList({
                 </div>
 
                 <div id={`maintenance-location-${activeLocation.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`} role="tabpanel" className="alert-table-scroll">
-                <table className="alert-table alert-group-table maintenance-alert-group-table">
-                  <thead>
-                    <tr>
-                      <th>Transaction ID</th>
-                      <th>Maintenance</th>
-                      <th>Status</th>
-                      <th>Batas</th>
-                      <th>Waktu</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {activeItems.map((item) => (
-                      <tr key={item.transactionId} className={item.late ? 'is-alert-late' : ''}>
-                        <td><strong>{item.transactionId}</strong></td>
-                        <td>{item.maintenance}</td>
-                        <td><span className="alert-kind-badge maintenance">{item.status}</span></td>
-                        <td>{item.threshold}</td>
-                        <td><b className={item.late ? 'is-late' : ''}>{item.label} · {item.indicator}</b></td>
+                  <table className="alert-table alert-group-table maintenance-alert-group-table">
+                    <thead>
+                      <tr>
+                        <th>Transaction ID</th>
+                        <th>Maintenance</th>
+                        <th>Status</th>
+                        <th>Batas</th>
+                        <th>Waktu</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-
+                    </thead>
+                    <tbody>
+                      {activeItems.length ? activeItems.map((item) => (
+                        <tr key={item.transactionId} className={item.late ? 'is-alert-late' : ''}>
+                          <td><strong>{item.transactionId}</strong></td>
+                          <td>{item.maintenance}</td>
+                          <td><span className="alert-kind-badge maintenance">{item.status}</span></td>
+                          <td>{item.threshold}</td>
+                          <td><b className={item.late ? 'is-late' : ''}>{item.label} · {item.indicator}</b></td>
+                        </tr>
+                      )) : (
+                        <tr className="alert-empty-row">
+                          <td colSpan={5}>Belum ada maintenance yang masuk alert.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )
-          })() : (
-            <div className="alert-empty-inline">Tidak ada alert maintenance saat ini.</div>
-          )}
+          })()}
         </section>
       ) : null}
     </div>
