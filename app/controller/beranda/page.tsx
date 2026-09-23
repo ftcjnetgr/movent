@@ -4,11 +4,11 @@ import { getDashboardData } from '@/lib/server/dashboard'
 
 function statusLabel(status: string) {
   return ({
-    Requested: 'Diajukan',
-    Confirmed: 'Dikonfirmasi',
-    Assigned: 'Ditugaskan',
-    Driving: 'Berangkat',
-    Completed: 'Selesai',
+    Requested: 'Udah Diajukan',
+    Confirmed: 'Udah Diterima',
+    Assigned: 'Siap Jalan',
+    Driving: 'Lagi Jalan',
+    Completed: 'Udah Selesai',
     Canceled: 'Dibatalkan',
   } as Record<string, string>)[status] ?? status
 }
@@ -153,9 +153,9 @@ export default async function ControllerPenugasanDashboardPage() {
               <p>Lihat ritme keberangkatan berdasarkan jam STD.</p>
             </div>
             <div className="super-chart-legend">
-              <span><i className="legend-blue" /> Selesai</span>
-              <span><i className="legend-green" /> Berjalan</span>
-              <span><i className="legend-orange" /> Belum</span>
+              <span><i className="legend-blue" /> Udah Selesai</span>
+              <span><i className="legend-green" /> Lagi Jalan</span>
+              <span><i className="legend-orange" /> Siap Jalan</span>
               <span><i className="legend-red" /> Dibatalkan</span>
             </div>
           </div>
