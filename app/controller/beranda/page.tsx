@@ -108,11 +108,6 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           <h1>Selamat datang, {profile.full_name}! <span aria-hidden="true">👋</span></h1>
           <p>Ini ringkasan operasional sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
-        <form className="dashboard-date-filter" method="get">
-          <label><span>Dari</span><input type="date" name="from" value={from} /></label>
-          <label><span>Sampai</span><input type="date" name="to" value={to} min={from} /></label>
-          <button type="submit">Terapkan</button>
-        </form>
       </div>
 
       <section className="super-kpi-grid assignment-kpi-grid">
