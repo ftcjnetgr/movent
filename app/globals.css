@@ -5059,13 +5059,15 @@ html {
 }
 
 .schedule-page .schedule-point-tabs {
-  display: grid;
+  display: flex;
   width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
   gap: 6px;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .schedule-page .schedule-point-tabs button {
-  width: 100%;
+  flex: 1 1 0;
+  width: 0;
   min-width: 0;
 }
