@@ -14,6 +14,7 @@ type TaskAlert = {
   targetAt: string
   driverName: string | null
   fleetPlat: string | null
+  scheduleHubId: string | null
 }
 
 type TicketAlert = {
@@ -135,7 +136,7 @@ export default function DashboardAlertList({
   const taskGroups = useMemo(() => {
     const groups = new Map<string, typeof taskItems>()
     for (const item of taskItems) {
-      const hub = item.startPoint || 'Hub tidak tersedia'
+      const hub = item.scheduleHubId || 'Hub tidak tersedia'
       groups.set(hub, [...(groups.get(hub) ?? []), item])
     }
     return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
