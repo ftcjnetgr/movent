@@ -31,7 +31,7 @@ function shortTime(value: string | null) {
   })
 }
 
-export default async function ControllerPenugasanDashboardPage() {
+export default async function ControllerPenugasanDashboardPage({ searchParams }: { searchParams: Promise<{ from?: string; to?: string }> }) {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
 
