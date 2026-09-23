@@ -4035,3 +4035,150 @@ small {
 .alert-page .alert-hero {
   display: none !important;
 }
+
+
+/* alert pages: shared hero + stable accordion/table columns */
+.alert-page .alert-content-heading {
+  display: block;
+  padding: 0;
+  margin: 0 !important;
+}
+.alert-page .alert-content-heading h1 {
+  margin: 4px 0 0;
+  color: #17243a;
+  font-size: 30px;
+  line-height: 1.08;
+  letter-spacing: -.05em;
+  font-weight: 800;
+}
+.alert-page .alert-content-heading p {
+  margin: 6px 0 0;
+  color: #59687c;
+  font-size: 12px;
+  line-height: 1.55;
+  max-width: 720px;
+}
+
+.alert-page .alert-group {
+  overflow: hidden;
+}
+.alert-page .alert-group-heading {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 18px auto minmax(0,1fr) auto;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 12px;
+  border: 0;
+  border-bottom: 1px solid #e8edf3;
+  border-radius: 0;
+  background: #f8fafc;
+  color: #24344b;
+  box-shadow: none;
+  text-align: left;
+  transform: none;
+}
+.alert-page .alert-group-heading:hover {
+  background: #f3f6fa;
+  color: #17243a;
+  box-shadow: none;
+  transform: none;
+}
+.alert-page .alert-group-heading:active {
+  transform: none;
+}
+.alert-page .alert-group-chevron {
+  width: 18px;
+  color: #64748b;
+  font-size: 17px;
+  line-height: 1;
+  text-align: center;
+}
+.alert-page .alert-group-heading > span:not(.alert-group-chevron) {
+  color: #708096;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.alert-page .alert-group-heading strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #24344b;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.alert-page .alert-group-heading small {
+  color: #8793a4;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.alert-page .alert-group.is-collapsed .alert-group-heading {
+  border-bottom: 0;
+}
+
+.alert-page .alert-group-table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+.alert-page .alert-group-table th,
+.alert-page .alert-group-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.alert-page .alert-group-table th:nth-child(1),
+.alert-page .alert-group-table td:nth-child(1) { width: 12%; }
+.alert-page .alert-group-table th:nth-child(2),
+.alert-page .alert-group-table td:nth-child(2) { width: 15%; }
+.alert-page .alert-group-table th:nth-child(3),
+.alert-page .alert-group-table td:nth-child(3) { width: 12%; }
+.alert-page .alert-group-table th:nth-child(4),
+.alert-page .alert-group-table td:nth-child(4) { width: 10%; }
+.alert-page .alert-group-table th:nth-child(5),
+.alert-page .alert-group-table td:nth-child(5) { width: 20%; }
+.alert-page .alert-group-table th:nth-child(6),
+.alert-page .alert-group-table td:nth-child(6) { width: 7%; }
+.alert-page .alert-group-table th:nth-child(7),
+.alert-page .alert-group-table td:nth-child(7) { width: 7%; }
+.alert-page .alert-group-table th:nth-child(8),
+.alert-page .alert-group-table td:nth-child(8) { width: 8%; }
+.alert-page .alert-group-table th:nth-child(9),
+.alert-page .alert-group-table td:nth-child(9) { width: 9%; }
+
+.alert-page .alert-group-table td:nth-child(2),
+.alert-page .alert-group-table td:nth-child(8),
+.alert-page .alert-group-table td:nth-child(9) {
+  white-space: normal;
+}
+.alert-page .alert-group-table td:nth-child(2) small,
+.alert-page .alert-group-table td:nth-child(9) b {
+  display: block;
+  margin-top: 2px;
+}
+.alert-page .alert-group-table td:nth-child(6),
+.alert-page .alert-group-table td:nth-child(7),
+.alert-page .alert-group-table td:nth-child(8),
+.alert-page .alert-group-table td:nth-child(9) {
+  text-align: center;
+}
+.alert-page .alert-group-table th:nth-child(6),
+.alert-page .alert-group-table th:nth-child(7),
+.alert-page .alert-group-table th:nth-child(8),
+.alert-page .alert-group-table th:nth-child(9) {
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .alert-page .alert-content-heading h1 {
+    font-size: 26px;
+  }
+  .alert-page .alert-group-table {
+    min-width: 860px;
+  }
+}
