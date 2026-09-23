@@ -13,10 +13,6 @@ function statusLabel(status: string) {
   } as Record<string, string>)[status] ?? status
 }
 
-function taskTypeLabel(type: string) {
-  return type === 'Supply' ? 'Supply' : 'Distribusi'
-}
-
 function timeLabel(value: string | null) {
   if (!value) return '-'
   return new Date(value).toLocaleTimeString('id-ID', {
@@ -58,11 +54,6 @@ export default async function ControllerPenugasanDashboardPage() {
       .order('created_at', { ascending: false })
       .limit(8),
     admin
-      .from('ticketings')
-      .select('transaction_id, status, maintenance_list, fleet_plat_number, location, created_at')
-      .order('created_at', { ascending: false })
-      .limit(6),
-    admin
       .from('schedules')
       .select('schedule_id, std')
       .eq('status', 'Active')
@@ -78,8 +69,7 @@ export default async function ControllerPenugasanDashboardPage() {
   ])
 
   const tasks = tasksResult.data ?? []
-  const tickets = ticketsResult.data ?? []
-  const schedules = scheduleResult.data ?? []
+    const schedules = scheduleResult.data ?? []
   const activities = activityResult.data ?? []
   const usedScheduleIds = new Set((usedScheduleResult.data ?? []).map((task) => task.schedule_id).filter((value): value is string => Boolean(value)))
 
@@ -124,27 +114,33 @@ export default async function ControllerPenugasanDashboardPage() {
       <section className="super-kpi-grid">
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">▤</div>
-          <span>Total Tugas</span>
+          <span>Semua Tugas</span>
           <strong>{totalTaskResult.count ?? 0}</strong>
           <small>Semua data</small>
         </div>
         <div className="super-kpi-card kpi-green">
           <div className="super-kpi-icon">▰</div>
-          <span>Sedang Berjalan</span>
-          <strong>{activeTasks}</strong>
-          <small>Sedang diproses</small>
+          <span>Siap Jalan</span>
+          <strong>{data.taskCounts.Assigned ?? 0}</strong>
+          <small>Belum mulai</small>
         </div>
         <div className="super-kpi-card kpi-cyan">
           <div className="super-kpi-icon">✓</div>
-          <span>Selesai</span>
-          <strong>{completedTasks}</strong>
-          <small>Hari ini</small>
+          <span>Udah Diterima</span>
+          <strong>{data.taskCounts.Confirmed ?? 0}</strong>
+          <small>Udah diterima</small>
         </div>
         <div className="super-kpi-card kpi-orange">
           <div className="super-kpi-icon">◷</div>
-          <span>Belum Ditugaskan</span>
-          <strong>{unassignedSchedules}</strong>
-          <small>Schedule hari ini</small>
+          <span>Lagi Jalan</span>
+          <strong>{data.taskCounts.Driving ?? 0}</strong>
+          <small>Sedang berjalan</small>
+        </div>
+        <div className="super-kpi-card kpi-red">
+          <div className="super-kpi-icon">✓</div>
+          <span>Udah Selesai</span>
+          <strong>{data.taskCounts.Completed ?? 0}</strong>
+          <small>Udah selesai</small>
         </div>
       </section>
 
@@ -186,7 +182,7 @@ export default async function ControllerPenugasanDashboardPage() {
             <div><h2>Aktivitas Sistem</h2><p>Aktivitas terbaru di sistem.</p></div>
           </div>
           <div className="super-activity-list">
-            <div><span className="activity-dot blue" /><span>{tickets.length} maintenance terbaru</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot blue" /><span>{tasks.length} penugasan terbaru</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot green" /><span>{schedules.length} schedule aktif hari ini</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot orange" /><span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
           </div>
