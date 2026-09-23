@@ -26,7 +26,7 @@ export default async function ControllerTicketingDashboardPage() {
       <div className="page-heading">
         <div>
           <span className="eyebrow">Controller</span>
-          <h1>Ticketing Maintenance</h1>
+          <h1>Maintenance</h1>
           <p>Pantau proses maintenance dari ticket dibuat sampai selesai.</p>
         </div>
       </div>
@@ -41,7 +41,7 @@ export default async function ControllerTicketingDashboardPage() {
 
       <section className="section-block dashboard-table-section">
         <div className="section-heading">
-          <div><h2>Ticketing Terbaru</h2><p>Ticket terbaru yang masuk dan sedang diproses.</p></div>
+          <div><h2>Maintenance Terbaru</h2><p>Ticket terbaru yang masuk dan sedang diproses.</p></div>
           <span className="section-count">{tickets.length} data</span>
         </div>
         <div className="data-table-card dashboard-table-card">
@@ -60,7 +60,7 @@ export default async function ControllerTicketingDashboardPage() {
                   </tr>
                 ))}
                 {!tickets.length ? (
-                  <tr><td colSpan={6}><div className="dashboard-empty-state"><strong>Belum ada ticket maintenance.</strong><span>Kalau ada ticket baru, nanti muncul di sini.</span></div></td></tr>
+                  <tr><td colSpan={6}><div className="dashboard-empty-state"><strong>Belum ada maintenance.</strong><span>Kalau ada ticket baru, nanti muncul di sini.</span></div></td></tr>
                 ) : null}
               </tbody>
             </table>
