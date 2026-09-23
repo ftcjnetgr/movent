@@ -3,6 +3,7 @@ import type { AppProfile } from '@/lib/server/profile'
 
 type TaskRow = {
   transaction_id: string
+  created_at: string
   status: string
   source_type: string
   task_type: string
@@ -112,7 +113,7 @@ export async function getDashboardData(profile: AppProfile, dateFrom?: string, d
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
     admin
       .from('tasks')
-      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at, executor_snapshot, fleet_snapshot')
+      .select('transaction_id, created_at, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at, executor_snapshot, fleet_snapshot')
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
@@ -139,7 +140,7 @@ export async function getDashboardData(profile: AppProfile, dateFrom?: string, d
     const time = new Date(value).getTime()
     return time >= rangeStart && time < rangeEndExclusive
   }
-  const tasks = scopedTasks.filter((task) => inRange(task.std))
+  const tasks = scopedTasks.filter((task) => inRange(task.created_at))
   const day = ((new Date(date + 'T12:00:00+07:00').getUTCDay() + 6) % 7) + 1
   const now = new Date()
 
