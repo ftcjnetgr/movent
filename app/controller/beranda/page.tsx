@@ -45,8 +45,8 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
   const params = await searchParams
   const requestedFrom = params.from ?? today
   const requestedTo = params.to ?? requestedFrom
-  const from = /^\\d{4}-\\d{2}-\\d{2}$/.test(requestedFrom) ? requestedFrom : today
-  const to = /^\\d{4}-\\d{2}-\\d{2}$/.test(requestedTo) && requestedTo >= from ? requestedTo : from
+  const from = /^\d{4}-\d{2}-\d{2}$/.test(requestedFrom) ? requestedFrom : today
+  const to = /^\d{4}-\d{2}-\d{2}$/.test(requestedTo) && requestedTo >= from ? requestedTo : from
   const rangeStart = new Date(`${from}T00:00:00+07:00`).toISOString()
   const rangeEnd = new Date(new Date(`${to}T00:00:00+07:00`).getTime() + 86400000).toISOString()
 
