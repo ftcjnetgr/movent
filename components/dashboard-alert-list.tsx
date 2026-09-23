@@ -86,6 +86,7 @@ export default function DashboardAlertList({
   const taskAlertRows = taskAlerts ?? []
   const ticketAlertRows = ticketAlerts ?? []
   const [now, setNow] = useState(() => Date.now())
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -124,6 +125,12 @@ export default function DashboardAlertList({
   const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? ticketItems.length : 0)
   const lateCount = (showTasks ? lateTaskCount : 0) + (showTickets ? lateTicketCount : 0)
   const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'ticket' ? 'Alert Maintenance' : 'Alert'
+  const heroEyebrow = mode === 'task' ? 'Penugasan' : mode === 'ticket' ? 'Maintenance' : 'Monitoring'
+  const heroDescription = mode === 'task'
+    ? 'Pantau schedule yang mendekati atau melewati batas waktu penugasan.'
+    : mode === 'ticket'
+      ? 'Pantau ticket maintenance yang belum bergerak sesuai batas waktu proses.'
+      : 'Pantau kondisi operasional yang membutuhkan perhatian.'
 
   const taskGroups = useMemo(() => {
     const groups = new Map<string, typeof taskItems>()
@@ -144,10 +151,11 @@ export default function DashboardAlertList({
 
   return (
     <div className="alert-dashboard">
-      <div className="page-heading alert-content-heading">
+      <div className="super-dashboard-heading alert-content-heading">
         <div>
+          <span className="eyebrow">{heroEyebrow}</span>
           <h1>{heroTitle}</h1>
-          <p>{totalAlerts} kondisi aktif{lateCount ? ` · ${lateCount} melewati batas` : ''}.</p>
+          <p>{heroDescription} {totalAlerts} kondisi aktif{lateCount ? ` · ${lateCount} melewati batas` : ''}.</p>
         </div>
       </div>
 
@@ -161,14 +169,23 @@ export default function DashboardAlertList({
             <strong>{taskItems.length}</strong>
           </div>
 
-          {taskGroups.length ? taskGroups.map(([hub, items]) => (
-            <div className="alert-group" key={hub}>
-              <div className="alert-group-heading">
+          {taskGroups.length ? taskGroups.map(([hub, items]) => {
+            const groupKey = `task:${hub}`
+            const collapsed = collapsedGroups.has(groupKey)
+            return (
+            <div className={`alert-group${collapsed ? ' is-collapsed' : ''}`} key={hub}>
+              <button type="button" className="alert-group-heading" onClick={() => setCollapsedGroups((current) => {
+                const next = new Set(current)
+                if (next.has(groupKey)) next.delete(groupKey)
+                else next.add(groupKey)
+                return next
+              })} aria-expanded={!collapsed}>
+                <span className="alert-group-chevron" aria-hidden="true">{collapsed ? '›' : '⌄'}</span>
                 <span>Schedule Hub</span>
                 <strong>{hub}</strong>
                 <small>{items.length} schedule</small>
-              </div>
-              <div className="table-wrap">
+              </button>
+              {!collapsed ? <div className="table-wrap">
                 <table className="alert-table alert-group-table">
                   <thead>
                     <tr>
@@ -202,9 +219,10 @@ export default function DashboardAlertList({
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </div> : null}
             </div>
-          )) : (
+            )
+          }) : (
             <div className="alert-empty-inline">Tidak ada alert tugas saat ini.</div>
           )}
         </section>
@@ -220,14 +238,23 @@ export default function DashboardAlertList({
             <strong>{ticketItems.length}</strong>
           </div>
 
-          {ticketGroups.length ? ticketGroups.map(([location, items]) => (
-            <div className="alert-group" key={location}>
-              <div className="alert-group-heading">
+          {ticketGroups.length ? ticketGroups.map(([location, items]) => {
+            const groupKey = `ticket:${location}`
+            const collapsed = collapsedGroups.has(groupKey)
+            return (
+            <div className={`alert-group${collapsed ? ' is-collapsed' : ''}`} key={location}>
+              <button type="button" className="alert-group-heading" onClick={() => setCollapsedGroups((current) => {
+                const next = new Set(current)
+                if (next.has(groupKey)) next.delete(groupKey)
+                else next.add(groupKey)
+                return next
+              })} aria-expanded={!collapsed}>
+                <span className="alert-group-chevron" aria-hidden="true">{collapsed ? '›' : '⌄'}</span>
                 <span>Lokasi</span>
                 <strong>{location}</strong>
                 <small>{items.length} ticket</small>
-              </div>
-              <div className="table-wrap">
+              </button>
+              {!collapsed ? <div className="table-wrap">
                 <table className="alert-table alert-group-table">
                   <thead>
                     <tr>
@@ -250,9 +277,10 @@ export default function DashboardAlertList({
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </div> : null}
             </div>
-          )) : (
+            )
+          }) : (
             <div className="alert-empty-inline">Tidak ada alert maintenance saat ini.</div>
           )}
         </section>
