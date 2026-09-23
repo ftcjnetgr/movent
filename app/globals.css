@@ -4382,3 +4382,26 @@ small {
 .alert-page .alert-group-heading strong {
   font-size: 12px;
 }
+
+
+/* copy hierarchy: menu is emphasized, submenu stays regular */
+.sidebar .nav-link,
+.sidebar .nav-link.active {
+  font-weight: 400 !important;
+}
+
+.alert-page .alert-group-heading,
+.alert-page .alert-group-heading > span:not(.alert-group-chevron),
+.alert-page .alert-group-heading strong,
+.alert-page .alert-group-heading small {
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.alert-page .alert-group-heading strong {
+  font-size: 10px;
+}
+
+.alert-page .alert-group-heading > span:not(.alert-group-chevron) {
+  letter-spacing: .04em;
+}
