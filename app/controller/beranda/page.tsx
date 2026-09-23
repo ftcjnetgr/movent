@@ -197,7 +197,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           </div>
           <div className="super-activity-list">
             <div><span className="activity-dot blue" /><span>{tasks.length} penugasan terbaru</span><time>{shortTime(now.toISOString())}</time></div>
-            <div><span className="activity-dot green" /><span>{schedules.length} tugas selesai dalam periode</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot green" /><span>{completedTasks} tugas selesai dalam periode</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot orange" /><span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
           </div>
         </div>
