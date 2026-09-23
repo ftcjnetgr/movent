@@ -13,7 +13,7 @@ export default function LoginPage() {
       <section className="login-simple-shell" aria-label="Login MOVENT">
         <aside className="login-simple-visual">
           <div className="login-simple-content">
-            <img src="/assets/branding/movent-light.svg" alt="MOVENT" className="login-simple-logo" />
+            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="login-simple-logo" />
             <div className="login-simple-message">
               <h1>Setiap pergerakan.<br />Satu kendali.</h1>
             </div>
