@@ -111,7 +111,7 @@ export default function DashboardAlertList({
         label: elapsed < thresholdSeconds ? 'Sisa waktu' : 'Lewat',
         indicator: formatDuration(Math.abs(thresholdSeconds - elapsed)),
         late: elapsed >= thresholdSeconds,
-        threshold: maintenance.status === 'Requested' ? '3 jam' : maintenance.status === 'Confirmed' ? '1 hari' : '3 hari',
+        threshold: ticket.status === 'Requested' ? '3 jam' : ticket.status === 'Confirmed' ? '1 hari' : '3 hari',
         location: ticket.location ?? 'Lokasi tidak tersedia',
         maintenance: ticket.maintenance_list ?? 'Maintenance tidak tersedia',
       }
@@ -126,10 +126,10 @@ export default function DashboardAlertList({
   const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? ticketItems.length : 0)
   const lateCount = (showTasks ? lateTaskCount : 0) + (showTickets ? lateTicketCount : 0)
   const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'ticket' ? 'Alert Maintenance' : 'Alert'
-  const heroEyebrow = mode === 'task' ? 'Penugasan' : mode === 'maintenance' ? 'Maintenance' : 'Monitoring'
+  const heroEyebrow = mode === 'task' ? 'Penugasan' : mode === 'ticket' ? 'Maintenance' : 'Monitoring'
   const heroDescription = mode === 'task'
     ? 'Pantau schedule yang mendekati atau melewati batas waktu penugasan.'
-    : mode === 'maintenance'
+    : mode === 'ticket'
       ? 'Pantau maintenance yang belum bergerak sesuai batas waktu proses.'
       : 'Pantau kondisi operasional yang membutuhkan perhatian.'
 
