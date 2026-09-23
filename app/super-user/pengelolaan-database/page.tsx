@@ -64,7 +64,6 @@ export default async function DatabaseManagementPage({
     <>
     <div className="page-heading">
         <div>
-          <span className="eyebrow">Super User</span>
           <h1>Kelola Database</h1>
           <p>Kelola master data satu per satu atau melalui import CSV/XLSX.</p>
         </div>
