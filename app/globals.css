@@ -4357,3 +4357,28 @@ small {
     min-width: 860px;
   }
 }
+
+
+/* alert group header: white typography + matched sizing */
+.alert-page .alert-group-heading,
+.alert-page .alert-group-heading:hover,
+.alert-page .alert-group-heading:active {
+  color: #fff;
+}
+
+.alert-page .alert-group-heading .alert-group-chevron,
+.alert-page .alert-group-heading > span:not(.alert-group-chevron),
+.alert-page .alert-group-heading strong,
+.alert-page .alert-group-heading small {
+  color: #fff;
+}
+
+.alert-page .alert-group-heading > span:not(.alert-group-chevron),
+.alert-page .alert-group-heading small {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.alert-page .alert-group-heading strong {
+  font-size: 12px;
+}
