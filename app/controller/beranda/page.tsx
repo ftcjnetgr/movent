@@ -56,12 +56,12 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
       .from('tasks')
       .select('transaction_id, task_type, status, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, created_at')
       .order('created_at', { ascending: false })
-      .gte('std', rangeStart)
-      .lt('std', rangeEnd)
+      .gte('created_at', rangeStart)
+      .lt('created_at', rangeEnd)
       .limit(8),
     admin
       .from('tasks')
-      .select('status, std')
+      .select('status, created_at')
       .gte('std', rangeStart)
       .lt('std', rangeEnd),
     admin
@@ -82,8 +82,8 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
 
   const byHour = Array.from({ length: 24 }, (_, hour) => {
     const rows = activities.filter((task) => {
-      if (!task.std) return false
-      return new Date(task.std).toLocaleString('en-US', {
+      if (!task.created_at) return false
+      return new Date(task.created_at).toLocaleString('en-US', {
         timeZone: 'Asia/Jakarta',
         hour: '2-digit',
         hour12: false,
@@ -159,7 +159,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           <div className="super-panel-heading">
             <div>
               <h2>Aktivitas Tugas</h2>
-              <p>Lihat ritme keberangkatan berdasarkan periode yang dipilih.</p>
+              <p>Lihat aktivitas penugasan yang dibuat berdasarkan periode yang dipilih.</p>
             </div>
             <div className="super-chart-legend">
               <span><i className="legend-blue" /> Udah Selesai</span>
