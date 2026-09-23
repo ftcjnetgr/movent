@@ -198,7 +198,7 @@ export default async function ControllerPenugasanDashboardPage() {
             <div><h2>Aktivitas Sistem</h2><p>Aktivitas terbaru di sistem.</p></div>
           </div>
           <div className="super-activity-list">
-            <div><span className="activity-dot blue" /><span>{tickets.length} tiket maintenance terbaru</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot blue" /><span>{tickets.length} maintenance terbaru</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot green" /><span>{schedules.length} schedule aktif hari ini</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot orange" /><span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
           </div>
@@ -236,7 +236,7 @@ export default async function ControllerPenugasanDashboardPage() {
           </div>
           <div className="super-table-wrap">
             <table className="controller-detail-table">
-              <thead><tr><th>Ticket</th><th>Lokasi</th><th>Armada</th><th>Maintenance</th><th>Status</th><th>Waktu</th></tr></thead>
+              <thead><tr><th>Maintenance</th><th>Lokasi</th><th>Armada</th><th>Maintenance</th><th>Status</th><th>Waktu</th></tr></thead>
               <tbody>
                 {tickets.map((ticket) => (
                   <tr key={ticket.transaction_id}>
@@ -248,7 +248,7 @@ export default async function ControllerPenugasanDashboardPage() {
                     <td><strong>{shortTime(ticket.created_at)}</strong></td>
                   </tr>
                 ))}
-                {!tickets.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada ticketing.</td></tr> : null}
+                {!tickets.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada maintenance.</td></tr> : null}
               </tbody>
             </table>
           </div>
