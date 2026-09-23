@@ -79,7 +79,6 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
     (data.taskCounts.Driving ?? 0)
 
   const completedTasks = activities.filter((task) => task.status === 'Completed').length
-  const unassignedSchedules = Math.max(0, schedules.length - usedScheduleIds.size)
 
   const byHour = Array.from({ length: 24 }, (_, hour) => {
     const rows = activities.filter((task) => {
