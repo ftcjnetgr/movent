@@ -19,9 +19,9 @@ function ticketStatusLabel(status: string) {
 }
 
 function nextActionLabel(status: string) {
-  if (status === 'Requested') return 'Terima Ticket'
+  if (status === 'Requested') return 'Terima Maintenance'
   if (status === 'Confirmed') return 'Konfirmasi Pengerjaan'
-  if (status === 'In Progress') return 'Konfirmasi Maintenance Selesai'
+  if (status === 'In Progress') return 'Selesaikan Maintenance'
   return 'Tidak ada tindakan'
 }
 
@@ -60,7 +60,7 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
     <article className="task-card">
       <div className="task-card-top">
         <div>
-          <span className="eyebrow">Tiket Maintenance</span>
+          <span className="eyebrow">Maintenance</span>
           <h2>{ticket.transaction_id}</h2>
         </div>
         <span className={`status-badge status-${ticket.status.toLowerCase().replaceAll(' ', '-')}`}>{ticketStatusLabel(ticket.status)}</span>
@@ -79,7 +79,7 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
       {ticket.status === 'Requested' ? (
         <form onSubmit={(event) => handleSubmit(event, acceptMaintenanceTicketAction)}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
-          <button type="submit" disabled={isPending}>Terima Ticket</button>
+          <button type="submit" disabled={isPending}>Terima Maintenance</button>
         </form>
       ) : null}
 
@@ -94,7 +94,7 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
         <form onSubmit={(event) => handleSubmit(event, completeMaintenanceAction)} className="compact-form">
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
           <label>Nama PIC Maintenance<input name="picMaintenance" required placeholder="Masukkan nama PIC" /></label>
-          <button type="submit" disabled={isPending}>Konfirmasi Maintenance Selesai</button>
+          <button type="submit" disabled={isPending}>Selesaikan Maintenance</button>
         </form>
       ) : null}
     </article>
