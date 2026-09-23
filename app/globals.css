@@ -4985,10 +4985,6 @@ html {
   box-shadow: 0 8px 18px rgba(23, 105, 224, .16);
 }
 
-.topbar-date-filter + .topbar-actions {
-  margin-left: 0;
-}
-
 @media (max-width: 1180px) {
   .topbar-date-filter input {
     width: 112px;
@@ -5014,10 +5010,6 @@ html {
     flex-wrap: wrap;
     padding-top: 8px;
     padding-bottom: 8px;
-  }
-
-  .topbar-actions {
-    order: 2;
   }
 
   .topbar-date-filter {
