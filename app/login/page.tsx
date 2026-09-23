@@ -15,7 +15,7 @@ export default function LoginPage() {
           <div className="login-simple-content">
             <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="login-simple-logo" />
             <div className="login-simple-message">
-              <h1>Setiap<br />pergerakan<br />Satu<br />kendali</h1>
+              <h1>setiap<br />pergerakan,<br />satu<br />kendali.</h1>
             </div>
           </div>
           <div className="login-simple-left-footer">Part of FTC Go Project</div>
