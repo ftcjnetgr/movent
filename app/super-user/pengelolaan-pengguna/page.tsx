@@ -47,7 +47,6 @@ export default async function UserManagementPage() {
     <>
     <div className="page-heading">
         <div>
-          <span className="eyebrow">Super User</span>
           <h1>Kelola Pengguna</h1>
           <p>Atur akses dan data pengguna dari sini.</p>
         </div>
