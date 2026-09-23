@@ -12,11 +12,11 @@ const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Maintenance', href: '/controller/alert/maintenance-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
-      { label: 'Ticketing', href: '/controller/beranda/ticketing', icon: 'ticket' },
+      { label: 'Maintenance', href: '/controller/beranda/maintenance', icon: 'ticket' },
     ] },
     { label: 'Schedule', icon: 'calendar', items: [
       { label: 'By Plan', href: '/controller/timetable?view=plan', icon: 'calendar' },
@@ -28,7 +28,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Dispatcher: [
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/dispatcher/alert/penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/dispatcher/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Maintenance', href: '/dispatcher/alert/maintenance-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [
       { label: 'Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'clipboard' },
@@ -41,7 +41,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Executor: [
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/executor/alert/penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/executor/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Maintenance', href: '/executor/alert/maintenance-maintenance', icon: 'wrench' },
     ] },
     { label: 'Tugas Saya', icon: 'clipboard', items: [{ label: 'Tugas Saya', href: '/executor/tugas-saya', icon: 'clipboard' }] },
     { label: 'Riwayat Tugas', icon: 'history', items: [{ label: 'Riwayat Tugas', href: '/executor/riwayat-tugas', icon: 'history' }] },
@@ -50,7 +50,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Maintainer: [
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/maintainer/alert/penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/maintainer/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Maintenance', href: '/maintainer/alert/maintenance-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
     { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
@@ -60,7 +60,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Operation: [
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/operation/alert/penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/operation/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Maintenance', href: '/operation/alert/maintenance-maintenance', icon: 'wrench' },
     ] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/operation/beranda', icon: 'home' }] },
     { label: 'Riwayat Extra Schedule', icon: 'calendar', items: [{ label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' }] },
@@ -74,7 +74,7 @@ const superUserNav: NavGroup[] = [
     icon: 'bell',
     items: [
       { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/alert/ticketing-maintenance', icon: 'wrench' },
+      { label: 'Maintenance', href: '/alert/maintenance-maintenance', icon: 'wrench' },
     ],
   },
   {
@@ -88,7 +88,7 @@ const superUserNav: NavGroup[] = [
     items: [
       { label: 'Schedule', href: '/controller/timetable?view=plan', icon: 'calendar' },
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
-      { label: 'Ticketing', href: '/controller/beranda/ticketing', icon: 'ticket' },
+      { label: 'Maintenance', href: '/controller/beranda/maintenance', icon: 'ticket' },
       { label: 'Monitoring', href: '/controller/timetable?view=live', icon: 'truck' },
     ],
   },
