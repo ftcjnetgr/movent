@@ -205,7 +205,7 @@ export default async function ControllerPenugasanDashboardPage() {
         </div>
       </section>
 
-      <section className="super-dashboard-table-grid controller-detail-tables">
+      <section className="super-dashboard-table-grid controller-detail-tables controller-single-detail-table">
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
             <div><h2>Penugasan Terbaru</h2><p>Ringkasan penugasan terbaru tanpa membuka detail halaman.</p></div>
@@ -230,28 +230,6 @@ export default async function ControllerPenugasanDashboardPage() {
           </div>
         </div>
 
-        <div className="super-panel super-table-panel">
-          <div className="super-panel-heading">
-            <div><h2>Maintenance Terbaru</h2><p>Ringkasan maintenance terbaru beserta lokasi dan armada.</p></div>
-          </div>
-          <div className="super-table-wrap">
-            <table className="controller-detail-table">
-              <thead><tr><th>Maintenance</th><th>Lokasi</th><th>Armada</th><th>Maintenance</th><th>Status</th><th>Waktu</th></tr></thead>
-              <tbody>
-                {tickets.map((ticket) => (
-                  <tr key={ticket.transaction_id}>
-                    <td><strong>{ticket.transaction_id}</strong></td>
-                    <td>{ticket.location ?? '-'}</td>
-                    <td>{ticket.fleet_plat_number ?? '-'}</td>
-                    <td>{ticket.maintenance_list ?? '-'}</td>
-                    <td><span className={'status-badge status-' + ticket.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(ticket.status)}</span></td>
-                    <td><strong>{shortTime(ticket.created_at)}</strong></td>
-                  </tr>
-                ))}
-                {!tickets.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada maintenance.</td></tr> : null}
-              </tbody>
-            </table>
-          </div>
         </div>
       </section>
 
