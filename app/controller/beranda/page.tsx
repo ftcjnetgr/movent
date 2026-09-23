@@ -46,7 +46,7 @@ export default async function ControllerPenugasanDashboardPage() {
   const todayEnd = new Date(new Date(`${today}T00:00:00+07:00`).getTime() + 86400000).toISOString()
   const todayDay = ((new Date(`${today}T12:00:00+07:00`).getUTCDay() + 6) % 7) + 1
 
-  const [data, tasksResult, ticketsResult, scheduleResult, activityResult, totalTaskResult, usedScheduleResult] = await Promise.all([
+  const [data, tasksResult, scheduleResult, activityResult, totalTaskResult, usedScheduleResult] = await Promise.all([
     getDashboardData(profile),
     admin
       .from('tasks')
@@ -69,7 +69,7 @@ export default async function ControllerPenugasanDashboardPage() {
   ])
 
   const tasks = tasksResult.data ?? []
-    const schedules = scheduleResult.data ?? []
+  const schedules = scheduleResult.data ?? []
   const activities = activityResult.data ?? []
   const usedScheduleIds = new Set((usedScheduleResult.data ?? []).map((task) => task.schedule_id).filter((value): value is string => Boolean(value)))
 
