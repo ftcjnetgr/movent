@@ -88,10 +88,10 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
     <section>
       <section className="section-grid two-column">
         <div className="metric-card">
-          <div className="card-title">Buat Ticketing Maintenance</div>
+          <div className="card-title">Buat Maintenance</div>
           <p className="muted">Pilih kebutuhan maintenance, lokasi armada, dan armada yang akan ditangani.</p>
           {!showCreate ? (
-            <button type="button" onClick={() => setShowCreate(true)}>Buat Ticketing</button>
+            <button type="button" onClick={() => setShowCreate(true)}>Buat Maintenance</button>
           ) : (
           <form onSubmit={handleCreate} className="data-form">
             <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceOptions} placeholder="Pilih jenis maintenance" required />
@@ -100,7 +100,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
             {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
             {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
             <div className="form-actions">
-              <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Sedang menyimpan...' : 'Submit Ticketing'}</button>
+              <button type="submit" disabled={isCreatePending}>{isCreatePending ? 'Sedang menyimpan...' : 'Submit Maintenance'}</button>
               <button type="button" className="secondary-button" onClick={() => setShowCreate(false)}>Batal</button>
             </div>
           </form>
@@ -108,7 +108,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
         </div>
 
         <div className="metric-card">
-          <div className="card-title">Preview Ticketing</div>
+          <div className="card-title">Preview Maintenance</div>
           {state.preview ? (
             <>
               <span className="eyebrow">PREVIEW</span><h2>{state.preview.transactionId}</h2>
@@ -131,8 +131,8 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                 {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
                 {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
                 <div className="form-actions">
-                  <button type="submit" disabled={isConfirmPending}>{isConfirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Ticket'}</button>
-                  <button type="button" className="secondary-button" onClick={() => setState({})}>Edit Ticket</button>
+                  <button type="submit" disabled={isConfirmPending}>{isConfirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Maintenance'}</button>
+                  <button type="button" className="secondary-button" onClick={() => setState({})}>Edit Maintenance</button>
                 </div>
               </form>
             </>
@@ -143,7 +143,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
       </section>
 
       <section className="data-table-card section-block">
-        <div className="section-heading"><div><h2>Tiket yang sudah dibuat</h2><p>Tiket yang masih tersimpan di riwayat pembuatan.</p></div></div>
+        <div className="section-heading"><div><h2>Maintenance yang sudah dibuat</h2><p>Maintenance yang masih tersimpan di riwayat pembuatan.</p></div></div>
         {cancelMessage ? <p className="form-success">{cancelMessage}</p> : null}
         <div className="table-wrap">
           <table>
@@ -174,7 +174,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                   </td>
                 </tr>
               ))}
-              {!tickets.length ? <tr><td colSpan={6}><div className="empty-state">Belum ada tiket yang dibuat untuk sekarang.</div></td></tr> : null}
+              {!tickets.length ? <tr><td colSpan={6}><div className="empty-state">Belum ada maintenance yang dibuat untuk sekarang.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
