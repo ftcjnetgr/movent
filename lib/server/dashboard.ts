@@ -73,6 +73,7 @@ type TaskAlert = {
   targetAt: Date
   driverName: string | null
   fleetPlat: string | null
+  scheduleHubId: string | null
 }
 
 function jakartaDate(value: Date) {
@@ -115,7 +116,7 @@ export async function getDashboardData(profile: AppProfile) {
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
-      .select('schedule_id, schedule_day, start_point, destination, std, sta, status')
+      .select('schedule_id, schedule_day, schedule_hub_id, start_point, destination, std, sta, status')
       .eq('status', 'Active'),
     admin
       .from('ticketings')
@@ -131,6 +132,10 @@ export async function getDashboardData(profile: AppProfile) {
   const date = jakartaDate(new Date())
   const day = ((new Date(date + 'T12:00:00+07:00').getUTCDay() + 6) % 7) + 1
   const now = new Date()
+
+  const scheduleHubById = new Map(
+    (schedules ?? []).map((schedule) => [schedule.schedule_id, schedule.schedule_hub_id as string | null]),
+  )
 
   const usedScheduleIds = new Set(
     all
@@ -152,6 +157,7 @@ export async function getDashboardData(profile: AppProfile) {
       targetAt: scheduleTimestamp(date, schedule.std),
       driverName: null,
       fleetPlat: null,
+      scheduleHubId: schedule.schedule_hub_id as string | null,
     }))
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000)
 
@@ -169,6 +175,7 @@ export async function getDashboardData(profile: AppProfile) {
       status: task.status,
       driverName: task.executor_snapshot?.full_name ?? null,
       fleetPlat: task.fleet_snapshot?.plat_number ?? null,
+      scheduleHubId: scheduleHubById.get(task.schedule_id as string) ?? null,
     }))
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 10 * 60 * 1000)
 
