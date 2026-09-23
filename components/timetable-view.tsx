@@ -271,19 +271,6 @@ export default function TimetableView({
   return (
     <div className={`schedule-page schedule-view-${view}`}>
       <div className="schedule-control-compact">
-        <div className="schedule-route-tabs schedule-route-tabs-standalone">
-          {routes.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={route === item ? 'active' : ''}
-              onClick={() => setRoute(item)}
-            >
-              {routeLabels[item] ?? item}
-            </button>
-          ))}
-        </div>
-
         <div className="schedule-filter-top">
           <div className="schedule-control-field schedule-mode-field">
             <span className="schedule-control-label">Mode</span>
