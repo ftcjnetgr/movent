@@ -91,11 +91,6 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
           <h1>Maintenance</h1>
           <p>Ini ringkasan operasional maintenance sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
-        <form className="dashboard-date-filter" method="get">
-          <label><span>Dari</span><input type="date" name="from" value={from} /></label>
-          <label><span>Sampai</span><input type="date" name="to" value={to} min={from} /></label>
-          <button type="submit">Terapkan</button>
-        </form>
       </div>
 
       <section className="super-kpi-grid maintenance-kpi-grid">
