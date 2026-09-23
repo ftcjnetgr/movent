@@ -51,32 +51,28 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
   const rangeEnd = new Date(new Date(`${to}T00:00:00+07:00`).getTime() + 86400000).toISOString()
 
   const [data, tasksResult, activityResult, totalTaskResult] = await Promise.all([
-    getDashboardData(profile),
+    getDashboardData(profile, from, to),
     admin
       .from('tasks')
       .select('transaction_id, task_type, status, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, created_at')
       .order('created_at', { ascending: false })
+      .gte('std', rangeStart)
+      .lt('std', rangeEnd)
       .limit(8),
-    admin
-      .from('schedules')
-      .select('schedule_id, std')
-      .eq('status', 'Active')
-      .eq('schedule_day', todayDay)
-      .order('std'),
     admin
       .from('tasks')
       .select('status, std')
-      .gte('std', todayStart)
-      .lt('std', todayEnd),
-    admin.from('tasks').select('*', { count: 'exact', head: true }),
-    admin.from('tasks').select('schedule_id').not('schedule_id', 'is', null),
+      .gte('std', rangeStart)
+      .lt('std', rangeEnd),
+    admin
+      .from('tasks')
+      .select('*', { count: 'exact', head: true })
+      .gte('std', rangeStart)
+      .lt('std', rangeEnd),
   ])
 
   const tasks = tasksResult.data ?? []
-  const schedules = scheduleResult.data ?? []
   const activities = activityResult.data ?? []
-  const usedScheduleIds = new Set((usedScheduleResult.data ?? []).map((task) => task.schedule_id).filter((value): value is string => Boolean(value)))
-
   const activeTasks =
     (data.taskCounts.Assigned ?? 0) +
     (data.taskCounts.Confirmed ?? 0) +
@@ -197,7 +193,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           </div>
           <div className="super-activity-list">
             <div><span className="activity-dot blue" /><span>{tasks.length} penugasan terbaru</span><time>{shortTime(now.toISOString())}</time></div>
-            <div><span className="activity-dot green" /><span>{schedules.length} schedule aktif hari ini</span><time>{shortTime(now.toISOString())}</time></div>
+            <div><span className="activity-dot green" /><span>{schedules.length} tugas selesai dalam periode</span><time>{shortTime(now.toISOString())}</time></div>
             <div><span className="activity-dot orange" /><span>{activeTasks} tugas sedang berjalan</span><time>{shortTime(now.toISOString())}</time></div>
           </div>
         </div>
