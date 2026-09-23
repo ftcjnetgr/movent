@@ -1397,7 +1397,7 @@ tbody tr:hover td { background: #fbfdff; }
 .schedule-grid-table th,
 .schedule-grid-table td {
   padding: 7px 4px;
-  font-size: 8px;
+  font-size: 9px;
   text-align: center;
 }
 
@@ -1407,6 +1407,7 @@ tbody tr:hover td { background: #fbfdff; }
   z-index: 3;
   background: #f8fafc;
   color: #8995a6;
+  font-weight: 800;
 }
 
 .schedule-grid-table thead th:first-child,
@@ -1418,16 +1419,23 @@ tbody tr:hover td { background: #fbfdff; }
   min-width: 160px;
   background: #f8fafc;
   text-align: left;
+  padding-left: 12px;
 }
 
 .schedule-grid-table tbody th {
   color: #68778b;
   font-size: 9px;
+  font-weight: 700;
 }
 
 .schedule-grid-table td {
   height: 38px;
   vertical-align: middle;
+}
+
+.schedule-grid-table tbody td {
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .schedule-grid-cell {
@@ -1450,7 +1458,7 @@ tbody tr:hover td { background: #fbfdff; }
   background: var(--primary-soft);
   color: var(--primary);
   font-size: 8px;
-  font-weight: 800;
+  font-weight: 400;
 }
 
 .schedule-trip.unassigned {
