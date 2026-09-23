@@ -47,7 +47,6 @@ export default function ProfilePage({
     <div className="profile-settings-page">
       <div className="page-heading profile-settings-heading">
         <div>
-          <span className="eyebrow">{profile.role}</span>
           <h1>{title}</h1>
           <p>Atur informasi akun dan keamanan akses kamu.</p>
         </div>
