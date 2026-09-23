@@ -86,7 +86,7 @@ export default function DashboardAlertList({
   const taskAlertRows = taskAlerts ?? []
   const ticketAlertRows = ticketAlerts ?? []
   const [now, setNow] = useState(() => Date.now())
-  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -161,32 +161,24 @@ export default function DashboardAlertList({
 
       {showTasks ? (
         <section className="alert-content-section">
-          <div className="section-heading alert-content-section-heading">
-            <div>
-              <span className="eyebrow">Penugasan</span>
-              <h2>Alert Tugas</h2>
-            </div>
-            <strong>{taskItems.length}</strong>
-          </div>
-
           {taskGroups.length ? taskGroups.map(([hub, items]) => {
             const groupKey = `task:${hub}`
-            const collapsed = collapsedGroups.has(groupKey)
+            const expanded = expandedGroups.has(groupKey)
             return (
-            <div className={`alert-group${collapsed ? ' is-collapsed' : ''}`} key={hub}>
-              <button type="button" className="alert-group-heading" onClick={() => setCollapsedGroups((current) => {
+            <div className={`alert-group${!expanded ? ' is-collapsed' : ''}`} key={hub}>
+              <button type="button" className="alert-group-heading" onClick={() => setExpandedGroups((current) => {
                 const next = new Set(current)
                 if (next.has(groupKey)) next.delete(groupKey)
                 else next.add(groupKey)
                 return next
-              })} aria-expanded={!collapsed}>
-                <span className="alert-group-chevron" aria-hidden="true">{collapsed ? '›' : '⌄'}</span>
+              })} aria-expanded={expanded}>
+                <span className="alert-group-chevron" aria-hidden="true">{expanded ? '⌄' : '›'}</span>
                 <span>Schedule Hub</span>
                 <strong>{hub}</strong>
                 <small>{items.length} schedule</small>
               </button>
-              {!collapsed ? <div className="table-wrap">
-                <table className="alert-table alert-group-table">
+              {expanded ? <div className="table-wrap">
+                <table className="alert-table alert-group-table task-alert-group-table">
                   <thead>
                     <tr>
                       <th>Schedule</th>
@@ -230,32 +222,24 @@ export default function DashboardAlertList({
 
       {showTickets ? (
         <section className="alert-content-section">
-          <div className="section-heading alert-content-section-heading">
-            <div>
-              <span className="eyebrow">Maintenance</span>
-              <h2>Alert Maintenance</h2>
-            </div>
-            <strong>{ticketItems.length}</strong>
-          </div>
-
           {ticketGroups.length ? ticketGroups.map(([location, items]) => {
             const groupKey = `ticket:${location}`
-            const collapsed = collapsedGroups.has(groupKey)
+            const expanded = expandedGroups.has(groupKey)
             return (
-            <div className={`alert-group${collapsed ? ' is-collapsed' : ''}`} key={location}>
-              <button type="button" className="alert-group-heading" onClick={() => setCollapsedGroups((current) => {
+            <div className={`alert-group${!expanded ? ' is-collapsed' : ''}`} key={location}>
+              <button type="button" className="alert-group-heading" onClick={() => setExpandedGroups((current) => {
                 const next = new Set(current)
                 if (next.has(groupKey)) next.delete(groupKey)
                 else next.add(groupKey)
                 return next
-              })} aria-expanded={!collapsed}>
-                <span className="alert-group-chevron" aria-hidden="true">{collapsed ? '›' : '⌄'}</span>
+              })} aria-expanded={expanded}>
+                <span className="alert-group-chevron" aria-hidden="true">{expanded ? '⌄' : '›'}</span>
                 <span>Lokasi</span>
                 <strong>{location}</strong>
                 <small>{items.length} ticket</small>
               </button>
-              {!collapsed ? <div className="table-wrap">
-                <table className="alert-table alert-group-table">
+              {expanded ? <div className="table-wrap">
+                <table className="alert-table alert-group-table ticket-alert-group-table">
                   <thead>
                     <tr>
                       <th>Transaction ID</th>
