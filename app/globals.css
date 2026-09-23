@@ -4684,3 +4684,42 @@ html {
     overflow-x: auto;
   }
 }
+
+
+/* alert viewport frame: only table rows scroll */
+.app-content:has(.alert-page) {
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-content:has(.alert-page) .page-content {
+  height: calc(100vh - 68px);
+  min-height: 0;
+  overflow: hidden;
+  padding-top: 28px;
+  padding-bottom: 20px;
+}
+
+.app-content:has(.alert-page) .alert-page {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-content:has(.alert-page) .alert-dashboard {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-content:has(.alert-page) .alert-content-section {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-content:has(.alert-page) .alert-table-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
