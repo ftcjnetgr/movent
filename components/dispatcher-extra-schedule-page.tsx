@@ -77,7 +77,6 @@ export default function DispatcherExtraSchedulePage() {
   return (
     <div>
       <div className="page-heading">
-        <span className="eyebrow">Dispatcher</span>
         <h1>Extra Schedule</h1>
         <p>Konfirmasi request terlebih dahulu, lalu pilih Executor dan Armada.</p>
       </div>
