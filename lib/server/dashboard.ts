@@ -107,7 +107,7 @@ function canceledFromTimestamp(task: TaskRow) {
   return task.driving_at ?? task.accepted_at ?? task.assigned_at
 }
 
-export async function getDashboardData(profile: AppProfile) {
+export async function getDashboardData(profile: AppProfile, dateFrom?: string, dateTo?: string) {
   const admin = createAdminClient()
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
     admin
@@ -125,11 +125,21 @@ export async function getDashboardData(profile: AppProfile) {
   ])
 
   const all = (allTasks ?? []) as TaskRow[]
-  const tasks = profile.role === 'Dispatcher'
+  const scopedTasks = profile.role === 'Dispatcher'
     ? all.filter((task) => task.created_by === profile.id || task.fleet_ownership === 'Non-TGR')
     : all
 
   const date = jakartaDate(new Date())
+  const rangeFrom = dateFrom ?? date
+  const rangeTo = dateTo ?? rangeFrom
+  const rangeStart = new Date(`${rangeFrom}T00:00:00+07:00`).getTime()
+  const rangeEndExclusive = new Date(`${rangeTo}T00:00:00+07:00`).getTime() + 86400000
+  const inRange = (value: string | null) => {
+    if (!value) return false
+    const time = new Date(value).getTime()
+    return time >= rangeStart && time < rangeEndExclusive
+  }
+  const tasks = scopedTasks.filter((task) => inRange(task.std))
   const day = ((new Date(date + 'T12:00:00+07:00').getUTCDay() + 6) % 7) + 1
   const now = new Date()
 
@@ -180,7 +190,7 @@ export async function getDashboardData(profile: AppProfile) {
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 10 * 60 * 1000)
 
   const taskAlerts = [...unassignedAlerts, ...assignedAlerts]
-  const ticketRows = (ticketings ?? []) as TicketRow[]
+  const ticketRows = ((ticketings ?? []) as TicketRow[]).filter((ticket) => inRange(ticket.created_at))
   const ticketAlerts = ticketRows.filter((ticket) =>
     ['Requested', 'Confirmed', 'In Progress'].includes(ticket.status)
   )
