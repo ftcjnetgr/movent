@@ -25,15 +25,27 @@ function shortTime(value: string | null) {
   })
 }
 
-export default async function ControllerTicketingDashboardPage() {
+export default async function ControllerTicketingDashboardPage({ searchParams }: { searchParams: Promise<{ from?: string; to?: string }> }) {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
+  const now = new Date()
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now)
+  const params = await searchParams
+  const requestedFrom = params.from ?? today
+  const requestedTo = params.to ?? requestedFrom
+  const from = /^\d{4}-\d{2}-\d{2}$/.test(requestedFrom) ? requestedFrom : today
+  const to = /^\d{4}-\d{2}-\d{2}$/.test(requestedTo) && requestedTo >= from ? requestedTo : from
+  const rangeStart = new Date(`${from}T00:00:00+07:00`).toISOString()
+  const rangeEnd = new Date(new Date(`${to}T00:00:00+07:00`).getTime() + 86400000).toISOString()
+
   const [data, ticketResult] = await Promise.all([
-    getDashboardData(profile),
+    getDashboardData(profile, from, to),
     admin
       .from('ticketings')
       .select('transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at')
       .order('created_at', { ascending: false })
+      .gte('created_at', rangeStart)
+      .lt('created_at', rangeEnd)
       .limit(12),
   ])
 
@@ -43,20 +55,11 @@ export default async function ControllerTicketingDashboardPage() {
     (data.ticketCounts.Confirmed ?? 0) +
     (data.ticketCounts['In Progress'] ?? 0)
 
-  const now = new Date()
-  const today = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Jakarta',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(now)
-  const todayStart = new Date(`${today}T00:00:00+07:00`).toISOString()
-  const todayEnd = new Date(new Date(`${today}T00:00:00+07:00`).getTime() + 86400000).toISOString()
   const { data: todayTickets } = await admin
     .from('ticketings')
     .select('status, created_at')
-    .gte('created_at', todayStart)
-    .lt('created_at', todayEnd)
+    .gte('created_at', rangeStart)
+    .lt('created_at', rangeEnd)
 
   const todayActivities = todayTickets ?? []
   const byHour = Array.from({ length: 24 }, (_, hour) => {
@@ -86,8 +89,13 @@ export default async function ControllerTicketingDashboardPage() {
         <div>
           <span className="eyebrow">Controller</span>
           <h1>Maintenance</h1>
-          <p>Ini ringkasan operasional maintenance hari ini. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
+          <p>Ini ringkasan operasional maintenance sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
+        <form className="dashboard-date-filter" method="get">
+          <label><span>Dari</span><input type="date" name="from" value={from} /></label>
+          <label><span>Sampai</span><input type="date" name="to" value={to} min={from} /></label>
+          <button type="submit">Terapkan</button>
+        </form>
       </div>
 
       <section className="super-kpi-grid maintenance-kpi-grid">
