@@ -1081,9 +1081,9 @@ tbody tr:hover td { background: #fbfdff; }
 .login-simple-message {
   width: 100%;
   max-width: 360px;
-  margin: auto;
-  align-self: center;
-  text-align: center;
+  margin: auto 0;
+  align-self: flex-start;
+  text-align: left;
 }
 .login-simple-message h1 {
   margin: 0;
