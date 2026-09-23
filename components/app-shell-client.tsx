@@ -165,6 +165,15 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<string[]>([])
   const currentRole = Object.keys(modeRoutes).find((role) => pathname.startsWith('/' + role.toLowerCase())) ?? (profile.role === 'Super User' ? 'Controller' : profile.role)
+  const isDashboardDateFilter = pathname === '/controller/beranda' || pathname === '/controller/beranda/ticketing'
+  const jakartaToday = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date())
+  const filterFrom = searchParams.get('from') ?? jakartaToday
+  const filterTo = searchParams.get('to') ?? filterFrom
   const navGroups = useMemo(() => {
     const roleNav = navByRole[currentRole] ?? []
     if (profile.role !== 'Super User') return roleNav
@@ -268,6 +277,20 @@ export default function AppShellClient({ profile, children }: { profile: { usern
         <header className="topbar">
           <button className="mobile-menu" type="button" onClick={() => setMobileOpen(v => !v)} aria-label="Buka menu navigasi">☰</button>
           <div className="topbar-search"><span className="search-icon">⌕</span><input aria-label="Pencarian" placeholder="Cari tugas, armada, lokasi..." /></div>
+          {isDashboardDateFilter ? (
+            <form className="topbar-date-filter" method="get" action={pathname}>
+              <label>
+                <span>Dari</span>
+                <input type="date" name="from" value={filterFrom} onChange={() => {}} />
+              </label>
+              <label>
+                <span>Sampai</span>
+                <input type="date" name="to" value={filterTo} min={filterFrom} onChange={() => {}} />
+              </label>
+              <button type="submit">Terapkan</button>
+              <button type="button" className="topbar-date-reset" onClick={() => router.push(pathname)}>Reset</button>
+            </form>
+          ) : null}
           <div className="topbar-actions">
             <div className="topbar-user"><span className="topbar-avatar">{(profile.full_name || profile.username || 'U').slice(0,1).toUpperCase()}</span><span>{profile.full_name || profile.username}</span><small>{currentRole}</small><span className="user-chevron">⌄</span></div>
           </div>
