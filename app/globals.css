@@ -4830,3 +4830,16 @@ html {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Maintenance dashboard: keep all five summary cards on one desktop row. */
+.super-dashboard .maintenance-kpi-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.super-dashboard .bar-maintenance-completed { background: #8b5cf6; }
+.super-dashboard .legend-purple { background: #8b5cf6; }
+@media (max-width: 820px) {
+  .super-dashboard .maintenance-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .super-dashboard .maintenance-kpi-grid { grid-template-columns: 1fr; }
+}
