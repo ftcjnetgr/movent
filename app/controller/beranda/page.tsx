@@ -113,34 +113,44 @@ export default async function ControllerPenugasanDashboardPage() {
 
       <section className="super-kpi-grid assignment-kpi-grid">
         <div className="super-kpi-card kpi-blue">
-          <div className="super-kpi-icon">▤</div>
-          <span>Semua Tugas</span>
-          <strong>{totalTaskResult.count ?? 0}</strong>
-          <small>Semua data</small>
+          <div className="super-kpi-icon">⌁</div>
+          <div className="super-kpi-content">
+            <span>Semua Tugas</span>
+            <strong>{totalTaskResult.count ?? 0}</strong>
+            <small>Semua data</small>
+          </div>
         </div>
-        <div className="super-kpi-card kpi-green">
+        <div className="super-kpi-card kpi-orange">
           <div className="super-kpi-icon">▰</div>
-          <span>Siap Jalan</span>
-          <strong>{data.taskCounts.Assigned ?? 0}</strong>
-          <small>Belum mulai</small>
+          <div className="super-kpi-content">
+            <span>Siap Jalan</span>
+            <strong>{data.taskCounts.Assigned ?? 0}</strong>
+            <small>Belum mulai</small>
+          </div>
         </div>
         <div className="super-kpi-card kpi-cyan">
           <div className="super-kpi-icon">✓</div>
-          <span>Udah Diterima</span>
-          <strong>{data.taskCounts.Confirmed ?? 0}</strong>
-          <small>Udah diterima</small>
+          <div className="super-kpi-content">
+            <span>Udah Diterima</span>
+            <strong>{data.taskCounts.Confirmed ?? 0}</strong>
+            <small>Udah diterima</small>
+          </div>
         </div>
-        <div className="super-kpi-card kpi-orange">
+        <div className="super-kpi-card kpi-green">
           <div className="super-kpi-icon">◷</div>
-          <span>Lagi Jalan</span>
-          <strong>{data.taskCounts.Driving ?? 0}</strong>
-          <small>Sedang berjalan</small>
+          <div className="super-kpi-content">
+            <span>Lagi Jalan</span>
+            <strong>{data.taskCounts.Driving ?? 0}</strong>
+            <small>Sedang berjalan</small>
+          </div>
         </div>
         <div className="super-kpi-card kpi-purple">
           <div className="super-kpi-icon">✓</div>
-          <span>Udah Selesai</span>
-          <strong>{data.taskCounts.Completed ?? 0}</strong>
-          <small>Udah selesai</small>
+          <div className="super-kpi-content">
+            <span>Udah Selesai</span>
+            <strong>{data.taskCounts.Completed ?? 0}</strong>
+            <small>Udah selesai</small>
+          </div>
         </div>
       </section>
 
