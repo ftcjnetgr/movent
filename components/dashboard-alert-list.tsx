@@ -38,7 +38,7 @@ function formatDuration(totalSeconds: number) {
 }
 
 function maintenanceBaseAt(maintenance: TicketAlert) {
-  if (maintenance.status === 'Confirmed') return maintenance.accepted_at ? new Date(maintenance.accepted_at).getTime() : null
+  if (ticket.status === 'Confirmed') return maintenance.accepted_at ? new Date(maintenance.accepted_at).getTime() : null
   if (maintenance.status === 'In Progress') return maintenance.in_progress_at ? new Date(maintenance.in_progress_at).getTime() : null
   return new Date(maintenance.created_at).getTime()
 }
@@ -77,15 +77,15 @@ function taskDetail(alert: TaskAlert, now: number) {
 
 export default function DashboardAlertList({
   taskAlerts,
-  maintenanceAlerts,
+  ticketAlerts,
   mode = 'all',
 }: {
   taskAlerts?: TaskAlert[]
-  maintenanceAlerts?: TicketAlert[]
-  mode?: 'all' | 'task' | 'maintenance'
+  ticketAlerts?: TicketAlert[]
+  mode?: 'all' | 'task' | 'ticket'
 }) {
   const taskAlertRows = taskAlerts ?? []
-  const maintenanceAlertRows = maintenanceAlerts ?? []
+  const ticketAlertRows = ticketAlerts ?? []
   const [now, setNow] = useState(() => Date.now())
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
 
@@ -99,33 +99,33 @@ export default function DashboardAlertList({
     [taskAlertRows, now],
   )
 
-  const maintenanceItems = useMemo(
-    () => maintenanceAlertRows.map((maintenance) => {
-      const base = maintenanceBaseAt(maintenance)
+  const ticketItems = useMemo(
+    () => ticketAlertRows.map((ticket) => {
+      const base = maintenanceBaseAt(ticket)
       if (base === null) return null
-      const thresholdSeconds = maintenanceThresholdSeconds(maintenance.status)
+      const thresholdSeconds = maintenanceThresholdSeconds(ticket.status)
       const elapsed = (now - base) / 1000
       return {
-        transactionId: maintenance.transaction_id,
-        status: maintenanceStatusLabel(maintenance.status),
+        transactionId: ticket.transaction_id,
+        status: maintenanceStatusLabel(ticket.status),
         label: elapsed < thresholdSeconds ? 'Sisa waktu' : 'Lewat',
         indicator: formatDuration(Math.abs(thresholdSeconds - elapsed)),
         late: elapsed >= thresholdSeconds,
         threshold: maintenance.status === 'Requested' ? '3 jam' : maintenance.status === 'Confirmed' ? '1 hari' : '3 hari',
-        location: maintenance.location ?? 'Lokasi tidak tersedia',
-        maintenance: maintenance.maintenance_list ?? 'Maintenance tidak tersedia',
+        location: ticket.location ?? 'Lokasi tidak tersedia',
+        maintenance: ticket.maintenance_list ?? 'Maintenance tidak tersedia',
       }
     }).filter((item): item is NonNullable<typeof item> => item !== null),
-    [maintenanceAlertRows, now],
+    [ticketAlertRows, now],
   )
 
   const lateTaskCount = taskItems.filter((item) => item.late).length
-  const lateTicketCount = maintenanceItems.filter((item) => item.late).length
-  const showTasks = mode !== 'maintenance'
+  const lateTicketCount = ticketItems.filter((item) => item.late).length
+  const showTasks = mode !== 'ticket'
   const showTickets = mode !== 'task'
-  const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? maintenanceItems.length : 0)
+  const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? ticketItems.length : 0)
   const lateCount = (showTasks ? lateTaskCount : 0) + (showTickets ? lateTicketCount : 0)
-  const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'maintenance' ? 'Alert Maintenance' : 'Alert'
+  const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'ticket' ? 'Alert Maintenance' : 'Alert'
   const heroEyebrow = mode === 'task' ? 'Penugasan' : mode === 'maintenance' ? 'Maintenance' : 'Monitoring'
   const heroDescription = mode === 'task'
     ? 'Pantau schedule yang mendekati atau melewati batas waktu penugasan.'
@@ -142,13 +142,13 @@ export default function DashboardAlertList({
     return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [taskItems])
 
-  const maintenanceGroups = useMemo(() => {
-    const groups = new Map<string, typeof maintenanceItems>()
-    for (const item of maintenanceItems) {
+  const ticketGroups = useMemo(() => {
+    const groups = new Map<string, typeof ticketItems>()
+    for (const item of ticketItems) {
       groups.set(item.location, [...(groups.get(item.location) ?? []), item])
     }
     return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-  }, [maintenanceItems])
+  }, [ticketItems])
 
   return (
     <div className="alert-dashboard">
