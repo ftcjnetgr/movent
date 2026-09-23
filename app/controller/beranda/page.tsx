@@ -230,7 +230,6 @@ export default async function ControllerPenugasanDashboardPage() {
           </div>
         </div>
 
-        </div>
       </section>
 
     </div>
