@@ -137,7 +137,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
               </form>
             </>
           ) : (
-            <p className="muted">Preview ticketing akan muncul setelah data berhasil disimpan.</p>
+            <p className="muted">Preview maintenance akan muncul setelah data berhasil disimpan.</p>
           )}
         </div>
       </section>
