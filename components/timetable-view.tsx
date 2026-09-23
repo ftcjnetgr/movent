@@ -271,7 +271,20 @@ export default function TimetableView({
   return (
     <div className={`schedule-page schedule-view-${view}`}>
       <div className="schedule-control-compact">
-        <div className="schedule-filter-top">
+        <div className="schedule-route-tabs schedule-route-tabs-standalone">
+          {routes.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={route === item ? 'active' : ''}
+              onClick={() => setRoute(item)}
+            >
+              {routeLabels[item] ?? item}
+            </button>
+          ))}
+        </div>
+
+        <div className="schedule-filter-bar">
           <div className="schedule-control-field schedule-day-field">
             <span className="schedule-control-label">Hari</span>
             <div className="schedule-day-row">
@@ -328,44 +341,31 @@ export default function TimetableView({
               ))}
             </div>
           </div>
-        </div>
 
-        <div className="schedule-point-card">
-          <span className="schedule-control-label">
-            {direction === 'start-point' ? 'Start Point / Destination' : 'Start Point / Destination'}
-          </span>
-          <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
-            <button
-              type="button"
-              className={!point ? 'active' : ''}
-              onClick={() => setPoint('')}
-            >
-              Semua
-            </button>
-            {pointOptions.map((item) => (
+          <div className="schedule-control-field schedule-point-field">
+            <span className="schedule-control-label">
+              {direction === 'start-point' ? 'Start Point' : 'Destination'}
+            </span>
+            <div className="schedule-point-tabs" aria-label={direction === 'start-point' ? 'Filter Start Point' : 'Filter Destination'}>
               <button
-                key={item}
                 type="button"
-                className={point === item ? 'active' : ''}
-                onClick={() => setPoint(item)}
+                className={!point ? 'active' : ''}
+                onClick={() => setPoint('')}
               >
-                {item}
+                Semua
               </button>
-            ))}
+              {pointOptions.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={point === item ? 'active' : ''}
+                  onClick={() => setPoint(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-
-        <div className="schedule-route-tabs schedule-route-tabs-standalone">
-          {routes.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={route === item ? 'active' : ''}
-              onClick={() => setRoute(item)}
-            >
-              {routeLabels[item] ?? item}
-            </button>
-          ))}
         </div>
       </div>
 
