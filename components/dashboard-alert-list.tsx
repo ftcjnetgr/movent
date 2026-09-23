@@ -38,7 +38,7 @@ function formatDuration(totalSeconds: number) {
 }
 
 function maintenanceBaseAt(maintenance: TicketAlert) {
-  if (ticket.status === 'Confirmed') return maintenance.accepted_at ? new Date(maintenance.accepted_at).getTime() : null
+  if (maintenance.status === 'Confirmed') return maintenance.accepted_at ? new Date(maintenance.accepted_at).getTime() : null
   if (maintenance.status === 'In Progress') return maintenance.in_progress_at ? new Date(maintenance.in_progress_at).getTime() : null
   return new Date(maintenance.created_at).getTime()
 }
