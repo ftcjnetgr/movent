@@ -163,8 +163,8 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
         <div className="super-panel super-chart-panel">
           <div className="super-panel-heading">
             <div>
-              <h2>Aktivitas Tugas Hari Ini</h2>
-              <p>Lihat ritme keberangkatan berdasarkan jam STD.</p>
+              <h2>Aktivitas Tugas</h2>
+              <p>Lihat ritme keberangkatan berdasarkan periode yang dipilih.</p>
             </div>
             <div className="super-chart-legend">
               <span><i className="legend-blue" /> Udah Selesai</span>
