@@ -343,8 +343,6 @@ export default function TimetableView({
           </div>
         </div>
 
-        </div>
-
         <div className="schedule-point-card">
           <span className="schedule-control-label">
             {direction === 'start-point' ? 'Start Point' : 'Destination'}
