@@ -295,9 +295,6 @@ export default function AppShellClient({ profile, children }: { profile: { usern
               <button type="button" className="topbar-date-reset" onClick={() => router.push(pathname)}>Reset</button>
             </form>
           ) : null}
-          <div className="topbar-actions">
-            <div className="topbar-user"><span className="topbar-avatar">{(profile.full_name || profile.username || 'U').slice(0,1).toUpperCase()}</span><span>{profile.full_name || profile.username}</span><small>{currentRole}</small><span className="user-chevron">⌄</span></div>
-          </div>
         </header>
         <section className="page-content">{children}</section>
         <footer className="app-footer"><span>Part of FTC Go Project</span><span>Developed by Fleet Traffic Control</span></footer>
