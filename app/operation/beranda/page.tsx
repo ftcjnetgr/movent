@@ -15,7 +15,6 @@ export default async function OperationBerandaPage() {
     <div className="role-page">
       <div className="page-heading">
         <div>
-          <span className="eyebrow">OPERATION</span>
           <h1>Operasional Harian</h1>
           <p>Buat Supply Non-TGR dan ajukan Jadwal Tambahan tanpa pindah-pindah halaman.</p>
         </div>
