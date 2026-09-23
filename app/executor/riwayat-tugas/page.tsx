@@ -29,7 +29,6 @@ export default async function ExecutorHistoryPage() {
     <>
     <div className="page-heading">
         <div>
-          <span className="eyebrow">Executor</span>
           <h1>Riwayat Tugas</h1>
           <p>Riwayat tugas yang sudah selesai.</p>
         </div>
