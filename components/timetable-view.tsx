@@ -272,6 +272,26 @@ export default function TimetableView({
     <div className={`schedule-page schedule-view-${view}`}>
       <div className="schedule-control-compact">
         <div className="schedule-filter-top">
+          <div className="schedule-control-field schedule-mode-field">
+            <span className="schedule-control-label">Mode</span>
+            <div className="schedule-direction">
+              <button
+                type="button"
+                className={direction === 'start-point' ? 'active' : ''}
+                onClick={() => { setDirection('start-point'); setPoint('') }}
+              >
+                AS Start Point
+              </button>
+              <button
+                type="button"
+                className={direction === 'destination' ? 'active' : ''}
+                onClick={() => { setDirection('destination'); setPoint('') }}
+              >
+                AS Destination
+              </button>
+            </div>
+          </div>
+
           <div className="schedule-control-field schedule-day-field">
             <span className="schedule-control-label">Hari</span>
             <div className="schedule-day-row">
@@ -293,26 +313,6 @@ export default function TimetableView({
             </div>
           </div>
 
-          <div className="schedule-control-field schedule-mode-field">
-            <span className="schedule-control-label">Mode</span>
-            <div className="schedule-direction">
-              <button
-                type="button"
-                className={direction === 'start-point' ? 'active' : ''}
-                onClick={() => { setDirection('start-point'); setPoint('') }}
-              >
-                AS Start Point
-              </button>
-              <button
-                type="button"
-                className={direction === 'destination' ? 'active' : ''}
-                onClick={() => { setDirection('destination'); setPoint('') }}
-              >
-                AS Destination
-              </button>
-            </div>
-          </div>
-
           <div className="schedule-control-field schedule-category-field">
             <span className="schedule-control-label">Category</span>
             <div className="schedule-category-buttons">
@@ -328,6 +328,8 @@ export default function TimetableView({
               ))}
             </div>
           </div>
+        </div>
+
         </div>
 
         <div className="schedule-point-card">
