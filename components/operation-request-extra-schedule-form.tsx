@@ -17,7 +17,7 @@ export default function OperationRequestExtraScheduleForm({locations}:{locations
    <button type="submit" disabled={pending}>{pending?'Menyiapkan preview...':'Submit Request'}</button>
   </form>
   {state.preview?<div className="metric-card" style={{marginTop:16}}>
-   <span className="eyebrow">PREVIEW REQUEST</span><h3>{state.preview.transactionId}</h3>
+   <h3>{state.preview.transactionId}</h3>
    <div className="task-summary-grid"><div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div><div><span>STD</span><strong>{state.preview.std.slice(11,16)}</strong></div><div><span>STA</span><strong>{state.preview.sta.slice(11,16)}</strong></div></div>
    <p className="muted">Periksa data sebelum request dikonfirmasi.</p>
    <form action={confirmAction} className="compact-form">
