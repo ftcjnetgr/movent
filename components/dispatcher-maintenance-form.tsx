@@ -111,7 +111,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
           <div className="card-title">Preview Maintenance</div>
           {state.preview ? (
             <>
-              <span className="eyebrow">PREVIEW</span><h2>{state.preview.transactionId}</h2>
+              <h2>{state.preview.transactionId}</h2>
               <div className="compact-form">
                 <div><span className="muted">Daftar Maintenance</span><strong>{state.preview.maintenanceList}</strong></div>
                 <div><span className="muted">Lokasi</span><strong>{state.preview.location}</strong></div>
