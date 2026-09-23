@@ -87,7 +87,6 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
     <div className="super-dashboard">
       <div className="super-dashboard-heading">
         <div>
-          <span className="eyebrow">Controller</span>
           <h1>Maintenance</h1>
           <p>Ini ringkasan operasional maintenance sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
