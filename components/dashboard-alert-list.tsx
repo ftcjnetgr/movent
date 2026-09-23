@@ -37,19 +37,19 @@ function formatDuration(totalSeconds: number) {
   return days > 0 ? `${days} hari ${clock}` : clock
 }
 
-function ticketBaseAt(ticket: TicketAlert) {
-  if (ticket.status === 'Confirmed') return ticket.accepted_at ? new Date(ticket.accepted_at).getTime() : null
-  if (ticket.status === 'In Progress') return ticket.in_progress_at ? new Date(ticket.in_progress_at).getTime() : null
-  return new Date(ticket.created_at).getTime()
+function maintenanceBaseAt(maintenance: TicketAlert) {
+  if (maintenance.status === 'Confirmed') return maintenance.accepted_at ? new Date(maintenance.accepted_at).getTime() : null
+  if (maintenance.status === 'In Progress') return maintenance.in_progress_at ? new Date(maintenance.in_progress_at).getTime() : null
+  return new Date(maintenance.created_at).getTime()
 }
 
-function ticketThresholdSeconds(status: string) {
+function maintenanceThresholdSeconds(status: string) {
   if (status === 'Confirmed') return 24 * 60 * 60
   if (status === 'In Progress') return 3 * 24 * 60 * 60
   return 3 * 60 * 60
 }
 
-function ticketStatusLabel(status: string) {
+function maintenanceStatusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Dibuat',
     Confirmed: 'Dikonfirmasi',
@@ -77,15 +77,15 @@ function taskDetail(alert: TaskAlert, now: number) {
 
 export default function DashboardAlertList({
   taskAlerts,
-  ticketAlerts,
+  maintenanceAlerts,
   mode = 'all',
 }: {
   taskAlerts?: TaskAlert[]
-  ticketAlerts?: TicketAlert[]
-  mode?: 'all' | 'task' | 'ticket'
+  maintenanceAlerts?: TicketAlert[]
+  mode?: 'all' | 'task' | 'maintenance'
 }) {
   const taskAlertRows = taskAlerts ?? []
-  const ticketAlertRows = ticketAlerts ?? []
+  const maintenanceAlertRows = maintenanceAlerts ?? []
   const [now, setNow] = useState(() => Date.now())
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
 
@@ -99,38 +99,38 @@ export default function DashboardAlertList({
     [taskAlertRows, now],
   )
 
-  const ticketItems = useMemo(
-    () => ticketAlertRows.map((ticket) => {
-      const base = ticketBaseAt(ticket)
+  const maintenanceItems = useMemo(
+    () => maintenanceAlertRows.map((maintenance) => {
+      const base = maintenanceBaseAt(maintenance)
       if (base === null) return null
-      const thresholdSeconds = ticketThresholdSeconds(ticket.status)
+      const thresholdSeconds = maintenanceThresholdSeconds(maintenance.status)
       const elapsed = (now - base) / 1000
       return {
-        transactionId: ticket.transaction_id,
-        status: ticketStatusLabel(ticket.status),
+        transactionId: maintenance.transaction_id,
+        status: maintenanceStatusLabel(maintenance.status),
         label: elapsed < thresholdSeconds ? 'Sisa waktu' : 'Lewat',
         indicator: formatDuration(Math.abs(thresholdSeconds - elapsed)),
         late: elapsed >= thresholdSeconds,
-        threshold: ticket.status === 'Requested' ? '3 jam' : ticket.status === 'Confirmed' ? '1 hari' : '3 hari',
-        location: ticket.location ?? 'Lokasi tidak tersedia',
-        maintenance: ticket.maintenance_list ?? 'Maintenance tidak tersedia',
+        threshold: maintenance.status === 'Requested' ? '3 jam' : maintenance.status === 'Confirmed' ? '1 hari' : '3 hari',
+        location: maintenance.location ?? 'Lokasi tidak tersedia',
+        maintenance: maintenance.maintenance_list ?? 'Maintenance tidak tersedia',
       }
     }).filter((item): item is NonNullable<typeof item> => item !== null),
-    [ticketAlertRows, now],
+    [maintenanceAlertRows, now],
   )
 
   const lateTaskCount = taskItems.filter((item) => item.late).length
-  const lateTicketCount = ticketItems.filter((item) => item.late).length
-  const showTasks = mode !== 'ticket'
+  const lateTicketCount = maintenanceItems.filter((item) => item.late).length
+  const showTasks = mode !== 'maintenance'
   const showTickets = mode !== 'task'
-  const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? ticketItems.length : 0)
+  const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? maintenanceItems.length : 0)
   const lateCount = (showTasks ? lateTaskCount : 0) + (showTickets ? lateTicketCount : 0)
-  const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'ticket' ? 'Alert Maintenance' : 'Alert'
-  const heroEyebrow = mode === 'task' ? 'Penugasan' : mode === 'ticket' ? 'Maintenance' : 'Monitoring'
+  const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'maintenance' ? 'Alert Maintenance' : 'Alert'
+  const heroEyebrow = mode === 'task' ? 'Penugasan' : mode === 'maintenance' ? 'Maintenance' : 'Monitoring'
   const heroDescription = mode === 'task'
     ? 'Pantau schedule yang mendekati atau melewati batas waktu penugasan.'
-    : mode === 'ticket'
-      ? 'Pantau ticket maintenance yang belum bergerak sesuai batas waktu proses.'
+    : mode === 'maintenance'
+      ? 'Pantau maintenance maintenance yang belum bergerak sesuai batas waktu proses.'
       : 'Pantau kondisi operasional yang membutuhkan perhatian.'
 
   const taskGroups = useMemo(() => {
@@ -142,13 +142,13 @@ export default function DashboardAlertList({
     return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [taskItems])
 
-  const ticketGroups = useMemo(() => {
-    const groups = new Map<string, typeof ticketItems>()
-    for (const item of ticketItems) {
+  const maintenanceGroups = useMemo(() => {
+    const groups = new Map<string, typeof maintenanceItems>()
+    for (const item of maintenanceItems) {
       groups.set(item.location, [...(groups.get(item.location) ?? []), item])
     }
     return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-  }, [ticketItems])
+  }, [maintenanceItems])
 
   return (
     <div className="alert-dashboard">
@@ -223,8 +223,8 @@ export default function DashboardAlertList({
 
       {showTickets ? (
         <section className="alert-content-section">
-          {ticketGroups.length ? ticketGroups.map(([location, items]) => {
-            const groupKey = `ticket:${location}`
+          {maintenanceGroups.length ? maintenanceGroups.map(([location, items]) => {
+            const groupKey = `maintenance:${location}`
             const expanded = expandedGroups.has(groupKey)
             return (
             <div className={`alert-group${!expanded ? ' is-collapsed' : ''}`} key={location}>
@@ -237,10 +237,10 @@ export default function DashboardAlertList({
                 <span className="alert-group-chevron" aria-hidden="true">{expanded ? '⌄' : '›'}</span>
                 <span>Lokasi</span>
                 <strong>{location}</strong>
-                <small>{items.length} ticket</small>
+                <small>{items.length} maintenance</small>
               </button>
               {expanded ? <div className="table-wrap">
-                <table className="alert-table alert-group-table ticket-alert-group-table">
+                <table className="alert-table alert-group-table maintenance-alert-group-table">
                   <thead>
                     <tr>
                       <th>Transaction ID</th>
@@ -255,7 +255,7 @@ export default function DashboardAlertList({
                       <tr key={item.transactionId} className={item.late ? 'is-alert-late' : ''}>
                         <td><strong>{item.transactionId}</strong></td>
                         <td>{item.maintenance}</td>
-                        <td><span className="alert-kind-badge ticket">{item.status}</span></td>
+                        <td><span className="alert-kind-badge maintenance">{item.status}</span></td>
                         <td>{item.threshold}</td>
                         <td><b className={item.late ? 'is-late' : ''}>{item.label} · {item.indicator}</b></td>
                       </tr>
