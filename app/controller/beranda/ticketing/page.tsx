@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -44,12 +43,42 @@ export default async function ControllerTicketingDashboardPage() {
     (data.ticketCounts.Confirmed ?? 0) +
     (data.ticketCounts['In Progress'] ?? 0)
 
-  const statusRows = [
-    { label: 'Diajukan', value: data.ticketCounts.Requested ?? 0, color: 'blue', note: 'Menunggu diterima' },
-    { label: 'Dikonfirmasi', value: data.ticketCounts.Confirmed ?? 0, color: 'green', note: 'Sudah diterima' },
-    { label: 'Sedang dikerjakan', value: data.ticketCounts['In Progress'] ?? 0, color: 'cyan', note: 'Sedang diproses' },
-    { label: 'Selesai', value: data.ticketCounts.Completed ?? 0, color: 'purple', note: 'Maintenance selesai' },
-  ]
+  const now = new Date()
+  const today = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now)
+  const todayStart = new Date(`${today}T00:00:00+07:00`).toISOString()
+  const todayEnd = new Date(new Date(`${today}T00:00:00+07:00`).getTime() + 86400000).toISOString()
+  const { data: todayTickets } = await admin
+    .from('ticketings')
+    .select('status, created_at')
+    .gte('created_at', todayStart)
+    .lt('created_at', todayEnd)
+
+  const todayActivities = todayTickets ?? []
+  const byHour = Array.from({ length: 24 }, (_, hour) => {
+    const rows = todayActivities.filter((ticket) =>
+      new Date(ticket.created_at).toLocaleString('en-US', {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        hour12: false,
+      }).slice(0, 2) === String(hour).padStart(2, '0')
+    )
+    return {
+      hour,
+      requested: rows.filter((ticket) => ticket.status === 'Requested').length,
+      confirmed: rows.filter((ticket) => ticket.status === 'Confirmed').length,
+      inProgress: rows.filter((ticket) => ticket.status === 'In Progress').length,
+      completed: rows.filter((ticket) => ticket.status === 'Completed').length,
+      canceled: rows.filter((ticket) => ticket.status === 'Canceled').length,
+    }
+  })
+  const maxHour = Math.max(1, ...byHour.map((item) =>
+    item.requested + item.confirmed + item.inProgress + item.completed + item.canceled
+  ))
 
   return (
     <div className="super-dashboard">
@@ -61,7 +90,7 @@ export default async function ControllerTicketingDashboardPage() {
         </div>
       </div>
 
-      <section className="super-kpi-grid">
+      <section className="super-kpi-grid maintenance-kpi-grid">
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">⌁</div>
           <span>Diajukan</span>
@@ -94,28 +123,38 @@ export default async function ControllerTicketingDashboardPage() {
         </div>
       </section>
 
-      <section className="super-quick-row">
-        <div className="super-panel super-quick-panel">
-          <div className="super-quick-grid maintenance-quick-grid">
-            <Link href="/dispatcher/maintenance-armada"><span className="quick-blue">+</span><strong>Buat Maintenance</strong></Link>
-            <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
-          </div>
-        </div>
-      </section>
 
       <section className="super-dashboard-main-grid maintenance-dashboard-main-grid">
-        <div className="super-panel super-activity-panel">
+        <div className="super-panel super-chart-panel">
           <div className="super-panel-heading">
-            <div><h2>Status Maintenance</h2><p>Ringkasan kondisi maintenance saat ini.</p></div>
+            <div>
+              <h2>Aktivitas Maintenance Hari Ini</h2>
+              <p>Maintenance yang dibuat hari ini berdasarkan jam.</p>
+            </div>
+            <div className="super-chart-legend">
+              <span><i className="legend-blue" /> Diajukan</span>
+              <span><i className="legend-green" /> Dikonfirmasi</span>
+              <span><i className="legend-orange" /> Dikerjakan</span>
+              <span><i className="legend-purple" /> Selesai</span>
+              <span><i className="legend-red" /> Dibatalkan</span>
+            </div>
           </div>
-          <div className="super-activity-list">
-            {statusRows.map((item) => (
-              <div key={item.label}>
-                <span className={'activity-dot ' + item.color} />
-                <span>{item.label} · {item.value} data</span>
-                <small>{item.note}</small>
-              </div>
-            ))}
+          <div className="super-chart">
+            <div className="super-chart-y"><span>{maxHour}</span><span>{Math.ceil(maxHour / 2)}</span><span>0</span></div>
+            <div className="super-chart-bars">
+              {byHour.map((item) => (
+                <div className="super-chart-column" key={item.hour}>
+                  <div className="super-chart-stack">
+                    {item.requested > 0 ? <span className="bar-completed" style={{ height: `${(item.requested / maxHour) * 100}%` }} /> : null}
+                    {item.confirmed > 0 ? <span className="bar-driving" style={{ height: `${(item.confirmed / maxHour) * 100}%` }} /> : null}
+                    {item.inProgress > 0 ? <span className="bar-unassigned" style={{ height: `${(item.inProgress / maxHour) * 100}%` }} /> : null}
+                    {item.completed > 0 ? <span className="bar-maintenance-completed" style={{ height: `${(item.completed / maxHour) * 100}%` }} /> : null}
+                    {item.canceled > 0 ? <span className="bar-canceled" style={{ height: `${(item.canceled / maxHour) * 100}%` }} /> : null}
+                  </div>
+                  <small>{String(item.hour).padStart(2, '0')}</small>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
