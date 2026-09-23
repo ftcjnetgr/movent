@@ -66,7 +66,6 @@ export default async function SuperUserTransactionManagementPage() {
     <>
     <div className="page-heading">
         <div>
-          <span className="eyebrow">Super User</span>
           <h1>Kelola Transaksi</h1>
           <p>Edit transaksi yang masih bisa diubah. Transaksi yang sudah selesai tetap terkunci.</p>
         </div>
