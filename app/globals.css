@@ -4780,3 +4780,11 @@ html {
 .alert-page .maintenance-alert-group-table td:nth-child(5) {
   text-align: center;
 }
+
+
+/* alert table header separation */
+.alert-page .alert-table-scroll .alert-group-table thead th {
+  background: #e9eef5 !important;
+  color: #53647a !important;
+  border-bottom: 1px solid #d9e1eb;
+}
