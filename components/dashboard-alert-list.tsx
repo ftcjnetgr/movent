@@ -210,7 +210,7 @@ export default function DashboardAlertList({
                   </div>
                 </div>
 
-                <div id={`task-hub-${activeHub.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`} role="tabpanel">
+                <div id={`task-hub-${activeHub.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`} role="tabpanel" className="alert-table-scroll">
                 <table className="alert-table alert-group-table task-alert-group-table">
                   <thead>
                     <tr>
@@ -303,7 +303,7 @@ export default function DashboardAlertList({
                   </div>
                 </div>
 
-                <div id={`maintenance-location-${activeLocation.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`} role="tabpanel">
+                <div id={`maintenance-location-${activeLocation.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`} role="tabpanel" className="alert-table-scroll">
                 <table className="alert-table alert-group-table maintenance-alert-group-table">
                   <thead>
                     <tr>
