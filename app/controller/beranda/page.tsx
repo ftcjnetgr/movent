@@ -111,7 +111,7 @@ export default async function ControllerPenugasanDashboardPage() {
         </div>
       </div>
 
-      <section className="super-kpi-grid">
+      <section className="super-kpi-grid assignment-kpi-grid">
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">▤</div>
           <span>Semua Tugas</span>
@@ -136,7 +136,7 @@ export default async function ControllerPenugasanDashboardPage() {
           <strong>{data.taskCounts.Driving ?? 0}</strong>
           <small>Sedang berjalan</small>
         </div>
-        <div className="super-kpi-card kpi-red">
+        <div className="super-kpi-card kpi-purple">
           <div className="super-kpi-icon">✓</div>
           <span>Udah Selesai</span>
           <strong>{data.taskCounts.Completed ?? 0}</strong>
