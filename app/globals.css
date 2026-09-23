@@ -4874,6 +4874,8 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
+  line-height: 1;
 }
 
 .super-dashboard .assignment-kpi-grid .super-kpi-content span,
