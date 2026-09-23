@@ -53,15 +53,6 @@ export default function ProfilePage({
         </div>
       </div>
 
-      <section className="profile-settings-hero">
-        <div className="profile-settings-avatar" aria-hidden="true">{initials}</div>
-        <div className="profile-settings-identity">
-          <h2>{profile.full_name}</h2>
-          <p>@{profile.username}</p>
-        </div>
-        <span className="profile-settings-role">{profile.role}</span>
-      </section>
-
       <section className="profile-settings-workspace">
         <nav className="profile-settings-nav" aria-label="Pengaturan akun">
           <button
