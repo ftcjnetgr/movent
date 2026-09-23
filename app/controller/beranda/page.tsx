@@ -104,7 +104,6 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
     <div className="super-dashboard">
       <div className="super-dashboard-heading">
         <div>
-          <span className="eyebrow">Controller</span>
           <h1>Selamat datang, {profile.full_name}! <span aria-hidden="true">👋</span></h1>
           <p>Ini ringkasan operasional sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
