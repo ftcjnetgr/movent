@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -149,17 +148,6 @@ export default async function ControllerPenugasanDashboardPage() {
         </div>
       </section>
 
-      <section className="super-quick-row">
-        <div className="super-panel super-quick-panel">
-          <div className="super-quick-grid">
-            <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
-            <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Maintenance</strong></Link>
-            <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Jadwal</strong></Link>
-            <Link href="/controller/beranda/ticketing"><span className="quick-navy">⌁</span><strong>Maintenance</strong></Link>
-            <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
-          </div>
-        </div>
-      </section>
 
       <section className="super-dashboard-main-grid">
         <div className="super-panel super-chart-panel">
