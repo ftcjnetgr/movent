@@ -4845,13 +4845,15 @@ html {
 }
 
 
-/* assignment dashboard summary cards: one clean row + centered status content */
-.super-dashboard .assignment-kpi-grid {
+/* dashboard summary cards: one clean row + centered status content */
+.super-dashboard .assignment-kpi-grid,
+.super-dashboard .maintenance-kpi-grid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
 }
 
-.super-dashboard .assignment-kpi-grid .super-kpi-card {
+.super-dashboard .assignment-kpi-grid .super-kpi-card,
+.super-dashboard .maintenance-kpi-grid .super-kpi-card {
   min-height: 104px;
   display: flex;
   align-items: center;
@@ -4859,40 +4861,42 @@ html {
   padding: 14px 16px;
 }
 
-.super-dashboard .assignment-kpi-grid .super-kpi-icon {
+.super-dashboard .assignment-kpi-grid .super-kpi-icon,
+.super-dashboard .maintenance-kpi-grid .super-kpi-icon {
   flex: 0 0 36px;
   width: 36px;
   height: 36px;
 }
 
-.super-dashboard .assignment-kpi-grid .super-kpi-card > span,
-.super-dashboard .assignment-kpi-grid .super-kpi-card > strong,
-.super-dashboard .assignment-kpi-grid .super-kpi-card > small {
+.super-dashboard .assignment-kpi-grid .super-kpi-content,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.super-dashboard .assignment-kpi-grid .super-kpi-content span,
+.super-dashboard .assignment-kpi-grid .super-kpi-content strong,
+.super-dashboard .assignment-kpi-grid .super-kpi-content small,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content span,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content strong,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content small {
   display: block;
 }
 
-.super-dashboard .assignment-kpi-grid .super-kpi-card > span {
-  margin: 0;
-}
-
-.super-dashboard .assignment-kpi-grid .super-kpi-card > strong {
-  margin: 5px 0 0;
-}
-
-.super-dashboard .assignment-kpi-grid .super-kpi-card > small {
-  margin: 5px 0 0;
-}
-
-.super-dashboard .assignment-kpi-grid .super-kpi-card > span,
-.super-dashboard .assignment-kpi-grid .super-kpi-card > strong,
-.super-dashboard .assignment-kpi-grid .super-kpi-card > small {
-  align-self: center;
-}
+.super-dashboard .assignment-kpi-grid .super-kpi-content span,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content span { margin: 0; }
+.super-dashboard .assignment-kpi-grid .super-kpi-content strong,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content strong { margin: 5px 0 0; }
+.super-dashboard .assignment-kpi-grid .super-kpi-content small,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content small { margin: 5px 0 0; }
 
 .kpi-purple .super-kpi-icon { background: #f1eaff; color: #7c3aed; }
 
 @media (max-width: 1100px) {
-  .super-dashboard .assignment-kpi-grid {
+  .super-dashboard .assignment-kpi-grid,
+  .super-dashboard .maintenance-kpi-grid {
     grid-template-columns: repeat(5, minmax(130px, 1fr));
     overflow-x: auto;
     padding-bottom: 2px;
@@ -4900,14 +4904,16 @@ html {
 }
 
 @media (max-width: 820px) {
-  .super-dashboard .assignment-kpi-grid {
+  .super-dashboard .assignment-kpi-grid,
+  .super-dashboard .maintenance-kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     overflow-x: visible;
   }
 }
 
 @media (max-width: 480px) {
-  .super-dashboard .assignment-kpi-grid {
+  .super-dashboard .assignment-kpi-grid,
+  .super-dashboard .maintenance-kpi-grid {
     grid-template-columns: 1fr;
   }
 }
