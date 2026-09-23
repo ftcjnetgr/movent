@@ -28,32 +28,16 @@ function shortTime(value: string | null) {
 export default async function ControllerTicketingDashboardPage() {
   const profile = await getCurrentProfile()
   const admin = createAdminClient()
-  const now = new Date()
-  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now)
-  const todayStart = new Date(`${today}T00:00:00+07:00`).toISOString()
-  const todayEnd = new Date(new Date(`${today}T00:00:00+07:00`).getTime() + 86400000).toISOString()
-
-  const [data, ticketResult, todayTicketResult] = await Promise.all([
+  const [data, ticketResult] = await Promise.all([
     getDashboardData(profile),
     admin
       .from('ticketings')
       .select('transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at')
       .order('created_at', { ascending: false })
       .limit(12),
-    admin
-      .from('ticketings')
-      .select('status, created_at')
-      .gte('created_at', todayStart)
-      .lt('created_at', todayEnd),
   ])
 
   const tickets = ticketResult.data ?? []
-  const todayTickets = todayTicketResult.data ?? []
-  const todayActivity = [
-    { label: 'Diajukan', value: todayTickets.filter((ticket) => ticket.status === 'Requested').length, color: 'blue', note: 'Nunggu diterima' },
-    { label: 'Lagi dikerjain', value: todayTickets.filter((ticket) => ticket.status === 'In Progress').length, color: 'orange', note: 'Sedang diproses' },
-    { label: 'Udah selesai', value: todayTickets.filter((ticket) => ticket.status === 'Completed').length, color: 'green', note: 'Udah beres' },
-  ]
   const activeCount =
     (data.ticketCounts.Requested ?? 0) +
     (data.ticketCounts.Confirmed ?? 0) +
