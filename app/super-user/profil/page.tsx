@@ -1,6 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
-import ChangePasswordForm from '@/components/change-password-form'
+import ProfilePage from '@/components/profile-page'
 
 export default async function SuperUserProfilePage() {
   const profile = await getCurrentProfile()
@@ -13,29 +13,5 @@ export default async function SuperUserProfilePage() {
 
   if (!data) return null
 
-  return (
-    <>
-      <div className="page-heading">
-        <div>
-          <span className="eyebrow">Super User</span>
-          <h1>Setting</h1>
-          <p>Profil dan pengaturan akun kamu ada di sini.</p>
-        </div>
-      </div>
-
-      <section className="section-grid two-column setting-grid">
-        <div className="metric-card"><span>Nama</span><strong>{data.full_name}</strong></div>
-        <div className="metric-card"><span>Username</span><strong>{data.username}</strong></div>
-        <div className="metric-card"><span>Email</span><strong>{data.email}</strong></div>
-        <div className="metric-card"><span>NIK</span><strong>{data.nik}</strong></div>
-        <div className="metric-card"><span>No. telepon</span><strong>{data.phone_number ?? '-'}</strong></div>
-        <div className="metric-card"><span>Role</span><strong>{data.role}</strong></div>
-        <div className="metric-card"><span>Status</span><strong>{data.status}</strong></div>
-      </section>
-
-      <section className="section-block">
-        <ChangePasswordForm first={false} />
-      </section>
-    </>
-  )
+  return <ProfilePage title="Pengaturan" profile={data} />
 }
