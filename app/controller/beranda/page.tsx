@@ -153,9 +153,9 @@ export default async function ControllerPenugasanDashboardPage() {
         <div className="super-panel super-quick-panel">
           <div className="super-quick-grid">
             <Link href="/dispatcher/beranda"><span className="quick-blue">+</span><strong>Buat Tugas</strong></Link>
-            <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Tiket</strong></Link>
+            <Link href="/dispatcher/maintenance-armada"><span className="quick-green">⌁</span><strong>Buat Maintenance</strong></Link>
             <Link href="/controller/timetable?view=plan"><span className="quick-purple">▦</span><strong>Lihat Jadwal</strong></Link>
-            <Link href="/controller/beranda/ticketing"><span className="quick-navy">⌁</span><strong>Tiket Maintenance</strong></Link>
+            <Link href="/controller/beranda/ticketing"><span className="quick-navy">⌁</span><strong>Maintenance</strong></Link>
             <Link href="/controller/penarikan-report"><span className="quick-cyan">▤</span><strong>Penarikan Report</strong></Link>
           </div>
         </div>
@@ -232,7 +232,7 @@ export default async function ControllerPenugasanDashboardPage() {
 
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
-            <div><h2>Tiket Maintenance Terbaru</h2><p>Ringkasan ticket terbaru beserta lokasi dan armada.</p></div>
+            <div><h2>Maintenance Terbaru</h2><p>Ringkasan maintenance terbaru beserta lokasi dan armada.</p></div>
           </div>
           <div className="super-table-wrap">
             <table className="controller-detail-table">
