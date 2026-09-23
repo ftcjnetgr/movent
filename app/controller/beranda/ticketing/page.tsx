@@ -97,19 +97,19 @@ export default async function ControllerTicketingDashboardPage() {
           <strong>{data.ticketCounts.Requested ?? 0}</strong>
           <small>Nunggu diterima</small></div>
         </div>
-        <div className="super-kpi-card kpi-green">
+        <div className="super-kpi-card kpi-cyan">
           <div className="super-kpi-icon">✓</div>
           <div className="super-kpi-content"><span>Udah Diterima</span>
           <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
           <small>Udah diterima</small></div>
         </div>
-        <div className="super-kpi-card kpi-cyan">
+        <div className="super-kpi-card kpi-green">
           <div className="super-kpi-icon">◷</div>
           <div className="super-kpi-content"><span>Lagi Dikerjain</span>
           <strong>{data.ticketCounts['In Progress'] ?? 0}</strong>
           <small>Lagi diproses</small></div>
         </div>
-        <div className="super-kpi-card kpi-orange">
+        <div className="super-kpi-card kpi-purple">
           <div className="super-kpi-icon">✓</div>
           <div className="super-kpi-content"><span>Udah Selesai</span>
           <strong>{data.ticketCounts.Completed ?? 0}</strong>
