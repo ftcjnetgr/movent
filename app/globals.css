@@ -1062,7 +1062,6 @@ tbody tr:hover td { background: #fbfdff; }
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 38px;
   background:
     radial-gradient(circle at 82% 15%, rgba(23,105,224,.14), transparent 28%),
@@ -1072,12 +1071,19 @@ tbody tr:hover td { background: #fbfdff; }
 .login-simple-logo {
   width: 150px;
   height: auto;
-  filter: brightness(0) saturate(100%) invert(10%) sepia(17%) saturate(1257%) hue-rotate(180deg) brightness(90%) contrast(94%);
+}
+.login-simple-content {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .login-simple-message {
+  width: 100%;
   max-width: 360px;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto;
+  align-self: center;
+  text-align: center;
 }
 .login-simple-message h1 {
   margin: 0;
@@ -1167,7 +1173,8 @@ tbody tr:hover td { background: #fbfdff; }
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
-  .login-simple-message { margin: 42px 0 0; }
+  .login-simple-content { min-height: 0; }
+  .login-simple-message { margin: auto; }
   .login-simple-message h1 { font-size: 32px; }
   .login-simple-form-panel { padding: 30px 22px 22px; }
   .login-simple-form { width:100%; }
