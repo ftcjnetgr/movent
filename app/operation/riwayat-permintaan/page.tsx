@@ -54,7 +54,6 @@ export default async function OperasionalHistoryPage() {
     <>
     <div className="page-heading">
         <div>
-          <span className="eyebrow">Operasional</span>
           <h1>Riwayat Permintaan</h1>
           <p>Semua permintaan jadwal tambahan yang pernah kamu ajukan.</p>
         </div>
