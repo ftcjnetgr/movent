@@ -93,33 +93,33 @@ export default async function ControllerTicketingDashboardPage() {
       <section className="super-kpi-grid maintenance-kpi-grid">
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">⌁</div>
-          <span>Udah Udah Diajukan</span>
+          <div className="super-kpi-content"><span>Udah Diajukan</span>
           <strong>{data.ticketCounts.Requested ?? 0}</strong>
-          <small>Nunggu diterima</small>
+          <small>Nunggu diterima</small></div>
         </div>
         <div className="super-kpi-card kpi-green">
           <div className="super-kpi-icon">✓</div>
-          <span>Udah Diterima</span>
+          <div className="super-kpi-content"><span>Udah Diterima</span>
           <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-          <small>Udah diterima</small>
+          <small>Udah diterima</small></div>
         </div>
         <div className="super-kpi-card kpi-cyan">
           <div className="super-kpi-icon">◷</div>
-          <span>Lagi Dikerjain</span>
+          <div className="super-kpi-content"><span>Lagi Dikerjain</span>
           <strong>{data.ticketCounts['In Progress'] ?? 0}</strong>
-          <small>Lagi diproses</small>
+          <small>Lagi diproses</small></div>
         </div>
         <div className="super-kpi-card kpi-orange">
           <div className="super-kpi-icon">✓</div>
-          <span>Udah Udah Selesai</span>
+          <div className="super-kpi-content"><span>Udah Selesai</span>
           <strong>{data.ticketCounts.Completed ?? 0}</strong>
-          <small>Udah beres</small>
+          <small>Udah beres</small></div>
         </div>
         <div className="super-kpi-card kpi-red">
           <div className="super-kpi-icon">●</div>
-          <span>Masih Aktif</span>
+          <div className="super-kpi-content"><span>Masih Aktif</span>
           <strong>{activeCount}</strong>
-          <small>Masih jalan</small>
+          <small>Masih jalan</small></div>
         </div>
       </section>
 
