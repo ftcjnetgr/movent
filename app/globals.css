@@ -4723,3 +4723,33 @@ html {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+
+/* final tab color override */
+.alert-page .alert-hub-tab:not(.is-active) {
+  background: #cfe0ff !important;
+  color: #17243a !important;
+}
+
+.alert-page .alert-hub-tab:not(.is-active) span,
+.alert-page .alert-hub-tab:not(.is-active) small {
+  color: #17243a !important;
+}
+
+.alert-page .alert-hub-tab:not(.is-active):hover,
+.alert-page .alert-hub-tab:not(.is-active):active {
+  background: #bfd5ff !important;
+  color: #17243a !important;
+}
+
+.alert-page .alert-hub-tab.is-active,
+.alert-page .alert-hub-tab.is-active:hover,
+.alert-page .alert-hub-tab.is-active:active {
+  background: #2462e9 !important;
+  color: #fff !important;
+}
+
+.alert-page .alert-hub-tab.is-active span,
+.alert-page .alert-hub-tab.is-active small {
+  color: #fff !important;
+}
