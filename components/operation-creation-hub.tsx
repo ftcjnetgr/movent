@@ -58,7 +58,6 @@ export default function OperationCreationHub({
     <section className="section-block">
       <div className="creation-flow-toolbar">
         <div>
-          <span className="eyebrow">PROSES BARU</span>
           <strong>{choice === 'supply' ? 'Supply Non-TGR' : 'Request Extra Schedule'}</strong>
         </div>
         <button type="button" className="secondary-button" onClick={() => setChoice(null)}>Ganti proses</button>
