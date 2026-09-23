@@ -172,8 +172,10 @@ export default function AppShellClient({ profile, children }: { profile: { usern
     month: '2-digit',
     day: '2-digit',
   }).format(new Date())
-  const filterFrom = searchParams.get('from') ?? jakartaToday
-  const filterTo = searchParams.get('to') ?? filterFrom
+  const queryFilterFrom = searchParams.get('from') ?? jakartaToday
+  const queryFilterTo = searchParams.get('to') ?? queryFilterFrom
+  const [filterFrom, setFilterFrom] = useState(queryFilterFrom)
+  const [filterTo, setFilterTo] = useState(queryFilterTo)
   const navGroups = useMemo(() => {
     const roleNav = navByRole[currentRole] ?? []
     if (profile.role !== 'Super User') return roleNav
@@ -211,9 +213,11 @@ export default function AppShellClient({ profile, children }: { profile: { usern
 
   useEffect(() => {
     setMobileOpen(false)
+    setFilterFrom(queryFilterFrom)
+    setFilterTo(queryFilterTo)
     const activeGroups = navGroups.filter(group => group.items.some(isItemActive)).map(group => group.label)
     setOpenGroups(current => Array.from(new Set([...current, ...activeGroups])))
-  }, [pathname, searchKey, navGroups])
+  }, [pathname, searchKey, navGroups, queryFilterFrom, queryFilterTo])
 
   async function logout() { const supabase = createClient(); await supabase.auth.signOut(); router.replace('/login') }
 
@@ -281,11 +285,11 @@ export default function AppShellClient({ profile, children }: { profile: { usern
             <form className="topbar-date-filter" method="get" action={pathname}>
               <label>
                 <span>Dari</span>
-                <input type="date" name="from" defaultValue={filterFrom} />
+                <input type="date" name="from" value={filterFrom} onChange={(e) => setFilterFrom(e.target.value)} />
               </label>
               <label>
                 <span>Sampai</span>
-                <input type="date" name="to" defaultValue={filterTo} min={filterFrom} />
+                <input type="date" name="to" value={filterTo} onChange={(e) => setFilterTo(e.target.value)} min={filterFrom} />
               </label>
               <button type="submit">Terapkan</button>
               <button type="button" className="topbar-date-reset" onClick={() => router.push(pathname)}>Reset</button>
