@@ -4753,3 +4753,30 @@ html {
 .alert-page .alert-hub-tab.is-active small {
   color: #fff !important;
 }
+
+
+/* maintenance alert: same tab + table treatment as assignment alert */
+.alert-page .maintenance-alert-group-table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.alert-page .maintenance-alert-group-table th:nth-child(1),
+.alert-page .maintenance-alert-group-table td:nth-child(1) { width: 19%; }
+
+.alert-page .maintenance-alert-group-table th:nth-child(2),
+.alert-page .maintenance-alert-group-table td:nth-child(2) { width: 31%; }
+
+.alert-page .maintenance-alert-group-table th:nth-child(3),
+.alert-page .maintenance-alert-group-table td:nth-child(3) { width: 18%; }
+
+.alert-page .maintenance-alert-group-table th:nth-child(4),
+.alert-page .maintenance-alert-group-table td:nth-child(4) { width: 13%; }
+
+.alert-page .maintenance-alert-group-table th:nth-child(5),
+.alert-page .maintenance-alert-group-table td:nth-child(5) { width: 19%; }
+
+.alert-page .maintenance-alert-group-table td:nth-child(5) {
+  text-align: center;
+}
