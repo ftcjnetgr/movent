@@ -5376,3 +5376,45 @@ html {
     display: none;
   }
 }
+
+
+/* settings navigation: readable active state */
+.profile-settings-page .profile-settings-nav button {
+  color: #526174 !important;
+  background: transparent !important;
+}
+
+.profile-settings-page .profile-settings-nav button:hover,
+.profile-settings-page .profile-settings-nav button:active {
+  color: #152238 !important;
+  background: #eef3f9 !important;
+}
+
+.profile-settings-page .profile-settings-nav button.active {
+  color: #ffffff !important;
+  background: #2563eb !important;
+  box-shadow: 0 4px 12px rgba(37,99,235,.16) !important;
+}
+
+.profile-settings-page .profile-settings-nav button.active span,
+.profile-settings-page .profile-settings-nav button.active small {
+  color: #ffffff !important;
+}
+
+.profile-settings-page .profile-settings-nav button small {
+  color: #8290a3 !important;
+}
+
+.profile-settings-page .profile-settings-nav button.active small {
+  opacity: .82;
+}
+
+.profile-settings-page .profile-settings-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 760px) {
+  .profile-settings-page .profile-settings-fields {
+    grid-template-columns: 1fr;
+  }
+}
