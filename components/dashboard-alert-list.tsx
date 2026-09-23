@@ -87,7 +87,8 @@ export default function DashboardAlertList({
   const taskAlertRows = taskAlerts ?? []
   const ticketAlertRows = ticketAlerts ?? []
   const [now, setNow] = useState(() => Date.now())
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
+  const [activeTaskHub, setActiveTaskHub] = useState('')
+  const [activeTicketLocation, setActiveTicketLocation] = useState('')
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -162,23 +163,54 @@ export default function DashboardAlertList({
 
       {showTasks ? (
         <section className="alert-content-section">
-          {taskGroups.length ? taskGroups.map(([hub, items]) => {
-            const groupKey = `task:${hub}`
-            const expanded = expandedGroups.has(groupKey)
+          {taskGroups.length ? (() => {
+            const activeHub = taskGroups.some(([hub]) => hub === activeTaskHub) ? activeTaskHub : taskGroups[0][0]
+            const activeItems = taskGroups.find(([hub]) => hub === activeHub)?.[1] ?? []
+            const late = activeItems.filter((item) => item.late).length
+            const approaching = activeItems.length - late
             return (
-            <div className={`alert-group${!expanded ? ' is-collapsed' : ''}`} key={hub}>
-              <button type="button" className="alert-group-heading" onClick={() => setExpandedGroups((current) => {
-                const next = new Set(current)
-                if (next.has(groupKey)) next.delete(groupKey)
-                else next.add(groupKey)
-                return next
-              })} aria-expanded={expanded}>
-                <span className="alert-group-chevron" aria-hidden="true">{expanded ? '⌄' : '›'}</span>
-                <span>Schedule Hub</span>
-                <strong>{hub}</strong>
-                <small>{items.length} schedule</small>
-              </button>
-              {expanded ? <div className="table-wrap">
+              <div className="alert-hub-tabs">
+                <div className="alert-hub-tabs-list" role="tablist" aria-label="Schedule Hub">
+                  {taskGroups.map(([hub, items]) => {
+                    const tabId = `task-hub-${hub.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`
+                    const active = hub === activeHub
+                    return (
+                      <button
+                        key={hub}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        aria-controls={tabId}
+                        className={`alert-hub-tab${active ? ' is-active' : ''}`}
+                        onClick={() => setActiveTaskHub(hub)}
+                      >
+                        <span>{hub}</span>
+                        <small>{items.length} schedule</small>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                <div className="alert-hub-summary">
+                  <div>
+                    <span>Schedule Hub</span>
+                    <h2>{activeHub}</h2>
+                  </div>
+                  <div className="alert-hub-summary-stat">
+                    <strong>{activeItems.length}</strong>
+                    <span>schedule</span>
+                  </div>
+                  <div className="alert-hub-summary-stat">
+                    <strong>{approaching}</strong>
+                    <span>mendekati batas</span>
+                  </div>
+                  <div className="alert-hub-summary-stat">
+                    <strong>{late}</strong>
+                    <span>melewati batas</span>
+                  </div>
+                </div>
+
+                <div id={`task-hub-${activeHub.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`} role="tabpanel">
                 <table className="alert-table alert-group-table task-alert-group-table">
                   <thead>
                     <tr>
@@ -212,10 +244,11 @@ export default function DashboardAlertList({
                     ))}
                   </tbody>
                 </table>
-              </div> : null}
-            </div>
+
+                </div>
+              </div>
             )
-          }) : (
+          })() : (
             <div className="alert-empty-inline">Tidak ada alert tugas saat ini.</div>
           )}
         </section>
