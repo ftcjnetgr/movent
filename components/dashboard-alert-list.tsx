@@ -226,7 +226,7 @@ export default function DashboardAlertList({
                     </tr>
                   </thead>
                   <tbody>
-                    {items.map((item) => (
+                    {activeItems.map((item) => (
                       <tr key={`${item.scheduleId}-${item.transactionId ?? 'schedule'}`} className={item.late ? 'is-alert-late' : ''}>
                         <td><strong>{item.scheduleId}</strong>{item.transactionId ? <small>{item.transactionId}</small> : null}</td>
                         <td>
