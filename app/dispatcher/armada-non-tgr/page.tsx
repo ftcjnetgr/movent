@@ -32,7 +32,6 @@ export default async function ArmadaNonTgrPage() {
     <>
       <div className="page-heading">
         <div>
-          <span className="eyebrow">Dispatcher</span>
           <h1>Armada Non-TGR</h1>
           <p>Konfirmasi kedatangan Armada Non-TGR dan simpan ATA setelah Operation mengonfirmasi keberangkatan.</p>
         </div>
