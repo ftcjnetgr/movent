@@ -280,14 +280,14 @@ export default function TimetableView({
                 className={direction === 'start-point' ? 'active' : ''}
                 onClick={() => { setDirection('start-point'); setPoint('') }}
               >
-                AS Start Point
+                Start Point
               </button>
               <button
                 type="button"
                 className={direction === 'destination' ? 'active' : ''}
                 onClick={() => { setDirection('destination'); setPoint('') }}
               >
-                AS Destination
+                Destination
               </button>
             </div>
           </div>
