@@ -42,11 +42,15 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
     month: '2-digit',
     day: '2-digit',
   }).format(now)
-  const todayStart = new Date(`${today}T00:00:00+07:00`).toISOString()
-  const todayEnd = new Date(new Date(`${today}T00:00:00+07:00`).getTime() + 86400000).toISOString()
-  const todayDay = ((new Date(`${today}T12:00:00+07:00`).getUTCDay() + 6) % 7) + 1
+  const params = await searchParams
+  const requestedFrom = params.from ?? today
+  const requestedTo = params.to ?? requestedFrom
+  const from = /^\\d{4}-\\d{2}-\\d{2}$/.test(requestedFrom) ? requestedFrom : today
+  const to = /^\\d{4}-\\d{2}-\\d{2}$/.test(requestedTo) && requestedTo >= from ? requestedTo : from
+  const rangeStart = new Date(`${from}T00:00:00+07:00`).toISOString()
+  const rangeEnd = new Date(new Date(`${to}T00:00:00+07:00`).getTime() + 86400000).toISOString()
 
-  const [data, tasksResult, scheduleResult, activityResult, totalTaskResult, usedScheduleResult] = await Promise.all([
+  const [data, tasksResult, activityResult, totalTaskResult] = await Promise.all([
     getDashboardData(profile),
     admin
       .from('tasks')
