@@ -3787,11 +3787,6 @@ small {
   display: none;
 }
 
-.schedule-page .schedule-point-card .schedule-control-label {
-  display: block;
-  margin-bottom: 8px;
-}
-
 .schedule-page .schedule-day-row,
 .schedule-page .schedule-direction,
 .schedule-page .schedule-category-buttons,
