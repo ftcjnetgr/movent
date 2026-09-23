@@ -281,11 +281,11 @@ export default function AppShellClient({ profile, children }: { profile: { usern
             <form className="topbar-date-filter" method="get" action={pathname}>
               <label>
                 <span>Dari</span>
-                <input type="date" name="from" value={filterFrom} onChange={() => {}} />
+                <input type="date" name="from" defaultValue={filterFrom} />
               </label>
               <label>
                 <span>Sampai</span>
-                <input type="date" name="to" value={filterTo} min={filterFrom} onChange={() => {}} />
+                <input type="date" name="to" defaultValue={filterTo} min={filterFrom} />
               </label>
               <button type="submit">Terapkan</button>
               <button type="button" className="topbar-date-reset" onClick={() => router.push(pathname)}>Reset</button>
