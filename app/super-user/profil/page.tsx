@@ -13,5 +13,5 @@ export default async function SuperUserProfilePage() {
 
   if (!data) return null
 
-  return <ProfilePage title="Pengaturan" profile={data} />
+  return <ProfilePage title="Pengaturan" profile={{ ...data, password_changed_at: profile.password_changed_at }} />
 }
