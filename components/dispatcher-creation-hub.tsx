@@ -55,7 +55,6 @@ export default function DispatcherCreationHub(props: Props) {
     <section className="section-block">
       <div className="creation-flow-toolbar">
         <div>
-          <span className="eyebrow">PROSES BARU</span>
           <strong>{choice === 'task' ? 'Penugasan' : 'Maintenance'}</strong>
         </div>
         <button type="button" className="secondary-button" onClick={() => setChoice(null)}>Ganti proses</button>
