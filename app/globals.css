@@ -3757,7 +3757,7 @@ small {
 
 .schedule-filter-top {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr) minmax(180px, 1fr);
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, .95fr) minmax(0, .95fr);
   gap: 14px;
 }
 
@@ -3772,18 +3772,14 @@ small {
 }
 
 .schedule-page .schedule-control-label {
-  margin-bottom: 8px;
-  color: #1f2d40;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0;
-  text-transform: uppercase;
+  display: none;
 }
 
 .schedule-page .schedule-day-row,
 .schedule-page .schedule-direction,
 .schedule-page .schedule-category-buttons,
 .schedule-page .schedule-point-tabs {
+  width: 100%;
   gap: 6px;
 }
 
@@ -3792,8 +3788,15 @@ small {
 .schedule-page .schedule-category-buttons button,
 .schedule-page .schedule-point-tabs button {
   min-height: 34px;
-  padding: 7px 11px;
+  padding: 7px 10px;
   border-radius: 8px;
+}
+
+.schedule-page .schedule-day-row button,
+.schedule-page .schedule-direction button,
+.schedule-page .schedule-category-buttons button {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .schedule-point-card {
