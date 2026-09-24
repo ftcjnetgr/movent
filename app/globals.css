@@ -6598,3 +6598,130 @@ td select:focus,
   background: var(--theme-color-soft-2) !important;
   color: var(--theme-color-dark) !important;
 }
+
+
+/* =========================================================
+   MOVENT COLOR SYSTEM — STATUS / INFO CONSISTENCY
+   =========================================================
+   STATUS MAP
+   requested / diajukan  = blue
+   confirmed / diterima  = cyan
+   assigned / siap jalan = orange
+   driving / in progress = green for task-driving, orange for maintenance work
+   completed / selesai   = purple
+   canceled              = red
+
+   SCHEDULE QTY MAP
+   1 = slate, 2 = yellow, 3 = cyan, 4 = purple,
+   5 = green, 6+ = red.
+   These mappings are reused everywhere they represent the same meaning.
+   ========================================================= */
+
+/* status badges */
+.status-requested,
+.status-created,
+.status-assigned {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+  border-color: #c7d2fe !important;
+}
+
+.status-confirmed,
+.status-accepted {
+  background: #edf8fb !important;
+  color: #16758a !important;
+  border-color: #bfe5ed !important;
+}
+
+.status-driving {
+  background: var(--success-soft) !important;
+  color: var(--success) !important;
+  border-color: #bfe5d5 !important;
+}
+
+.status-in-progress {
+  background: var(--warning-soft) !important;
+  color: var(--warning) !important;
+  border-color: #f0d39b !important;
+}
+
+.status-completed {
+  background: #f0eaff !important;
+  color: #7c3aed !important;
+  border-color: #d9c8ff !important;
+}
+
+.status-canceled {
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+  border-color: #f0c2c7 !important;
+}
+
+/* dashboard KPI status colors — same status, same color */
+.super-dashboard .kpi-blue .super-kpi-icon {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+}
+.super-dashboard .kpi-cyan .super-kpi-icon {
+  background: #edf8fb !important;
+  color: #16758a !important;
+}
+.super-dashboard .kpi-orange .super-kpi-icon {
+  background: var(--warning-soft) !important;
+  color: var(--warning) !important;
+}
+.super-dashboard .kpi-green .super-kpi-icon {
+  background: var(--success-soft) !important;
+  color: var(--success) !important;
+}
+.super-dashboard .kpi-purple .super-kpi-icon {
+  background: #f0eaff !important;
+  color: #7c3aed !important;
+}
+.super-dashboard .kpi-red .super-kpi-icon {
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+}
+
+/* chart legend uses the exact same status colors */
+.super-chart-legend .legend-blue,
+.activity-dot.blue { background: var(--primary) !important; }
+.super-chart-legend .legend-cyan { background: #16758a !important; }
+.super-chart-legend .legend-orange,
+.activity-dot.orange { background: var(--warning) !important; }
+.super-chart-legend .legend-green,
+.activity-dot.green { background: var(--success) !important; }
+.super-chart-legend .legend-purple,
+.activity-dot.purple { background: #7c3aed !important; }
+.super-chart-legend .legend-red,
+.activity-dot.red { background: var(--danger) !important; }
+
+/* task chart semantic bars */
+.super-chart .bar-completed,
+.super-chart .bar-maintenance-completed {
+  background: #7c3aed !important;
+}
+.super-chart .bar-driving { background: var(--success) !important; }
+.super-chart .bar-unassigned { background: var(--warning) !important; }
+.super-chart .bar-canceled { background: var(--danger) !important; }
+
+/* schedule quantity palette: exact same visual language as its legend */
+.schedule-density-legend-item:nth-of-type(2) i,
+.schedule-grid-table .schedule-cell-button[style*="--density-background"] {
+  /* palette is injected inline; no override needed */
+}
+
+/* Keep semantic status colors distinct enough that adjacent meanings
+   cannot be mistaken for one another. */
+.super-dashboard .super-kpi-card {
+  border-top-width: 3px !important;
+}
+.super-dashboard .kpi-blue { border-top-color: var(--primary) !important; }
+.super-dashboard .kpi-cyan { border-top-color: #16758a !important; }
+.super-dashboard .kpi-orange { border-top-color: var(--warning) !important; }
+.super-dashboard .kpi-green { border-top-color: var(--success) !important; }
+.super-dashboard .kpi-purple { border-top-color: #7c3aed !important; }
+.super-dashboard .kpi-red { border-top-color: var(--danger) !important; }
+
+/* activity dots without status meaning stay brand-blue; status-bearing
+   activity dots above use their semantic classes. */
