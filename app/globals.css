@@ -6509,3 +6509,92 @@ td select:focus,
   line-height: 38px;
   padding: 0 !important;
 }
+
+
+/* =========================================================
+   DASHBOARD SUBMENU LAYOUT — 3 SUMMARY / 2 SYSTEM
+   ========================================================= */
+
+/* KPI cards stay 5 equal columns.
+   The activity panel spans the same visual width as 3 cards,
+   while system activity spans the same width as 2 cards. */
+.super-dashboard-main-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+.super-dashboard-main-grid .super-chart-panel {
+  grid-column: span 3 !important;
+  min-width: 0;
+}
+
+.super-dashboard-main-grid .super-activity-panel {
+  grid-column: span 2 !important;
+  min-width: 0;
+}
+
+/* make the two panels equal in vertical rhythm */
+.super-dashboard-main-grid .super-panel {
+  min-height: 330px;
+}
+
+@media (max-width: 1100px) {
+  .super-dashboard-main-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .super-dashboard-main-grid .super-chart-panel,
+  .super-dashboard-main-grid .super-activity-panel {
+    grid-column: span 2 !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .super-dashboard-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .super-dashboard-main-grid .super-chart-panel,
+  .super-dashboard-main-grid .super-activity-panel {
+    grid-column: span 1 !important;
+  }
+}
+
+/* =========================================================
+   SCHEDULE — TOTAL ROW MUST MATCH HEADER
+   ========================================================= */
+
+.schedule-grid-table thead th,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+}
+
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  border-top: 1px solid var(--theme-color-light) !important;
+  border-bottom: 1px solid var(--theme-color-light) !important;
+}
+
+.schedule-grid-table tfoot .schedule-total-button,
+.schedule-grid-table tfoot .schedule-grand-total .schedule-total-button {
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table tfoot .schedule-total-button:hover,
+.schedule-grid-table tfoot .schedule-grand-total .schedule-total-button:hover {
+  background: rgba(79,70,229,.06) !important;
+  color: var(--theme-color-dark) !important;
+}
+
+/* total column uses exactly the same surface as header/total row */
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table tbody .schedule-total-cell {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+}
