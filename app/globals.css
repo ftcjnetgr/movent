@@ -5418,3 +5418,66 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* schedule density legend: cell color represents how many schedules share the same hour */
+.schedule-grid-header {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 7px 12px;
+  border-bottom: 1px solid #dfe5ec;
+  background: #fff;
+}
+
+.schedule-grid-header > span {
+  color: #627287;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .045em;
+}
+
+.schedule-density-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.schedule-density-legend-title {
+  color: #8995a6;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.schedule-density-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #68778b;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.schedule-density-legend-item i {
+  width: 18px;
+  height: 16px;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+@media (max-width: 760px) {
+  .schedule-grid-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .schedule-density-legend {
+    justify-content: flex-start;
+  }
+}
