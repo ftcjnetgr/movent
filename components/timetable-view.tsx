@@ -84,6 +84,27 @@ const routeLabels: Record<string, string> = {
   Direct: 'Direct',
 }
 
+const scheduleDensityPalette = [
+  { background: '#f0f2f4', color: '#697789', border: '#e1e5e9' },
+  { background: '#fff1c7', color: '#9a721f', border: '#f3dda0' },
+  { background: '#dff1f7', color: '#34778b', border: '#c5e4ed' },
+  { background: '#ebe4ff', color: '#6b55a5', border: '#ddd1fa' },
+  { background: '#e2f4e9', color: '#397957', border: '#cce7d7' },
+  { background: '#ffe3e5', color: '#a05259', border: '#f5c9cd' },
+]
+
+function scheduleDensityStyle(total: number, index: number) {
+  const palette = total === 1
+    ? scheduleDensityPalette[0]
+    : scheduleDensityPalette[(index % (scheduleDensityPalette.length - 1)) + 1]
+
+  return {
+    background: palette.background,
+    color: palette.color,
+    border: `1px solid ${palette.border}`,
+  }
+}
+
 export default function TimetableView({
   date,
   todayDay,
@@ -175,14 +196,20 @@ export default function TimetableView({
         <table className="schedule-grid-table">
           <thead>
             <tr>
-              <th>{direction === 'start-point' ? 'Destination' : 'Start Point'}</th>
-              {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
+              <th style={{ background: '#e7edf5', color: '#627287' }}>
+                {direction === 'start-point' ? 'Destination' : 'Start Point'}
+              </th>
+              {Array.from({ length: 24 }, (_, hour) => (
+                <th key={hour} style={{ background: '#e7edf5', color: '#627287' }}>
+                  {String(hour).padStart(2, '0')}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
             {sortedRows.map(([row, rowItems]) => (
               <tr key={row}>
-                <th>{row}</th>
+                <th style={{ background: '#f1f5f9', color: '#617187' }}>{row}</th>
                 {Array.from({ length: 24 }, (_, hour) => {
                   const cellItems = rowItems
                     .filter((item) => hourValue(item.std) === hour)
@@ -191,12 +218,14 @@ export default function TimetableView({
                   return (
                     <td key={hour}>
                       <div className="schedule-grid-cell">
-                        {cellItems.map((item) => {
+                        {cellItems.map((item, index) => {
                           const task = taskBySchedule[item.schedule_id]
+                          const densityStyle = scheduleDensityStyle(cellItems.length, index)
                           return (
                             <span
                               key={item.schedule_id}
                               className={`schedule-trip ${task ? statusClass(task.status) : 'unassigned'}`}
+                              style={densityStyle}
                               title={`STD ${timeValue(item.std)} · ${item.route} · ${item.category}`}
                             >
                               {timeValue(item.std)}
@@ -229,14 +258,20 @@ export default function TimetableView({
         <table className="schedule-grid-table">
           <thead>
             <tr>
-              <th>{direction === 'start-point' ? 'Start Point' : 'Destination'}</th>
-              {Array.from({ length: 24 }, (_, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
+              <th style={{ background: '#e7edf5', color: '#627287' }}>
+                {direction === 'start-point' ? 'Start Point' : 'Destination'}
+              </th>
+              {Array.from({ length: 24 }, (_, hour) => (
+                <th key={hour} style={{ background: '#e7edf5', color: '#627287' }}>
+                  {String(hour).padStart(2, '0')}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
             {sortedRows.map(([row, rowItems]) => (
               <tr key={row}>
-                <th>{row}</th>
+                <th style={{ background: '#f1f5f9', color: '#617187' }}>{row}</th>
                 {Array.from({ length: 24 }, (_, hour) => {
                   const cellItems = rowItems
                     .filter((item) => hourValue(item.std) === hour)
@@ -373,8 +408,6 @@ export default function TimetableView({
         {view === 'database' ? renderPlanTable(activeRows as Schedule[]) : renderLiveTable(activeRows as Task[])}
         {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
-
-
     </div>
   )
 }
