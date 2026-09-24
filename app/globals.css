@@ -6887,3 +6887,23 @@ td select:focus,
   color: var(--theme-color-dark) !important;
   border-color: transparent !important;
 }
+
+
+/* active submenu icon follows active submenu text */
+.sidebar .nav-link.active svg,
+.sidebar .nav-link.active svg *,
+.nav-link.active svg,
+.nav-link.active svg * {
+  color: var(--theme-color) !important;
+  stroke: var(--theme-color) !important;
+  fill: none !important;
+}
+
+.sidebar .nav-link.active {
+  color: var(--theme-color) !important;
+  background: var(--theme-color-soft) !important;
+}
+
+.sidebar .nav-link.active span {
+  color: var(--theme-color) !important;
+}
