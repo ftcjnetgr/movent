@@ -6035,3 +6035,202 @@ td select:focus,
 /* route progress */
 .route-progress { background: var(--theme-primary-soft); }
 .route-progress::after { background: var(--theme-primary); }
+
+
+/* =========================================================
+   MOVENT — SINGLE COLOR THEME
+   One brand color only: Indigo.
+   All UI accents, status treatments, KPI states and schedule
+   density levels stay inside the same indigo/slate family.
+   ========================================================= */
+
+:root {
+  --theme-color: #4f46e5;
+  --theme-color-dark: #3730a3;
+  --theme-color-mid: #6366f1;
+  --theme-color-soft: #eef2ff;
+  --theme-color-soft-2: #e0e7ff;
+  --theme-color-light: #c7d2fe;
+  --theme-ink: #334155;
+  --theme-muted: #64748b;
+  --theme-line: #dbe2ee;
+}
+
+/* every primary accent */
+button,
+.button-link,
+.link-button,
+.login-simple-submit {
+  background: var(--theme-color) !important;
+  border-color: var(--theme-color) !important;
+  color: #fff !important;
+}
+button:not(:disabled):hover,
+.button-link:hover,
+.link-button:hover,
+.login-simple-submit:hover {
+  background: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-dark) !important;
+  color: #fff !important;
+}
+
+/* navigation / active states */
+.nav-link.active,
+.profile-settings-nav button.active {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(79,70,229,.16) !important;
+}
+.nav-link.active { box-shadow: inset 2px 0 0 var(--theme-color-dark) !important; }
+.nav-link.active svg,
+.profile-settings-nav button.active span,
+.profile-settings-nav button.active small { color: #fff !important; }
+.eyebrow,
+.page-heading .eyebrow,
+.super-panel-heading a,
+.super-panel-link { color: var(--theme-color) !important; }
+
+/* remove semantic rainbow: all statuses use the same indigo family */
+.status-badge,
+.status-requested,
+.status-assigned,
+.status-created,
+.status-confirmed,
+.status-accepted,
+.status-driving,
+.status-in-progress,
+.status-completed,
+.status-canceled {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
+
+/* KPI / dashboard accents */
+.kpi-blue .super-kpi-icon,
+.kpi-green .super-kpi-icon,
+.kpi-cyan .super-kpi-icon,
+.kpi-orange .super-kpi-icon,
+.kpi-red .super-kpi-icon,
+.kpi-purple .super-kpi-icon,
+.super-info-icon.blue,
+.super-info-icon.green,
+.super-info-icon.danger,
+.ticket-row-icon {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color) !important;
+}
+.super-dashboard .bar-maintenance-completed,
+.super-dashboard .legend-purple,
+.super-chart-column i b,
+.summary-bar-row i b {
+  background: var(--theme-color) !important;
+}
+.alert-card {
+  background: var(--theme-color-soft) !important;
+  border-color: var(--theme-color-light) !important;
+}
+.alert-card > strong,
+.alert-item b { color: var(--theme-color-dark) !important; }
+
+/* forms / controls */
+.login-form input:focus,
+.login-simple-form input:focus,
+.data-form input:focus,
+.data-form select:focus,
+.data-form textarea:focus,
+.compact-form input:focus,
+.compact-form select:focus,
+.compact-form textarea:focus,
+td select:focus,
+.master-select-trigger:hover,
+.master-select-trigger.open,
+.topbar-search input:focus,
+.topbar-date-filter input:focus {
+  border-color: var(--theme-color-mid) !important;
+  box-shadow: 0 0 0 4px rgba(79,70,229,.08) !important;
+}
+.master-select-option:hover,
+.master-select-option.selected {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+}
+.topbar-avatar,
+.profile-settings-avatar,
+.profile-settings-role {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
+
+/* alert / error surfaces also stay monochrome */
+.form-error,
+.login-error {
+  color: var(--theme-color-dark) !important;
+}
+.login-error {
+  background: var(--theme-color-soft) !important;
+  border-color: var(--theme-color-light) !important;
+}
+
+/* timetable: one color, different indigo intensity only */
+.schedule-grid-table {
+  --schedule-indigo: var(--theme-color);
+  --schedule-indigo-dark: var(--theme-color-dark);
+  --schedule-indigo-soft: var(--theme-color-soft);
+}
+.schedule-grid-table thead th {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+}
+.schedule-grid-table tbody th {
+  background: #f8faff !important;
+  color: var(--theme-ink) !important;
+}
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
+.schedule-grid-table .schedule-total-cell,
+.schedule-grid-table tfoot .schedule-total-cell {
+  background: #f8faff !important;
+  border-color: #d8def0 !important;
+}
+.schedule-total-button {
+  background: var(--theme-color-soft) !important;
+  border-color: var(--theme-color-light) !important;
+  color: var(--theme-color-dark) !important;
+}
+.schedule-total-button:hover {
+  background: var(--theme-color-soft-2) !important;
+  border-color: var(--theme-color-mid) !important;
+  color: var(--theme-color-dark) !important;
+}
+.schedule-grand-total {
+  background: var(--theme-color-soft-2) !important;
+  border-left-color: var(--theme-color-mid) !important;
+}
+.schedule-grand-total .schedule-total-button {
+  background: var(--theme-color) !important;
+  border-color: var(--theme-color) !important;
+  color: #fff !important;
+}
+.schedule-grand-total .schedule-total-button:hover {
+  background: var(--theme-color-dark) !important;
+}
+
+/* density palette: same hue, different intensity */
+.schedule-density-legend-item i { border-color: var(--theme-color-light) !important; }
+
+/* shared success / warning / danger tokens intentionally collapse into one brand family */
+:root {
+  --success: var(--theme-color);
+  --success-soft: var(--theme-color-soft);
+  --warning: var(--theme-color-dark);
+  --warning-soft: var(--theme-color-soft);
+  --danger: var(--theme-color-dark);
+  --danger-soft: var(--theme-color-soft);
+  --info-soft: var(--theme-color-soft);
+}
