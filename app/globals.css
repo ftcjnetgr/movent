@@ -5677,3 +5677,116 @@ html {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+/* =========================================================
+   MOVENT GLOBAL THEME — SLATE + INDIGO
+   Applied consistently across all pages and shared UI.
+   Semantic status colors and schedule-density colors remain
+   independent from the brand palette.
+   ========================================================= */
+
+:root {
+  --brand-indigo: #4f46e5;
+  --brand-indigo-dark: #3730a3;
+  --brand-indigo-soft: #eef2ff;
+  --slate-950: #0f172a;
+  --slate-900: #1e293b;
+  --slate-800: #334155;
+  --slate-700: #475569;
+  --slate-600: #64748b;
+  --slate-500: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+}
+
+/* primary actions */
+button,
+.button-link,
+.link-button {
+  background: var(--brand-indigo);
+  box-shadow: 0 4px 12px rgba(79,70,229,.13);
+}
+button:not(:disabled):hover,
+.button-link:hover,
+.link-button:hover {
+  background: var(--brand-indigo-dark);
+  box-shadow: 0 8px 18px rgba(79,70,229,.16);
+}
+
+/* navigation and active states */
+.nav-link.active {
+  background: var(--brand-indigo-soft) !important;
+  color: var(--brand-indigo) !important;
+  box-shadow: inset 2px 0 0 var(--brand-indigo) !important;
+}
+
+.topbar-avatar {
+  background: var(--brand-indigo-soft) !important;
+  color: var(--brand-indigo) !important;
+}
+
+.route-progress {
+  background: var(--brand-indigo-soft);
+}
+.route-progress::after {
+  background: var(--brand-indigo);
+}
+
+.master-select-option:hover,
+.master-select-option.selected {
+  background: var(--brand-indigo-soft);
+  color: var(--brand-indigo);
+}
+
+.profile-settings-page .profile-settings-nav button.active {
+  background: var(--brand-indigo) !important;
+  box-shadow: 0 4px 12px rgba(79,70,229,.16) !important;
+}
+
+/* common indigo accents */
+.page-heading .eyebrow,
+.eyebrow {
+  color: var(--brand-indigo);
+}
+
+.ticket-row-icon {
+  background: var(--brand-indigo-soft);
+  color: var(--brand-indigo);
+}
+
+.status-requested,
+.status-assigned,
+.status-created {
+  background: var(--brand-indigo-soft);
+  color: var(--brand-indigo);
+}
+
+/* inputs/focus */
+.login-form input:focus,
+.data-form input:focus,
+.data-form select:focus,
+.data-form textarea:focus,
+.compact-form input:focus,
+.compact-form select:focus,
+.compact-form textarea:focus,
+td select:focus,
+.master-select-trigger:hover,
+.master-select-trigger.open,
+.topbar-search input:focus,
+.topbar-date-filter input:focus {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 4px rgba(79,70,229,.08);
+}
+
+/* common table/neutral surfaces */
+th {
+  background: var(--slate-50);
+  color: var(--slate-600);
+}
+.schedule-grid-table thead th {
+  background: #e9eafc !important;
+  color: #4c4f7a !important;
+}
