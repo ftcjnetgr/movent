@@ -271,13 +271,14 @@ export default function TimetableView({
               <th className="schedule-total-label">Total</th>
               {columnTotals.map((hourItems, hour) => (
                 <td key={hour} className="schedule-total-cell">
-                  {hourItems.length ? (
-                    <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems)}>
-                      {hourItems.length}
-                    </button>
-                  ) : (
-                    <span className="schedule-total-zero">0</span>
-                  )}
+                  <button
+                    type="button"
+                    className="schedule-total-button"
+                    onClick={() => openSchedulePreview(hourItems)}
+                    aria-label={`Lihat total schedule jam ${String(hour).padStart(2, '0')}: ${hourItems.length}`}
+                  >
+                    {hourItems.length}
+                  </button>
                 </td>
               ))}
               <td className="schedule-total-cell schedule-grand-total">
@@ -359,13 +360,14 @@ export default function TimetableView({
               <th className="schedule-total-label">Total</th>
               {columnTotals.map((hourItems, hour) => (
                 <td key={hour} className="schedule-total-cell">
-                  {hourItems.length ? (
-                    <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule))}>
-                      {hourItems.length}
-                    </button>
-                  ) : (
-                    <span className="schedule-total-zero">0</span>
-                  )}
+                  <button
+                    type="button"
+                    className="schedule-total-button"
+                    onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule))}
+                    aria-label={`Lihat total schedule jam ${String(hour).padStart(2, '0')}: ${hourItems.length}`}
+                  >
+                    {hourItems.length}
+                  </button>
                 </td>
               ))}
               <td className="schedule-total-cell schedule-grand-total">
