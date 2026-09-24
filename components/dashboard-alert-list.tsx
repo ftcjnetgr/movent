@@ -127,7 +127,6 @@ export default function DashboardAlertList({
   const totalAlerts = (showTasks ? taskItems.length : 0) + (showTickets ? ticketItems.length : 0)
   const lateCount = (showTasks ? lateTaskCount : 0) + (showTickets ? lateTicketCount : 0)
   const heroTitle = mode === 'task' ? 'Alert Penugasan' : mode === 'ticket' ? 'Alert Maintenance' : 'Alert'
-  const heroEyebrow = mode === 'task' ? 'Penugasan' : mode === 'ticket' ? 'Maintenance' : 'Monitoring'
   const heroDescription = mode === 'task'
     ? 'Pantau schedule yang mendekati atau melewati batas waktu penugasan.'
     : mode === 'ticket'
@@ -155,7 +154,6 @@ export default function DashboardAlertList({
     <div className="alert-dashboard">
       <div className="super-dashboard-heading alert-content-heading">
         <div>
-          <span className="eyebrow">{heroEyebrow}</span>
           <h1>{heroTitle}</h1>
           <p>{heroDescription} {totalAlerts} kondisi aktif{lateCount ? ` · ${lateCount} melewati batas` : ''}.</p>
         </div>
