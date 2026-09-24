@@ -234,7 +234,7 @@ export default function TimetableView({
                   {String(hour).padStart(2, '0')}
                 </th>
               ))}
-              <th className="schedule-total-header" style={{ background: '#e7edf5', color: '#627287' }}>Total</th>
+              <th className="schedule-total-header">Total</th>
             </tr>
           </thead>
           <tbody>
