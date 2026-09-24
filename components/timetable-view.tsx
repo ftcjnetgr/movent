@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'\nimport type { CSSProperties } from 'react'
 
 type Schedule = {
   schedule_id: string
@@ -98,10 +98,10 @@ function scheduleDensityStyle(total: number) {
   const palette = scheduleDensityPalette[paletteIndex]
 
   return {
-    background: palette.background,
-    color: palette.color,
-    border: `1px solid ${palette.border}`,
-  }
+    '--density-background': palette.background,
+    '--density-color': palette.color,
+    '--density-border': palette.border,
+  } as CSSProperties
 }
 
 function renderScheduleDensityLegend() {
