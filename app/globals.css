@@ -6846,3 +6846,17 @@ td select:focus,
 
 /* the cell palette is injected by timetable-view; these variables are
    intentionally distinct from neighboring density levels. */
+
+
+/* timetable total column — same background as header */
+.schedule-grid-table tbody .schedule-total-cell {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+  border-left: 1px solid var(--theme-color-light) !important;
+  border-right: 1px solid var(--theme-color-light) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button {
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+}
