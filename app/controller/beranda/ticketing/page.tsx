@@ -105,7 +105,7 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
           <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
           <small>Udah diterima</small></div>
         </div>
-        <div className="super-kpi-card kpi-green">
+        <div className="super-kpi-card kpi-orange">
           <div className="super-kpi-icon">◷</div>
           <div className="super-kpi-content"><span>Lagi Dikerjain</span>
           <strong>{data.ticketCounts['In Progress'] ?? 0}</strong>
@@ -135,7 +135,7 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
             </div>
             <div className="super-chart-legend">
               <span><i className="legend-blue" /> Diajukan</span>
-              <span><i className="legend-green" /> Udah Diterima</span>
+              <span><i className="legend-cyan" /> Udah Diterima</span>
               <span><i className="legend-orange" /> Lagi Dikerjain</span>
               <span><i className="legend-purple" /> Selesai</span>
               <span><i className="legend-red" /> Dibatalkan</span>
@@ -166,8 +166,8 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
           </div>
           <div className="super-activity-list">
             <div><span className="activity-dot blue" /><span>{tickets.length} maintenance terbaru</span><time>{shortTime(new Date().toISOString())}</time></div>
-            <div><span className="activity-dot green" /><span>{activeCount} maintenance sedang berjalan</span><time>{shortTime(new Date().toISOString())}</time></div>
-            <div><span className="activity-dot orange" /><span>{data.ticketCounts.Completed ?? 0} maintenance selesai</span><time>{shortTime(new Date().toISOString())}</time></div>
+            <div><span className="activity-dot orange" /><span>{activeCount} maintenance sedang berjalan</span><time>{shortTime(new Date().toISOString())}</time></div>
+            <div><span className="activity-dot purple" /><span>{data.ticketCounts.Completed ?? 0} maintenance selesai</span><time>{shortTime(new Date().toISOString())}</time></div>
           </div>
         </div>
       </section>
