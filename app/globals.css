@@ -6860,3 +6860,30 @@ td select:focus,
   background: transparent !important;
   color: var(--theme-color-dark) !important;
 }
+
+
+/* timetable color hierarchy:
+   header = hard indigo, total row/column = soft indigo */
+.schedule-grid-table thead th {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-color: #4338ca !important;
+}
+
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-cell,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table tbody .schedule-total-cell {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
+
+.schedule-grid-table .schedule-total-button,
+.schedule-grid-table .schedule-grand-total .schedule-total-button {
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  border-color: transparent !important;
+}
