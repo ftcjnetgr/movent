@@ -144,6 +144,7 @@ export default function TimetableView({
   const [route, setRoute] = useState('Interhub')
   const [category, setCategory] = useState('Normal')
   const [point, setPoint] = useState('')
+  const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([])
 
   const scheduleById = useMemo(
     () => new Map(schedules.map((item) => [item.schedule_id, item])),
@@ -198,6 +199,15 @@ export default function TimetableView({
     return true
   }), [todayTasks, direction, route, category, point, scheduleById])
 
+  function openSchedulePreview(items: Schedule[]) {
+    if (!items.length) return
+    setPreviewSchedules(items)
+  }
+
+  function closeSchedulePreview() {
+    setPreviewSchedules([])
+  }
+
   function renderPlanTable(items: Schedule[]) {
     const rows = new Map<string, Schedule[]>()
     for (const item of items) {
@@ -206,6 +216,9 @@ export default function TimetableView({
     }
 
     const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+    const columnTotals = Array.from({ length: 24 }, (_, hour) =>
+      items.filter((item) => hourValue(item.std) === hour),
+    )
 
     return (
       <div className="schedule-grid-scroll">
@@ -215,46 +228,65 @@ export default function TimetableView({
               <th style={{ background: '#e7edf5', color: '#627287' }}>
                 {direction === 'start-point' ? 'Destination' : 'Start Point'}
               </th>
-              {Array.from({ length: 24 }, (_, hour) => (
+              {columnTotals.map((hourItems, hour) => (
                 <th key={hour} style={{ background: '#e7edf5', color: '#627287' }}>
                   {String(hour).padStart(2, '0')}
                 </th>
               ))}
+              <th className="schedule-total-header" style={{ background: '#e7edf5', color: '#627287' }}>Total</th>
             </tr>
           </thead>
           <tbody>
             {sortedRows.map(([row, rowItems]) => (
               <tr key={row}>
                 <th style={{ background: '#f1f5f9', color: '#617187' }}>{row}</th>
-                {Array.from({ length: 24 }, (_, hour) => {
+                {columnTotals.map((_, hour) => {
                   const cellItems = rowItems
                     .filter((item) => hourValue(item.std) === hour)
                     .sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
 
-                  if (!cellItems.length) {
-                    return <td key={hour} />
-                  }
+                  if (!cellItems.length) return <td key={hour} />
 
                   const first = cellItems[0]
                   const total = cellItems.length
 
                   return (
                     <td key={hour}>
-                      <div className="schedule-grid-cell">
-                        <span
-                          className="schedule-trip"
-                          style={scheduleDensityStyle(total)}
-                          title={`${timeValue(first.std)} · ${total} schedule · ${first.route} · ${first.category}`}
-                        >
-                          {timeValue(first.std)}
-                        </span>
-                      </div>
+                      <button type="button" className="schedule-cell-button" style={scheduleDensityStyle(total)} onClick={() => openSchedulePreview(cellItems)} title={"Lihat " + total + " schedule · " + timeValue(first.std)}>
+                        {timeValue(first.std)}
+                      </button>
                     </td>
                   )
                 })}
+                <td className="schedule-total-cell">
+                  <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(rowItems)}>
+                    {rowItems.length}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <th className="schedule-total-label">Total</th>
+              {columnTotals.map((hourItems, hour) => (
+                <td key={hour} className="schedule-total-cell">
+                  {hourItems.length ? (
+                    <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems)}>
+                      {hourItems.length}
+                    </button>
+                  ) : (
+                    <span className="schedule-total-zero">0</span>
+                  )}
+                </td>
+              ))}
+              <td className="schedule-total-cell schedule-grand-total">
+                <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items)}>
+                  {items.length}
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     )
@@ -268,6 +300,18 @@ export default function TimetableView({
     }
 
     const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+    const columnTotals = Array.from({ length: 24 }, (_, hour) =>
+      items.filter((item) => hourValue(item.std) === hour),
+    )
+
+    const toPreviewSchedule = (item: Task): Schedule => ({
+      schedule_id: item.schedule_id ?? item.transaction_id,
+      trip: 0, route: '', category: '',
+      start_point: item.start_point ?? '-', start_point_type: '',
+      destination: item.destination ?? '-', destination_type: '',
+      schedule_day: todayDay, schedule_day_name: '',
+      std: item.std ?? '', sta: item.sta ?? '',
+    })
 
     return (
       <div className="schedule-grid-scroll">
@@ -277,46 +321,60 @@ export default function TimetableView({
               <th style={{ background: '#e7edf5', color: '#627287' }}>
                 {direction === 'start-point' ? 'Start Point' : 'Destination'}
               </th>
-              {Array.from({ length: 24 }, (_, hour) => (
+              {columnTotals.map((hourItems, hour) => (
                 <th key={hour} style={{ background: '#e7edf5', color: '#627287' }}>
                   {String(hour).padStart(2, '0')}
                 </th>
               ))}
+              <th className="schedule-total-header" style={{ background: '#e7edf5', color: '#627287' }}>Total</th>
             </tr>
           </thead>
           <tbody>
             {sortedRows.map(([row, rowItems]) => (
               <tr key={row}>
                 <th style={{ background: '#f1f5f9', color: '#617187' }}>{row}</th>
-                {Array.from({ length: 24 }, (_, hour) => {
-                  const cellItems = rowItems
-                    .filter((item) => hourValue(item.std) === hour)
-                    .sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
-
-                  if (!cellItems.length) {
-                    return <td key={hour} />
-                  }
-
+                {columnTotals.map((_, hour) => {
+                  const cellItems = rowItems.filter((item) => hourValue(item.std) === hour).sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
+                  if (!cellItems.length) return <td key={hour} />
                   const first = cellItems[0]
                   const total = cellItems.length
-
                   return (
                     <td key={hour}>
-                      <div className="schedule-grid-cell">
-                        <span
-                          className="schedule-trip"
-                          style={scheduleDensityStyle(total)}
-                          title={`${timeValue(first.std)} · ${total} schedule`}
-                        >
-                          {timeValue(first.std)}
-                        </span>
-                      </div>
+                      <button type="button" className="schedule-cell-button" style={scheduleDensityStyle(total)} onClick={() => openSchedulePreview(cellItems.map(toPreviewSchedule))} title={"Lihat " + total + " schedule · " + timeValue(first.std)}>
+                        {timeValue(first.std)}
+                      </button>
                     </td>
                   )
                 })}
+                <td className="schedule-total-cell">
+                  <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(rowItems.map(toPreviewSchedule))}>
+                    {rowItems.length}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <th className="schedule-total-label">Total</th>
+              {columnTotals.map((hourItems, hour) => (
+                <td key={hour} className="schedule-total-cell">
+                  {hourItems.length ? (
+                    <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule))}>
+                      {hourItems.length}
+                    </button>
+                  ) : (
+                    <span className="schedule-total-zero">0</span>
+                  )}
+                </td>
+              ))}
+              <td className="schedule-total-cell schedule-grand-total">
+                <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items.map(toPreviewSchedule))}>
+                  {items.length}
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     )
@@ -433,6 +491,30 @@ export default function TimetableView({
         {view === 'database' ? renderPlanTable(activeRows as Schedule[]) : renderLiveTable(activeRows as Task[])}
         {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
+      {previewSchedules.length ? (
+        <div className="schedule-preview-backdrop" role="presentation" onMouseDown={closeSchedulePreview}>
+          <div className="schedule-preview-modal" role="dialog" aria-modal="true" aria-label="Preview schedule" onMouseDown={(event) => event.stopPropagation()}>
+            <div className="schedule-preview-heading">
+              <div>
+                <h2>Preview Schedule</h2>
+                <p>{previewSchedules.length} schedule dipilih</p>
+              </div>
+              <button type="button" className="schedule-preview-close" onClick={closeSchedulePreview} aria-label="Tutup">×</button>
+            </div>
+            <div className="schedule-preview-list">
+              {previewSchedules.map((item, index) => (
+                <div className="schedule-preview-item" key={item.schedule_id + "-" + index}>
+                  <div><span>Schedule ID</span><strong>{item.schedule_id}</strong></div>
+                  <div><span>Start Point</span><strong>{item.start_point || '-'}</strong></div>
+                  <div><span>Destination</span><strong>{item.destination || '-'}</strong></div>
+                  <div><span>STD</span><strong>{timeValue(item.std)}</strong></div>
+                  <div><span>STA</span><strong>{timeValue(item.sta)}</strong></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
