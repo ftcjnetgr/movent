@@ -6296,3 +6296,72 @@ td select:focus,
   border-color: var(--primary) !important;
   color: #fff !important;
 }
+
+
+/* =========================================================
+   FINAL VISUAL BALANCE — SEMANTIC STATUS + SCHEDULE DENSITY
+   ========================================================= */
+
+/* schedule data cells must use the same palette as their legend */
+.schedule-grid-table .schedule-cell-button {
+  background: var(--density-background) !important;
+  color: var(--density-color) !important;
+  border: 1px solid var(--density-border) !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table .schedule-cell-button:hover {
+  filter: brightness(.97);
+  box-shadow: 0 2px 7px rgba(22,32,51,.08) !important;
+}
+
+/* total is a structural value, so keep it neutral/indigo rather than
+   competing with the density colors */
+.schedule-grid-table .schedule-total-button {
+  min-height: 30px;
+  background: var(--primary-soft) !important;
+  border: 1px solid #c7d2fe !important;
+  color: var(--primary-dark) !important;
+  font-weight: 800;
+}
+
+.schedule-grid-table .schedule-grand-total .schedule-total-button {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* dashboard KPI cards follow the exact status meaning */
+.super-dashboard .kpi-blue .super-kpi-icon {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+}
+.super-dashboard .kpi-cyan .super-kpi-icon {
+  background: var(--info-soft) !important;
+  color: #1a7182 !important;
+}
+.super-dashboard .kpi-orange .super-kpi-icon {
+  background: var(--warning-soft) !important;
+  color: var(--warning) !important;
+}
+.super-dashboard .kpi-green .super-kpi-icon {
+  background: var(--success-soft) !important;
+  color: var(--success) !important;
+}
+.super-dashboard .kpi-purple .super-kpi-icon {
+  background: #f1eaff !important;
+  color: #7c3aed !important;
+}
+.super-dashboard .kpi-red .super-kpi-icon {
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+}
+
+/* KPI card top accent matches the status meaning without recoloring
+   the whole card. */
+.super-dashboard .kpi-blue { border-top: 3px solid var(--primary) !important; }
+.super-dashboard .kpi-cyan { border-top: 3px solid #1a7182 !important; }
+.super-dashboard .kpi-orange { border-top: 3px solid var(--warning) !important; }
+.super-dashboard .kpi-green { border-top: 3px solid var(--success) !important; }
+.super-dashboard .kpi-purple { border-top: 3px solid #7c3aed !important; }
+.super-dashboard .kpi-red { border-top: 3px solid var(--danger) !important; }
