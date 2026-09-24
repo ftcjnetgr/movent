@@ -6725,3 +6725,124 @@ td select:focus,
 
 /* activity dots without status meaning stay brand-blue; status-bearing
    activity dots above use their semantic classes. */
+
+
+/* =========================================================
+   COLOR SEPARATION — HIGH CONTRAST SEMANTIC STATES
+   ========================================================= */
+
+:root {
+  --status-requested: #2563eb;
+  --status-confirmed: #0891b2;
+  --status-assigned: #ea580c;
+  --status-driving: #16a34a;
+  --status-in-progress: #ea580c;
+  --status-completed: #7c3aed;
+  --status-canceled: #dc2626;
+
+  --status-requested-soft: #eff6ff;
+  --status-confirmed-soft: #ecfeff;
+  --status-assigned-soft: #fff7ed;
+  --status-driving-soft: #f0fdf4;
+  --status-completed-soft: #f5f3ff;
+  --status-canceled-soft: #fef2f2;
+}
+
+/* status badge — strong separation */
+.status-requested,
+.status-created {
+  background: var(--status-requested-soft) !important;
+  color: var(--status-requested) !important;
+  border-color: #bfdbfe !important;
+}
+.status-confirmed,
+.status-accepted {
+  background: var(--status-confirmed-soft) !important;
+  color: var(--status-confirmed) !important;
+  border-color: #a5f3fc !important;
+}
+.status-assigned {
+  background: var(--status-assigned-soft) !important;
+  color: var(--status-assigned) !important;
+  border-color: #fed7aa !important;
+}
+.status-driving {
+  background: var(--status-driving-soft) !important;
+  color: var(--status-driving) !important;
+  border-color: #bbf7d0 !important;
+}
+.status-in-progress {
+  background: var(--status-assigned-soft) !important;
+  color: var(--status-in-progress) !important;
+  border-color: #fed7aa !important;
+}
+.status-completed {
+  background: var(--status-completed-soft) !important;
+  color: var(--status-completed) !important;
+  border-color: #ddd6fe !important;
+}
+.status-canceled {
+  background: var(--status-canceled-soft) !important;
+  color: var(--status-canceled) !important;
+  border-color: #fecaca !important;
+}
+
+/* KPI + card accents use exactly the same status colors */
+.super-dashboard .kpi-blue .super-kpi-icon {
+  background: var(--status-requested-soft) !important;
+  color: var(--status-requested) !important;
+}
+.super-dashboard .kpi-cyan .super-kpi-icon {
+  background: var(--status-confirmed-soft) !important;
+  color: var(--status-confirmed) !important;
+}
+.super-dashboard .kpi-orange .super-kpi-icon {
+  background: var(--status-assigned-soft) !important;
+  color: var(--status-assigned) !important;
+}
+.super-dashboard .kpi-green .super-kpi-icon {
+  background: var(--status-driving-soft) !important;
+  color: var(--status-driving) !important;
+}
+.super-dashboard .kpi-purple .super-kpi-icon {
+  background: var(--status-completed-soft) !important;
+  color: var(--status-completed) !important;
+}
+.super-dashboard .kpi-red .super-kpi-icon {
+  background: var(--status-canceled-soft) !important;
+  color: var(--status-canceled) !important;
+}
+
+.super-dashboard .kpi-blue { border-top-color: var(--status-requested) !important; }
+.super-dashboard .kpi-cyan { border-top-color: var(--status-confirmed) !important; }
+.super-dashboard .kpi-orange { border-top-color: var(--status-assigned) !important; }
+.super-dashboard .kpi-green { border-top-color: var(--status-driving) !important; }
+.super-dashboard .kpi-purple { border-top-color: var(--status-completed) !important; }
+.super-dashboard .kpi-red { border-top-color: var(--status-canceled) !important; }
+
+/* legends + activity indicators */
+.super-chart-legend .legend-blue,
+.activity-dot.blue { background: var(--status-requested) !important; }
+.super-chart-legend .legend-cyan { background: var(--status-confirmed) !important; }
+.super-chart-legend .legend-orange,
+.activity-dot.orange { background: var(--status-assigned) !important; }
+.super-chart-legend .legend-green,
+.activity-dot.green { background: var(--status-driving) !important; }
+.super-chart-legend .legend-purple,
+.activity-dot.purple { background: var(--status-completed) !important; }
+.super-chart-legend .legend-red,
+.activity-dot.red { background: var(--status-canceled) !important; }
+
+/* chart bars */
+.super-chart .bar-completed,
+.super-chart .bar-maintenance-completed { background: var(--status-completed) !important; }
+.super-chart .bar-driving { background: var(--status-driving) !important; }
+.super-chart .bar-unassigned { background: var(--status-assigned) !important; }
+.super-chart .bar-canceled { background: var(--status-canceled) !important; }
+
+/* schedule density — six clearly separated colors */
+.schedule-density-legend-item:nth-of-type(2) i,
+.schedule-grid-table .schedule-cell-button { }
+
+/* the cell palette is injected by timetable-view; these variables are
+   intentionally distinct from neighboring density levels. */
