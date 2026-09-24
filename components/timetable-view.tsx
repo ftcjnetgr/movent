@@ -93,16 +93,32 @@ const scheduleDensityPalette = [
   { background: '#ffe3e5', color: '#a05259', border: '#f5c9cd' },
 ]
 
-function scheduleDensityStyle(total: number, index: number) {
-  const palette = total === 1
-    ? scheduleDensityPalette[0]
-    : scheduleDensityPalette[(index % (scheduleDensityPalette.length - 1)) + 1]
+function scheduleDensityStyle(total: number) {
+  const paletteIndex = Math.min(Math.max(total, 1), scheduleDensityPalette.length) - 1
+  const palette = scheduleDensityPalette[paletteIndex]
 
   return {
     background: palette.background,
     color: palette.color,
     border: `1px solid ${palette.border}`,
   }
+}
+
+function renderScheduleDensityLegend() {
+  return (
+    <div className="schedule-density-legend" aria-label="Keterangan jumlah schedule">
+      <span className="schedule-density-legend-title">Jumlah schedule</span>
+      {scheduleDensityPalette.map((_, index) => {
+        const count = index + 1
+        return (
+          <span key={count} className="schedule-density-legend-item">
+            <i style={scheduleDensityStyle(count)} />
+            {count === scheduleDensityPalette.length ? '6+' : count}
+          </span>
+        )
+      })}
+    </div>
+  )
 }
 
 export default function TimetableView({
@@ -215,23 +231,23 @@ export default function TimetableView({
                     .filter((item) => hourValue(item.std) === hour)
                     .sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
 
+                  if (!cellItems.length) {
+                    return <td key={hour} />
+                  }
+
+                  const first = cellItems[0]
+                  const total = cellItems.length
+
                   return (
                     <td key={hour}>
                       <div className="schedule-grid-cell">
-                        {cellItems.map((item, index) => {
-                          const task = taskBySchedule[item.schedule_id]
-                          const densityStyle = scheduleDensityStyle(cellItems.length, index)
-                          return (
-                            <span
-                              key={item.schedule_id}
-                              className={`schedule-trip ${task ? statusClass(task.status) : 'unassigned'}`}
-                              style={densityStyle}
-                              title={`STD ${timeValue(item.std)} · ${item.route} · ${item.category}`}
-                            >
-                              {timeValue(item.std)}
-                            </span>
-                          )
-                        })}
+                        <span
+                          className="schedule-trip"
+                          style={scheduleDensityStyle(total)}
+                          title={`${timeValue(first.std)} · ${total} schedule · ${first.route} · ${first.category}`}
+                        >
+                          {timeValue(first.std)}
+                        </span>
                       </div>
                     </td>
                   )
@@ -277,18 +293,23 @@ export default function TimetableView({
                     .filter((item) => hourValue(item.std) === hour)
                     .sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
 
+                  if (!cellItems.length) {
+                    return <td key={hour} />
+                  }
+
+                  const first = cellItems[0]
+                  const total = cellItems.length
+
                   return (
                     <td key={hour}>
                       <div className="schedule-grid-cell">
-                        {cellItems.map((item) => (
-                          <span
-                            key={item.transaction_id}
-                            className={`schedule-trip live-item ${statusClass(item.status)}`}
-                            title={`${item.transaction_id} · STD ${timeValue(item.std)}`}
-                          >
-                            {timeValue(item.std)}
-                          </span>
-                        ))}
+                        <span
+                          className="schedule-trip"
+                          style={scheduleDensityStyle(total)}
+                          title={`${timeValue(first.std)} · ${total} schedule`}
+                        >
+                          {timeValue(first.std)}
+                        </span>
                       </div>
                     </td>
                   )
@@ -405,6 +426,10 @@ export default function TimetableView({
       </div>
 
       <section className="schedule-grid-shell">
+        <div className="schedule-grid-header">
+          <span>Schedule</span>
+          {renderScheduleDensityLegend()}
+        </div>
         {view === 'database' ? renderPlanTable(activeRows as Schedule[]) : renderLiveTable(activeRows as Task[])}
         {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
       </section>
