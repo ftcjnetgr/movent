@@ -6234,3 +6234,65 @@ td select:focus,
   --danger-soft: var(--theme-color-soft);
   --info-soft: var(--theme-color-soft);
 }
+
+
+/* =========================================================
+   MOVENT — SEMANTIC COLORS
+   Brand stays Indigo. Meaningful statuses and schedule
+   density keep their own semantic colors.
+   ========================================================= */
+
+/* status colors retain their operational meaning */
+.status-requested,
+.status-assigned,
+.status-created {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+}
+.status-confirmed,
+.status-accepted {
+  background: var(--info-soft) !important;
+  color: #1a7182 !important;
+}
+.status-driving,
+.status-in-progress {
+  background: var(--warning-soft) !important;
+  color: var(--warning) !important;
+}
+.status-completed {
+  background: var(--success-soft) !important;
+  color: var(--success) !important;
+}
+.status-canceled {
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+}
+
+/* restore semantic tokens */
+:root {
+  --success: #15966b;
+  --success-soft: #eaf8f2;
+  --warning: #b56b00;
+  --warning-soft: #fff6e6;
+  --danger: #c53d46;
+  --danger-soft: #fff0f1;
+  --info-soft: #edf7fb;
+}
+
+/* schedule density is intentionally categorical:
+   each color represents a different schedule count. */
+.schedule-cell-button {
+  box-shadow: none !important;
+}
+
+/* keep total area aligned with the brand, while density cells stay semantic */
+.schedule-total-button {
+  background: var(--primary-soft) !important;
+  border-color: #c7d2fe !important;
+  color: var(--primary-dark) !important;
+}
+.schedule-grand-total .schedule-total-button {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
