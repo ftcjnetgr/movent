@@ -5494,24 +5494,35 @@ html {
   font-weight: 500;
 }
 
+/* total area is a separate visual band from schedule-density cells */
 .schedule-grid-table .schedule-total-header,
 .schedule-grid-table .schedule-total-label {
-  width: 58px;
-  min-width: 58px;
-  background: #e7edf5 !important;
-  color: #627287;
+  width: 66px;
+  min-width: 66px;
+  background: #eef2f7 !important;
+  color: #475569;
   text-align: center;
   font-weight: 800;
+  border-left: 2px solid #a5b4fc !important;
 }
 
 .schedule-grid-table .schedule-total-label {
-  background: #eef2f7 !important;
+  background: #e7eaf1 !important;
+  border-left: 0 !important;
+  border-top: 2px solid #a5b4fc !important;
+  color: #334155;
 }
 
 .schedule-grid-table .schedule-total-cell {
   background: #f8fafc;
   text-align: center;
   vertical-align: middle;
+  border-left: 2px solid #d8def0;
+}
+
+.schedule-grid-table tfoot .schedule-total-cell {
+  border-top: 2px solid #a5b4fc;
+  background: #f5f7fb;
 }
 
 .schedule-cell-button,
@@ -5535,33 +5546,36 @@ html {
 }
 
 .schedule-total-button {
-  width: 34px;
-  min-width: 34px;
+  width: 38px;
+  min-width: 38px;
   min-height: 24px;
-  border: 1px solid #d5dce6;
-  background: #eef2f7;
-  color: #53647a;
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+  color: #4338ca;
+  font-weight: 800;
 }
 
 .schedule-total-button:hover {
-  background: #e6ebf2;
-  color: #33445b;
-}
-
-.schedule-total-zero {
-  color: #a4afbd;
-  font-size: 8px;
-  font-weight: 500;
+  background: #e0e7ff;
+  color: #3730a3;
+  border-color: #a5b4fc;
 }
 
 .schedule-grand-total {
-  background: #eef2f7 !important;
+  background: #e9ecf5 !important;
+  border-left-color: #818cf8 !important;
 }
 
 .schedule-grand-total .schedule-total-button {
-  background: #dfe7f1;
-  border-color: #cbd6e3;
-  color: #3e526b;
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #fff;
+  font-weight: 800;
+}
+
+.schedule-grand-total .schedule-total-button:hover {
+  background: #3730a3;
+  color: #fff;
 }
 
 .schedule-preview-backdrop {
