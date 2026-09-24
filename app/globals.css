@@ -6445,3 +6445,67 @@ td select:focus,
 .schedule-grid-table .schedule-grand-total .schedule-total-button:hover {
   background: rgba(79,70,229,.08) !important;
 }
+
+
+/* =========================================================
+   TIMETABLE — UNIFORM GRID ROW HEIGHT
+   Header, destination rows and total row use the same
+   38px visual height so the grid stays perfectly aligned.
+   ========================================================= */
+
+.schedule-grid-table {
+  border-collapse: collapse;
+}
+
+.schedule-grid-table thead th,
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  box-sizing: border-box;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  vertical-align: middle !important;
+}
+
+.schedule-grid-table thead th {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+.schedule-grid-table thead th:first-child,
+.schedule-grid-table tbody th {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  text-align: left;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  text-align: center !important;
+}
+
+.schedule-grid-table .schedule-grid-cell {
+  min-height: 38px;
+  height: 38px;
+  align-items: center;
+}
+
+.schedule-grid-table .schedule-total-cell {
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 4px !important;
+  vertical-align: middle !important;
+}
+
+.schedule-grid-table tfoot .schedule-total-button,
+.schedule-grid-table .schedule-total-cell .schedule-total-button {
+  height: 38px !important;
+  min-height: 38px !important;
+  line-height: 38px;
+  padding: 0 !important;
+}
