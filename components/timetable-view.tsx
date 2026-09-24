@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'\nimport type { CSSProperties } from 'react'
+import { useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 
 type Schedule = {
   schedule_id: string
