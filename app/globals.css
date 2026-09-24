@@ -5812,3 +5812,226 @@ th {
   background: #e9eafc !important;
   color: #4c4f7a !important;
 }
+
+
+/* =========================================================
+   MOVENT THEME — FINAL GLOBAL HARMONIZATION
+   One visual language across login, dashboards, master data,
+   transactions, reports, settings, timetable and all shared UI.
+   ========================================================= */
+
+:root {
+  --theme-primary: #4f46e5;
+  --theme-primary-dark: #3730a3;
+  --theme-primary-soft: #eef2ff;
+  --theme-primary-soft-2: #e8eaff;
+  --theme-slate-950: #0f172a;
+  --theme-slate-900: #1e293b;
+  --theme-slate-800: #334155;
+  --theme-slate-700: #475569;
+  --theme-slate-600: #64748b;
+  --theme-slate-500: #94a3b8;
+  --theme-slate-300: #cbd5e1;
+  --theme-slate-200: #e2e8f0;
+  --theme-slate-100: #f1f5f9;
+  --theme-slate-50: #f8fafc;
+}
+
+/* base surfaces */
+body,
+.app-content,
+.page-content { color: var(--theme-slate-900); }
+
+.sidebar,
+.topbar,
+.data-table-card,
+.dashboard-form-card,
+.report-card,
+.task-card,
+.super-panel,
+.super-kpi-card,
+.timetable-shell,
+.schedule-grid-shell,
+.profile-settings-workspace,
+.login-simple-shell { background: #fff; }
+
+/* brand actions */
+button,
+.button-link,
+.link-button,
+.login-simple-submit {
+  background: var(--theme-primary);
+  border-color: var(--theme-primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79,70,229,.13);
+}
+button:not(:disabled):hover,
+.button-link:hover,
+.link-button:hover,
+.login-simple-submit:hover {
+  background: var(--theme-primary-dark);
+  border-color: var(--theme-primary-dark);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(79,70,229,.16);
+}
+
+/* navigation */
+.nav-group-title { color: var(--theme-slate-600); }
+.nav-group-title:hover { background: var(--theme-slate-100); color: var(--theme-slate-900); }
+.nav-link { color: var(--theme-slate-600); }
+.nav-link:hover { background: var(--theme-slate-50); color: var(--theme-slate-900); }
+.nav-link.active {
+  background: var(--theme-primary-soft) !important;
+  color: var(--theme-primary) !important;
+  box-shadow: inset 2px 0 0 var(--theme-primary) !important;
+}
+.nav-group-items { border-left-color: var(--theme-slate-200); }
+.sidebar-top,
+.sidebar-footer { border-color: var(--theme-slate-200); }
+.sidebar-role { background: var(--theme-slate-50); border-color: var(--theme-slate-200); }
+.sidebar-role-name { color: var(--theme-slate-900); }
+.mode-select { color: var(--theme-slate-500); }
+.mode-select select { border-color: var(--theme-slate-300); color: var(--theme-slate-700); }
+
+/* topbar */
+.topbar { border-bottom-color: var(--theme-slate-200); }
+.topbar-avatar { background: var(--theme-primary-soft) !important; color: var(--theme-primary) !important; }
+.topbar-user { border-color: var(--theme-slate-200); color: var(--theme-slate-700); }
+.topbar-search input,
+.topbar-date-filter input { border-color: var(--theme-slate-200); background: var(--theme-slate-50); }
+.topbar-search input:focus,
+.topbar-date-filter input:focus,
+.login-simple-form input:focus {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 4px rgba(79,70,229,.08);
+}
+
+/* headings / copy */
+.page-heading h1,
+.section-heading h2,
+.super-panel-heading h2,
+.login-simple-message h1,
+.login-simple-form-heading h2 { color: var(--theme-slate-900); }
+.page-heading p,
+.section-heading p,
+.super-dashboard-heading p,
+.login-simple-form-heading p,
+.login-simple-left-footer,
+.login-simple-right-footer { color: var(--theme-slate-500); }
+.eyebrow { color: var(--theme-primary); }
+
+/* cards / panels */
+.metric-card,
+.data-table-card,
+.dashboard-form-card,
+.report-card,
+.task-card,
+.ticket-row-card,
+.super-kpi-card,
+.super-panel,
+.profile-settings-workspace { border-color: var(--theme-slate-200); }
+
+/* tables */
+th {
+  background: var(--theme-slate-50) !important;
+  color: var(--theme-slate-600) !important;
+  border-color: var(--theme-slate-200) !important;
+}
+td { color: var(--theme-slate-700); border-color: var(--theme-slate-200); }
+tbody tr:hover td { background: #fbfcff; }
+
+/* neutral buttons / controls retain the theme instead of reverting to blue */
+.secondary-button,
+.icon-button,
+.master-select-trigger,
+.schedule-preview-close {
+  background: #fff;
+  color: var(--theme-slate-700);
+  border-color: var(--theme-slate-300);
+  box-shadow: none;
+}
+.secondary-button:hover,
+.icon-button:hover,
+.master-select-trigger:hover,
+.schedule-preview-close:hover {
+  background: var(--theme-slate-50);
+  color: var(--theme-slate-900);
+  border-color: var(--theme-slate-300);
+}
+
+/* focus states */
+.login-form input:focus,
+.data-form input:focus,
+.data-form select:focus,
+.data-form textarea:focus,
+.compact-form input:focus,
+.compact-form select:focus,
+.compact-form textarea:focus,
+td select:focus,
+.master-select-trigger.open,
+.master-select-search:focus {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 4px rgba(79,70,229,.08);
+}
+.master-select-option:hover,
+.master-select-option.selected {
+  background: var(--theme-primary-soft) !important;
+  color: var(--theme-primary) !important;
+}
+
+/* login */
+.login-page {
+  background:
+    radial-gradient(circle at 10% 0, rgba(79,70,229,.08), transparent 30%),
+    radial-gradient(circle at 100% 100%, rgba(71,85,105,.045), transparent 28%),
+    var(--bg);
+}
+.login-simple-form input { background: #fbfcff; }
+.login-simple-submit { background: var(--theme-primary); }
+.login-error { border-color: #c7d2fe; }
+
+/* dashboard accents */
+.kpi-blue .super-kpi-icon,
+.super-info-icon.blue,
+.ticket-row-icon {
+  background: var(--theme-primary-soft);
+  color: var(--theme-primary);
+}
+.super-panel-heading a,
+.super-panel-link { color: var(--theme-primary); }
+.super-chart-column i b,
+.summary-bar-row i b { background: var(--theme-primary); }
+
+/* settings */
+.profile-settings-nav { background: var(--theme-slate-50); border-color: var(--theme-slate-200); }
+.profile-settings-nav button.active {
+  background: var(--theme-primary) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(79,70,229,.16) !important;
+}
+.profile-settings-nav button.active span,
+.profile-settings-nav button.active small { color: #fff !important; }
+.profile-settings-avatar { background: var(--theme-primary-soft); color: var(--theme-primary); }
+.profile-settings-role { background: var(--theme-primary-soft); color: var(--theme-primary); border-color: #c7d2fe; }
+
+/* timetable: same slate-indigo family, density colors remain within the family */
+.schedule-grid-table {
+  --schedule-indigo: var(--theme-primary);
+  --schedule-indigo-dark: var(--theme-primary-dark);
+  --schedule-indigo-soft: var(--theme-primary-soft);
+}
+.schedule-grid-table thead th { background: var(--theme-primary-soft-2) !important; color: #4c4f7a !important; }
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label { background: var(--theme-primary-soft) !important; color: #4f46a5; }
+.schedule-grid-table .schedule-total-cell { background: #fafbff; }
+.schedule-grid-table tfoot .schedule-total-cell { background: #f7f8ff; }
+.schedule-grand-total { background: var(--theme-primary-soft-2) !important; }
+.schedule-grand-total .schedule-total-button { background: var(--theme-primary); border-color: var(--theme-primary); color: #fff; }
+
+/* alerts keep semantic warning/danger colors, but their containers stay neutral */
+.alert-modal,
+.alert-detail-item { border-color: var(--theme-slate-200); }
+
+/* route progress */
+.route-progress { background: var(--theme-primary-soft); }
+.route-progress::after { background: var(--theme-primary); }
