@@ -6,37 +6,39 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 type NavItem = { label: string; href: string; icon: string }
-type NavGroup = { label: string; icon: string; items: NavItem[] }
+type NavGroup = { label: string; icon: string; items: NavItem[]; nonCollapsible?: boolean }
 
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
+
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
       { label: 'Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
-    ] },
-    { label: 'Dashboard', icon: 'home', items: [
-      { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/controller/beranda/ticketing', icon: 'ticket' },
     ] },
     { label: 'Schedule', icon: 'calendar', items: [
       { label: 'By Plan', href: '/controller/timetable?view=plan', icon: 'calendar' },
       { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
     ]},
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
-    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },    { label: 'Dashboard', icon: 'home', items: [
+      { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/controller/beranda/ticketing', icon: 'ticket' },
+    ], nonCollapsible: true },
+
   ],
   Dispatcher: [
+
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/dispatcher/alert/penugasan', icon: 'clipboard' },
       { label: 'Maintenance', href: '/dispatcher/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
-    { label: 'Dashboard', icon: 'home', items: [
-      { label: 'Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
-    ] },
     { label: 'Jadwal Tambahan', icon: 'calendar', items: [{ label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule', icon: 'calendar' }] },
     { label: 'Armada Non TGR', icon: 'truck', items: [{ label: 'Armada Non TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' }] },
-    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },    { label: 'Dashboard', icon: 'home', items: [
+      { label: 'Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'clipboard' },
+      { label: 'Maintenance', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
+    ], nonCollapsible: true },
+
   ],
   Executor: [
     { label: 'Alert', icon: 'bell', items: [
@@ -247,7 +249,21 @@ export default function AppShellClient({ profile, children }: { profile: { usern
             const hasActive = group.items.some(isItemActive)
             return (
               <div className={'nav-group ' + (hasActive ? 'has-active' : '')} key={group.label}>
-                {group.items.length === 1 ? (
+                {group.nonCollapsible ? (
+                  <>
+                    <div className="nav-group-title nav-group-title-static">
+                      <span className="nav-icon"><Icon name={group.icon} /></span><span>{group.label}</span>
+                    </div>
+                    <div className="nav-group-items nav-group-items-static">
+                      {group.items.map(item => {
+                        const active = isItemActive(item)
+                        return <Link key={item.href} href={item.href} className={'nav-link nav-dashboard-button ' + (active ? 'active' : '')} >
+                          <span className="nav-icon"><Icon name={item.icon} /></span><span>{item.label}</span>
+                        </Link>
+                      })}
+                    </div>
+                  </>
+                ) : group.items.length === 1 ? (
                   <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} >
                     <span className="nav-icon"><Icon name={group.items[0].icon} /></span><span>{group.label}</span>
                   </Link>
