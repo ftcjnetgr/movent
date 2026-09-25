@@ -8300,3 +8300,13 @@ td select:focus,
   border-left: 0 !important;
   border-right: 1px solid rgba(148, 163, 184, 0.22) !important;
 }
+
+
+/* Total column keeps horizontal row dividers just like the data grid */
+.schedule-grid-table tbody .schedule-total-cell {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell:last-child {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
