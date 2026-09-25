@@ -7997,3 +7997,21 @@ td select:focus,
 .alert-nav-badge {
   border: 0 !important;
 }
+
+
+/* Alert sidebar indicator: small red dot without a number */
+.sidebar .alert-nav-dot {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  width: 9px;
+  height: 9px;
+  min-width: 9px;
+  min-height: 9px;
+  padding: 0;
+  border-radius: 50%;
+  background: #dc2626 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  z-index: 2;
+}
