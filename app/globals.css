@@ -7772,3 +7772,10 @@ td select:focus,
 .database-action-modal .database-action-modal-close {
   font-weight: 400 !important;
 }
+
+
+/* Database management tables: vertically center every cell */
+.database-management-filter ~ .data-table-card td,
+.database-management-filter ~ .data-table-card th {
+  vertical-align: middle !important;
+}
