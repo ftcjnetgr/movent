@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 
 type Schedule = {
@@ -188,6 +188,14 @@ export default function TimetableView({
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([])
   const [previewMode, setPreviewMode] = useState<'schedule' | 'live'>('schedule')
   const [openLiveDestinationGroups, setOpenLiveDestinationGroups] = useState<string[]>([])
+
+  useEffect(() => {
+    const destinations = [...new Set(liveTasks.map((item) => item.destination ?? '-'))]
+    setOpenLiveDestinationGroups((current) => {
+      if (!current.length) return destinations
+      return current.filter((item) => destinations.includes(item))
+    })
+  }, [liveTasks])
 
   const scheduleById = useMemo(
     () => new Map(schedules.map((item) => [item.schedule_id, item])),
