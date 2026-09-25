@@ -51,10 +51,7 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
   ])
 
   const tickets = ticketResult.data ?? []
-  const activeCount =
-    (data.ticketCounts.Requested ?? 0) +
-    (data.ticketCounts.Confirmed ?? 0) +
-    (data.ticketCounts['In Progress'] ?? 0)
+  const totalMaintenance = Object.values(data.ticketCounts).reduce((total, count) => total + (count ?? 0), 0)
 
   const { data: todayTickets } = await admin
     .from('ticketings')
@@ -99,6 +96,12 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
 
       <section className="super-kpi-grid maintenance-kpi-grid">
         <div className="super-kpi-card kpi-blue">
+          <div className="super-kpi-icon">●</div>
+          <div className="super-kpi-content"><span>Semua Maintenance</span>
+          <strong>{totalMaintenance}</strong>
+          <small>Total maintenance</small></div>
+        </div>
+        <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">⌁</div>
           <div className="super-kpi-content"><span>Udah Diajukan</span>
           <strong>{data.ticketCounts.Requested ?? 0}</strong>
@@ -121,12 +124,6 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
           <div className="super-kpi-content"><span>Udah Selesai</span>
           <strong>{data.ticketCounts.Completed ?? 0}</strong>
           <small>Udah beres</small></div>
-        </div>
-        <div className="super-kpi-card kpi-red">
-          <div className="super-kpi-icon">●</div>
-          <div className="super-kpi-content"><span>Masih Aktif</span>
-          <strong>{activeCount}</strong>
-          <small>Masih jalan</small></div>
         </div>
       </section>
 
@@ -171,7 +168,7 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
           </div>
           <div className="super-activity-list">
             <div><span className="activity-dot blue" /><span>{tickets.length} maintenance terbaru</span><time>{shortTime(new Date().toISOString())}</time></div>
-            <div><span className="activity-dot orange" /><span>{activeCount} maintenance sedang berjalan</span><time>{shortTime(new Date().toISOString())}</time></div>
+            <div><span className="activity-dot orange" /><span>{(data.ticketCounts.Confirmed ?? 0) + (data.ticketCounts['In Progress'] ?? 0)} maintenance sedang berjalan</span><time>{shortTime(new Date().toISOString())}</time></div>
             <div><span className="activity-dot purple" /><span>{data.ticketCounts.Completed ?? 0} maintenance selesai</span><time>{shortTime(new Date().toISOString())}</time></div>
           </div>
         </div>
