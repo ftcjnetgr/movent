@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 
 type Schedule = {
@@ -28,6 +28,8 @@ type Task = {
   destination: string | null
   std: string | null
   sta: string | null
+  driving_at: string | null
+  arrived_at: string | null
   executor_nik: string | null
   executor_snapshot: { full_name?: string; executor_nik?: string } | null
   fleet_snapshot: { plat_number?: string; fleet_type?: string } | null
@@ -136,6 +138,7 @@ export default function TimetableView({
   schedules: Schedule[]
   tasks: Task[]
   todayTasks: Task[]
+  liveTasks: Task[]
   taskBySchedule: Record<string, Task>
   initialView?: 'database' | 'live'
 }) {
@@ -146,6 +149,7 @@ export default function TimetableView({
   const [category, setCategory] = useState('Normal')
   const [point, setPoint] = useState('')
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([])
+  const [openLiveFleetGroups, setOpenLiveFleetGroups] = useState<string[]>([])
 
   const scheduleById = useMemo(
     () => new Map(schedules.map((item) => [item.schedule_id, item])),
@@ -295,95 +299,75 @@ export default function TimetableView({
   }
 
   function renderLiveTable(items: Task[]) {
-    const rows = new Map<string, Task[]>()
+    const groups = new Map<string, Task[]>()
     for (const item of items) {
-      const row = direction === 'start-point' ? (item.destination ?? '-') : (item.start_point ?? '-')
-      rows.set(row, [...(rows.get(row) ?? []), item])
+      const fleetType = item.fleet_snapshot?.fleet_type || 'Tipe Armada tidak tersedia'
+      groups.set(fleetType, [...(groups.get(fleetType) ?? []), item])
     }
-
-    const sortedRows = [...rows.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-    const columnTotals = Array.from({ length: 24 }, (_, hour) =>
-      items.filter((item) => hourValue(item.std) === hour),
-    )
-
+    const sortedGroups = [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+    const actualTime = (item: Task) => item.status === 'Completed' ? item.arrived_at : item.driving_at
+    const hourOf = (item: Task) => hourValue(actualTime(item))
+    const timeOf = (item: Task) => timeValue(actualTime(item))
+    const columnTotals = Array.from({ length: 24 }, (_, hour) => items.filter((item) => hourOf(item) === hour))
     const toPreviewSchedule = (item: Task): Schedule => ({
-      schedule_id: item.schedule_id ?? item.transaction_id,
-      trip: 0, route: '', category: '',
-      start_point: item.start_point ?? '-', start_point_type: '',
-      destination: item.destination ?? '-', destination_type: '',
-      schedule_day: todayDay, schedule_day_name: '',
-      std: item.std ?? '', sta: item.sta ?? '',
+      schedule_id: item.schedule_id ?? item.transaction_id, trip: 0, route: '', category: '',
+      start_point: item.start_point ?? '-', start_point_type: '', destination: item.destination ?? '-', destination_type: '',
+      schedule_day: todayDay, schedule_day_name: '', std: item.driving_at ?? '', sta: item.arrived_at ?? '',
     })
-
     return (
       <div className="schedule-grid-scroll">
-        <table className="schedule-grid-table">
-          <thead>
-            <tr>
-              <th style={{ background: '#e7edf5', color: '#627287' }}>
-                {direction === 'start-point' ? 'Start Point' : 'Destination'}
-              </th>
-              {columnTotals.map((hourItems, hour) => (
-                <th key={hour} style={{ background: '#e7edf5', color: '#627287' }}>
-                  {String(hour).padStart(2, '0')}
-                </th>
-              ))}
-              <th className="schedule-total-header" style={{ background: '#e7edf5', color: '#627287' }}>Total</th>
-            </tr>
-          </thead>
+        <table className="schedule-grid-table live-tracking-table">
+          <thead><tr>
+            <th>Destination</th><th className="live-fleet-type-header">Tipe Armada</th>
+            {columnTotals.map((hourItems, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
+            <th className="schedule-total-header">Total</th>
+          </tr></thead>
           <tbody>
-            {sortedRows.map(([row, rowItems]) => (
-              <tr key={row}>
-                <th style={{ background: '#f1f5f9', color: '#617187' }}>{row}</th>
-                {columnTotals.map((_, hour) => {
-                  const cellItems = rowItems.filter((item) => hourValue(item.std) === hour).sort((a, b) => (minutesValue(a.std) ?? 0) - (minutesValue(b.std) ?? 0))
-                  if (!cellItems.length) return <td key={hour} />
-                  const first = cellItems[0]
-                  const total = cellItems.length
-                  return (
-                    <td key={hour}>
-                      <button type="button" className="schedule-cell-button" style={scheduleDensityStyle(total)} onClick={() => openSchedulePreview(cellItems.map(toPreviewSchedule))} title={"Lihat " + total + " schedule · " + timeValue(first.std)}>
-                        {timeValue(first.std)}
+            {sortedGroups.map(([fleetType, groupItems]) => {
+              const open = openLiveFleetGroups.includes(fleetType)
+              const destinations = new Map<string, Task[]>()
+              groupItems.forEach((item) => { const destination = item.destination ?? '-'; destinations.set(destination, [...(destinations.get(destination) ?? []), item]) })
+              const sortedDestinations = [...destinations.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+              return (
+                <React.Fragment key={fleetType}>
+                  <tr className="live-fleet-accordion-row">
+                    <th colSpan={2}>
+                      <button type="button" className="live-fleet-accordion-button" onClick={() => setOpenLiveFleetGroups((current) => open ? current.filter((item) => item !== fleetType) : [...current, fleetType])} aria-expanded={open}>
+                        <span>{fleetType}</span><small>{groupItems.length} tugas</small><b>{open ? '⌃' : '⌄'}</b>
                       </button>
-                    </td>
-                  )
-                })}
-                <td className="schedule-total-cell">
-                  <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(rowItems.map(toPreviewSchedule))}>
-                    {rowItems.length}
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    </th>
+                    <td colSpan={25}>{open ? 'Aktif' : ''}</td>
+                  </tr>
+                  {open ? sortedDestinations.map(([destination, destinationItems]) => {
+                    const rowTotals = Array.from({ length: 24 }, (_, hour) => destinationItems.filter((item) => hourOf(item) === hour))
+                    return <tr key={fleetType + '-' + destination}>
+                      <th>{destination}</th><td className="live-fleet-type-cell">{fleetType}</td>
+                      {rowTotals.map((cellItems, hour) => cellItems.length ? <td key={hour}><button type="button" className="schedule-cell-button" style={scheduleDensityStyle(cellItems.length)} onClick={() => openSchedulePreview(cellItems.map(toPreviewSchedule))} title={cellItems.map((item) => (item.status === 'Completed' ? 'ATA ' : 'ATD ') + timeOf(item)).join(' · ')}>{timeOf(cellItems[0])}</button></td> : <td key={hour} />)}
+                      <td className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(destinationItems.map(toPreviewSchedule))}>{destinationItems.length}</button></td>
+                    </tr>
+                  }) : null}
+                </React.Fragment>
+              )
+            })}
           </tbody>
-          <tfoot>
-            <tr>
-              <th className="schedule-total-label">Total</th>
-              {columnTotals.map((hourItems, hour) => (
-                <td key={hour} className="schedule-total-cell">
-                  <button
-                    type="button"
-                    className="schedule-total-button"
-                    onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule))}
-                    aria-label={`Lihat total schedule jam ${String(hour).padStart(2, '0')}: ${hourItems.length}`}
-                  >
-                    {hourItems.length}
-                  </button>
-                </td>
-              ))}
-              <td className="schedule-total-cell schedule-grand-total">
-                <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items.map(toPreviewSchedule))}>
-                  {items.length}
-                </button>
-              </td>
-            </tr>
-          </tfoot>
+          <tfoot><tr><th className="schedule-total-label" colSpan={2}>Total</th>
+            {columnTotals.map((hourItems, hour) => <td key={hour} className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule))}>{hourItems.length}</button></td>)}
+            <td className="schedule-total-cell schedule-grand-total"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items.map(toPreviewSchedule))}>{items.length}</button></td>
+          </tr></tfoot>
         </table>
       </div>
     )
   }
+  const filteredLiveTasks = useMemo(() => liveTasks.filter((task) => {
+    const filterPoint = direction === 'start-point' ? task.start_point : task.destination
+    const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
+    if (route && schedule && schedule.route !== route) return false
+    if (category && schedule && schedule.category !== category) return false
+    if (point && filterPoint !== point) return false
+    return true
+  }), [liveTasks, direction, route, category, point, scheduleById])
 
-  const activeRows = view === 'database' ? filteredSchedules : filteredTasks
+  const activeRows = view === 'database' ? filteredSchedules : filteredLiveTasks
 
   return (
     <div className={`schedule-page schedule-view-${view}`}>
