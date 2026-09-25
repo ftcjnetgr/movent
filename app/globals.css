@@ -7872,3 +7872,25 @@ td select:focus,
   white-space: nowrap;
   z-index: 2;
 }
+
+
+.alert-view-tabs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.alert-tab-badge {
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dc2626;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1;
+}
