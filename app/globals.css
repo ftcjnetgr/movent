@@ -7017,3 +7017,28 @@ td select:focus,
   right: auto;
   z-index: auto;
 }
+
+
+/* timetable: keep the TOTAL row frozen at the bottom while scrolling vertically */
+.schedule-grid-table tfoot {
+  position: sticky;
+  bottom: 0;
+  z-index: 6;
+}
+
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  position: sticky;
+  bottom: 0;
+  z-index: 6;
+  background: var(--theme-color-soft) !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label {
+  left: 0;
+  z-index: 8;
+}
+
+.schedule-grid-table tfoot td.schedule-total-cell {
+  z-index: 7;
+}
