@@ -436,7 +436,7 @@ export default function TimetableView({
           <thead>
             <tr>
               <th>Destination</th>
-              <th className="live-fleet-type-header">Tipe Armada</th>
+              <th className="live-fleet-type-header" aria-label="Tipe Armada"></th>
               {columnTotals.map((hourItems, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
               <th className="schedule-total-header">Total</th>
             </tr>
