@@ -7894,3 +7894,13 @@ td select:focus,
   font-weight: 600;
   line-height: 1;
 }
+
+
+/* Active Alert group: white label and icon */
+.sidebar .nav-group.has-active > .nav-group-title,
+.sidebar .nav-group.has-active > .nav-group-title span,
+.sidebar .nav-group.has-active > .nav-group-title .nav-icon,
+.sidebar .nav-group.has-active > .nav-group-title .nav-icon svg,
+.sidebar .nav-group.has-active > .nav-group-title .nav-icon svg * {
+  color: #fff !important;
+}
