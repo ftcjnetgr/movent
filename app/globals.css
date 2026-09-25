@@ -8366,3 +8366,21 @@ td select:focus,
   background: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* Total column uses the same purple as the schedule header */
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table tbody .schedule-total-cell,
+.schedule-grid-table tfoot td.schedule-total-cell {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button,
+.schedule-grid-table tfoot .schedule-total-cell .schedule-total-button {
+  background: transparent !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
