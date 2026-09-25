@@ -1,12 +1,13 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { loginAction } from './actions'
 
 const initialState: { error?: string } = {}
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, initialState)
+  const [showPassword, setShowPassword] = useState(false)
 
   return (
     <main className="login-page">
@@ -35,12 +36,40 @@ export default function LoginPage() {
               </label>
               <label>
                 Password
-                <input name="password" type="password" autoComplete="current-password" placeholder="Password kamu" />
+                <span className="login-password-field">
+                  <input
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    placeholder="Password kamu"
+                  />
+                  <button
+                    type="button"
+                    className="login-password-toggle"
+                    aria-label={showPassword ? 'Sembunyikan password' : 'Lihat password'}
+                    aria-pressed={showPassword}
+                    onClick={() => setShowPassword((visible) => !visible)}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      {showPassword ? (
+                        <>
+                          <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
+                          <circle cx="12" cy="12" r="2.5" />
+                        </>
+                      ) : (
+                        <>
+                          <path d="M3 3l18 18" />
+                          <path d="M10.6 6.2A11.4 11.4 0 0 1 12 6c6.5 0 10 6 10 6a18.6 18.6 0 0 1-4.1 4.3" />
+                          <path d="M6.2 8.1C3.5 9.8 2 12 2 12s3.5 6 10 6a10.9 10.9 0 0 0 4.1-.8" />
+                        </>
+                      )}
+                    </svg>
+                  </button>
+                </span>
               </label>
               {state.error ? <p className="form-error login-error" role="alert">{state.error}</p> : null}
               <button type="submit" className="login-simple-submit" disabled={pending}>
                 {pending ? 'Sebentar ya...' : 'Masuk'}
-                <span aria-hidden="true">→</span>
               </button>
             </form>
           </div>
