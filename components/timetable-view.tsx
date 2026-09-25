@@ -130,6 +130,7 @@ export default function TimetableView({
   schedules,
   tasks,
   todayTasks,
+  liveTasks,
   taskBySchedule,
   initialView = 'database',
 }: {
