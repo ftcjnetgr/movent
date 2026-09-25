@@ -46,6 +46,14 @@ export async function getTimetableData(profile: AppProfile) {
     return value >= new Date(startIso).getTime() && value < new Date(endIso).getTime()
   })
 
+  const liveTasks = tasks.filter((task) => {
+    if (!['Driving', 'Completed'].includes(task.status)) return false
+    const actualTime = task.status === 'Completed' ? task.arrived_at : task.driving_at
+    if (!actualTime) return false
+    const value = new Date(actualTime).getTime()
+    return value >= new Date(startIso).getTime() && value < new Date(endIso).getTime()
+  })
+
   // A schedule can be reused before STD, including after cancellation.
   // Keep a non-canceled assignment when several transactions reference the same schedule,
   // so a later canceled transaction cannot hide an earlier active assignment in the plan view.
@@ -78,6 +86,7 @@ export async function getTimetableData(profile: AppProfile) {
     schedules: schedules ?? [],
     tasks,
     todayTasks,
+    liveTasks,
     taskBySchedule: Object.fromEntries(taskBySchedule),
   }
 }
