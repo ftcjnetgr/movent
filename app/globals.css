@@ -7844,3 +7844,31 @@ td select:focus,
 .sidebar-footer {
   border-top: 0 !important;
 }
+
+
+/* Alert notification badge on sidebar icons */
+.nav-icon-with-badge {
+  position: relative;
+  overflow: visible !important;
+}
+
+.alert-nav-badge {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dc2626;
+  color: #fff;
+  border: 2px solid var(--sidebar-bg, #fff);
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 2;
+}
