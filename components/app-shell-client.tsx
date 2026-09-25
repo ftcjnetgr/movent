@@ -100,13 +100,12 @@ const superUserNav: NavGroup[] = [
     ],
   },
   {
-    label: 'Management',
+    label: 'Manajemen',
     icon: 'settings',
     items: [
       { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
       { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
       { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
-      { label: 'Import Data', href: '/super-user/pengelolaan-database', icon: 'upload' },
     ],
   },
   {
@@ -177,13 +176,12 @@ export default function AppShellClient({ profile, children }: { profile: { usern
     return [
       ...roleNav,
       {
-        label: 'Management',
+        label: 'Manajemen',
         icon: 'settings',
         items: [
           { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
           { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
           { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
-          { label: 'Import Data', href: '/super-user/pengelolaan-database', icon: 'upload' },
         ],
       },
     ]
@@ -281,6 +279,10 @@ export default function AppShellClient({ profile, children }: { profile: { usern
         </nav>
 
         <div className="sidebar-footer">
+          <div className="sidebar-credit">
+            <span>Part of FTC Go Project</span>
+            <span>Developed by Fleet Traffic Control</span>
+          </div>
           <button type="button" className="sidebar-logout" onClick={logout}><span className="nav-icon"><Icon name="logout" /></span><span>Keluar</span></button>
         </div>
       </aside>
@@ -306,7 +308,6 @@ export default function AppShellClient({ profile, children }: { profile: { usern
           ) : null}
         </header>
         <section className="page-content">{children}</section>
-        <footer className="app-footer"><span>Part of FTC Go Project</span><span>Developed by Fleet Traffic Control</span></footer>
       </main>
     </div>
   )
