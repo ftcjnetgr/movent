@@ -243,9 +243,12 @@ export default function TimetableView({
   }), [todayTasks, direction, route, category, point, scheduleById])
 
   function previewStatus(item: Schedule) {
-    if (item.status) return item.status
     const task = taskBySchedule[item.schedule_id]
-    return task?.status ?? 'Belum Ditugaskan'
+    if (task?.status) return task.status
+    if (item.status && ['Requested', 'Assigned', 'Confirmed', 'Driving', 'Completed', 'Canceled'].includes(item.status)) {
+      return item.status
+    }
+    return 'Belum Ditugaskan'
   }
 
   function statusLabel(status: string) {
