@@ -6907,3 +6907,67 @@ td select:focus,
 .sidebar .nav-link.active span {
   color: var(--theme-color) !important;
 }
+
+
+/* LOGIN FORM — lighter input text + password visibility toggle */
+.login-simple-form input {
+  font-weight: 400 !important;
+}
+
+.login-simple-form input::placeholder {
+  font-weight: 400 !important;
+}
+
+.login-password-field {
+  position: relative;
+  display: block;
+}
+
+.login-password-field input {
+  width: 100%;
+  padding-right: 48px !important;
+}
+
+.login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 8px;
+  background: transparent !important;
+  color: #94a3b8;
+  box-shadow: none !important;
+}
+
+.login-password-toggle:hover {
+  background: #f1f5f9 !important;
+  color: #475569;
+  box-shadow: none !important;
+  transform: translateY(-50%);
+}
+
+.login-password-toggle:active {
+  transform: translateY(-50%);
+}
+
+.login-password-toggle svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+  margin: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.login-simple-submit {
+  gap: 0 !important;
+}
