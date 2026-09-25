@@ -8384,3 +8384,11 @@ td select:focus,
   border-color: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* Schedule header: no border, including the Total header */
+.schedule-grid-table thead th,
+.schedule-grid-table thead th.schedule-total-header {
+  border: 0 !important;
+  border-color: transparent !important;
+}
