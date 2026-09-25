@@ -87,8 +87,8 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
     <div className="super-dashboard">
       <div className="super-dashboard-heading dashboard-page-heading">
         <div>
-          <h1>Maintenance</h1>
-          <p>Ini ringkasan operasional maintenance sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
+          <h1>Dashboard</h1>
+          <p>Ini ringkasan operasional sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
         <nav className="dashboard-view-tabs" aria-label="Dashboard">
           <a href={`/controller/beranda?from=${from}&to=${to}`}>Penugasan</a>
