@@ -279,11 +279,11 @@ export default function AppShellClient({ profile, children }: { profile: { usern
         </nav>
 
         <div className="sidebar-footer">
+          <button type="button" className="sidebar-logout" onClick={logout}><span className="nav-icon"><Icon name="logout" /></span><span>Keluar</span></button>
           <div className="sidebar-credit">
             <span>Part of FTC Go Project</span>
             <span>Developed by Fleet Traffic Control</span>
           </div>
-          <button type="button" className="sidebar-logout" onClick={logout}><span className="nav-icon"><Icon name="logout" /></span><span>Keluar</span></button>
         </div>
       </aside>
 
