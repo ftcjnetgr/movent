@@ -8111,3 +8111,14 @@ td select:focus,
   margin-right: 6px;
   color: #94a3b8;
 }
+
+
+/* Live Tracking: the unlabeled fleet column header should blend into the header */
+.live-tracking-table thead th:first-child {
+  border-right-color: #4f46e5 !important;
+}
+.live-tracking-table thead th.live-fleet-type-header {
+  color: transparent !important;
+  border-left-color: #4f46e5 !important;
+  border-right-color: #4f46e5 !important;
+}
