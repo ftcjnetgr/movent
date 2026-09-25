@@ -3,6 +3,16 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
 
+
+function SummaryIcon({ name }: { name: 'clipboard' | 'truck' | 'check' | 'wrench' | 'play' }) {
+  const common = { viewBox: '0 0 24 24', width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true }
+  if (name === 'clipboard') return <svg {...common}><rect x="6" y="5" width="12" height="16" rx="2" /><path d="M9 5V3h6v2M9 10h6M9 14h6M9 18h4" /></svg>
+  if (name === 'truck') return <svg {...common}><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z" /><circle cx="7" cy="18" r="2" /><circle cx="18" cy="18" r="2" /></svg>
+  if (name === 'check') return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="m8 12 2.5 2.5L16 9" /></svg>
+  if (name === 'wrench') return <svg {...common}><path d="M14 6a4 4 0 0 1-5 5L4 16l4 4 5-5a4 4 0 0 1 5-5l-4-4Z" /></svg>
+  return <svg {...common}><path d="M8 5v14l11-7-11-7Z" /></svg>
+}
+
 function statusLabel(status: string) {
   return ({
     Requested: 'Udah Diajukan',
@@ -116,7 +126,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
 
       <section className="super-kpi-grid assignment-kpi-grid">
         <div className="super-kpi-card kpi-blue">
-          <div className="super-kpi-icon">⌁</div>
+          <div className="super-kpi-icon"><SummaryIcon name="clipboard" /></div>
           <div className="super-kpi-content">
             <span>Semua Tugas</span>
             <strong>{totalTaskResult.count ?? 0}</strong>
@@ -124,7 +134,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           </div>
         </div>
         <div className="super-kpi-card kpi-orange">
-          <div className="super-kpi-icon">▰</div>
+          <div className="super-kpi-icon"><SummaryIcon name="truck" /></div>
           <div className="super-kpi-content">
             <span>Siap Jalan</span>
             <strong>{data.taskCounts.Assigned ?? 0}</strong>
@@ -132,7 +142,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           </div>
         </div>
         <div className="super-kpi-card kpi-cyan">
-          <div className="super-kpi-icon">✓</div>
+          <div className="super-kpi-icon"><SummaryIcon name="check" /></div>
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{data.taskCounts.Confirmed ?? 0}</strong>
@@ -140,7 +150,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           </div>
         </div>
         <div className="super-kpi-card kpi-green">
-          <div className="super-kpi-icon">◷</div>
+          <div className="super-kpi-icon"><SummaryIcon name="truck" /></div>
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{data.taskCounts.Driving ?? 0}</strong>
@@ -148,7 +158,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           </div>
         </div>
         <div className="super-kpi-card kpi-purple">
-          <div className="super-kpi-icon">✓</div>
+          <div className="super-kpi-icon"><SummaryIcon name="check" /></div>
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{data.taskCounts.Completed ?? 0}</strong>
