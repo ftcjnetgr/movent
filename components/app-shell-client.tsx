@@ -10,7 +10,7 @@ type NavGroup = { label: string; icon: string; items: NavItem[]; nonCollapsible?
 
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
-
+    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/controller/beranda', icon: 'home' }] },
     { label: 'Alert', icon: 'bell', items: [
       { label: 'Penugasan', href: '/controller/alert/penugasan', icon: 'clipboard' },
       { label: 'Maintenance', href: '/controller/alert/ticketing-maintenance', icon: 'wrench' },
@@ -20,8 +20,7 @@ const navByRole: Record<string, NavGroup[]> = {
       { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
     ]},
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
-    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/controller/beranda', icon: 'home' }] },
-
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
   Dispatcher: [
 
