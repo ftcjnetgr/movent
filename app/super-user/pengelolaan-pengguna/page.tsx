@@ -82,12 +82,19 @@ export default async function UserManagementPage() {
                         <button type="submit">Simpan perubahan</button>
                       </form>
                     </details>
-                    <div className="admin-row-action-secondary">
-                      {user.status === 'Locked' ? (
-                        <form action={unlockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit">Buka akses</button></form>
-                      ) : (
-                        <form action={lockUserFormAction}><input type="hidden" name="id" value={user.id} /><button type="submit" className="secondary-button">Kunci akun</button></form>
-                      )}
+                    <div className="admin-row-action-secondary admin-user-lock-actions">
+                      <form action={lockUserFormAction}>
+                        <input type="hidden" name="id" value={user.id} />
+                        <button type="submit" className="user-action-lock" disabled={user.status === 'Locked'}>
+                          Kunci akun
+                        </button>
+                      </form>
+                      <form action={unlockUserFormAction}>
+                        <input type="hidden" name="id" value={user.id} />
+                        <button type="submit" className="user-action-unlock" disabled={user.status !== 'Locked'}>
+                          Unlock Account
+                        </button>
+                      </form>
                     </div>
                     </div>
                   </td>
