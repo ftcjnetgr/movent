@@ -7946,3 +7946,25 @@ td select:focus,
   background: #dc2626 !important;
   color: #fff !important;
 }
+
+
+/* Alert: inactive stays muted, active uses white text/icon for contrast */
+.sidebar .nav-group-title.is-active,
+.sidebar .nav-group-title.is-active > span,
+.sidebar .nav-group-title.is-active .nav-icon,
+.sidebar .nav-group-title.is-active .nav-icon svg,
+.sidebar .nav-group-title.is-active .nav-icon svg *,
+.sidebar .nav-group-title.is-active .nav-group-chevron {
+  color: #fff !important;
+}
+.sidebar .nav-group-title:not(.is-active),
+.sidebar .nav-group-title:not(.is-active) > span,
+.sidebar .nav-group-title:not(.is-active) .nav-icon,
+.sidebar .nav-group-title:not(.is-active) .nav-icon svg,
+.sidebar .nav-group-title:not(.is-active) .nav-icon svg *,
+.sidebar .nav-group-title:not(.is-active) .nav-group-chevron {
+  color: #536278 !important;
+}
+.sidebar .nav-group-title.is-active .alert-nav-badge {
+  color: #fff !important;
+}
