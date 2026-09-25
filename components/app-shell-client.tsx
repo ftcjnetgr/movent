@@ -12,8 +12,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/controller/beranda', icon: 'home' }] },
-    { label: 'By Plan', icon: 'calendar', items: [{ label: 'By Plan', href: '/controller/timetable?view=plan', icon: 'calendar' }] },
-    { label: 'Live Tracking', icon: 'truck', items: [{ label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' }] },
+    { label: 'Schedule', icon: 'calendar', items: [{ label: 'Schedule', href: '/controller/timetable?view=plan', icon: 'calendar' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
