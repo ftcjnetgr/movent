@@ -7543,3 +7543,86 @@ td select:focus,
   border-color: var(--theme-color-dark) !important;
   box-shadow: none !important;
 }
+
+
+/* Super User database management */
+.database-management-filter .form-row label {
+  font-weight: 500 !important;
+}
+
+.database-management-filter input,
+.database-management-filter select {
+  font-weight: 400 !important;
+}
+
+.database-management-filter input::placeholder {
+  font-weight: 400 !important;
+}
+
+.database-management-actions {
+  align-items: start !important;
+}
+
+.database-management-action {
+  padding: 18px !important;
+  overflow: hidden;
+}
+
+.database-action-trigger {
+  list-style: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--theme-color-light);
+  border-radius: 10px;
+  background: var(--theme-color);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+}
+
+.database-action-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.database-action-trigger::after {
+  content: '＋';
+  margin-left: 8px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.database-management-action[open] .database-action-trigger::after {
+  content: '−';
+}
+
+.database-management-action[open] .database-action-trigger {
+  background: var(--theme-color-dark);
+}
+
+.database-action-trigger:hover {
+  background: var(--theme-color-dark);
+}
+
+.database-action-body {
+  margin-top: 14px;
+}
+
+.database-action-body .data-form {
+  max-width: none;
+}
+
+.database-action-body label {
+  font-weight: 500 !important;
+}
+
+.database-action-body input,
+.database-action-body select,
+.database-action-body textarea {
+  font-weight: 400 !important;
+}
