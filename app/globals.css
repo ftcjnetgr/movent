@@ -7820,3 +7820,21 @@ td select:focus,
 .sidebar-footer .sidebar-credit {
   order: 2;
 }
+
+
+/* Sidebar footer order: Keluar, divider, project credit */
+.sidebar-footer {
+  gap: 0;
+  padding-top: 12px;
+}
+
+.sidebar-footer .sidebar-logout {
+  order: 1;
+  margin-bottom: 12px;
+}
+
+.sidebar-footer .sidebar-credit {
+  order: 2;
+  padding-top: 12px;
+  border-top: 1px solid #edf1f5;
+}
