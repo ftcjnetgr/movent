@@ -39,6 +39,7 @@ export default async function AppShell({
     redirect('/ganti-password?first=1')
   }
 
-  const alertData = await getDashboardData(profile as AppProfile)
+  const currentProfile = await getCurrentProfile()
+  const alertData = await getDashboardData(currentProfile)
   return <AppShellClient profile={profile} alertCounts={{ task: alertData.taskAlerts.length, maintenance: alertData.ticketAlerts.length }}>{children}</AppShellClient>
 }
