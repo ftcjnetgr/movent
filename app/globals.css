@@ -6971,3 +6971,13 @@ td select:focus,
 .login-simple-submit {
   gap: 0 !important;
 }
+
+
+/* active submenu icon must stay visible on the soft-indigo background */
+.sidebar .nav-link.active .nav-icon,
+.sidebar .nav-link.active .nav-icon svg,
+.sidebar .nav-link.active .nav-icon svg * {
+  color: var(--theme-color) !important;
+  stroke: var(--theme-color) !important;
+  fill: none !important;
+}
