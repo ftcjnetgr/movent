@@ -7217,3 +7217,11 @@ td select:focus,
     flex: 0 0 auto;
   }
 }
+
+
+/* Restore schedule-density legend swatches from the same palette as grid cells */
+.schedule-density-legend-item i {
+  background: var(--density-background) !important;
+  color: var(--density-color) !important;
+  border: 1px solid var(--density-border) !important;
+}
