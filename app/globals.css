@@ -8003,7 +8003,7 @@ td select:focus,
 .sidebar .alert-nav-dot {
   position: absolute;
   top: -2px;
-  right: -1px;
+  right: 2px;
   width: 9px;
   height: 9px;
   min-width: 9px;
