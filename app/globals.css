@@ -7009,30 +7009,11 @@ td select:focus,
 }
 
 
-/* timetable: keep TOTAL column frozen while the hourly grid scrolls */
+/* timetable: only the Destination column stays frozen */
 .schedule-grid-table .schedule-total-header,
 .schedule-grid-table tbody .schedule-total-cell,
 .schedule-grid-table tfoot .schedule-total-cell {
-  position: sticky;
-  right: 0;
-  z-index: 5;
-}
-
-.schedule-grid-table .schedule-total-header {
-  z-index: 7;
-}
-
-.schedule-grid-table tfoot .schedule-total-label {
-  z-index: 6;
-}
-
-.schedule-grid-table tfoot .schedule-total-cell {
-  z-index: 6;
-}
-
-/* restore density colors in the legend so 1–6+ explains the cell colors */
-.schedule-density-legend-item i {
-  background: var(--density-background) !important;
-  border: 1px solid var(--density-border) !important;
-  color: var(--density-color) !important;
+  position: static;
+  right: auto;
+  z-index: auto;
 }
