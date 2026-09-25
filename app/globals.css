@@ -7915,3 +7915,14 @@ td select:focus,
 .sidebar .nav-group-title.is-active .nav-group-chevron {
   color: #fff !important;
 }
+
+
+/* Alert active state matches Dashboard: indigo text/icon on soft active background */
+.sidebar .nav-group-title.is-active,
+.sidebar .nav-group-title.is-active > span,
+.sidebar .nav-group-title.is-active .nav-icon,
+.sidebar .nav-group-title.is-active .nav-icon svg,
+.sidebar .nav-group-title.is-active .nav-icon svg *,
+.sidebar .nav-group-title.is-active .nav-group-chevron {
+  color: var(--theme-color) !important;
+}
