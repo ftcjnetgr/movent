@@ -7904,3 +7904,14 @@ td select:focus,
 .sidebar .nav-group.has-active > .nav-group-title .nav-icon svg * {
   color: #fff !important;
 }
+
+
+/* Active collapsible menu title */
+.sidebar .nav-group-title.is-active,
+.sidebar .nav-group-title.is-active > span,
+.sidebar .nav-group-title.is-active .nav-icon,
+.sidebar .nav-group-title.is-active .nav-icon svg,
+.sidebar .nav-group-title.is-active .nav-icon svg *,
+.sidebar .nav-group-title.is-active .nav-group-chevron {
+  color: #fff !important;
+}
