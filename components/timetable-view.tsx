@@ -84,7 +84,7 @@ function durationValue(start: string | null, end: string | null, live = false) {
   const startMs = isDateTime
     ? new Date(start).getTime()
     : (() => {
-        const match = start.match(/^(\\d{2}):(\\d{2})/)
+        const match = start.match(/^(\d{2}):(\d{2})/)
         return match ? (Number(match[1]) * 60 + Number(match[2])) * 60 * 1000 : NaN
       })()
 
@@ -95,7 +95,7 @@ function durationValue(start: string | null, end: string | null, live = false) {
     endMs = end.includes('T')
       ? new Date(end).getTime()
       : (() => {
-          const match = end.match(/^(\\d{2}):(\\d{2})/)
+          const match = end.match(/^(\d{2}):(\d{2})/)
           return match ? (Number(match[1]) * 60 + Number(match[2])) * 60 * 1000 : NaN
         })()
     if (!Number.isFinite(endMs)) return '-'
