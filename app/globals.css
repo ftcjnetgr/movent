@@ -7042,3 +7042,64 @@ td select:focus,
 .schedule-grid-table tfoot td.schedule-total-cell {
   z-index: 7;
 }
+
+
+/* Dashboard is a single menu with two always-visible action buttons */
+.nav-group-title-static {
+  cursor: default;
+  margin-bottom: 2px;
+  color: var(--text) !important;
+}
+
+.nav-group-title-static:hover {
+  background: transparent !important;
+  color: var(--text) !important;
+}
+
+.nav-group-items-static {
+  margin-left: 0;
+  padding: 2px 0 7px;
+  border-left: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.nav-dashboard-button {
+  min-height: 34px;
+  padding: 7px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: #64748b;
+  box-shadow: none;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.nav-dashboard-button:hover {
+  background: var(--theme-color-soft);
+  border-color: var(--theme-color-light);
+  color: var(--theme-color-dark);
+}
+
+.nav-dashboard-button.active {
+  background: var(--theme-color-soft) !important;
+  border-color: var(--theme-color-light) !important;
+  color: var(--theme-color) !important;
+  box-shadow: inset 0 2px 0 var(--theme-color) !important;
+}
+
+.nav-dashboard-button .nav-icon {
+  width: 18px;
+}
+
+.nav-dashboard-button .nav-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 480px) {
+  .nav-group-items-static {
+    grid-template-columns: 1fr;
+  }
+}
