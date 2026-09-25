@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
@@ -108,8 +109,8 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           <p>Ini ringkasan operasional sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
         <nav className="dashboard-view-tabs" aria-label="Dashboard">
-          <a href={`/controller/beranda?from=${from}&to=${to}`} className="active">Penugasan</a>
-          <a href={`/controller/beranda/ticketing?from=${from}&to=${to}`}>Maintenance</a>
+          <Link href={`/controller/beranda?from=${from}&to=${to}`} className="active">Penugasan</Link>
+          <Link href={`/controller/beranda/ticketing?from=${from}&to=${to}`}>Maintenance</Link>
         </nav>
       </div>
 
