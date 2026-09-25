@@ -192,7 +192,7 @@ export default function TimetableView({
   useEffect(() => {
     const destinations = [...new Set(liveTasks.map((item) => item.destination ?? '-'))]
     setOpenLiveDestinationGroups((current) => {
-      if (!current.length) return destinations
+      if (!current.length) return current
       return current.filter((item) => destinations.includes(item))
     })
   }, [liveTasks])
