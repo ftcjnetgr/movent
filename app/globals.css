@@ -6981,3 +6981,29 @@ td select:focus,
   stroke: var(--theme-color) !important;
   fill: none !important;
 }
+
+
+/* timetable cells: compact, balanced dimensions around the schedule badge */
+.schedule-grid-table {
+  table-layout: fixed;
+}
+
+.schedule-grid-table th:not(:first-child):not(.schedule-total-header),
+.schedule-grid-table td:not(.schedule-total-cell) {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+}
+
+.schedule-grid-table th:not(:first-child):not(.schedule-total-header),
+.schedule-grid-table td:not(.schedule-total-cell) {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+.schedule-grid-table .schedule-cell-button {
+  width: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  margin: 0 auto !important;
+}
