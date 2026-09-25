@@ -81,7 +81,7 @@ export default async function DatabaseManagementPage({
         </div>
       </div>
 
-      <section className="section-block">
+      <section className="section-block database-management-filter">
         <form className="data-form" method="get">
           <div className="form-row">
             <label>Pilih Database
@@ -97,27 +97,31 @@ export default async function DatabaseManagementPage({
         </form>
       </section>
 
-      <section className="section-grid two-column section-block">
-        <div className="metric-card">
-          <h2>Import banyak data</h2>
-          <p className="muted">Data dengan ID yang sama akan diperbarui, ID baru akan ditambahkan, dan data lain tetap aman.</p>
-          <form action={importMasterDatabaseFormAction} className="data-form">
-            <input type="hidden" name="database" value={db} />
-            <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
-            <button type="submit">Import data</button>
-          </form>
-        </div>
+      <section className="section-grid two-column section-block database-management-actions">
+        <details className="metric-card database-management-action">
+          <summary className="database-action-trigger">Import banyak data</summary>
+          <div className="database-action-body">
+            <p className="muted">Data dengan ID yang sama akan diperbarui, ID baru akan ditambahkan, dan data lain tetap aman.</p>
+            <form action={importMasterDatabaseFormAction} className="data-form">
+              <input type="hidden" name="database" value={db} />
+              <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
+              <button type="submit">Import data</button>
+            </form>
+          </div>
+        </details>
 
-        <div className="metric-card">
-          <h2>Tambah data</h2>
-          <form action={addMasterRowFormAction} className="data-form compact-form">
-            <input type="hidden" name="database" value={db} />
-            {config.map((column) => (
-              <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} required={column === meta.identifier} /></label>
-            ))}
-            <button type="submit">Tambah data</button>
-          </form>
-        </div>
+        <details className="metric-card database-management-action">
+          <summary className="database-action-trigger">Tambah data</summary>
+          <div className="database-action-body">
+            <form action={addMasterRowFormAction} className="data-form compact-form">
+              <input type="hidden" name="database" value={db} />
+              {config.map((column) => (
+                <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} required={column === meta.identifier} /></label>
+              ))}
+              <button type="submit">Tambah data</button>
+            </form>
+          </div>
+        </details>
       </section>
 
       <section className="data-table-card section-block">
