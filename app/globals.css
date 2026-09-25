@@ -7546,12 +7546,28 @@ td select:focus,
 
 
 /* Super User database management */
+.database-management-filter {
+  width: 100% !important;
+}
+
+.database-management-filter .data-form {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.database-management-filter .form-row {
+  width: 100% !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
 .database-management-filter .form-row label {
   font-weight: 500 !important;
+  min-width: 0;
 }
 
 .database-management-filter input,
 .database-management-filter select {
+  width: 100% !important;
   font-weight: 400 !important;
 }
 
@@ -7559,7 +7575,12 @@ td select:focus,
   font-weight: 400 !important;
 }
 
+.database-management-filter > form > button {
+  width: 100% !important;
+}
+
 .database-management-actions {
+  width: 100% !important;
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 18px !important;
@@ -7567,22 +7588,23 @@ td select:focus,
 }
 
 .database-action-card {
-  width: 100%;
-  min-height: 86px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  padding: 16px 20px;
-  border: 1px solid var(--theme-color-light);
-  border-radius: 14px;
-  background: #fff;
-  color: var(--theme-color-dark);
-  box-shadow: var(--shadow);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-align: center;
+  width: 100% !important;
+  min-height: 64px !important;
+  height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 12px 18px !important;
+  border: 1px solid var(--theme-color-light) !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: var(--shadow) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
 }
 
 .database-action-card:hover {
