@@ -262,8 +262,8 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
                   </Link>
                 ) : (
                   <>
-                    <button type="button" className="nav-group-title" onClick={() => setOpenGroups((current) => current.includes(group.label) ? current.filter((item) => item !== group.label) : [...current, group.label])}>
-                      <span className="nav-icon"><Icon name={group.icon} /></span><span>{group.label}</span><span className="nav-group-chevron">{openGroups.includes(group.label) ? '⌃' : '⌄'}</span>
+                    <button type="button" className={'nav-group-title ' + (hasActive ? 'is-active' : '')} onClick={() => setOpenGroups((current) => current.includes(group.label) ? current.filter((item) => item !== group.label) : [...current, group.label])}>
+                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge">{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span><span className="nav-group-chevron">{openGroups.includes(group.label) ? '⌃' : '⌄'}</span>
                     </button>
                     <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
                       {group.items.map(item => {
