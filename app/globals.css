@@ -7436,3 +7436,32 @@ td select:focus,
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
 }
+
+
+/* User management actions stay compact and on one horizontal line */
+.admin-row-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
+.admin-row-actions details {
+  display: block !important;
+  margin: 0 !important;
+}
+
+.admin-row-actions .admin-row-action-secondary,
+.admin-row-actions .admin-row-action-secondary form {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.admin-row-actions .link-button,
+.admin-row-actions .admin-row-action-secondary button {
+  min-height: 40px !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
