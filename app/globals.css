@@ -7383,25 +7383,25 @@ td select:focus,
 }
 
 
-/* Password eye toggle: force the control to stay visible above the input */
+/* Password eye toggle: subtle and lightweight */
 .login-password-field {
   position: relative !important;
   width: 100% !important;
 }
 
 .login-password-field input {
-  padding-right: 54px !important;
+  padding-right: 48px !important;
 }
 
 .login-password-toggle {
   position: absolute !important;
   top: 50% !important;
-  right: 8px !important;
+  right: 6px !important;
   z-index: 20 !important;
-  width: 38px !important;
-  min-width: 38px !important;
-  height: 38px !important;
-  min-height: 38px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -7411,28 +7411,28 @@ td select:focus,
   visibility: visible !important;
   opacity: 1 !important;
   border: 0 !important;
-  border-radius: 8px !important;
-  background: #ffffff !important;
-  color: #475569 !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: #b1bac7 !important;
   box-shadow: none !important;
   pointer-events: auto !important;
 }
 
 .login-password-toggle:hover {
-  background: #f1f5f9 !important;
-  color: #1e293b !important;
+  background: transparent !important;
+  color: #9aa6b5 !important;
   transform: translateY(-50%) !important;
 }
 
 .login-password-toggle svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 16px !important;
+  height: 16px !important;
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
   fill: none !important;
   stroke: currentColor !important;
-  stroke-width: 2 !important;
+  stroke-width: 1.7 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
 }
