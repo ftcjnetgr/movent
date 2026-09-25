@@ -7977,3 +7977,16 @@ td select:focus,
   color: #fff !important;
   background: #dc2626 !important;
 }
+
+
+/* Badge number: hard-lock the glyph color regardless of parent/menu state */
+.sidebar .alert-nav-badge,
+.sidebar .alert-nav-badge *,
+.sidebar .nav-group-title.is-active .alert-nav-badge,
+.sidebar .nav-group-title.is-active .alert-nav-badge * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  background: #dc2626 !important;
+}
