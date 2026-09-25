@@ -8347,3 +8347,22 @@ td select:focus,
   border: 0 !important;
   box-shadow: none !important;
 }
+
+
+/* Total column: force each row separator on the full-height value button */
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button,
+.schedule-grid-table tfoot .schedule-total-cell .schedule-total-button {
+  position: relative !important;
+  z-index: 2 !important;
+  display: inline-flex !important;
+  width: 100% !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
