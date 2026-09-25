@@ -26,6 +26,7 @@ export default async function ControllerTimetablePage({
         schedules={data.schedules}
         tasks={data.tasks}
         todayTasks={data.todayTasks}
+        liveTasks={data.liveTasks}
         taskBySchedule={data.taskBySchedule}
         initialView={view === 'live' ? 'live' : 'database'}
       />
