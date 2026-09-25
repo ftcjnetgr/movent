@@ -28,13 +28,23 @@ type TicketAlert = {
 }
 
 function formatDuration(totalSeconds: number) {
-  const seconds = Math.max(0, Math.floor(totalSeconds))
-  const days = Math.floor(seconds / 86400)
-  const hours = Math.floor((seconds % 86400) / 3600)
-  const minutes = Math.floor((seconds % 3600) / 60)
-  const remaining = seconds % 60
-  const clock = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remaining).padStart(2, '0')}`
-  return days > 0 ? `${days} hari ${clock}` : clock
+  const totalMinutes = Math.max(0, Math.floor(totalSeconds / 60))
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+}
+
+function formatScheduleTime(value: string | null) {
+  if (!value || value === '-') return '-'
+  if (/^\d{2}:\d{2}/.test(value)) return value.slice(0, 5)
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return '-'
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Jakarta',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date)
 }
 
 function maintenanceBaseAt(maintenance: TicketAlert) {
@@ -66,8 +76,8 @@ function taskDetail(alert: TaskAlert, now: number) {
     ...alert,
     startPoint: alert.startPoint ?? '-',
     destination: alert.destination ?? '-',
-    std: alert.std ?? '-',
-    sta: alert.sta ?? '-',
+    std: formatScheduleTime(alert.std),
+    sta: formatScheduleTime(alert.sta),
     label: countdown > 0 ? 'Sisa waktu' : 'Lewat',
     time: formatDuration(Math.abs(countdown) / 1000),
     late: countdown <= 0,
