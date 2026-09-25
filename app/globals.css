@@ -8122,3 +8122,21 @@ td select:focus,
   border-left-color: #4f46e5 !important;
   border-right-color: #4f46e5 !important;
 }
+
+
+/* Schedule totals: same light-purple background for total row and total column,
+   shared by By Plan and Live Tracking */
+.schedule-grid-table tbody .schedule-total-cell,
+.schedule-grid-table tfoot th.schedule-total-label,
+.schedule-grid-table tfoot td.schedule-total-cell {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button,
+.schedule-grid-table tfoot .schedule-total-cell .schedule-total-button {
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  border: 0 !important;
+}
