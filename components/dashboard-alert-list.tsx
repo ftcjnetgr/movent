@@ -261,7 +261,56 @@ export default function DashboardAlertList({
               </div>
             )
           })() : (
-            <div className="alert-empty-inline">Tidak ada alert tugas saat ini.</div>
+            <div className="alert-hub-tabs task-alert-empty">
+              <div className="alert-hub-tabs-list" role="tablist" aria-label="Schedule Hub">
+                <button type="button" role="tab" aria-selected="true" className="alert-hub-tab is-active" disabled>
+                  <span>Belum ada schedule hub</span>
+                  <small>0 schedule</small>
+                </button>
+              </div>
+
+              <div className="alert-hub-summary">
+                <div>
+                  <span>Schedule Hub</span>
+                  <h2>Belum ada schedule hub</h2>
+                </div>
+                <div className="alert-hub-summary-stat">
+                  <strong>0</strong>
+                  <span>schedule</span>
+                </div>
+                <div className="alert-hub-summary-stat">
+                  <strong>0</strong>
+                  <span>mendekati batas</span>
+                </div>
+                <div className="alert-hub-summary-stat">
+                  <strong>0</strong>
+                  <span>melewati batas</span>
+                </div>
+              </div>
+
+              <div className="alert-table-scroll">
+                <table className="alert-table alert-group-table task-alert-group-table">
+                  <thead>
+                    <tr>
+                      <th>Schedule</th>
+                      <th>Status</th>
+                      <th>Driver</th>
+                      <th>Armada</th>
+                      <th>Rute</th>
+                      <th>STD</th>
+                      <th>STA</th>
+                      <th>Target</th>
+                      <th>Waktu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="alert-empty-row">
+                      <td colSpan={9}>Tidak ada alert tugas saat ini.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )}
         </section>
       ) : null}
