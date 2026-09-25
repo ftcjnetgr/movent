@@ -79,16 +79,33 @@ function timeValue(value: string | null) {
 
 function durationValue(start: string | null, end: string | null, live = false) {
   if (!start) return '-'
-  const startMs = new Date(start).getTime()
+
+  const isDateTime = start.includes('T')
+  const startMs = isDateTime
+    ? new Date(start).getTime()
+    : (() => {
+        const match = start.match(/^(\\d{2}):(\\d{2})/)
+        return match ? (Number(match[1]) * 60 + Number(match[2])) * 60 * 1000 : NaN
+      })()
+
   if (!Number.isFinite(startMs)) return '-'
 
-  const endMs = end
-    ? new Date(end).getTime()
-    : live
-      ? Date.now()
-      : NaN
+  let endMs: number
+  if (end) {
+    endMs = end.includes('T')
+      ? new Date(end).getTime()
+      : (() => {
+          const match = end.match(/^(\\d{2}):(\\d{2})/)
+          return match ? (Number(match[1]) * 60 + Number(match[2])) * 60 * 1000 : NaN
+        })()
+    if (!Number.isFinite(endMs)) return '-'
+    if (!isDateTime && endMs < startMs) endMs += 24 * 60 * 60 * 1000
+  } else if (live) {
+    endMs = Date.now()
+  } else {
+    return '-'
+  }
 
-  if (!Number.isFinite(endMs)) return '-'
   const totalSeconds = Math.max(0, Math.floor((endMs - startMs) / 1000))
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
