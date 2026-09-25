@@ -7742,3 +7742,20 @@ td select:focus,
 .database-management-actions + .data-table-card {
   margin-top: 16px !important;
 }
+
+
+/* Database row delete action: readable contrast and regular-weight text */
+.admin-row-actions .admin-row-action-secondary button.secondary-button {
+  background: var(--theme-slate-100) !important;
+  color: var(--theme-slate-700) !important;
+  border-color: var(--theme-slate-300) !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+}
+
+.admin-row-actions .admin-row-action-secondary button.secondary-button:hover {
+  background: var(--theme-slate-200) !important;
+  color: var(--theme-slate-900) !important;
+  border-color: var(--theme-slate-400) !important;
+  box-shadow: none !important;
+}
