@@ -245,7 +245,7 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
                 {group.nonCollapsible ? (
                   <>
                     <div className="nav-group-title nav-group-title-static">
-                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge" style={{ color: "#fff", backgroundColor: "#dc2626" }}>{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
+                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-dot" aria-label="Ada alert aktif" /> : null}</span><span>{group.label}</span>
                     </div>
                     <div className="nav-group-items nav-group-items-static">
                       {group.items.map(item => {
@@ -258,7 +258,7 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
                   </>
                 ) : group.items.length === 1 ? (
                   <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} >
-                    <span className="nav-icon nav-icon-with-badge"><Icon name={group.items[0].icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge" style={{ color: "#fff", backgroundColor: "#dc2626" }}>{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
+                    <span className="nav-icon nav-icon-with-badge"><Icon name={group.items[0].icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-dot" aria-label="Ada alert aktif" /> : null}</span><span>{group.label}</span>
                   </Link>
                 ) : (
                   <>
