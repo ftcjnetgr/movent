@@ -7225,3 +7225,68 @@ td select:focus,
   color: var(--density-color) !important;
   border: 1px solid var(--density-border) !important;
 }
+
+
+/* Live Tracking: fleet type sits after Destination and expands as an accordion */
+.live-tracking-table .live-fleet-type-header,
+.live-tracking-table .live-fleet-type-cell {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.live-tracking-table .live-fleet-type-cell {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.live-fleet-accordion-row th {
+  padding: 0 !important;
+  background: #f8fafc !important;
+}
+
+.live-fleet-accordion-row td {
+  background: #f8fafc !important;
+  color: #94a3b8;
+  font-size: 8px;
+  text-align: left !important;
+}
+
+.live-fleet-accordion-button {
+  width: 100%;
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 18px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  color: #334155;
+  box-shadow: none !important;
+  text-align: left;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.live-fleet-accordion-button:hover {
+  background: #f1f5f9 !important;
+  color: var(--theme-color-dark);
+  box-shadow: none !important;
+  transform: none;
+}
+
+.live-fleet-accordion-button small {
+  color: #64748b;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.live-fleet-accordion-button b {
+  color: var(--theme-color);
+  font-size: 11px;
+  text-align: center;
+}
