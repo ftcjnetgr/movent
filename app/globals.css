@@ -8160,3 +8160,26 @@ td select:focus,
   z-index: 20 !important;
   box-shadow: 1px 0 0 var(--theme-color-light) !important;
 }
+
+
+/* Keep the Total row divider visually locked to the sticky label cell */
+.schedule-grid-table tfoot th.schedule-total-label {
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 50 !important;
+  border-right: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1px;
+  width: 1px;
+  background: var(--theme-color-light);
+  pointer-events: none;
+  z-index: 51;
+}
