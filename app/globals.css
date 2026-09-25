@@ -7759,3 +7759,16 @@ td select:focus,
   border-color: var(--theme-slate-400) !important;
   box-shadow: none !important;
 }
+
+
+/* Database management buttons use regular-weight text */
+.database-management-actions .database-action-card,
+.database-management-actions .database-action-card span,
+.admin-row-actions .database-edit-trigger,
+.database-action-modal button {
+  font-weight: 400 !important;
+}
+
+.database-action-modal .database-action-modal-close {
+  font-weight: 400 !important;
+}
