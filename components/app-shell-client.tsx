@@ -152,7 +152,7 @@ function Icon({ name }: { name: string }) {
   }
 }
 
-export default function AppShellClient({ profile, children }: { profile: { username: string; full_name: string; role: string }; children: React.ReactNode }) {
+export default function AppShellClient({ profile, children, alertCounts }: { profile: { username: string; full_name: string; role: string }; children: React.ReactNode; alertCounts: { task: number; maintenance: number } }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -170,6 +170,8 @@ export default function AppShellClient({ profile, children }: { profile: { usern
   const queryFilterTo = searchParams.get('to') ?? queryFilterFrom
   const [filterFrom, setFilterFrom] = useState(queryFilterFrom)
   const [filterTo, setFilterTo] = useState(queryFilterTo)
+  const totalAlertCount = alertCounts.task + alertCounts.maintenance
+  const alertCountForItem = (label: string) => label === 'Penugasan' ? alertCounts.task : label === 'Maintenance' ? alertCounts.maintenance : 0
   const navGroups = useMemo(() => {
     const roleNav = navByRole[currentRole] ?? []
     if (profile.role !== 'Super User') return roleNav
@@ -243,20 +245,20 @@ export default function AppShellClient({ profile, children }: { profile: { usern
                 {group.nonCollapsible ? (
                   <>
                     <div className="nav-group-title nav-group-title-static">
-                      <span className="nav-icon"><Icon name={group.icon} /></span><span>{group.label}</span>
+                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge">{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
                     </div>
                     <div className="nav-group-items nav-group-items-static">
                       {group.items.map(item => {
                         const active = isItemActive(item)
                         return <Link key={item.href} href={item.href} className={'nav-link nav-dashboard-button ' + (active ? 'active' : '')} >
-                          <span className="nav-icon"><Icon name={item.icon} /></span><span>{item.label}</span>
+                          <span className="nav-icon nav-icon-with-badge"><Icon name={item.icon} />{group.label === 'Alert' && alertCountForItem(item.label) > 0 ? <span className="alert-nav-badge">{alertCountForItem(item.label) > 99 ? '99+' : alertCountForItem(item.label)}</span> : null}</span><span>{item.label}</span>
                         </Link>
                       })}
                     </div>
                   </>
                 ) : group.items.length === 1 ? (
                   <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} >
-                    <span className="nav-icon"><Icon name={group.items[0].icon} /></span><span>{group.label}</span>
+                    <span className="nav-icon nav-icon-with-badge"><Icon name={group.items[0].icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge">{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
                   </Link>
                 ) : (
                   <>
