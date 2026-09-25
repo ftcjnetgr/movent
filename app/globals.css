@@ -8238,3 +8238,33 @@ td select:focus,
   border-right-color: #4338ca !important;
   border-bottom-color: #4338ca !important;
 }
+
+
+/* Schedule grid: very light, subtle cell borders; no header grid lines */
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  border-right-color: rgba(148, 163, 184, 0.28) !important;
+  border-bottom-color: rgba(148, 163, 184, 0.28) !important;
+}
+
+.schedule-grid-table thead th {
+  border: 0 !important;
+  border-color: transparent !important;
+}
+
+.schedule-grid-table thead th:first-child {
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+.schedule-grid-table tbody > tr > th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right: 0 !important;
+  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.28) !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label::after {
+  display: none !important;
+}
