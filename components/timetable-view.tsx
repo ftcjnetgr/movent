@@ -187,7 +187,7 @@ export default function TimetableView({
   const [point, setPoint] = useState('')
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([])
   const [previewMode, setPreviewMode] = useState<'schedule' | 'live'>('schedule')
-  const [openLiveFleetGroups, setOpenLiveFleetGroups] = useState<string[]>([])
+  const [openLiveDestinationGroups, setOpenLiveDestinationGroups] = useState<string[]>([])
 
   const scheduleById = useMemo(
     () => new Map(schedules.map((item) => [item.schedule_id, item])),
@@ -361,65 +361,139 @@ export default function TimetableView({
   }
 
   function renderLiveTable(items: Task[]) {
-    const groups = new Map<string, Task[]>()
+    const destinationGroups = new Map<string, Task[]>()
     for (const item of items) {
-      const fleetType = item.fleet_snapshot?.fleet_type || 'Tipe Armada tidak tersedia'
-      groups.set(fleetType, [...(groups.get(fleetType) ?? []), item])
+      const destination = item.destination ?? '-'
+      destinationGroups.set(destination, [...(destinationGroups.get(destination) ?? []), item])
     }
-    const sortedGroups = [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+
+    const sortedDestinations = [...destinationGroups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
     const actualTime = (item: Task) => item.status === 'Completed' ? item.arrived_at : item.driving_at
     const hourOf = (item: Task) => hourValue(actualTime(item))
     const timeOf = (item: Task) => timeValue(actualTime(item))
     const columnTotals = Array.from({ length: 24 }, (_, hour) => items.filter((item) => hourOf(item) === hour))
+
     const toPreviewSchedule = (item: Task): Schedule => ({
-      schedule_id: item.schedule_id ?? item.transaction_id, trip: 0, route: '', category: '',
-      start_point: item.start_point ?? '-', start_point_type: '', destination: item.destination ?? '-', destination_type: '',
-      schedule_day: todayDay, schedule_day_name: '', std: item.driving_at ?? '', sta: item.arrived_at ?? '', status: item.status,
+      schedule_id: item.schedule_id ?? item.transaction_id,
+      trip: 0,
+      route: '',
+      category: '',
+      start_point: item.start_point ?? '-',
+      start_point_type: '',
+      destination: item.destination ?? '-',
+      destination_type: '',
+      schedule_day: todayDay,
+      schedule_day_name: '',
+      std: item.driving_at ?? '',
+      sta: item.arrived_at ?? '',
+      status: item.status,
     })
+
+    const renderFleetRow = (fleetType: string, fleetItems: Task[]) => {
+      const rowTotals = Array.from({ length: 24 }, (_, hour) => fleetItems.filter((item) => hourOf(item) === hour))
+
+      return (
+        <tr key={fleetType}>
+          <th className="live-fleet-type-indent" />
+          <td className="live-fleet-type-cell">{fleetType}</td>
+          {rowTotals.map((cellItems, hour) => (
+            cellItems.length
+              ? (
+                <td key={hour}>
+                  <button
+                    type="button"
+                    className="schedule-cell-button"
+                    style={scheduleDensityStyle(cellItems.length)}
+                    onClick={() => openSchedulePreview(cellItems.map(toPreviewSchedule), 'live')}
+                    title={cellItems.map((item) => (item.status === 'Completed' ? 'ATA ' : 'ATD ') + timeOf(item)).join(' · ')}
+                  >
+                    {timeOf(cellItems[0])}
+                  </button>
+                </td>
+              )
+              : <td key={hour} />
+          ))}
+          <td className="schedule-total-cell">
+            <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(fleetItems.map(toPreviewSchedule), 'live')}>
+              {fleetItems.length}
+            </button>
+          </td>
+        </tr>
+      )
+    }
+
     return (
       <div className="schedule-grid-scroll">
         <table className="schedule-grid-table live-tracking-table">
-          <thead><tr>
-            <th>Destination</th><th className="live-fleet-type-header">Tipe Armada</th>
-            {columnTotals.map((hourItems, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
-            <th className="schedule-total-header">Total</th>
-          </tr></thead>
+          <thead>
+            <tr>
+              <th>Destination</th>
+              <th className="live-fleet-type-header">Tipe Armada</th>
+              {columnTotals.map((hourItems, hour) => <th key={hour}>{String(hour).padStart(2, '0')}</th>)}
+              <th className="schedule-total-header">Total</th>
+            </tr>
+          </thead>
           <tbody>
-            {sortedGroups.map(([fleetType, groupItems]) => {
-              const open = openLiveFleetGroups.includes(fleetType)
-              const destinations = new Map<string, Task[]>()
-              groupItems.forEach((item) => { const destination = item.destination ?? '-'; destinations.set(destination, [...(destinations.get(destination) ?? []), item]) })
-              const sortedDestinations = [...destinations.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+            {sortedDestinations.map(([destination, destinationItems]) => {
+              const open = openLiveDestinationGroups.includes(destination)
+              const fleetGroups = new Map<string, Task[]>()
+
+              destinationItems.forEach((item) => {
+                const fleetType = item.fleet_snapshot?.fleet_type || 'Tipe Armada tidak tersedia'
+                fleetGroups.set(fleetType, [...(fleetGroups.get(fleetType) ?? []), item])
+              })
+
+              const sortedFleetGroups = [...fleetGroups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+
               return (
-                <React.Fragment key={fleetType}>
-                  <tr className="live-fleet-accordion-row">
-                    <th colSpan={2}>
-                      <button type="button" className="live-fleet-accordion-button" onClick={() => setOpenLiveFleetGroups((current) => open ? current.filter((item) => item !== fleetType) : [...current, fleetType])} aria-expanded={open}>
-                        <span>{fleetType}</span><small>{groupItems.length} tugas</small><b>{open ? '⌃' : '⌄'}</b>
+                <React.Fragment key={destination}>
+                  <tr className="live-destination-pivot-row">
+                    <th colSpan={2} className="live-destination-pivot-cell">
+                      <button
+                        type="button"
+                        className="live-destination-pivot-button"
+                        onClick={() => setOpenLiveDestinationGroups((current) => open
+                          ? current.filter((item) => item !== destination)
+                          : [...current, destination])}
+                        aria-expanded={open}
+                      >
+                        <span>{destination}</span>
+                        <small>{destinationItems.length} tugas</small>
+                        <b>{open ? '⌃' : '⌄'}</b>
                       </button>
                     </th>
-                    <td colSpan={25}>{open ? 'Aktif' : ''}</td>
+                    {Array.from({ length: 25 }, (_, index) => (
+                      <td key={index}>{index === 0 && !open ? '' : ''}</td>
+                    ))}
                   </tr>
-                  {open ? sortedDestinations.map(([destination, destinationItems]) => {
-                    const rowTotals = Array.from({ length: 24 }, (_, hour) => destinationItems.filter((item) => hourOf(item) === hour))
-                    return <tr key={fleetType + '-' + destination}>
-                      <th>{destination}</th><td className="live-fleet-type-cell">{fleetType}</td>
-                      {rowTotals.map((cellItems, hour) => cellItems.length ? <td key={hour}><button type="button" className="schedule-cell-button" style={scheduleDensityStyle(cellItems.length)} onClick={() => openSchedulePreview(cellItems.map(toPreviewSchedule), 'live')} title={cellItems.map((item) => (item.status === 'Completed' ? 'ATA ' : 'ATD ') + timeOf(item)).join(' · ')}>{timeOf(cellItems[0])}</button></td> : <td key={hour} />)}
-                      <td className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(destinationItems.map(toPreviewSchedule), 'live')}>{destinationItems.length}</button></td>
-                    </tr>
-                  }) : null}
+
+                  {open ? sortedFleetGroups.map(([fleetType, fleetItems]) => renderFleetRow(fleetType, fleetItems)) : null}
                 </React.Fragment>
               )
             })}
           </tbody>
-          <tfoot><tr><th className="schedule-total-label" colSpan={2}>Total</th>
-            {columnTotals.map((hourItems, hour) => <td key={hour} className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule), 'live')}>{hourItems.length}</button></td>)}
-            <td className="schedule-total-cell schedule-grand-total"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items.map(toPreviewSchedule), 'live')}>{items.length}</button></td>
-          </tr></tfoot>
+          <tfoot>
+            <tr>
+              <th className="schedule-total-label" colSpan={2}>Total</th>
+              {columnTotals.map((hourItems, hour) => (
+                <td key={hour} className="schedule-total-cell">
+                  <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule), 'live')}>
+                    {hourItems.length}
+                  </button>
+                </td>
+              ))}
+              <td className="schedule-total-cell schedule-grand-total">
+                <button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items.map(toPreviewSchedule), 'live')}>
+                  {items.length}
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     )
   }
+
   const filteredLiveTasks = useMemo(() => liveTasks.filter((task) => {
     const filterPoint = direction === 'start-point' ? task.start_point : task.destination
     const schedule = task.schedule_id ? scheduleById.get(task.schedule_id) : null
