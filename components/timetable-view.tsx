@@ -149,6 +149,7 @@ export default function TimetableView({
   const [category, setCategory] = useState('Normal')
   const [point, setPoint] = useState('')
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([])
+  const [previewMode, setPreviewMode] = useState<'schedule' | 'live'>('schedule')
   const [openLiveFleetGroups, setOpenLiveFleetGroups] = useState<string[]>([])
 
   const scheduleById = useMemo(
@@ -204,8 +205,9 @@ export default function TimetableView({
     return true
   }), [todayTasks, direction, route, category, point, scheduleById])
 
-  function openSchedulePreview(items: Schedule[]) {
+  function openSchedulePreview(items: Schedule[], mode: 'schedule' | 'live' = 'schedule') {
     if (!items.length) return
+    setPreviewMode(mode)
     setPreviewSchedules(items)
   }
 
@@ -342,8 +344,8 @@ export default function TimetableView({
                     const rowTotals = Array.from({ length: 24 }, (_, hour) => destinationItems.filter((item) => hourOf(item) === hour))
                     return <tr key={fleetType + '-' + destination}>
                       <th>{destination}</th><td className="live-fleet-type-cell">{fleetType}</td>
-                      {rowTotals.map((cellItems, hour) => cellItems.length ? <td key={hour}><button type="button" className="schedule-cell-button" style={scheduleDensityStyle(cellItems.length)} onClick={() => openSchedulePreview(cellItems.map(toPreviewSchedule))} title={cellItems.map((item) => (item.status === 'Completed' ? 'ATA ' : 'ATD ') + timeOf(item)).join(' · ')}>{timeOf(cellItems[0])}</button></td> : <td key={hour} />)}
-                      <td className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(destinationItems.map(toPreviewSchedule))}>{destinationItems.length}</button></td>
+                      {rowTotals.map((cellItems, hour) => cellItems.length ? <td key={hour}><button type="button" className="schedule-cell-button" style={scheduleDensityStyle(cellItems.length)} onClick={() => openSchedulePreview(cellItems.map(toPreviewSchedule), 'live')} title={cellItems.map((item) => (item.status === 'Completed' ? 'ATA ' : 'ATD ') + timeOf(item)).join(' · ')}>{timeOf(cellItems[0])}</button></td> : <td key={hour} />)}
+                      <td className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(destinationItems.map(toPreviewSchedule), 'live')}>{destinationItems.length}</button></td>
                     </tr>
                   }) : null}
                 </React.Fragment>
@@ -351,8 +353,8 @@ export default function TimetableView({
             })}
           </tbody>
           <tfoot><tr><th className="schedule-total-label" colSpan={2}>Total</th>
-            {columnTotals.map((hourItems, hour) => <td key={hour} className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule))}>{hourItems.length}</button></td>)}
-            <td className="schedule-total-cell schedule-grand-total"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items.map(toPreviewSchedule))}>{items.length}</button></td>
+            {columnTotals.map((hourItems, hour) => <td key={hour} className="schedule-total-cell"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(hourItems.map(toPreviewSchedule), 'live')}>{hourItems.length}</button></td>)}
+            <td className="schedule-total-cell schedule-grand-total"><button type="button" className="schedule-total-button" onClick={() => openSchedulePreview(items.map(toPreviewSchedule), 'live')}>{items.length}</button></td>
           </tr></tfoot>
         </table>
       </div>
@@ -494,8 +496,8 @@ export default function TimetableView({
                   <div><span>Schedule ID</span><strong>{item.schedule_id}</strong></div>
                   <div><span>Start Point</span><strong>{item.start_point || '-'}</strong></div>
                   <div><span>Destination</span><strong>{item.destination || '-'}</strong></div>
-                  <div><span>STD</span><strong>{timeValue(item.std)}</strong></div>
-                  <div><span>STA</span><strong>{timeValue(item.sta)}</strong></div>
+                  <div><span>{previewMode === 'live' ? 'ATD' : 'STD'}</span><strong>{timeValue(item.std)}</strong></div>
+                  <div><span>{previewMode === 'live' ? 'ATA' : 'STA'}</span><strong>{timeValue(item.sta)}</strong></div>
                 </div>
               ))}
             </div>
