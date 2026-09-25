@@ -79,6 +79,7 @@ export default function DashboardAlertList({
   taskAlerts,
   ticketAlerts,
   mode = 'all',
+  embedded = false,
 }: {
   taskAlerts?: TaskAlert[]
   ticketAlerts?: TicketAlert[]
@@ -152,12 +153,14 @@ export default function DashboardAlertList({
 
   return (
     <div className="alert-dashboard">
-      <div className="super-dashboard-heading alert-content-heading">
-        <div>
-          <h1>{heroTitle}</h1>
-          <p>{heroDescription} {totalAlerts} kondisi aktif{lateCount ? ` · ${lateCount} melewati batas` : ''}.</p>
+{!embedded ? (
+        <div className="super-dashboard-heading alert-content-heading">
+          <div>
+            <h1>{heroTitle}</h1>
+            <p>{heroDescription} {totalAlerts} kondisi aktif{lateCount ? ` · ${lateCount} melewati batas` : ''}.</p>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {showTasks ? (
         <section className="alert-content-section">
