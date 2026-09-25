@@ -181,7 +181,7 @@ export default function DashboardAlertList({
             const late = activeItems.filter((item) => item.late).length
             const approaching = activeItems.length - late
             return (
-              <div className="alert-hub-tabs">
+              <div className={`alert-hub-tabs${!hasGroups ? " maintenance-alert-empty" : ""}`}>
                 <div className="alert-hub-tabs-list" role="tablist" aria-label="Schedule Hub">
                   {taskGroups.map(([hub, items]) => {
                     const tabId = `task-hub-${hub.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`
@@ -267,7 +267,7 @@ export default function DashboardAlertList({
       ) : null}
 
       {showTickets ? (
-        <section className="alert-content-section">
+        <section className="alert-content-section maintenance-alert-section">
           {(() => {
             const hasGroups = ticketGroups.length > 0
             const activeLocation = hasGroups
