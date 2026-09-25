@@ -102,11 +102,15 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
   const maxHour = Math.max(1, ...byHour.map((item) => item.total))
   return (
     <div className="super-dashboard">
-      <div className="super-dashboard-heading">
+      <div className="super-dashboard-heading dashboard-page-heading">
         <div>
           <h1>Selamat datang, {profile.full_name}! <span aria-hidden="true">👋</span></h1>
           <p>Ini ringkasan operasional sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
+        <nav className="dashboard-view-tabs" aria-label="Dashboard">
+          <a href={`/controller/beranda?from=${from}&to=${to}`} className="active">Penugasan</a>
+          <a href={`/controller/beranda/ticketing?from=${from}&to=${to}`}>Maintenance</a>
+        </nav>
       </div>
 
       <section className="super-kpi-grid assignment-kpi-grid">
