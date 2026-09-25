@@ -7157,3 +7157,63 @@ td select:focus,
     flex: 1;
   }
 }
+
+
+/* Dashboard tabs follow the lightweight route-tab treatment */
+.dashboard-page-heading {
+  align-items: flex-end;
+}
+
+.dashboard-view-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.dashboard-view-tabs a {
+  position: relative;
+  min-width: 0;
+  padding: 0 0 9px;
+  color: #0f172a;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.dashboard-view-tabs a:hover {
+  color: var(--theme-color);
+  background: transparent;
+}
+
+.dashboard-view-tabs a.active {
+  color: var(--theme-color);
+  background: transparent;
+  box-shadow: none;
+}
+
+.dashboard-view-tabs a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--theme-color);
+}
+
+@media (max-width: 760px) {
+  .dashboard-view-tabs {
+    width: 100%;
+    gap: 24px;
+  }
+
+  .dashboard-view-tabs a {
+    flex: 0 0 auto;
+  }
+}
