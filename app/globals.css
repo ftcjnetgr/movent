@@ -8183,3 +8183,14 @@ td select:focus,
   pointer-events: none;
   z-index: 51;
 }
+
+
+/* Final fix: paint the divider inside the sticky label cells so it cannot disappear under adjacent cells */
+.schedule-grid-table tbody > tr > th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 60 !important;
+  border-right: 0 !important;
+  box-shadow: inset -2px 0 0 #c7d2fe !important;
+}
