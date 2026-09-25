@@ -12,10 +12,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/controller/beranda', icon: 'home' }] },
-    { label: 'Schedule', icon: 'calendar', items: [
-      { label: 'By Plan', href: '/controller/timetable?view=plan', icon: 'calendar' },
-      { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
-    ]},
+    { label: 'Schedule', icon: 'calendar', items: [{ label: 'Schedule', href: '/controller/timetable?view=plan', icon: 'calendar' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
@@ -262,7 +259,7 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
                   </Link>
                 ) : (
                   <>
-                    <button type="button" className={'nav-group-title ' + (hasActive ? 'is-active' : '')} onClick={() => setOpenGroups((current) => current.includes(group.label) ? current.filter((item) => item !== group.label) : [...current, group.label])}>
+                    <button type="button" className={'nav-group-title ' + (hasActive ? 'is-active ' : '') + (group.label === 'Manajemen' ? 'manajemen-nav-title' : '')} onClick={() => setOpenGroups((current) => current.includes(group.label) ? current.filter((item) => item !== group.label) : [...current, group.label])}>
                       <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-dot" aria-label="Ada alert aktif" /> : null}</span><span>{group.label}</span><span className="nav-group-chevron">{openGroups.includes(group.label) ? '⌃' : '⌄'}</span>
                     </button>
                     <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
