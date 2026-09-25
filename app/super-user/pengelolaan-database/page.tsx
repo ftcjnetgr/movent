@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { addMasterRowAction, deleteMasterRowAction, importMasterDatabaseAction, updateMasterRowAction } from './actions'
+import DatabaseActionPreview from '@/components/database-action-preview'
 
 async function importMasterDatabaseFormAction(formData: FormData) {
   'use server'
@@ -97,31 +98,25 @@ export default async function DatabaseManagementPage({
         </form>
       </section>
 
-      <section className="section-grid two-column section-block database-management-actions">
-        <details className="metric-card database-management-action">
-          <summary className="database-action-trigger">Import banyak data</summary>
-          <div className="database-action-body">
-            <p className="muted">Data dengan ID yang sama akan diperbarui, ID baru akan ditambahkan, dan data lain tetap aman.</p>
-            <form action={importMasterDatabaseFormAction} className="data-form">
-              <input type="hidden" name="database" value={db} />
-              <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
-              <button type="submit">Import data</button>
-            </form>
-          </div>
-        </details>
+      <section className="database-management-actions section-block">
+        <DatabaseActionPreview title="Import banyak data">
+          <p className="muted">Data dengan ID yang sama akan diperbarui, ID baru akan ditambahkan, dan data lain tetap aman.</p>
+          <form action={importMasterDatabaseFormAction} className="data-form database-action-form">
+            <input type="hidden" name="database" value={db} />
+            <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
+            <button type="submit">Import data</button>
+          </form>
+        </DatabaseActionPreview>
 
-        <details className="metric-card database-management-action">
-          <summary className="database-action-trigger">Tambah data</summary>
-          <div className="database-action-body">
-            <form action={addMasterRowFormAction} className="data-form compact-form">
-              <input type="hidden" name="database" value={db} />
-              {config.map((column) => (
-                <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} required={column === meta.identifier} /></label>
-              ))}
-              <button type="submit">Tambah data</button>
-            </form>
-          </div>
-        </details>
+        <DatabaseActionPreview title="Tambah data">
+          <form action={addMasterRowFormAction} className="data-form compact-form database-action-form">
+            <input type="hidden" name="database" value={db} />
+            {config.map((column) => (
+              <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} required={column === meta.identifier} /></label>
+            ))}
+            <button type="submit">Tambah data</button>
+          </form>
+        </DatabaseActionPreview>
       </section>
 
       <section className="data-table-card section-block">
