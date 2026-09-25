@@ -8194,3 +8194,10 @@ td select:focus,
   border-right: 0 !important;
   box-shadow: inset -2px 0 0 #c7d2fe !important;
 }
+
+
+/* Divider thickness: keep it at the same 1px weight as the grid lines */
+.schedule-grid-table tbody > tr > th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  box-shadow: inset -1px 0 0 var(--theme-color-light) !important;
+}
