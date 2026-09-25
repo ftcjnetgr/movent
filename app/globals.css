@@ -8015,3 +8015,13 @@ td select:focus,
   box-shadow: none !important;
   z-index: 2;
 }
+
+
+/* Sidebar menu: keep all menu labels regular weight */
+.sidebar .nav-group-title,
+.sidebar .nav-group-title.is-active,
+.sidebar .nav-link,
+.sidebar .nav-link.active,
+.sidebar .sidebar-logout {
+  font-weight: 400 !important;
+}
