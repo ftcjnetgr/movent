@@ -8025,3 +8025,15 @@ td select:focus,
 .sidebar .sidebar-logout {
   font-weight: 400 !important;
 }
+
+
+/* Manajemen: active parent stays readable on the soft active background */
+.sidebar .nav-group-title.manajemen-nav-title.is-active,
+.sidebar .nav-group-title.manajemen-nav-title.is-active > span,
+.sidebar .nav-group-title.manajemen-nav-title.is-active .nav-icon,
+.sidebar .nav-group-title.manajemen-nav-title.is-active .nav-icon svg,
+.sidebar .nav-group-title.manajemen-nav-title.is-active .nav-icon svg *,
+.sidebar .nav-group-title.manajemen-nav-title.is-active .nav-group-chevron {
+  color: var(--primary) !important;
+  font-weight: 400 !important;
+}
