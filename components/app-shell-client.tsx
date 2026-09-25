@@ -20,10 +20,7 @@ const navByRole: Record<string, NavGroup[]> = {
       { label: 'Live Tracking', href: '/controller/timetable?view=live', icon: 'truck' },
     ]},
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
-    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },    { label: 'Dashboard', icon: 'home', items: [
-      { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/controller/beranda/ticketing', icon: 'ticket' },
-    ], nonCollapsible: true },
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/controller/beranda', icon: 'home' }] },
 
   ],
   Dispatcher: [
