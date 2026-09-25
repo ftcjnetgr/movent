@@ -4,13 +4,13 @@ import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
 
 
-function SummaryIcon({ name }: { name: 'clipboard' | 'truck' | 'check' | 'wrench' | 'play' }) {
+function SummaryIcon({ name }: { name: 'clipboard' | 'truck' | 'check' | 'wrench' | 'progress' }) {
   const common = { viewBox: '0 0 24 24', width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true }
   if (name === 'clipboard') return <svg {...common}><rect x="6" y="5" width="12" height="16" rx="2" /><path d="M9 5V3h6v2M9 10h6M9 14h6M9 18h4" /></svg>
   if (name === 'truck') return <svg {...common}><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z" /><circle cx="7" cy="18" r="2" /><circle cx="18" cy="18" r="2" /></svg>
   if (name === 'check') return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="m8 12 2.5 2.5L16 9" /></svg>
   if (name === 'wrench') return <svg {...common}><path d="M14 6a4 4 0 0 1-5 5L4 16l4 4 5-5a4 4 0 0 1 5-5l-4-4Z" /></svg>
-  return <svg {...common}><path d="M8 5v14l11-7-11-7Z" /></svg>
+  return <svg {...common}><circle cx="12" cy="12" r="8.5" /><path d="M12 7v5l3 2" /></svg>
 }
 
 function statusLabel(status: string) {
@@ -124,7 +124,7 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
           <small>Udah diterima</small></div>
         </div>
         <div className="super-kpi-card kpi-orange">
-          <div className="super-kpi-icon"><SummaryIcon name="wrench" /></div>
+          <div className="super-kpi-icon"><SummaryIcon name="progress" /></div>
           <div className="super-kpi-content"><span>Lagi Dikerjain</span>
           <strong>{data.ticketCounts['In Progress'] ?? 0}</strong>
           <small>Lagi diproses</small></div>
