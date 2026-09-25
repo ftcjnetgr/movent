@@ -7968,3 +7968,12 @@ td select:focus,
 .sidebar .nav-group-title.is-active .alert-nav-badge {
   color: #fff !important;
 }
+
+
+/* Notification number keeps the same contrast in both active and inactive Alert states */
+.sidebar .alert-nav-badge,
+.sidebar .nav-group-title.is-active .alert-nav-badge,
+.sidebar .nav-group-title:not(.is-active) .alert-nav-badge {
+  color: #fff !important;
+  background: #dc2626 !important;
+}
