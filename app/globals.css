@@ -7725,3 +7725,20 @@ td select:focus,
     padding-right: 16px;
   }
 }
+
+
+/* Database management spacing + compact action cards */
+.database-action-card {
+  min-height: 50px !important;
+  height: 50px !important;
+  box-sizing: border-box !important;
+  padding: 8px 16px !important;
+}
+
+.database-management-filter + .database-management-actions {
+  margin-top: 16px !important;
+}
+
+.database-management-actions + .data-table-card {
+  margin-top: 16px !important;
+}
