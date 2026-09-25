@@ -8201,3 +8201,13 @@ td select:focus,
 .schedule-grid-table tfoot th.schedule-total-label {
   box-shadow: inset -1px 0 0 var(--theme-color-light) !important;
 }
+
+
+/* Sticky divider follows the same purple as the schedule header */
+.schedule-grid-table tbody > tr > th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  box-shadow: inset -1px 0 0 var(--theme-color) !important;
+}
+.schedule-grid-table tfoot th.schedule-total-label::after {
+  background: var(--theme-color) !important;
+}
