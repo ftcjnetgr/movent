@@ -8211,3 +8211,16 @@ td select:focus,
 .schedule-grid-table tfoot th.schedule-total-label::after {
   background: var(--theme-color) !important;
 }
+
+
+/* Final schedule divider cleanup: one line only, same purple as header */
+.schedule-grid-table tbody > tr > th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right: 0 !important;
+  box-shadow: inset -1px 0 0 var(--theme-color) !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label::after {
+  display: none !important;
+  content: none !important;
+}
