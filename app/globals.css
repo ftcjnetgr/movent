@@ -7103,3 +7103,57 @@ td select:focus,
     grid-template-columns: 1fr;
   }
 }
+
+
+/* dashboard views: tabs sit on the same line as the page heading */
+.dashboard-page-heading {
+  align-items: center;
+  gap: 24px;
+}
+
+.dashboard-view-tabs {
+  display: inline-flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.dashboard-view-tabs a {
+  min-width: 108px;
+  padding: 8px 16px;
+  border-radius: 7px;
+  color: #64748b;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dashboard-view-tabs a:hover {
+  color: var(--theme-color-dark);
+  background: var(--theme-color-soft);
+}
+
+.dashboard-view-tabs a.active {
+  color: #fff;
+  background: var(--theme-color);
+  box-shadow: 0 2px 6px rgba(79,70,229,.16);
+}
+
+@media (max-width: 760px) {
+  .dashboard-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-view-tabs {
+    width: 100%;
+  }
+
+  .dashboard-view-tabs a {
+    flex: 1;
+  }
+}
