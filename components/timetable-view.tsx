@@ -77,6 +77,25 @@ function timeValue(value: string | null) {
     : `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
 }
 
+function durationValue(start: string | null, end: string | null, live = false) {
+  if (!start) return '-'
+  const startMs = new Date(start).getTime()
+  if (!Number.isFinite(startMs)) return '-'
+
+  const endMs = end
+    ? new Date(end).getTime()
+    : live
+      ? Date.now()
+      : NaN
+
+  if (!Number.isFinite(endMs)) return '-'
+  const totalSeconds = Math.max(0, Math.floor((endMs - startMs) / 1000))
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+}
+
 function statusClass(status: string | undefined) {
   return status ? `status-${status.toLowerCase().replaceAll(' ', '-')}` : ''
 }
@@ -499,6 +518,10 @@ export default function TimetableView({
                   <div><span>Destination</span><strong>{item.destination || '-'}</strong></div>
                   <div><span>{previewMode === 'live' ? 'ATD' : 'STD'}</span><strong>{timeValue(item.std)}</strong></div>
                   <div><span>{previewMode === 'live' ? 'ATA' : 'STA'}</span><strong>{timeValue(item.sta)}</strong></div>
+                  <div>
+                    <span>Durasi Perjalanan</span>
+                    <strong>{durationValue(item.std, item.sta, previewMode === 'live')}</strong>
+                  </div>
                 </div>
               ))}
             </div>
