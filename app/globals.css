@@ -8268,3 +8268,35 @@ td select:focus,
 .schedule-grid-table tfoot th.schedule-total-label::after {
   display: none !important;
 }
+
+
+/* Final schedule grid cleanup: one consistent, very light line system */
+.schedule-grid-table {
+  border-collapse: collapse !important;
+}
+
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 1px solid rgba(148, 163, 184, 0.22) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table thead th {
+  border: 0 !important;
+}
+
+.schedule-grid-table tbody > tr > th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right: 0 !important;
+  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell,
+.schedule-grid-table tfoot .schedule-total-cell {
+  border-left: 0 !important;
+  border-right: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
