@@ -7926,3 +7926,23 @@ td select:focus,
 .sidebar .nav-group-title.is-active .nav-group-chevron {
   color: var(--theme-color) !important;
 }
+
+
+/* Alert active must match the active Dashboard item exactly */
+.sidebar .nav-group-title.is-active {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+  font-weight: 800 !important;
+  box-shadow: inset 2px 0 0 var(--primary) !important;
+}
+.sidebar .nav-group-title.is-active > span,
+.sidebar .nav-group-title.is-active .nav-icon,
+.sidebar .nav-group-title.is-active .nav-icon svg,
+.sidebar .nav-group-title.is-active .nav-icon svg *,
+.sidebar .nav-group-title.is-active .nav-group-chevron {
+  color: var(--primary) !important;
+}
+.sidebar .nav-group-title.is-active .alert-nav-badge {
+  background: #dc2626 !important;
+  color: #fff !important;
+}
