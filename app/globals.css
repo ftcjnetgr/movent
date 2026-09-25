@@ -7560,69 +7560,146 @@ td select:focus,
 }
 
 .database-management-actions {
-  align-items: start !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+  align-items: stretch !important;
 }
 
-.database-management-action {
-  padding: 18px !important;
-  overflow: hidden;
-}
-
-.database-action-trigger {
-  list-style: none;
-  min-height: 44px;
+.database-action-card {
+  width: 100%;
+  min-height: 86px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  padding: 10px 14px;
+  gap: 9px;
+  padding: 16px 20px;
   border: 1px solid var(--theme-color-light);
-  border-radius: 10px;
-  background: var(--theme-color);
-  color: #fff;
-  font-size: 12px;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--theme-color-dark);
+  box-shadow: var(--shadow);
+  font-size: 13px;
   font-weight: 500;
-  cursor: pointer;
+  line-height: 1.2;
   text-align: center;
 }
 
-.database-action-trigger::-webkit-details-marker {
-  display: none;
+.database-action-card:hover {
+  background: var(--theme-color-soft);
+  border-color: var(--theme-color);
+  color: var(--theme-color-dark);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
 }
 
-.database-action-trigger::after {
-  content: '＋';
-  margin-left: 8px;
-  font-size: 14px;
+.database-action-card small {
+  color: var(--theme-color);
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1;
 }
 
-.database-management-action[open] .database-action-trigger::after {
-  content: '−';
+.database-action-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, .42);
+  backdrop-filter: blur(2px);
 }
 
-.database-management-action[open] .database-action-trigger {
+.database-action-modal {
+  width: min(720px, 100%);
+  max-height: 86vh;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, .2);
+}
+
+.database-action-modal-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.database-action-modal-heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 18px;
+  letter-spacing: -.025em;
+}
+
+.database-action-modal-heading p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.database-action-modal-heading p strong {
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.database-action-modal-close {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--theme-color);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.database-action-modal-close:hover {
   background: var(--theme-color-dark);
+  color: #fff;
+  box-shadow: none;
+  transform: none;
 }
 
-.database-action-trigger:hover {
-  background: var(--theme-color-dark);
+.database-action-modal-body {
+  padding: 20px 22px 22px;
 }
 
-.database-action-body {
-  margin-top: 14px;
+.database-action-form {
+  max-width: none !important;
 }
 
-.database-action-body .data-form {
-  max-width: none;
-}
-
-.database-action-body label {
+.database-action-form label {
   font-weight: 500 !important;
 }
 
-.database-action-body input,
-.database-action-body select,
-.database-action-body textarea {
+.database-action-form input,
+.database-action-form select,
+.database-action-form textarea {
   font-weight: 400 !important;
+}
+
+@media (max-width: 760px) {
+  .database-management-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .database-action-modal-backdrop {
+    padding: 12px;
+  }
+
+  .database-action-modal-heading,
+  .database-action-modal-body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
