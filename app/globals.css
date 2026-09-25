@@ -8310,3 +8310,17 @@ td select:focus,
 .schedule-grid-table tbody .schedule-total-cell:last-child {
   border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
 }
+
+
+/* Total column: draw each horizontal divider inside the cell so it stays visible behind the full-height button */
+.schedule-grid-table tbody .schedule-total-cell {
+  box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table tfoot .schedule-total-cell {
+  box-shadow: inset 0 1px 0 rgba(148, 163, 184, 0.22), inset 0 -1px 0 rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button {
+  background: transparent !important;
+}
