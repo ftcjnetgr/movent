@@ -84,6 +84,7 @@ export default function DashboardAlertList({
   taskAlerts?: TaskAlert[]
   ticketAlerts?: TicketAlert[]
   mode?: 'all' | 'task' | 'ticket'
+  embedded?: boolean
 }) {
   const taskAlertRows = taskAlerts ?? []
   const ticketAlertRows = ticketAlerts ?? []
