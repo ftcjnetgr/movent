@@ -191,11 +191,14 @@ export async function getDashboardData(profile: AppProfile, dateFrom?: string, d
     .filter((alert) => now.getTime() >= alert.targetAt.getTime() - 10 * 60 * 1000)
 
   const taskAlerts = [...unassignedAlerts, ...assignedAlerts]
-  const ticketRows = ((ticketings ?? []) as TicketRow[]).filter((ticket) => inRange(ticket.created_at))
-  const ticketAlerts = ticketRows.filter((ticket) =>
+  const allTicketRows = (ticketings ?? []) as TicketRow[]
+  const ticketRows = allTicketRows.filter((ticket) => inRange(ticket.created_at))
+
+  // Alerts are operational and must stay independent from the Dashboard date filter.
+  const ticketAlerts = allTicketRows.filter((ticket) =>
     ['Requested', 'Confirmed', 'In Progress'].includes(ticket.status)
   )
-  const ticketAlertCount = ticketRows.filter((ticket) => {
+  const ticketAlertCount = ticketAlerts.filter((ticket) => {
     const elapsed = now.getTime() - new Date(
       ticket.status === 'Confirmed'
         ? ticket.accepted_at ?? ticket.created_at
