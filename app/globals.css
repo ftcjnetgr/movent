@@ -8147,9 +8147,6 @@ td select:focus,
   border-right: 1px solid var(--theme-color-light) !important;
 }
 
-.schedule-grid-table thead > tr > th:first-child {
-  border-right: 1px solid #4338ca !important;
-}
 
 .schedule-grid-table tfoot th.schedule-total-label {
   border-right: 1px solid var(--theme-color-light) !important;
