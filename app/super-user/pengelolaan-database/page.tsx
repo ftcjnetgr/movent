@@ -31,6 +31,18 @@ const databases = [
   { key: 'maintenance_lists', label: 'List Maintenance', identifier: 'maintenance_list' },
 ] as const
 
+function displayDatabaseValue(column: string, value: unknown) {
+  if (value === null || value === undefined) return '-'
+  if (column === 'std' || column === 'sta') {
+    const text = String(value)
+    return /^\d{2}:\d{2}/.test(text) ? text.slice(0, 5) : text
+  }
+  return String(value)
+}
+
+function databaseInputType(column: string) {
+  return column === 'std' || column === 'sta' ? 'time' : 'text'
+}
 const configs = {
   schedules: ['schedule_id','trip','schedule_hub_id','route','category','start_point','start_point_type','destination','destination_type','schedule_day','schedule_day_name','aging','std','sta','status'],
   executors: ['executor_nik','full_name','status'],
@@ -101,7 +113,7 @@ export default async function DatabaseManagementPage({
           <form action={addMasterRowFormAction} className="data-form compact-form">
             <input type="hidden" name="database" value={db} />
             {config.map((column) => (
-              <label key={column}>{column}<input name={'field__' + column} required={column === meta.identifier} /></label>
+              <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} required={column === meta.identifier} /></label>
             ))}
             <button type="submit">Tambah data</button>
           </form>
@@ -124,7 +136,7 @@ export default async function DatabaseManagementPage({
               {(rows ?? []).map((row) => (
                 <tr key={String(row[meta.identifier])}>
                   {config.map((column) => (
-                    <td key={column}>{row[column] === null || row[column] === undefined ? '-' : String(row[column])}</td>
+                    <td key={column}>{displayDatabaseValue(column, row[column])}</td>
                   ))}
                   <td>
                     <div className="admin-row-actions">
@@ -134,7 +146,7 @@ export default async function DatabaseManagementPage({
                         <input type="hidden" name="database" value={db} />
                         <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
                         {config.map((column) => (
-                          <label key={column}>{column}<input name={'field__' + column} defaultValue={row[column] === null || row[column] === undefined ? '' : String(row[column])} disabled={column === meta.identifier} /></label>
+                          <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} defaultValue={row[column] === null || row[column] === undefined ? '' : displayDatabaseValue(column, row[column])} disabled={column === meta.identifier} /></label>
                         ))}
                         <button type="submit">Simpan perubahan</button>
                       </form>
