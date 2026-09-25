@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { addMasterRowAction, deleteMasterRowAction, importMasterDatabaseAction, updateMasterRowAction } from './actions'
 import DatabaseActionPreview from '@/components/database-action-preview'
+import DatabaseEditPreview from '@/components/database-edit-preview'
 
 async function importMasterDatabaseFormAction(formData: FormData) {
   'use server'
@@ -139,9 +140,8 @@ export default async function DatabaseManagementPage({
                   ))}
                   <td>
                     <div className="admin-row-actions">
-                    <details>
-                      <summary className="link-button">Edit</summary>
-                      <form action={updateMasterRowFormAction} className="compact-form" style={{marginTop:12}}>
+                    <DatabaseEditPreview>
+                      <form action={updateMasterRowFormAction} className="compact-form database-action-form">
                         <input type="hidden" name="database" value={db} />
                         <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
                         {config.map((column) => (
@@ -149,7 +149,7 @@ export default async function DatabaseManagementPage({
                         ))}
                         <button type="submit">Simpan perubahan</button>
                       </form>
-                    </details>
+                    </DatabaseEditPreview>
                     <form action={deleteMasterRowFormAction} className="admin-row-action-secondary">
                       <input type="hidden" name="database" value={db} />
                       <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
