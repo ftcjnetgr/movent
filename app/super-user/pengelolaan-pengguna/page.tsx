@@ -92,7 +92,7 @@ export default async function UserManagementPage() {
                       <form action={unlockUserFormAction}>
                         <input type="hidden" name="id" value={user.id} />
                         <button type="submit" className="user-action-unlock" disabled={user.status !== 'Locked'}>
-                          Unlock Account
+                          Buka akun
                         </button>
                       </form>
                     </div>
