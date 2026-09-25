@@ -7344,3 +7344,10 @@ td select:focus,
     gap: 24px;
   }
 }
+
+
+/* Schedule preview: keep all detail fields on one horizontal row */
+.schedule-preview-item {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  align-items: center !important;
+}
