@@ -7990,3 +7990,10 @@ td select:focus,
   opacity: 1 !important;
   background: #dc2626 !important;
 }
+
+
+/* Alert badge: remove outline */
+.sidebar .alert-nav-badge,
+.alert-nav-badge {
+  border: 0 !important;
+}
