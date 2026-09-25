@@ -7800,3 +7800,23 @@ td select:focus,
   font-size: 8px;
   color: #a0a8b3;
 }
+
+
+/* Sidebar credit uses one consistent text size */
+.sidebar-credit span,
+.sidebar-credit span:last-child {
+  font-size: 9px;
+}
+
+/* Keep logout above the credit divider */
+.sidebar-footer {
+  gap: 10px;
+}
+
+.sidebar-footer .sidebar-logout {
+  order: 1;
+}
+
+.sidebar-footer .sidebar-credit {
+  order: 2;
+}
