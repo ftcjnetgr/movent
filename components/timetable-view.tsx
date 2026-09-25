@@ -16,6 +16,7 @@ type Schedule = {
   schedule_day_name: string
   std: string
   sta: string
+  status?: string
 }
 
 type Task = {
@@ -241,6 +242,26 @@ export default function TimetableView({
     return true
   }), [todayTasks, direction, route, category, point, scheduleById])
 
+  function previewStatus(item: Schedule) {
+    if (item.status) return item.status
+    const task = taskBySchedule[item.schedule_id]
+    return task?.status ?? 'Belum Ditugaskan'
+  }
+
+  function statusLabel(status: string) {
+    const labels: Record<string, string> = {
+      Requested: 'Udah Diajukan',
+      Confirmed: 'Udah Diterima',
+      Assigned: 'Siap Jalan',
+      Driving: 'Lagi Jalan',
+      Completed: 'Udah Selesai',
+      Canceled: 'Dibatalkan',
+      'In Progress': 'Lagi Dikerjain',
+      'Belum Ditugaskan': 'Belum Ditugaskan',
+    }
+    return labels[status] ?? status
+  }
+
   function openSchedulePreview(items: Schedule[], mode: 'schedule' | 'live' = 'schedule') {
     if (!items.length) return
     setPreviewMode(mode)
@@ -350,7 +371,7 @@ export default function TimetableView({
     const toPreviewSchedule = (item: Task): Schedule => ({
       schedule_id: item.schedule_id ?? item.transaction_id, trip: 0, route: '', category: '',
       start_point: item.start_point ?? '-', start_point_type: '', destination: item.destination ?? '-', destination_type: '',
-      schedule_day: todayDay, schedule_day_name: '', std: item.driving_at ?? '', sta: item.arrived_at ?? '',
+      schedule_day: todayDay, schedule_day_name: '', std: item.driving_at ?? '', sta: item.arrived_at ?? '', status: item.status,
     })
     return (
       <div className="schedule-grid-scroll">
@@ -534,6 +555,12 @@ export default function TimetableView({
                   <div><span>Destination</span><strong>{item.destination || '-'}</strong></div>
                   <div><span>{previewMode === 'live' ? 'ATD' : 'STD'}</span><strong>{timeValue(item.std)}</strong></div>
                   <div><span>{previewMode === 'live' ? 'ATA' : 'STA'}</span><strong>{timeValue(item.sta)}</strong></div>
+                  <div>
+                    <span>Status</span>
+                    <strong className={previewStatus(item) === 'Belum Ditugaskan' ? 'schedule-preview-status-unassigned' : `status-badge ${statusClass(previewStatus(item))}`}>
+                      {statusLabel(previewStatus(item))}
+                    </strong>
+                  </div>
                   <div>
                     <span>Durasi Perjalanan</span>
                     <strong>{durationValue(item.std, item.sta, previewMode === 'live')}</strong>
