@@ -28,7 +28,7 @@ export async function getTimetableData(profile: AppProfile) {
       .order('std'),
     admin
       .from('tasks')
-      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, sj_number')
+      .select('transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, sj_number, driving_at, arrived_at')
       .order('std'),
   ])
 
