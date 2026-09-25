@@ -85,11 +85,15 @@ export default async function ControllerTicketingDashboardPage({ searchParams }:
 
   return (
     <div className="super-dashboard">
-      <div className="super-dashboard-heading">
+      <div className="super-dashboard-heading dashboard-page-heading">
         <div>
           <h1>Maintenance</h1>
           <p>Ini ringkasan operasional maintenance sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
+        <nav className="dashboard-view-tabs" aria-label="Dashboard">
+          <a href={`/controller/beranda?from=${from}&to=${to}`}>Penugasan</a>
+          <a href={`/controller/beranda/ticketing?from=${from}&to=${to}`} className="active">Maintenance</a>
+        </nav>
       </div>
 
       <section className="super-kpi-grid maintenance-kpi-grid">
