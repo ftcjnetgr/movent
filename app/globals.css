@@ -8392,3 +8392,28 @@ td select:focus,
   border: 0 !important;
   border-color: transparent !important;
 }
+
+
+/* FINAL schedule palette: dark-purple header, light-purple total column + total row */
+.schedule-grid-table thead th,
+.schedule-grid-table .schedule-total-header {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-color: transparent !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell,
+.schedule-grid-table tfoot th.schedule-total-label,
+.schedule-grid-table tfoot td.schedule-total-cell {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button,
+.schedule-grid-table tfoot .schedule-total-cell .schedule-total-button {
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
