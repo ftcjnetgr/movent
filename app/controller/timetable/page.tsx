@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import TimetableView from '@/components/timetable-view'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getTimetableData } from '@/lib/server/timetable'
@@ -14,11 +15,15 @@ export default async function ControllerTimetablePage({
 
   return (
     <>
-      <div className="page-heading">
+      <div className="page-heading schedule-page-heading">
         <div>
           <h1>Schedule</h1>
           <p>{view === 'live' ? 'Pantau posisi penugasan hari ini secara real-time.' : 'Lihat rencana schedule berdasarkan hari yang kamu pilih.'}</p>
         </div>
+        <nav className="alert-view-tabs" aria-label="Schedule">
+          <Link href="/controller/timetable?view=plan" className={view === 'plan' ? 'active' : ''}>By Plan</Link>
+          <Link href="/controller/timetable?view=live" className={view === 'live' ? 'active' : ''}>Live Tracking</Link>
+        </nav>
       </div>
       <TimetableView
         date={data.date}
