@@ -8140,3 +8140,17 @@ td select:focus,
   color: var(--theme-color-dark) !important;
   border: 0 !important;
 }
+
+
+/* Schedule grid: restore the vertical divider beside the fixed/total label column */
+.schedule-grid-table tbody > tr > th:first-child {
+  border-right: 1px solid var(--theme-color-light) !important;
+}
+
+.schedule-grid-table thead > tr > th:first-child {
+  border-right: 1px solid #4338ca !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right: 1px solid var(--theme-color-light) !important;
+}
