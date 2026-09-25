@@ -7351,3 +7351,33 @@ td select:focus,
   grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
   align-items: center !important;
 }
+
+
+/* Schedule preview: status added while keeping every detail in one line */
+.schedule-preview-item {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  align-items: center !important;
+}
+
+.schedule-preview-item > div {
+  min-width: 0;
+}
+
+.schedule-preview-item .status-badge {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.schedule-preview-status-unassigned {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
