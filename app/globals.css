@@ -8324,3 +8324,26 @@ td select:focus,
 .schedule-grid-table tbody .schedule-total-cell .schedule-total-button {
   background: transparent !important;
 }
+
+
+/* FINAL: total-column row separators are painted inside each cell so the
+   full-height button cannot cover them. Keep the line subtle like the grid. */
+.schedule-grid-table tbody .schedule-total-cell {
+  position: relative !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--theme-color-soft) 0,
+      var(--theme-color-soft) calc(100% - 1px),
+      rgba(148, 163, 184, 0.22) calc(100% - 1px),
+      rgba(148, 163, 184, 0.22) 100%
+    ) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
