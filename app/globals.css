@@ -7999,11 +7999,11 @@ td select:focus,
 }
 
 
-/* Alert sidebar indicator: small red dot without a number */
+/* Alert sidebar indicator: notification-style dot overlapping the icon */
 .sidebar .alert-nav-dot {
   position: absolute;
-  top: -4px;
-  right: -5px;
+  top: -2px;
+  right: -1px;
   width: 9px;
   height: 9px;
   min-width: 9px;
