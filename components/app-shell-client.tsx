@@ -245,25 +245,25 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
                 {group.nonCollapsible ? (
                   <>
                     <div className="nav-group-title nav-group-title-static">
-                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge">{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
+                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge" style={{ color: "#fff", backgroundColor: "#dc2626" }}>{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
                     </div>
                     <div className="nav-group-items nav-group-items-static">
                       {group.items.map(item => {
                         const active = isItemActive(item)
                         return <Link key={item.href} href={item.href} className={'nav-link nav-dashboard-button ' + (active ? 'active' : '')} >
-                          <span className="nav-icon nav-icon-with-badge"><Icon name={item.icon} />{group.label === 'Alert' && alertCountForItem(item.label) > 0 ? <span className="alert-nav-badge">{alertCountForItem(item.label) > 99 ? '99+' : alertCountForItem(item.label)}</span> : null}</span><span>{item.label}</span>
+                          <span className="nav-icon nav-icon-with-badge"><Icon name={item.icon} />{group.label === 'Alert' && alertCountForItem(item.label) > 0 ? <span className="alert-nav-badge" style={{ color: "#fff", backgroundColor: "#dc2626" }}>{alertCountForItem(item.label) > 99 ? '99+' : alertCountForItem(item.label)}</span> : null}</span><span>{item.label}</span>
                         </Link>
                       })}
                     </div>
                   </>
                 ) : group.items.length === 1 ? (
                   <Link href={group.items[0].href} className={'nav-link nav-link-direct ' + (hasActive ? 'active' : '')} >
-                    <span className="nav-icon nav-icon-with-badge"><Icon name={group.items[0].icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge">{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
+                    <span className="nav-icon nav-icon-with-badge"><Icon name={group.items[0].icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge" style={{ color: "#fff", backgroundColor: "#dc2626" }}>{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span>
                   </Link>
                 ) : (
                   <>
                     <button type="button" className={'nav-group-title ' + (hasActive ? 'is-active' : '')} onClick={() => setOpenGroups((current) => current.includes(group.label) ? current.filter((item) => item !== group.label) : [...current, group.label])}>
-                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge">{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span><span className="nav-group-chevron">{openGroups.includes(group.label) ? '⌃' : '⌄'}</span>
+                      <span className="nav-icon nav-icon-with-badge"><Icon name={group.icon} />{group.label === 'Alert' && totalAlertCount > 0 ? <span className="alert-nav-badge" style={{ color: "#fff", backgroundColor: "#dc2626" }}>{totalAlertCount > 99 ? '99+' : totalAlertCount}</span> : null}</span><span>{group.label}</span><span className="nav-group-chevron">{openGroups.includes(group.label) ? '⌃' : '⌄'}</span>
                     </button>
                     <div className={'nav-group-items ' + (openGroups.includes(group.label) ? 'is-open' : 'is-closed')}>
                       {group.items.map(item => {
