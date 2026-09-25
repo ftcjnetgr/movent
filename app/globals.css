@@ -8224,3 +8224,17 @@ td select:focus,
   display: none !important;
   content: none !important;
 }
+
+
+/* Schedule data grid borders use the same purple family as the header */
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td {
+  border-right-color: #4338ca !important;
+  border-bottom-color: #4338ca !important;
+}
+
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  border-right-color: #4338ca !important;
+  border-bottom-color: #4338ca !important;
+}
