@@ -8680,3 +8680,59 @@ td select:focus,
   background: #fff !important;
   color: var(--theme-color) !important;
 }
+
+
+/* Unified selection treatment across page controls */
+.schedule-day-row button.active,
+.schedule-direction button.active,
+.schedule-category-buttons button.active,
+.schedule-route-tabs button.active,
+.schedule-point-tabs button.active,
+.schedule-summary-inline button.active,
+.schedule-route-tabs-standalone button.active,
+.nav-dashboard-button.active,
+.profile-settings-nav button.active {
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+  border-color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+}
+
+.schedule-day-row button:not(.active),
+.schedule-direction button:not(.active),
+.schedule-category-buttons button:not(.active),
+.schedule-route-tabs button:not(.active),
+.schedule-point-tabs button:not(.active),
+.schedule-summary-inline button:not(.active),
+.nav-dashboard-button:not(.active),
+.profile-settings-nav button:not(.active) {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
+
+.schedule-route-tabs-standalone button:not(.active) {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: transparent !important;
+}
+
+.dashboard-view-tabs a.active,
+.alert-view-tabs a.active {
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  border-radius: 7px !important;
+}
+
+.dashboard-view-tabs a:not(.active),
+.alert-view-tabs a:not(.active) {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-radius: 7px !important;
+}
+
+.dashboard-view-tabs a.active::after,
+.alert-view-tabs a.active::after {
+  display: none !important;
+}
