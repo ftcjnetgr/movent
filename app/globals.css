@@ -8559,3 +8559,28 @@ td select:focus,
 .user-management-actions + .user-management-table-card {
   margin-top: 16px !important;
 }
+
+
+/* Report actions: all download/submit buttons use dark purple with white text */
+.report-actions > button,
+.report-actions > .report-download-button {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-color: var(--theme-color) !important;
+  box-shadow: none !important;
+}
+
+.report-actions > button:hover:not(:disabled),
+.report-actions > .report-download-button:hover:not(:disabled) {
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+  border-color: var(--theme-color-dark) !important;
+}
+
+.report-actions > button:disabled,
+.report-actions > .report-download-button:disabled {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-color: var(--theme-color) !important;
+  opacity: .55 !important;
+}
