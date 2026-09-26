@@ -28,7 +28,7 @@ export default function DispatcherCreationHub(props: Props) {
 
   if (!choice) {
     return (
-      <section className="section-block">
+      <section className="section-block dispatcher-create-panel">
         <div className="section-heading">
           <div>
             <h2>Buat Proses Baru</h2>
