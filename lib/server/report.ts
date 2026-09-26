@@ -38,51 +38,33 @@ function formatReportDateTime(value: string | null | undefined) {
   }).format(new Date(value))
 }
 
+const operationalReportColumns = [
+  'id','transaction_id','source_type','task_type','fleet_ownership','status','created_by','requested_by','assigned_by',
+  'executor_nik','executor_snapshot','fleet_snapshot','schedule_id','schedule_snapshot','start_point','start_point_snapshot',
+  'destination','destination_snapshot','std','sta','external_executor','external_fleet','sj_number','sj_qty','sj_weight',
+  'product','product_snapshot','sj_note','odometer_start','odometer_end','requested_at','assigned_at','accepted_at',
+  'driving_at','completed_at','canceled_at','canceled_from_status','cancellation_note','external_departure_at',
+  'external_arrival_at','created_at','updated_at','arrived_at',
+] as const
+
+function reportCellValue(column: string, value: unknown) {
+  if (value === null || value === undefined) return ''
+  if (typeof value === 'object') {
+    try { return JSON.stringify(value) } catch { return String(value) }
+  }
+  if ((column === 'std' || column === 'sta' || column.endsWith('_at') || column === 'created_at' || column === 'updated_at') && typeof value === 'string') {
+    return formatReportDateTime(value)
+  }
+  return String(value)
+}
+
 export async function queryOperationalReport(filters: ReportFilters) {
   const admin = createAdminClient()
-
-  // Avoid a report-query failure when there are currently no task rows at all.
-  const { count: taskCount, error: taskCountError } = await admin
-    .from('tasks')
-    .select('id', { count: 'exact', head: true })
-
-  if (taskCountError) {
-    console.error('[report] operational task count failed', taskCountError.message)
-    throw new Error('Operational report query failed')
-  }
-
-  if (!taskCount) {
-    return { rows: [], csv: '' }
-  }
-
   const dateField = filters.type === 'STD' ? 'std' : filters.type === 'STA' ? 'sta' : 'canceled_at'
   const fromIso = filters.from + 'T00:00:00+07:00'
   const toIso = endExclusiveIso(filters.to)
 
-  let query = admin
-    .from('tasks')
-    .select([
-      'transaction_id',
-      'task_type',
-      'status',
-      'fleet_ownership',
-      'start_point',
-      'destination',
-      'std',
-      'sta',
-      'executor_nik',
-      'executor_snapshot',
-      'fleet_snapshot',
-      'external_executor',
-      'external_fleet',
-      'external_departure_at',
-      'external_arrival_at',
-      'canceled_at',
-      'cancellation_note',
-    ].join(','))
-    .gte(dateField, fromIso)
-    .lt(dateField, toIso)
-    .order(dateField, { ascending: true })
+  let query = admin.from('tasks').select('*').gte(dateField, fromIso).lt(dateField, toIso).order(dateField, { ascending: true })
 
   if (filters.startPoint) query = query.eq('start_point', filters.startPoint)
   if (filters.destination) query = query.eq('destination', filters.destination)
@@ -100,42 +82,17 @@ export async function queryOperationalReport(filters: ReportFilters) {
     throw new Error('Operational report query failed')
   }
 
-  type OperationalReportTask = {
-    transaction_id?: string | null
-    task_type?: string | null
-    status?: string | null
-    fleet_ownership?: string | null
-    start_point?: string | null
-    destination?: string | null
-    std?: string | null
-    sta?: string | null
-    executor_nik?: string | null
-    executor_snapshot?: { full_name?: string | null; [key: string]: unknown } | null
-    fleet_snapshot?: { plat_number?: string | null; fleet_type?: string | null; [key: string]: unknown } | null
-    external_departure_at?: string | null
-    external_arrival_at?: string | null
-    canceled_at?: string | null
-    cancellation_note?: string | null
-  }
+  const rows = ((data ?? []) as unknown as Record<string, unknown>[]).map((task) => {
+    const row: Record<string, string> = {}
+    for (const column of operationalReportColumns) {
+      row[column] = reportCellValue(column, task[column])
+    }
+    return row
+  })
 
-  const reportTasks = (data ?? []) as unknown as OperationalReportTask[]
-  const rows = reportTasks.map((task) => ({
-    'Transaction ID': task.transaction_id ?? '',
-    'Task Type': task.task_type ?? '',
-    'Status': task.status ?? '',
-    'Start Point': task.start_point ?? '',
-    'Destination': task.destination ?? '',
-    'STD': formatReportDateTime(task.std),
-    'STA': formatReportDateTime(task.sta),
-    'Executor NIK': task.executor_nik ?? '',
-    'Executor Name': task.executor_snapshot?.full_name ?? '',
-    'Fleet': task.fleet_snapshot?.plat_number ?? '',
-    'Fleet Type': task.fleet_snapshot?.fleet_type ?? '',
-    'ATD': formatReportDateTime(task.task_type === 'Supply' && task.fleet_ownership === 'Non-TGR' ? task.external_departure_at : null),
-    'ATA': formatReportDateTime(task.task_type === 'Supply' && task.fleet_ownership === 'Non-TGR' ? task.external_arrival_at : null),
-    'Canceled At': formatReportDateTime(task.canceled_at),
-    'Cancellation Reason': task.cancellation_note ?? '',
-  }))
+  const csvRows = rows.map((row) => Object.fromEntries(
+    operationalReportColumns.map((column) => [column, row[column]])
+  ))
 
-  return { rows, csv: csvText(rows) }
+  return { rows, csv: csvText(csvRows) }
 }
