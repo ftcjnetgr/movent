@@ -8649,3 +8649,34 @@ td select:focus,
     grid-template-columns: repeat(2, minmax(0, 1fr)) auto !important;
   }
 }
+
+
+/* Report type picker: selected option uses dark purple + white text; inactive stays dark text */
+.report-type-buttons .report-type-button {
+  background: #fff !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+}
+
+.report-type-buttons .report-type-button:hover:not(.active) {
+  background: var(--primary-soft) !important;
+  color: var(--text) !important;
+  border-color: #b8d0f4 !important;
+}
+
+.report-type-buttons .report-type-button.active {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-color: var(--theme-color) !important;
+}
+
+.report-type-buttons .report-type-button.active strong,
+.report-type-buttons .report-type-button.active small {
+  color: #fff !important;
+}
+
+.report-type-buttons .report-type-button.active .report-type-radio {
+  border-color: #fff !important;
+  background: #fff !important;
+  color: var(--theme-color) !important;
+}
