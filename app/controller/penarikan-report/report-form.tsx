@@ -5,6 +5,21 @@ import { useMemo, useState } from 'react'
 type Option = { value: string; label: string }
 type Row = Record<string, string | null>
 
+const operationalReportColumns = [
+  'id','transaction_id','source_type','task_type','fleet_ownership','status','created_by','requested_by','assigned_by',
+  'executor_nik','executor_snapshot','fleet_snapshot','schedule_id','schedule_snapshot','start_point','start_point_snapshot',
+  'destination','destination_snapshot','std','sta','external_executor','external_fleet','sj_number','sj_qty','sj_weight',
+  'product','product_snapshot','sj_note','odometer_start','odometer_end','requested_at','assigned_at','accepted_at',
+  'driving_at','completed_at','canceled_at','canceled_from_status','cancellation_note','external_departure_at',
+  'external_arrival_at','created_at','updated_at','arrived_at',
+]
+
+const maintenanceReportColumns = [
+  'id','transaction_id','status','created_by','maintainer_user_id','maintenance_list','maintenance_snapshot',
+  'fleet_plat_number','fleet_snapshot','location','location_snapshot','created_at','accepted_at','in_progress_at',
+  'completed_at','canceled_at','canceled_from_status','cancellation_note','updated_at','maintenance_pic','requested_at',
+]
+
 const reportTypes = [
   { value: 'STD', label: 'Berdasarkan STD', description: 'Keberangkatan sesuai jadwal.' },
   { value: 'STA', label: 'Berdasarkan STA', description: 'Kedatangan sesuai jadwal.' },
@@ -32,9 +47,7 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
     return search
   }, [type, from, to, startPoint, destination, executorNik])
 
-  const reportHeaders = maintenanceOnly
-    ? ['Transaction ID', 'Maintenance', 'Location', 'Fleet', 'Status', 'Created At', 'Accepted At', 'In Progress At', 'Completed At', 'Canceled At', 'Cancellation Reason']
-    : ['Transaction ID', 'Task Type', 'Status', 'Start Point', 'Destination', 'STD', 'STA', 'Executor NIK', 'Executor Name', 'Fleet', 'Fleet Type', 'ATD', 'ATA', 'Canceled At', 'Cancellation Reason']
+  const reportHeaders = maintenanceOnly ? maintenanceReportColumns : operationalReportColumns
 
   function invalidatePulledReport() {
     setHasPulled(false)
@@ -152,34 +165,30 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
           {!maintenanceOnly ? <label>Titik mulai<select value={startPoint} onChange={(event) => { setStartPoint(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
           {!maintenanceOnly ? <label>Destinasi<select value={destination} onChange={(event) => { setDestination(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
           {!maintenanceOnly ? <label>Executor<select value={executorNik} onChange={(event) => { setExecutorNik(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
-        </div>
-        <div className="report-actions">
-          <button type="button" onClick={preview} disabled={loading || !from || !to}>
-            {loading ? 'Lagi narik...' : 'Tarik laporan'}
-          </button>
+          <div className="report-filter-actions">
+            <button type="button" onClick={preview} disabled={loading || !from || !to}>
+              {loading ? 'Lagi narik...' : 'Tarik laporan'}
+            </button>
+            {hasPulled ? (
+              <div className="report-result-download">
+                <button type="button" className="report-download-button" onClick={() => setShowDownloadOptions((current) => !current)}>
+                  Unduh
+                </button>
+                {showDownloadOptions ? (
+                  <div className="report-download-options">
+                    <button type="button" className="report-download-button" onClick={() => download('csv')}>CSV</button>
+                    <button type="button" className="report-download-button" onClick={() => download('xlsx')}>XLSX</button>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 
       <div className="report-preview">
         <div className="section-heading report-result-heading">
           <div><h2>Hasil Laporan</h2><p>{rows.length} transaksi.</p></div>
-          {hasPulled ? (
-            <div className="report-result-download">
-              <button
-                type="button"
-                className="report-download-button"
-                onClick={() => setShowDownloadOptions((current) => !current)}
-              >
-                Unduh
-              </button>
-              {showDownloadOptions ? (
-                <div className="report-download-options">
-                  <button type="button" className="report-download-button" onClick={() => download('csv')}>CSV</button>
-                  <button type="button" className="report-download-button" onClick={() => download('xlsx')}>XLSX</button>
-                </div>
-              ) : null}
-            </div>
-          ) : null}
         </div>
         <div className="table-wrap"><table>
           <thead><tr>{reportHeaders.map((key) => <th key={key}>{key}</th>)}</tr></thead>
