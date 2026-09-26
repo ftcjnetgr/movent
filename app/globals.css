@@ -8923,3 +8923,9 @@ td select:focus,
 .schedule-route-tabs-standalone button.active {
   border-bottom: 2px solid var(--theme-color) !important;
 }
+
+
+/* Profile & Security cards: give each option breathing room */
+.profile-settings-nav {
+  gap: 10px !important;
+}
