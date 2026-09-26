@@ -8584,3 +8584,43 @@ td select:focus,
   border-color: var(--theme-color) !important;
   opacity: .55 !important;
 }
+
+
+/* Report result download control */
+.report-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.report-result-download {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.report-download-button {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-color: var(--theme-color) !important;
+  box-shadow: none !important;
+}
+
+.report-download-button:hover:not(:disabled) {
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+}
+
+.report-download-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
