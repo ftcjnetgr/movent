@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
-import { lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
+import { addUserAction, importUsersAction, lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
+import DatabaseActionPreview from '@/components/database-action-preview'
 import DatabaseEditPreview from '@/components/database-edit-preview'
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
@@ -34,6 +35,16 @@ async function updateUserProfileFormAction(formData: FormData) {
   await updateUserProfileAction(formData)
 }
 
+async function addUserFormAction(formData: FormData) {
+  'use server'
+  await addUserAction(formData)
+}
+
+async function importUsersFormAction(formData: FormData) {
+  'use server'
+  await importUsersAction(formData)
+}
+
 export default async function UserManagementPage() {
   const profile = await getCurrentProfile()
   if (profile.role !== 'Super User') return null
@@ -52,6 +63,30 @@ export default async function UserManagementPage() {
           <p>Atur akses dan data pengguna dari sini.</p>
         </div>
       </div>
+
+      <section className="user-management-actions section-block">
+        <DatabaseActionPreview title="Import banyak data">
+          <p className="muted">Kolom wajib: username, email, nik, full_name, role. Kolom opsional: phone_number, status.</p>
+          <p className="muted">Password awal untuk user baru mengikuti mekanisme login awal aplikasi.</p>
+          <form action={importUsersFormAction} className="data-form database-action-form">
+            <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
+            <button type="submit">Import data</button>
+          </form>
+        </DatabaseActionPreview>
+
+        <DatabaseActionPreview title="Tambah data">
+          <form action={addUserFormAction} className="data-form compact-form database-action-form">
+            <label>Username<input name="username" required /></label>
+            <label>Email<input name="email" type="email" required /></label>
+            <label>NIK<input name="nik" required /></label>
+            <label>Nama lengkap<input name="fullName" required /></label>
+            <label>No. telepon<input name="phoneNumber" /></label>
+            <label>Role<select name="role" defaultValue="Controller" required>{['Controller','Dispatcher','Operation','Executor','Maintainer','Super User'].map((role) => <option key={role} value={role}>{role}</option>)}</select></label>
+            <label>Status<select name="status" defaultValue="Active" required><option value="Active">Active</option><option value="Locked">Locked</option></select></label>
+            <button type="submit">Tambah data</button>
+          </form>
+        </DatabaseActionPreview>
+      </section>
 
       <section className="data-table-card user-management-table-card">
         <div className="table-wrap">
