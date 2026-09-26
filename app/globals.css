@@ -9407,3 +9407,128 @@ td select:focus,
 .role-dispatcher .dashboard-main-grid .summary-bar-row {
   padding: 10px 0;
 }
+
+
+/* Dispatcher detail pass: typography, borders, pills and controls use Controller tokens */
+.role-dispatcher .page-heading h1,
+.role-dispatcher .section-heading h2,
+.role-dispatcher .card-title,
+.role-dispatcher .task-create-flow-head strong,
+.role-dispatcher .task-create-intro strong,
+.role-dispatcher .form-section-title {
+  color: var(--text) !important;
+}
+
+.role-dispatcher .page-heading p,
+.role-dispatcher .section-heading p,
+.role-dispatcher .task-create-intro > span:last-child,
+.role-dispatcher .task-create-choice small,
+.role-dispatcher .task-summary-grid span,
+.role-dispatcher .selected-schedule-summary span,
+.role-dispatcher .muted {
+  color: var(--muted) !important;
+}
+
+.role-dispatcher .data-table-card,
+.role-dispatcher .metric-card,
+.role-dispatcher .task-create-workspace,
+.role-dispatcher .dispatcher-create-panel,
+.role-dispatcher .creation-choice-card,
+.role-dispatcher .task-create-choice {
+  border-color: var(--line) !important;
+}
+
+.role-dispatcher .task-summary-grid > div {
+  border-color: var(--line) !important;
+  background: var(--surface-2) !important;
+}
+
+/* Semantic status pills: same Controller colors + borders */
+.role-dispatcher .status-badge {
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+.role-dispatcher .status-requested,
+.role-dispatcher .status-created {
+  background: var(--status-requested-soft) !important;
+  color: var(--status-requested) !important;
+  border-color: #bfdbfe !important;
+}
+
+.role-dispatcher .status-confirmed,
+.role-dispatcher .status-accepted {
+  background: var(--status-confirmed-soft) !important;
+  color: var(--status-confirmed) !important;
+  border-color: #a5f3fc !important;
+}
+
+.role-dispatcher .status-assigned {
+  background: var(--status-assigned-soft) !important;
+  color: var(--status-assigned) !important;
+  border-color: #fed7aa !important;
+}
+
+.role-dispatcher .status-driving,
+.role-dispatcher .status-in-progress {
+  background: var(--status-driving-soft) !important;
+  color: var(--status-driving) !important;
+  border-color: #bbf7d0 !important;
+}
+
+.role-dispatcher .status-completed {
+  background: var(--status-completed-soft) !important;
+  color: var(--status-completed) !important;
+  border-color: #ddd6fe !important;
+}
+
+.role-dispatcher .status-canceled {
+  background: var(--status-canceled-soft) !important;
+  color: var(--status-canceled) !important;
+  border-color: #fecaca !important;
+}
+
+/* Inputs/selects */
+.role-dispatcher .data-form input,
+.role-dispatcher .data-form select,
+.role-dispatcher .data-form textarea,
+.role-dispatcher .compact-form input,
+.role-dispatcher .compact-form select,
+.role-dispatcher .compact-form textarea {
+  border-color: var(--line-strong) !important;
+  background: #fff !important;
+  color: var(--text) !important;
+}
+
+.role-dispatcher .data-form input:focus,
+.role-dispatcher .data-form select:focus,
+.role-dispatcher .data-form textarea:focus,
+.role-dispatcher .compact-form input:focus,
+.role-dispatcher .compact-form select:focus,
+.role-dispatcher .compact-form textarea:focus {
+  border-color: var(--theme-color) !important;
+  box-shadow: 0 0 0 3px rgba(79,70,229,.08) !important;
+}
+
+/* Preview selected values use the same light-purple surface */
+.role-dispatcher .selected-schedule-summary {
+  border-color: var(--theme-color-light) !important;
+  background: var(--theme-color-soft) !important;
+}
+
+.role-dispatcher .selected-schedule-summary strong {
+  color: var(--theme-color-dark) !important;
+}
+
+/* Neutral action buttons retain the Controller border/text treatment */
+.role-dispatcher .secondary-button {
+  border-color: var(--line-strong) !important;
+  background: #fff !important;
+  color: var(--text-2) !important;
+}
+
+.role-dispatcher .secondary-button:hover {
+  border-color: var(--theme-color-light) !important;
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+}
