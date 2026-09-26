@@ -8666,3 +8666,58 @@ td select:focus,
     min-width: 170px;
   }
 }
+
+
+/* FINAL report filter layout: every filter + action stays inside the card width */
+.report-filter-card .report-filter-fields {
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-top: 16px !important;
+}
+
+.report-filter-card .report-filter-fields > label {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+
+.report-filter-card .report-filter-actions {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 8px !important;
+  margin-top: 0 !important;
+  position: relative !important;
+}
+
+.report-filter-card .report-filter-actions > button,
+.report-filter-card .report-filter-actions .report-download-button {
+  min-height: 40px !important;
+  white-space: nowrap !important;
+}
+
+.report-filter-card .report-download-options {
+  right: 0 !important;
+  top: calc(100% + 6px) !important;
+  display: flex !important;
+}
+
+@media (max-width: 900px) {
+  .report-filter-card .report-filter-fields {
+    flex-wrap: wrap !important;
+  }
+
+  .report-filter-card .report-filter-fields > label {
+    flex: 1 1 calc(50% - 5px) !important;
+    min-width: 180px !important;
+  }
+
+  .report-filter-card .report-filter-actions {
+    width: 100%;
+  }
+}
