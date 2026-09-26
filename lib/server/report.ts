@@ -29,7 +29,7 @@ function endExclusiveIso(date: string) {
   return end.toISOString()
 }
 
-function formatReportDateTime(value: string | null) {
+function formatReportDateTime(value: string | null | undefined) {
   if (!value) return ''
   return new Intl.DateTimeFormat('en-GB', {
     dateStyle: 'medium',
