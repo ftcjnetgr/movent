@@ -1708,8 +1708,22 @@ tbody tr:hover td { background: #fbfdff; }
   box-shadow: var(--shadow);
 }
 
+.report-preview {
+  width: 100%;
+  min-width: 0;
+}
+
 .report-preview .table-wrap {
   margin-top: 4px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.report-preview .table-wrap table {
+  width: max-content;
+  min-width: 100%;
 }
 
 /* settings/profile */
@@ -1737,9 +1751,6 @@ tbody tr:hover td { background: #fbfdff; }
     grid-template-columns: repeat(3,minmax(0,1fr));
   }
 
-  .report-filter-fields {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
 }
 
 @media (max-width: 680px) {
@@ -1751,11 +1762,13 @@ tbody tr:hover td { background: #fbfdff; }
 
   .super-dashboard .super-kpi-grid,
   .super-dashboard .super-quick-grid,
-  .report-type-buttons,
-  .report-filter-fields {
+  .report-type-buttons {
     grid-template-columns: 1fr;
   }
 
+  .report-filter-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .schedule-day-row,
   .schedule-direction,
   .schedule-category-buttons,
@@ -8604,4 +8617,35 @@ td select:focus,
 /* Keep User Management action cards and data table spacing consistent with other management pages */
 .user-management-actions + .user-management-table-card {
   margin-top: 16px !important;
+}
+
+
+/* Keep the filter/action bar fitted to the report card; only the result table may scroll horizontally. */
+.report-filter-card {
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.report-filter-card .report-filter-fields {
+  width: 100%;
+  min-width: 0;
+}
+
+.report-filter-card .report-filter-fields > label {
+  min-width: 0;
+}
+
+.report-filter-card .report-filter-actions {
+  min-width: max-content;
+}
+
+@media (min-width: 901px) {
+  .report-filter-card .report-filter-fields {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) auto !important;
+  }
+
+  .report-filter-card .report-filter-fields.is-maintenance {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) auto !important;
+  }
 }
