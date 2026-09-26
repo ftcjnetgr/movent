@@ -8736,3 +8736,89 @@ td select:focus,
 .alert-view-tabs a.active::after {
   display: none !important;
 }
+
+
+/* FINAL unified purple selection palette across MOVENT */
+:root {
+  --selection-purple-dark: #3730a3;
+  --selection-purple-light: #eef2ff;
+  --selection-purple-border: #c7d2fe;
+}
+
+/* Active / selected / pre-selected */
+.schedule-day-row button.active,
+.schedule-direction button.active,
+.schedule-category-buttons button.active,
+.schedule-route-tabs button.active,
+.schedule-point-tabs button.active,
+.schedule-summary-inline button.active,
+.schedule-route-tabs-standalone button.active,
+.dashboard-view-tabs a.active,
+.alert-view-tabs a.active,
+.nav-dashboard-button.active,
+.profile-settings-nav button.active,
+.nav-link.active,
+.report-type-buttons .report-type-button.active {
+  background: var(--selection-purple-dark) !important;
+  color: #fff !important;
+  border-color: var(--selection-purple-dark) !important;
+  box-shadow: none !important;
+}
+
+/* Active content stays white too */
+.dashboard-view-tabs a.active,
+.alert-view-tabs a.active,
+.nav-dashboard-button.active,
+.nav-link.active,
+.report-type-buttons .report-type-button.active,
+.report-type-buttons .report-type-button.active strong,
+.report-type-buttons .report-type-button.active small,
+.profile-settings-nav button.active span,
+.profile-settings-nav button.active small {
+  color: #fff !important;
+}
+
+/* Inactive controls */
+.schedule-day-row button:not(.active),
+.schedule-direction button:not(.active),
+.schedule-category-buttons button:not(.active),
+.schedule-route-tabs button:not(.active),
+.schedule-point-tabs button:not(.active),
+.schedule-summary-inline button:not(.active),
+.schedule-route-tabs-standalone button:not(.active),
+.dashboard-view-tabs a:not(.active),
+.alert-view-tabs a:not(.active),
+.nav-dashboard-button:not(.active),
+.profile-settings-nav button:not(.active),
+.report-type-buttons .report-type-button:not(.active) {
+  background: var(--selection-purple-light) !important;
+  color: var(--selection-purple-dark) !important;
+  border-color: var(--selection-purple-border) !important;
+}
+
+/* Inactive nested text follows the same purple */
+.report-type-buttons .report-type-button:not(.active) strong,
+.report-type-buttons .report-type-button:not(.active) small,
+.profile-settings-nav button:not(.active) span,
+.profile-settings-nav button:not(.active) small {
+  color: var(--selection-purple-dark) !important;
+}
+
+/* Route/alert/dashboard tab underline is replaced by the same dark-purple active fill */
+.dashboard-view-tabs a.active::after,
+.alert-view-tabs a.active::after {
+  display: none !important;
+}
+
+/* Unified radio/check styling */
+.report-type-buttons .report-type-button.active .report-type-radio {
+  background: #fff !important;
+  border-color: #fff !important;
+  color: var(--selection-purple-dark) !important;
+}
+
+.report-type-buttons .report-type-button:not(.active) .report-type-radio {
+  background: #fff !important;
+  border-color: var(--selection-purple-border) !important;
+  color: var(--selection-purple-dark) !important;
+}
