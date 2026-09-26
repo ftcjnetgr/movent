@@ -8474,3 +8474,82 @@ td select:focus,
 .user-management-table-card .admin-row-actions {
   min-width: 320px;
 }
+
+
+/* Manajemen User: action cards follow Database Management and stay compact */
+.user-management-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.user-management-actions .database-action-card {
+  min-height: 50px;
+}
+
+@media (max-width: 760px) {
+  .user-management-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Manajemen User table: fit the available content area, no horizontal scrollbar */
+.user-management-table-card {
+  width: 100% !important;
+}
+
+.user-management-table-card .table-wrap {
+  width: 100%;
+  overflow-x: hidden !important;
+}
+
+.user-management-table-card table {
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: fixed !important;
+}
+
+.user-management-table-card th,
+.user-management-table-card td {
+  vertical-align: middle !important;
+  white-space: nowrap;
+}
+
+.user-management-table-card th:nth-child(1),
+.user-management-table-card td:nth-child(1) { width: 20%; }
+
+.user-management-table-card th:nth-child(2),
+.user-management-table-card td:nth-child(2) { width: 11%; }
+
+.user-management-table-card th:nth-child(3),
+.user-management-table-card td:nth-child(3) { width: 9%; }
+
+.user-management-table-card th:nth-child(4),
+.user-management-table-card td:nth-child(4) { width: 11%; }
+
+.user-management-table-card th:nth-child(5),
+.user-management-table-card td:nth-child(5) { width: 14%; text-align: center; }
+
+.user-management-table-card th:nth-child(6),
+.user-management-table-card td:nth-child(6) { width: 35%; }
+
+.user-management-table-card .admin-row-actions {
+  width: 100%;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.user-management-table-card .admin-user-lock-actions {
+  gap: 8px;
+}
+
+.user-management-table-card .database-edit-trigger,
+.user-management-table-card .user-action-lock,
+.user-management-table-card .user-action-unlock {
+  min-width: 0 !important;
+  white-space: nowrap;
+}
