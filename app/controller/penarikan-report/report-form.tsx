@@ -45,10 +45,42 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
     setRows(data.rows ?? [])
   }
 
-  function download() {
+  async function download(format: 'csv' | 'xlsx') {
+    setLoading(true)
+    setMessage('')
     const search = new URLSearchParams(params)
-    search.set('format', 'csv')
-    window.location.href = (maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + search.toString()
+    search.set('format', format)
+    const endpoint = (maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + search.toString()
+
+    try {
+      const response = await fetch(endpoint, { credentials: 'include' })
+      if (!response.ok) {
+        let errorMessage = 'Report belum berhasil dibuat.'
+        try {
+          const data = await response.json()
+          errorMessage = data.error ?? errorMessage
+        } catch {}
+        setMessage(errorMessage)
+        return
+      }
+
+      const blob = await response.blob()
+      const contentDisposition = response.headers.get('Content-Disposition') ?? ''
+      const fileNameMatch = contentDisposition.match(/filename="([^"]+)"/i)
+      const fileName = fileNameMatch?.[1] ?? `movent-report.${format}`
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
+    } catch {
+      setMessage('Report belum berhasil diunduh. Coba lagi, ya.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -92,7 +124,8 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
         {message ? <p className="form-error" role="alert">{message}</p> : null}
         <div className="report-actions">
           <button type="button" onClick={preview} disabled={loading || !from || !to}>{loading ? 'Lagi narik...' : 'Tarik laporan'}</button>
-          <button type="button" className="secondary-button" onClick={download} disabled={!from || !to}>Unduh CSV</button>
+          <button type="button" className="report-download-button" onClick={() => download('csv')} disabled={loading || !from || !to}>Unduh CSV</button>
+          <button type="button" className="report-download-button" onClick={() => download('xlsx')} disabled={loading || !from || !to}>Unduh XLSX</button>
         </div>
         <p className="muted">Hasil report yang diunduh tetap menggunakan Bahasa Inggris formal.</p>
       </div>
