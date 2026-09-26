@@ -9532,3 +9532,50 @@ td select:focus,
   background: var(--theme-color-soft) !important;
   color: var(--theme-color-dark) !important;
 }
+
+
+/* Dispatcher process choices follow the global selection palette */
+.role-dispatcher .creation-choice-card,
+.role-dispatcher .task-create-choice:not([aria-disabled="true"]) {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+  box-shadow: none !important;
+}
+
+.role-dispatcher .creation-choice-card:hover,
+.role-dispatcher .task-create-choice:hover:not([aria-disabled="true"]) {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
+
+.role-dispatcher .creation-choice-card strong,
+.role-dispatcher .task-create-choice strong {
+  color: var(--theme-color-dark) !important;
+}
+
+.role-dispatcher .creation-choice-card small,
+.role-dispatcher .task-create-choice small {
+  color: var(--theme-color-dark) !important;
+}
+
+.role-dispatcher .creation-choice-icon,
+.role-dispatcher .task-create-choice-icon {
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+}
+
+.role-dispatcher .creation-choice-card b,
+.role-dispatcher .task-create-choice b {
+  color: var(--theme-color-dark) !important;
+}
+
+/* The process chooser itself is not a nested card */
+.role-dispatcher .dispatcher-create-panel {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
