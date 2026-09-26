@@ -8929,3 +8929,33 @@ td select:focus,
 .profile-settings-nav {
   gap: 10px !important;
 }
+
+
+/* Schedule Total borders match the regular data-cell grid lines in both By Plan and Live Tracking */
+.schedule-grid-table tbody .schedule-total-cell,
+.schedule-grid-table tfoot td.schedule-total-cell,
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right-color: rgba(148, 163, 184, 0.22) !important;
+  border-bottom-color: rgba(148, 163, 184, 0.22) !important;
+  border-top-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell {
+  border-left-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table tfoot td.schedule-total-cell {
+  border-left-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right: 0 !important;
+  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label::after {
+  display: none !important;
+  content: none !important;
+}
