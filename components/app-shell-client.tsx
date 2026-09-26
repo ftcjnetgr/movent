@@ -289,9 +289,6 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
       <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />
       <main className="app-content">
         <header className="topbar">
-          <Link className="dispatcher-mobile-brand" href="/dispatcher/beranda">
-            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" />
-          </Link>
           <button className="mobile-menu" type="button" onClick={() => setMobileOpen(v => !v)} aria-label="Buka menu navigasi">☰</button>
           <div className="topbar-search"><span className="search-icon">⌕</span><input aria-label="Pencarian" placeholder="Cari tugas, armada, lokasi..." /></div>
           {isDashboardDateFilter ? (
@@ -310,26 +307,6 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
           ) : null}
         </header>
         <section className="page-content">{children}</section>
-
-        {currentRole === 'Dispatcher' ? (
-          <nav className="dispatcher-mobile-bottom-nav" aria-label="Navigasi Dispatcher">
-            <Link href="/dispatcher/beranda" className={pathname === '/dispatcher/beranda' ? 'active' : ''}>
-              <span className="nav-icon"><Icon name="home" /></span><span>Beranda</span>
-            </Link>
-            <Link href="/dispatcher/alert/penugasan" className={pathname.startsWith('/dispatcher/alert') ? 'active' : ''}>
-              <span className="nav-icon nav-icon-with-badge"><Icon name="bell" />{totalAlertCount > 0 ? <span className="alert-nav-dot" aria-label="Ada alert aktif" /> : null}</span><span>Alert</span>
-            </Link>
-            <Link href="/dispatcher/extra-schedule" className={pathname.startsWith('/dispatcher/extra-schedule') ? 'active' : ''}>
-              <span className="nav-icon"><Icon name="calendar" /></span><span>Jadwal</span>
-            </Link>
-            <Link href="/dispatcher/armada-non-tgr" className={pathname.startsWith('/dispatcher/armada-non-tgr') ? 'active' : ''}>
-              <span className="nav-icon"><Icon name="truck" /></span><span>Armada</span>
-            </Link>
-            <Link href="/dispatcher/profil" className={pathname.startsWith('/dispatcher/profil') ? 'active' : ''}>
-              <span className="nav-icon"><Icon name="user" /></span><span>Pengaturan</span>
-            </Link>
-          </nav>
-        ) : null}
       </main>
     </div>
   )
