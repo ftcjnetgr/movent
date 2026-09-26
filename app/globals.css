@@ -8417,3 +8417,60 @@ td select:focus,
   border: 0 !important;
   box-shadow: none !important;
 }
+
+
+/* User management table: give columns enough room and keep actions horizontal */
+.user-management-table-card {
+  width: 100% !important;
+}
+
+.user-management-table-card .table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.user-management-table-card table {
+  min-width: 1180px !important;
+  table-layout: auto;
+}
+
+.user-management-table-card th,
+.user-management-table-card td {
+  vertical-align: middle !important;
+}
+
+.user-management-table-card th:nth-child(1),
+.user-management-table-card td:nth-child(1) {
+  min-width: 220px;
+  width: 220px;
+}
+
+.user-management-table-card th:nth-child(2),
+.user-management-table-card td:nth-child(2) {
+  min-width: 130px;
+}
+
+.user-management-table-card th:nth-child(3),
+.user-management-table-card td:nth-child(3) {
+  min-width: 110px;
+}
+
+.user-management-table-card th:nth-child(4),
+.user-management-table-card td:nth-child(4) {
+  min-width: 130px;
+}
+
+.user-management-table-card th:nth-child(5),
+.user-management-table-card td:nth-child(5) {
+  min-width: 165px;
+  text-align: center;
+}
+
+.user-management-table-card th:nth-child(6),
+.user-management-table-card td:nth-child(6) {
+  min-width: 330px;
+}
+
+.user-management-table-card .admin-row-actions {
+  min-width: 320px;
+}
