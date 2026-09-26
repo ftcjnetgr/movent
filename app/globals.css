@@ -8890,3 +8890,36 @@ td select:focus,
   color: var(--theme-color-dark) !important;
   border-color: var(--theme-color-light) !important;
 }
+
+
+/* Route tabs are text-only: absolutely no filled background */
+.schedule-route-tabs button,
+.schedule-route-tabs button:not(.active),
+.schedule-route-tabs button.active,
+.schedule-route-tabs-standalone button,
+.schedule-route-tabs-standalone button:not(.active),
+.schedule-route-tabs-standalone button.active {
+  background: transparent !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  box-shadow: none !important;
+}
+
+.schedule-route-tabs button:not(.active),
+.schedule-route-tabs-standalone button:not(.active) {
+  color: var(--theme-color-dark) !important;
+}
+
+.schedule-route-tabs button.active,
+.schedule-route-tabs-standalone button.active {
+  color: var(--theme-color) !important;
+}
+
+.schedule-route-tabs button.active {
+  border-bottom: 2px solid var(--theme-color) !important;
+}
+
+.schedule-route-tabs-standalone button.active {
+  border-bottom: 2px solid var(--theme-color) !important;
+}
