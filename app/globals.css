@@ -8624,3 +8624,45 @@ td select:focus,
   background: #fff;
   box-shadow: var(--shadow);
 }
+
+
+/* Report filter row: filters and actions share one line on desktop */
+.report-filter-fields {
+  display: flex !important;
+  align-items: end !important;
+  gap: 10px !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+}
+
+.report-filter-fields > label {
+  flex: 1 1 0;
+  min-width: 150px;
+}
+
+.report-filter-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  position: relative;
+}
+
+.report-filter-actions > button,
+.report-filter-actions .report-download-button {
+  white-space: nowrap;
+}
+
+.report-filter-actions .report-result-download {
+  position: relative;
+}
+
+@media (max-width: 1100px) {
+  .report-filter-fields {
+    overflow-x: auto;
+  }
+
+  .report-filter-fields > label {
+    min-width: 170px;
+  }
+}
