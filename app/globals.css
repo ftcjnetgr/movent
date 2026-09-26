@@ -8553,3 +8553,9 @@ td select:focus,
   min-width: 0 !important;
   white-space: nowrap;
 }
+
+
+/* Keep User Management action cards and data table spacing consistent with other management pages */
+.user-management-actions + .user-management-table-card {
+  margin-top: 16px !important;
+}
