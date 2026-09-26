@@ -100,7 +100,26 @@ export async function queryOperationalReport(filters: ReportFilters) {
     throw new Error('Operational report query failed')
   }
 
-  const rows = (data ?? []).map((task) => ({
+  type OperationalReportTask = {
+    transaction_id?: string | null
+    task_type?: string | null
+    status?: string | null
+    fleet_ownership?: string | null
+    start_point?: string | null
+    destination?: string | null
+    std?: string | null
+    sta?: string | null
+    executor_nik?: string | null
+    executor_snapshot?: { full_name?: string | null; [key: string]: unknown } | null
+    fleet_snapshot?: { plat_number?: string | null; fleet_type?: string | null; [key: string]: unknown } | null
+    external_departure_at?: string | null
+    external_arrival_at?: string | null
+    canceled_at?: string | null
+    cancellation_note?: string | null
+  }
+
+  const reportTasks = (data ?? []) as unknown as OperationalReportTask[]
+  const rows = reportTasks.map((task) => ({
     'Transaction ID': task.transaction_id ?? '',
     'Task Type': task.task_type ?? '',
     'Status': task.status ?? '',
