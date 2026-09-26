@@ -40,6 +40,21 @@ function formatReportDateTime(value: string | null) {
 
 export async function queryOperationalReport(filters: ReportFilters) {
   const admin = createAdminClient()
+
+  // Avoid a report-query failure when there are currently no task rows at all.
+  const { count: taskCount, error: taskCountError } = await admin
+    .from('tasks')
+    .select('id', { count: 'exact', head: true })
+
+  if (taskCountError) {
+    console.error('[report] operational task count failed', taskCountError.message)
+    throw new Error('Operational report query failed')
+  }
+
+  if (!taskCount) {
+    return { rows: [], csv: '' }
+  }
+
   const dateField = filters.type === 'STD' ? 'std' : filters.type === 'STA' ? 'sta' : 'canceled_at'
   const fromIso = filters.from + 'T00:00:00+07:00'
   const toIso = endExclusiveIso(filters.to)
