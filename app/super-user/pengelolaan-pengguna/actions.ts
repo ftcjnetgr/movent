@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
+import * as XLSX from 'sheetjs_xlsx'
 
 type Result = { error?: string; success?: string }
 
@@ -93,12 +94,147 @@ export async function updateUserProfileAction(formData: FormData): Promise<Resul
 }
 
 
+const allowedRoles = ['Controller','Dispatcher','Operation','Executor','Maintainer','Super User']
+const allowedStatuses = ['Active','Locked']
+
+function fieldText(formData: FormData, key: string) {
+  return String(formData.get(key) ?? '').trim()
+}
+
+function validateUserInput(input: {
+  username: string
+  email: string
+  nik: string
+  fullName: string
+  role: string
+  status: string
+}) {
+  if (!input.username || !input.email || !input.nik || !input.fullName || !input.role) {
+    return 'Username, email, NIK, nama lengkap, dan role wajib diisi.'
+  }
+  if (!allowedRoles.includes(input.role)) return 'Role tidak tersedia.'
+  if (!allowedStatuses.includes(input.status)) return 'Status tidak tersedia.'
+  return null
+}
+
 export async function addUserAction(formData: FormData): Promise<Result> {
   try { await requireSuperUser() } catch { return { error: 'Akses tidak tersedia.' } }
-  return { error: 'Fitur tambah user belum tersedia.' }
+
+  const input = {
+    username: fieldText(formData, 'username'),
+    email: fieldText(formData, 'email'),
+    nik: fieldText(formData, 'nik'),
+    fullName: fieldText(formData, 'fullName'),
+    phoneNumber: fieldText(formData, 'phoneNumber'),
+    role: fieldText(formData, 'role'),
+    status: fieldText(formData, 'status') || 'Active',
+  }
+
+  const validation = validateUserInput(input)
+  if (validation) return { error: validation }
+
+  const admin = createAdminClient()
+  const { data: existingUsers } = await admin
+    .from('user_profiles')
+    .select('username,email,nik')
+
+  const duplicate = (existingUsers ?? []).some((user) =>
+    user.username === input.username || user.email === input.email || user.nik === input.nik
+  )
+
+  if (duplicate) return { error: 'Username, email, atau NIK sudah digunakan.' }
+
+  const { error } = await admin.from('user_profiles').insert({
+    username: input.username,
+    email: input.email,
+    nik: input.nik,
+    full_name: input.fullName,
+    phone_number: input.phoneNumber || null,
+    role: input.role,
+    status: input.status,
+    must_change_password: true,
+    failed_login_attempts: 0,
+    auth_user_id: null,
+  })
+
+  if (error) return { error: 'Data pengguna belum berhasil ditambahkan.' }
+
+  revalidatePath('/super-user/pengelolaan-pengguna')
+  return { success: 'User berhasil ditambahkan.' }
 }
 
 export async function importUsersAction(formData: FormData): Promise<Result> {
   try { await requireSuperUser() } catch { return { error: 'Akses tidak tersedia.' } }
-  return { error: 'Fitur import user belum tersedia.' }
+
+  const file = formData.get('file')
+  if (!(file instanceof File) || file.size === 0) return { error: 'File CSV atau XLSX wajib dipilih.' }
+
+  let rows: Record<string, unknown>[] = []
+  try {
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const workbook = XLSX.read(buffer, { type: 'buffer' })
+    const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
+    rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(firstSheet, { defval: '' })
+  } catch {
+    return { error: 'File belum berhasil dibaca. Gunakan CSV atau XLSX.' }
+  }
+
+  if (!rows.length) return { error: 'File tidak memiliki data.' }
+
+  const normalized = rows.map((row) => ({
+    username: String(row.username ?? '').trim(),
+    email: String(row.email ?? '').trim(),
+    nik: String(row.nik ?? '').trim(),
+    full_name: String(row.full_name ?? row.fullName ?? '').trim(),
+    phone_number: String(row.phone_number ?? row.phoneNumber ?? '').trim() || null,
+    role: String(row.role ?? '').trim(),
+    status: String(row.status ?? 'Active').trim() || 'Active',
+    must_change_password: true,
+    failed_login_attempts: 0,
+    auth_user_id: null,
+  }))
+
+  for (const row of normalized) {
+    const validation = validateUserInput({
+      username: row.username,
+      email: row.email,
+      nik: row.nik,
+      fullName: row.full_name,
+      role: row.role,
+      status: row.status,
+    })
+    if (validation) return { error: 'Data ' + (row.username || '(tanpa username)') + ': ' + validation }
+  }
+
+  const usernames = new Set<string>()
+  const emails = new Set<string>()
+  const niks = new Set<string>()
+
+  for (const row of normalized) {
+    if (usernames.has(row.username) || emails.has(row.email) || niks.has(row.nik)) {
+      return { error: 'File memiliki username, email, atau NIK yang duplikat.' }
+    }
+    usernames.add(row.username)
+    emails.add(row.email)
+    niks.add(row.nik)
+  }
+
+  const admin = createAdminClient()
+  const { data: existingUsers } = await admin
+    .from('user_profiles')
+    .select('username,email,nik')
+
+  const existingUsername = new Set((existingUsers ?? []).map((user) => user.username))
+  const existingEmail = new Set((existingUsers ?? []).map((user) => user.email))
+  const existingNik = new Set((existingUsers ?? []).map((user) => user.nik))
+
+  if (normalized.some((row) => existingUsername.has(row.username) || existingEmail.has(row.email) || existingNik.has(row.nik))) {
+    return { error: 'Sebagian username, email, atau NIK di file sudah ada.' }
+  }
+
+  const { error } = await admin.from('user_profiles').insert(normalized)
+  if (error) return { error: 'Import data user belum berhasil diproses.' }
+
+  revalidatePath('/super-user/pengelolaan-pengguna')
+  return { success: normalized.length + ' user berhasil diimpor.' }
 }
