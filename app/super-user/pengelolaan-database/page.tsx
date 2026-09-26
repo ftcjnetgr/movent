@@ -45,6 +45,33 @@ function displayDatabaseValue(column: string, value: unknown) {
 function databaseInputType(column: string) {
   return column === 'std' || column === 'sta' ? 'time' : 'text'
 }
+
+function databaseFieldControl(column: string, value?: unknown, disabled = false, required = false) {
+  if (column === 'status') {
+    return (
+      <select
+        name={'field__' + column}
+        defaultValue={value === null || value === undefined || value === '' ? '' : String(value)}
+        disabled={disabled}
+        required={required}
+      >
+        <option value="" disabled>Pilih status</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    )
+  }
+
+  return (
+    <input
+      name={'field__' + column}
+      type={databaseInputType(column)}
+      defaultValue={value === null || value === undefined ? '' : displayDatabaseValue(column, value)}
+      disabled={disabled}
+      required={required}
+    />
+  )
+}
 const configs = {
   schedules: ['schedule_id','trip','schedule_hub_id','route','category','start_point','start_point_type','destination','destination_type','schedule_day','schedule_day_name','aging','std','sta','status'],
   executors: ['executor_nik','full_name','status'],
@@ -113,7 +140,7 @@ export default async function DatabaseManagementPage({
           <form action={addMasterRowFormAction} className="data-form compact-form database-action-form">
             <input type="hidden" name="database" value={db} />
             {config.map((column) => (
-              <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} required={column === meta.identifier} /></label>
+              <label key={column}>{column}{databaseFieldControl(column, undefined, false, column === meta.identifier)}</label>
             ))}
             <button type="submit">Tambah data</button>
           </form>
@@ -145,7 +172,7 @@ export default async function DatabaseManagementPage({
                         <input type="hidden" name="database" value={db} />
                         <input type="hidden" name="identifier" value={String(row[meta.identifier])} />
                         {config.map((column) => (
-                          <label key={column}>{column}<input name={'field__' + column} type={databaseInputType(column)} defaultValue={row[column] === null || row[column] === undefined ? '' : displayDatabaseValue(column, row[column])} disabled={column === meta.identifier} /></label>
+                          <label key={column}>{column}{databaseFieldControl(column, row[column], column === meta.identifier, false)}</label>
                         ))}
                         <button type="submit">Simpan perubahan</button>
                       </form>
