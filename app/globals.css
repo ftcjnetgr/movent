@@ -8822,3 +8822,71 @@ td select:focus,
   border-color: var(--selection-purple-border) !important;
   color: var(--selection-purple-dark) !important;
 }
+
+
+/* Restore lightweight route/tab appearance while keeping the unified MOVENT purple palette */
+.schedule-route-tabs-standalone button,
+.dashboard-view-tabs a,
+.alert-view-tabs a {
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.schedule-route-tabs-standalone button:hover,
+.dashboard-view-tabs a:hover,
+.alert-view-tabs a:hover {
+  background: transparent !important;
+  color: var(--theme-color) !important;
+  border-color: transparent !important;
+}
+
+.schedule-route-tabs-standalone button.active,
+.dashboard-view-tabs a.active,
+.alert-view-tabs a.active {
+  background: transparent !important;
+  color: var(--theme-color) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.schedule-route-tabs-standalone button.active {
+  border-bottom: 2px solid var(--theme-color) !important;
+}
+
+.dashboard-view-tabs a.active::after,
+.alert-view-tabs a.active::after {
+  display: block !important;
+  background: var(--theme-color) !important;
+  height: 2px !important;
+}
+
+/* Use one purple for filled active controls: match the MOVENT header purple */
+.schedule-day-row button.active,
+.schedule-direction button.active,
+.schedule-category-buttons button.active,
+.schedule-point-tabs button.active,
+.schedule-summary-inline button.active,
+.nav-dashboard-button.active,
+.profile-settings-nav button.active,
+.report-type-buttons .report-type-button.active {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-color: var(--theme-color) !important;
+}
+
+/* Matching light-purple inactive state */
+.schedule-day-row button:not(.active),
+.schedule-direction button:not(.active),
+.schedule-category-buttons button:not(.active),
+.schedule-point-tabs button:not(.active),
+.schedule-summary-inline button:not(.active),
+.nav-dashboard-button:not(.active),
+.profile-settings-nav button:not(.active),
+.report-type-buttons .report-type-button:not(.active) {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-light) !important;
+}
