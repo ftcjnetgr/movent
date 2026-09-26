@@ -22,6 +22,8 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
   const [rows, setRows] = useState<Row[]>([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [hasPulled, setHasPulled] = useState(false)
+  const [showDownloadOptions, setShowDownloadOptions] = useState(false)
 
   const params = useMemo(() => {
     const search = new URLSearchParams({ type, from, to, format: 'json' })
@@ -31,6 +33,17 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
     return search
   }, [type, from, to, startPoint, destination, executorNik])
 
+  const reportHeaders = maintenanceOnly
+    ? ['Transaction ID', 'Maintenance', 'Location', 'Fleet', 'Status', 'Created At', 'Accepted At', 'In Progress At', 'Completed At', 'Canceled At', 'Cancellation Reason']
+    : ['Transaction ID', 'Task Type', 'Status', 'Start Point', 'Destination', 'STD', 'STA', 'Executor NIK', 'Executor Name', 'Fleet', 'Fleet Type', 'ATD', 'ATA', 'Canceled At', 'Cancellation Reason']
+
+  function invalidatePulledReport() {
+    setHasPulled(false)
+    setShowDownloadOptions(false)
+    setRows([])
+  }
+
+
   async function preview() {
     setLoading(true)
     setMessage('')
@@ -39,73 +52,58 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
     setLoading(false)
     if (!response.ok) {
       setRows([])
+      setHasPulled(false)
+      setShowDownloadOptions(false)
       setMessage(data.error ?? 'Hmm, laporannya belum bisa ditarik. Coba cek lagi, ya.')
       return
     }
     setRows(data.rows ?? [])
+    setHasPulled(true)
+    setShowDownloadOptions(false)
   }
 
-  async function download(format: 'csv' | 'xlsx') {
-    setLoading(true)
-    setMessage('')
+  function download(format: 'csv' | 'xlsx') {
+    const headers = reportHeaders
+    let blob: Blob
 
-    const search = new URLSearchParams(params)
-    search.set('format', 'json')
-    const endpoint = (maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + search.toString()
+    const fileName = maintenanceOnly
+      ? `movent-maintenance-report-${from}-${to}.${format}`
+      : `movent-operational-report-${type.toLowerCase()}-${from}-${to}.${format}`
 
-    try {
-      const response = await fetch(endpoint, { credentials: 'include' })
-      const data = await response.json()
-
-      if (!response.ok) {
-        setMessage(data.error ?? 'Report belum berhasil dibuat.')
-        return
+    if (format === 'csv') {
+      const escape = (value: unknown) => {
+        const text = String(value ?? '')
+        return '"' + text.replaceAll('"', '""') + '"'
       }
 
-      const exportRows = Array.isArray(data.rows) ? data.rows : []
-      if (!exportRows.length) {
-        setMessage('Belum ada data laporan untuk filter yang dipilih.')
-        return
-      }
+      const csv = [
+        headers.map(escape).join(','),
+        ...rows.map((row) => headers.map((header) => escape(row[header])).join(',')),
+      ].join('\\r\\n')
 
-      let blob: Blob
-      const fileName = maintenanceOnly
-        ? `movent-maintenance-report-${from}-${to}.${format}`
-        : `movent-operational-report-${type.toLowerCase()}-${from}-${to}.${format}`
-
-      if (format === 'csv') {
-        const headers = Object.keys(exportRows[0])
-        const escape = (value: unknown) => {
-          const text = String(value ?? '')
-          return '"' + text.replaceAll('"', '""') + '"'
-        }
-        const csv = [
-          headers.map(escape).join(','),
-          ...exportRows.map((row: Row) => headers.map((header) => escape(row[header])).join(',')),
-        ].join('\\r\\n')
-        blob = new Blob(['\\uFEFF', csv], { type: 'text/csv;charset=utf-8' })
-      } else {
-        const XLSX = await import('sheetjs_xlsx')
-        const worksheet = XLSX.utils.json_to_sheet(exportRows)
-        const workbook = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Laporan')
-        const output = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
-        blob = new Blob([output], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      }
-
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = fileName
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-      URL.revokeObjectURL(url)
-    } catch {
-      setMessage('Report belum berhasil diunduh. Coba lagi, ya.')
-    } finally {
-      setLoading(false)
+      blob = new Blob(['\\uFEFF', csv], { type: 'text/csv;charset=utf-8' })
+    } else {
+      const XLSX = await import('sheetjs_xlsx')
+      const sheetRows = [
+        headers,
+        ...rows.map((row) => headers.map((header) => row[header] ?? '')),
+      ]
+      const worksheet = XLSX.utils.aoa_to_sheet(sheetRows)
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Laporan')
+      const output = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+      blob = new Blob([output], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
     }
+
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    URL.revokeObjectURL(url)
+    setShowDownloadOptions(false)
   }
 
   return (
@@ -129,7 +127,7 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
           </div>
           <div className="report-type-buttons">
             {reportTypes.map((item) => (
-              <button key={item.value} type="button" className={'report-type-button ' + (type === item.value ? 'active' : '')} onClick={() => setType(item.value)}>
+              <button key={item.value} type="button" className={'report-type-button ' + (type === item.value ? 'active' : '')} onClick={() => { setType(item.value); invalidatePulledReport() }}>
                 <span className="report-type-radio">{type === item.value ? '✓' : ''}</span>
                 <span><strong>{item.label}</strong><small>{item.description}</small></span>
               </button>
@@ -140,17 +138,32 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
       <div className="report-filter-card">
         <div className="report-filter-heading"><div><h2>Filter Laporan</h2><p>Rentang waktu maksimal 7 hari.</p></div></div>
         <div className="report-filter-fields">
-          <label>Dari tanggal<input type="date" value={from} onChange={(event) => setFrom(event.target.value)} /></label>
-          <label>Sampai tanggal<input type="date" value={to} onChange={(event) => setTo(event.target.value)} /></label>
-          {!maintenanceOnly ? <label>Titik mulai<select value={startPoint} onChange={(event) => setStartPoint(event.target.value)}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
-          {!maintenanceOnly ? <label>Destinasi<select value={destination} onChange={(event) => setDestination(event.target.value)}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
-          {!maintenanceOnly ? <label>Executor<select value={executorNik} onChange={(event) => setExecutorNik(event.target.value)}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
+          <label>Dari tanggal<input type="date" value={from} onChange={(event) => { setFrom(event.target.value); invalidatePulledReport() }} /></label>
+          <label>Sampai tanggal<input type="date" value={to} onChange={(event) => { setTo(event.target.value); invalidatePulledReport() }} /></label>
+          {!maintenanceOnly ? <label>Titik mulai<select value={startPoint} onChange={(event) => { setStartPoint(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
+          {!maintenanceOnly ? <label>Destinasi<select value={destination} onChange={(event) => { setDestination(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
+          {!maintenanceOnly ? <label>Executor<select value={executorNik} onChange={(event) => { setExecutorNik(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
         </div>
         {message ? <p className="form-error" role="alert">{message}</p> : null}
         <div className="report-actions">
           <button type="button" onClick={preview} disabled={loading || !from || !to}>{loading ? 'Lagi narik...' : 'Tarik laporan'}</button>
-          <button type="button" className="report-download-button" onClick={() => download('csv')} disabled={loading || !from || !to}>Unduh CSV</button>
-          <button type="button" className="report-download-button" onClick={() => download('xlsx')} disabled={loading || !from || !to}>Unduh XLSX</button>
+          {hasPulled ? (
+            <>
+              <button
+                type="button"
+                className="report-download-button"
+                onClick={() => setShowDownloadOptions((current) => !current)}
+              >
+                Unduh
+              </button>
+              {showDownloadOptions ? (
+                <>
+                  <button type="button" className="report-download-button" onClick={() => download('csv')}>CSV</button>
+                  <button type="button" className="report-download-button" onClick={() => download('xlsx')}>XLSX</button>
+                </>
+              ) : null}
+            </>
+          ) : null}
         </div>
         <p className="muted">Hasil report yang diunduh tetap menggunakan Bahasa Inggris formal.</p>
       </div>
@@ -158,8 +171,13 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
       <div className="report-preview">
         <div className="section-heading"><div><h2>Hasil Laporan</h2><p>{rows.length} transaksi.</p></div></div>
         <div className="table-wrap"><table>
-          <thead><tr>{rows[0] ? Object.keys(rows[0]).map((key) => <th key={key}>{key}</th>) : <th>Data</th>}</tr></thead>
-          <tbody>{rows.map((row, index) => <tr key={index}>{Object.keys(row).map((key) => <td key={key}>{row[key] ?? '-'}</td>)}</tr>)}{!rows.length ? <tr><td><div className="empty-state">Belum ada hasil. Pilih filter lalu tarik laporan.</div></td></tr> : null}</tbody>
+          <thead><tr>{reportHeaders.map((key) => <th key={key}>{key}</th>)}</tr></thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>{reportHeaders.map((key) => <td key={key}>{row[key] ?? '-'}</td>)}</tr>
+            ))}
+            {!rows.length ? <tr><td colSpan={reportHeaders.length}><div className="empty-state">Belum ada data untuk filter yang dipilih.</div></td></tr> : null}
+          </tbody>
         </table></div>
       </div>
     </div>
