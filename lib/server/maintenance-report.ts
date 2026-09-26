@@ -22,30 +22,45 @@ function formatDateTime(value: string | null) {
   return new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Jakarta' }).format(new Date(value))
 }
 
+const maintenanceReportColumns = [
+  'id','transaction_id','status','created_by','maintainer_user_id','maintenance_list','maintenance_snapshot',
+  'fleet_plat_number','fleet_snapshot','location','location_snapshot','created_at','accepted_at','in_progress_at',
+  'completed_at','canceled_at','canceled_from_status','cancellation_note','updated_at','maintenance_pic','requested_at',
+] as const
+
+function reportCellValue(column: string, value: unknown) {
+  if (value === null || value === undefined) return ''
+  if (typeof value === 'object') {
+    try { return JSON.stringify(value) } catch { return String(value) }
+  }
+  if (column.endsWith('_at') || column === 'created_at' || column === 'updated_at') {
+    return formatDateTime(String(value))
+  }
+  return String(value)
+}
+
 export async function queryMaintenanceReport({ from, to }: { from: string; to: string }) {
   const admin = createAdminClient()
   const { data, error } = await admin
     .from('ticketings')
-    .select('transaction_id, maintenance_list, location, fleet_plat_number, status, created_at, accepted_at, in_progress_at, completed_at, canceled_at, cancellation_note')
+    .select('*')
     .gte('created_at', from + 'T00:00:00+07:00')
     .lt('created_at', endExclusiveIso(to))
     .order('created_at', { ascending: true })
 
   if (error) throw new Error('Maintenance report query failed')
 
-  const rows = (data ?? []).map((ticket) => ({
-    'Transaction ID': ticket.transaction_id,
-    'Maintenance': ticket.maintenance_list,
-    'Location': ticket.location,
-    'Fleet': ticket.fleet_plat_number,
-    'Status': ticket.status,
-    'Created At': formatDateTime(ticket.created_at),
-    'Accepted At': formatDateTime(ticket.accepted_at),
-    'In Progress At': formatDateTime(ticket.in_progress_at),
-    'Completed At': formatDateTime(ticket.completed_at),
-    'Canceled At': formatDateTime(ticket.canceled_at),
-    'Cancellation Reason': ticket.cancellation_note,
-  }))
+  const rows = ((data ?? []) as unknown as Record<string, unknown>[]).map((ticket) => {
+    const row: Record<string, string> = {}
+    for (const column of maintenanceReportColumns) {
+      row[column] = reportCellValue(column, ticket[column])
+    }
+    return row
+  })
 
-  return { rows, csv: csvText(rows) }
+  const csvRows = rows.map((row) => Object.fromEntries(
+    maintenanceReportColumns.map((column) => [column, row[column]])
+  ))
+
+  return { rows, csv: csvText(csvRows) }
 }
