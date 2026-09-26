@@ -8959,3 +8959,314 @@ td select:focus,
   display: none !important;
   content: none !important;
 }
+
+
+/* =========================================================
+   DISPATCHER — UI/UX alignment with Controller
+   Same spacing, card surfaces, purple system, table rhythm
+   ========================================================= */
+
+.role-dispatcher .page-content {
+  max-width: 1600px !important;
+}
+
+.role-dispatcher .role-page {
+  width: 100%;
+}
+
+.role-dispatcher .page-heading {
+  margin-bottom: 0;
+}
+
+.role-dispatcher .role-page > * + * {
+  margin-top: 20px;
+}
+
+.role-dispatcher .role-page > .page-heading {
+  margin-bottom: 0;
+}
+
+.role-dispatcher .section-block {
+  margin-top: 0;
+}
+
+.role-dispatcher .metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px;
+}
+
+.role-dispatcher .metric-card {
+  min-height: 104px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.role-dispatcher .metric-card:hover {
+  border-color: #d5dde8;
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.role-dispatcher .dashboard-main-grid {
+  gap: 14px;
+}
+
+.role-dispatcher .data-table-card {
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.role-dispatcher .data-table-card .section-heading {
+  margin-bottom: 12px;
+}
+
+/* Create/preview workspaces */
+.role-dispatcher .task-create-workspace {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.role-dispatcher .task-create-intro,
+.role-dispatcher .task-create-flow-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.role-dispatcher .task-create-intro {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.role-dispatcher .task-create-intro strong,
+.role-dispatcher .task-create-flow-head strong {
+  color: var(--text);
+}
+
+.role-dispatcher .task-create-intro > span:last-child {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.role-dispatcher .task-create-flow-head {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.role-dispatcher .task-create-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.role-dispatcher .task-create-choice {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 92px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  box-shadow: none;
+}
+
+.role-dispatcher .task-create-choice:hover:not([aria-disabled="true"]) {
+  background: var(--theme-color-soft);
+  border-color: var(--theme-color-light);
+  color: var(--theme-color-dark);
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.role-dispatcher .task-create-choice[aria-disabled="true"] {
+  opacity: .65;
+  cursor: default;
+}
+
+.role-dispatcher .task-create-choice-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--theme-color-soft);
+  color: var(--theme-color-dark);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.role-dispatcher .task-create-choice strong {
+  display: block;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.role-dispatcher .task-create-choice small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.role-dispatcher .task-create-choice b {
+  color: var(--theme-color-dark);
+  font-size: 17px;
+}
+
+.role-dispatcher .task-create-form {
+  margin-top: 0;
+  gap: 14px;
+}
+
+.role-dispatcher .form-section + .form-section {
+  margin-top: 0;
+  padding-top: 14px;
+}
+
+.role-dispatcher .form-section-title {
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.role-dispatcher .selected-schedule-summary {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 2px 0 4px;
+  padding: 12px;
+  border: 1px solid var(--theme-color-light);
+  border-radius: 11px;
+  background: var(--theme-color-soft);
+}
+
+.role-dispatcher .selected-schedule-summary > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.role-dispatcher .selected-schedule-summary span {
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.role-dispatcher .selected-schedule-summary strong {
+  color: var(--theme-color-dark);
+  font-size: 10px;
+}
+
+/* Preview blocks use the same card language as Controller */
+.role-dispatcher .task-create-workspace + .metric-card,
+.role-dispatcher .metric-card.section-block {
+  margin-top: 0;
+}
+
+.role-dispatcher .task-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.role-dispatcher .task-summary-grid > div {
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+
+.role-dispatcher .task-summary-grid span {
+  color: var(--muted);
+}
+
+.role-dispatcher .task-summary-grid strong {
+  color: var(--text);
+}
+
+/* Maintenance create / preview */
+.role-dispatcher .section-grid.two-column {
+  gap: 14px;
+}
+
+.role-dispatcher .section-grid.two-column > .metric-card {
+  min-height: 0;
+  padding: 18px;
+}
+
+.role-dispatcher .section-grid.two-column .card-title {
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.role-dispatcher .section-grid.two-column .compact-form strong {
+  color: var(--text);
+}
+
+/* Dispatcher tables keep the same rhythm as Controller tables */
+.role-dispatcher .table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.role-dispatcher table {
+  min-width: 760px;
+}
+
+.role-dispatcher th,
+.role-dispatcher td {
+  vertical-align: middle;
+}
+
+.role-dispatcher .empty-state {
+  min-height: 140px;
+}
+
+@media (max-width: 980px) {
+  .role-dispatcher .task-create-choice-grid,
+  .role-dispatcher .section-grid.two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .role-dispatcher .selected-schedule-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .role-dispatcher .task-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .role-dispatcher .metric-grid,
+  .role-dispatcher .selected-schedule-summary,
+  .role-dispatcher .task-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .role-dispatcher .task-create-workspace,
+  .role-dispatcher .data-table-card,
+  .role-dispatcher .metric-card {
+    padding: 14px;
+  }
+}
