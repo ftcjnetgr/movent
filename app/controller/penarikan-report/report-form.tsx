@@ -48,26 +48,51 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
   async function download(format: 'csv' | 'xlsx') {
     setLoading(true)
     setMessage('')
+
     const search = new URLSearchParams(params)
-    search.set('format', format)
+    search.set('format', 'json')
     const endpoint = (maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + search.toString()
 
     try {
       const response = await fetch(endpoint, { credentials: 'include' })
+      const data = await response.json()
+
       if (!response.ok) {
-        let errorMessage = 'Report belum berhasil dibuat.'
-        try {
-          const data = await response.json()
-          errorMessage = data.error ?? errorMessage
-        } catch {}
-        setMessage(errorMessage)
+        setMessage(data.error ?? 'Report belum berhasil dibuat.')
         return
       }
 
-      const blob = await response.blob()
-      const contentDisposition = response.headers.get('Content-Disposition') ?? ''
-      const fileNameMatch = contentDisposition.match(/filename="([^"]+)"/i)
-      const fileName = fileNameMatch?.[1] ?? `movent-report.${format}`
+      const exportRows = Array.isArray(data.rows) ? data.rows : []
+      if (!exportRows.length) {
+        setMessage('Belum ada data laporan untuk filter yang dipilih.')
+        return
+      }
+
+      let blob: Blob
+      const fileName = maintenanceOnly
+        ? `movent-maintenance-report-${from}-${to}.${format}`
+        : `movent-operational-report-${type.toLowerCase()}-${from}-${to}.${format}`
+
+      if (format === 'csv') {
+        const headers = Object.keys(exportRows[0])
+        const escape = (value: unknown) => {
+          const text = String(value ?? '')
+          return '"' + text.replaceAll('"', '""') + '"'
+        }
+        const csv = [
+          headers.map(escape).join(','),
+          ...exportRows.map((row: Row) => headers.map((header) => escape(row[header])).join(',')),
+        ].join('\\r\\n')
+        blob = new Blob(['\\uFEFF', csv], { type: 'text/csv;charset=utf-8' })
+      } else {
+        const XLSX = await import('sheetjs_xlsx')
+        const worksheet = XLSX.utils.json_to_sheet(exportRows)
+        const workbook = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Laporan')
+        const output = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+        blob = new Blob([output], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      }
+
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
