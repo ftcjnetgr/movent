@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
+import DatabaseEditPreview from '@/components/database-edit-preview'
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
     Controller: 'Controller',
@@ -52,7 +53,7 @@ export default async function UserManagementPage() {
         </div>
       </div>
 
-      <section className="data-table-card">
+      <section className="data-table-card user-management-table-card">
         <div className="table-wrap">
           <table>
             <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Auth</th><th>Percobaan Login Gagal</th><th>Aksi</th></tr></thead>
@@ -69,9 +70,8 @@ export default async function UserManagementPage() {
                   <td>{user.failed_login_attempts}</td>
                   <td>
                     <div className="admin-row-actions">
-                    <details>
-                      <summary className="link-button">Edit</summary>
-                      <form action={updateUserProfileFormAction} className="data-form compact-form" style={{marginTop:12}}>
+                    <DatabaseEditPreview>
+                      <form action={updateUserProfileFormAction} className="data-form compact-form database-action-form">
                         <input type="hidden" name="id" value={user.id} />
                         <label>Username<input name="username" defaultValue={user.username} required /></label>
                         <label>Email<input name="email" type="email" defaultValue={user.email} required /></label>
@@ -81,7 +81,7 @@ export default async function UserManagementPage() {
                         <label>Role<select name="role" defaultValue={user.role} required>{['Controller','Dispatcher','Operation','Executor','Maintainer','Super User'].map((role) => <option key={role}>{role}</option>)}</select></label>
                         <button type="submit">Simpan perubahan</button>
                       </form>
-                    </details>
+                    </DatabaseEditPreview>
                     <div className="admin-row-action-secondary admin-user-lock-actions">
                       <form action={lockUserFormAction}>
                         <input type="hidden" name="id" value={user.id} />
