@@ -62,7 +62,7 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
     setShowDownloadOptions(false)
   }
 
-  function download(format: 'csv' | 'xlsx') {
+  async function download(format: 'csv' | 'xlsx') {
     const headers = reportHeaders
     let blob: Blob
 
