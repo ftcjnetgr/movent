@@ -9270,3 +9270,47 @@ td select:focus,
     padding: 14px;
   }
 }
+
+
+/* Dispatcher home creation chooser follows the same neutral card treatment */
+.role-dispatcher .creation-choice-card {
+  min-height: 92px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.role-dispatcher .creation-choice-card:hover {
+  background: var(--theme-color-soft);
+  border-color: var(--theme-color-light);
+  color: var(--theme-color-dark);
+  box-shadow: none;
+}
+
+.role-dispatcher .creation-choice-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: var(--theme-color-soft);
+  color: var(--theme-color-dark);
+}
+
+.role-dispatcher .creation-choice-card strong {
+  color: var(--text);
+}
+
+.role-dispatcher .creation-choice-card small {
+  color: var(--muted);
+}
+
+.role-dispatcher .creation-choice-card b {
+  color: var(--theme-color-dark);
+}
+
+.role-dispatcher .creation-flow-toolbar {
+  margin-bottom: 14px;
+  padding: 0;
+}
