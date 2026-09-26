@@ -20,7 +20,6 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
   const [destination, setDestination] = useState('')
   const [executorNik, setExecutorNik] = useState('')
   const [rows, setRows] = useState<Row[]>([])
-  const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [hasPulled, setHasPulled] = useState(false)
   const [showDownloadOptions, setShowDownloadOptions] = useState(false)
@@ -46,20 +45,30 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
 
   async function preview() {
     setLoading(true)
-    setMessage('')
-    const response = await fetch((maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + params.toString())
-    const data = await response.json()
-    setLoading(false)
-    if (!response.ok) {
+    try {
+      const response = await fetch(
+        (maintenanceOnly ? '/api/reports/maintenance?' : '/api/reports/operational?') + params.toString(),
+        { credentials: 'include' },
+      )
+      const data = await response.json()
+
+      if (!response.ok) {
+        setRows([])
+        setHasPulled(false)
+        setShowDownloadOptions(false)
+        return
+      }
+
+      setRows(Array.isArray(data.rows) ? data.rows : [])
+      setHasPulled(true)
+      setShowDownloadOptions(false)
+    } catch {
       setRows([])
       setHasPulled(false)
       setShowDownloadOptions(false)
-      setMessage(data.error ?? 'Hmm, laporannya belum bisa ditarik. Coba cek lagi, ya.')
-      return
+    } finally {
+      setLoading(false)
     }
-    setRows(data.rows ?? [])
-    setHasPulled(true)
-    setShowDownloadOptions(false)
   }
 
   async function download(format: 'csv' | 'xlsx') {
@@ -144,11 +153,18 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
           {!maintenanceOnly ? <label>Destinasi<select value={destination} onChange={(event) => { setDestination(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{destinations.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
           {!maintenanceOnly ? <label>Executor<select value={executorNik} onChange={(event) => { setExecutorNik(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{executors.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
         </div>
-        {message ? <p className="form-error" role="alert">{message}</p> : null}
         <div className="report-actions">
-          <button type="button" onClick={preview} disabled={loading || !from || !to}>{loading ? 'Lagi narik...' : 'Tarik laporan'}</button>
+          <button type="button" onClick={preview} disabled={loading || !from || !to}>
+            {loading ? 'Lagi narik...' : 'Tarik laporan'}
+          </button>
+        </div>
+      </div>
+
+      <div className="report-preview">
+        <div className="section-heading report-result-heading">
+          <div><h2>Hasil Laporan</h2><p>{rows.length} transaksi.</p></div>
           {hasPulled ? (
-            <>
+            <div className="report-result-download">
               <button
                 type="button"
                 className="report-download-button"
@@ -157,19 +173,14 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
                 Unduh
               </button>
               {showDownloadOptions ? (
-                <>
+                <div className="report-download-options">
                   <button type="button" className="report-download-button" onClick={() => download('csv')}>CSV</button>
                   <button type="button" className="report-download-button" onClick={() => download('xlsx')}>XLSX</button>
-                </>
+                </div>
               ) : null}
-            </>
+            </div>
           ) : null}
         </div>
-        <p className="muted">Hasil report yang diunduh tetap menggunakan Bahasa Inggris formal.</p>
-      </div>
-
-      <div className="report-preview">
-        <div className="section-heading"><div><h2>Hasil Laporan</h2><p>{rows.length} transaksi.</p></div></div>
         <div className="table-wrap"><table>
           <thead><tr>{reportHeaders.map((key) => <th key={key}>{key}</th>)}</tr></thead>
           <tbody>
