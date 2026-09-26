@@ -91,3 +91,14 @@ export async function updateUserProfileAction(formData: FormData): Promise<Resul
   revalidatePath('/super-user/pengelolaan-pengguna')
   return { success: 'Data pengguna berhasil disimpan.' }
 }
+
+
+export async function addUserAction(formData: FormData): Promise<Result> {
+  try { await requireSuperUser() } catch { return { error: 'Akses tidak tersedia.' } }
+  return { error: 'Fitur tambah user belum tersedia.' }
+}
+
+export async function importUsersAction(formData: FormData): Promise<Result> {
+  try { await requireSuperUser() } catch { return { error: 'Akses tidak tersedia.' } }
+  return { error: 'Fitur import user belum tersedia.' }
+}
