@@ -159,7 +159,7 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
       )}
       <div className="report-filter-card">
         <div className="report-filter-heading"><div><h2>Filter Laporan</h2><p>Rentang waktu maksimal 7 hari.</p></div></div>
-        <div className="report-filter-fields">
+        <div className={`report-filter-fields ${maintenanceOnly ? "is-maintenance" : "is-operational"}`}>
           <label>Dari tanggal<input type="date" value={from} onChange={(event) => { setFrom(event.target.value); invalidatePulledReport() }} /></label>
           <label>Sampai tanggal<input type="date" value={to} onChange={(event) => { setTo(event.target.value); invalidatePulledReport() }} /></label>
           {!maintenanceOnly ? <label>Titik mulai<select value={startPoint} onChange={(event) => { setStartPoint(event.target.value); invalidatePulledReport() }}><option value="">Semua</option>{startPoints.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label> : null}
