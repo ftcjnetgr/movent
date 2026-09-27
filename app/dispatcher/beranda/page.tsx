@@ -2,6 +2,7 @@ import DispatcherCreationHub from '@/components/dispatcher-creation-hub'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
+import StatusBadge from '@/components/status-badge'
 
 function statusLabel(status: string) {
   return ({ Requested:'Diajukan', Confirmed:'Dikonfirmasi', Assigned:'Ditugaskan', Driving:'Berangkat', Completed:'Selesai', Dibatalkan:'Dibatalkan' } as Record<string,string>)[status] ?? status
@@ -53,7 +54,7 @@ export default async function DispatcherBerandaPage() {
         <div className="data-table-card">
           <div className="section-heading"><div><h2>Tugas Terbaru</h2><p>Penugasan yang kamu buat.</p></div></div>
           <div className="table-wrap"><table><thead><tr><th>ID</th><th>Jenis</th><th>Rute</th><th>Armada</th><th>Executor</th><th>Status</th></tr></thead><tbody>
-            {(tasks ?? []).map(task => <tr key={task.transaction_id}><td><strong>{task.transaction_id}</strong></td><td>{task.task_type}</td><td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td><td>{task.fleet_snapshot?.plat_number ?? '-'}</td><td>{task.executor_snapshot?.full_name ?? '-'}</td><td><span className={'status-badge status-'+task.status.toLowerCase().replaceAll(' ','-')}>{statusLabel(task.status)}</span></td></tr>)}
+            {(tasks ?? []).map(task => <tr key={task.transaction_id}><td><strong>{task.transaction_id}</strong></td><td>{task.task_type}</td><td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td><td>{task.fleet_snapshot?.plat_number ?? '-'}</td><td>{task.executor_snapshot?.full_name ?? '-'}</td><td><StatusBadge status={task.status} label={statusLabel(task.status)} /></td></tr>)}
             {!(tasks ?? []).length ? <tr><td colSpan={6}><div className="empty-state">Belum ada penugasan yang kamu buat.</div></td></tr> : null}
           </tbody></table></div>
         </div>
