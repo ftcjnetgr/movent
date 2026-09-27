@@ -8972,3 +8972,53 @@ td select:focus,
 .status-badge svg {
   flex: 0 0 auto;
 }
+
+
+/* Maintainer sidebar follows Dispatcher active/inactive treatment */
+.role-maintainer .sidebar .nav-link:not(.active) {
+  background: var(--selection-purple-light) !important;
+  color: var(--selection-purple-dark) !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+}
+
+.role-maintainer .sidebar .nav-link:not(.active):hover {
+  background: var(--selection-purple-light) !important;
+  color: var(--selection-purple-dark) !important;
+}
+
+.role-maintainer .sidebar .nav-link.active {
+  background: var(--selection-purple-dark) !important;
+  color: #fff !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+}
+
+.role-maintainer .sidebar .nav-link.active .nav-icon,
+.role-maintainer .sidebar .nav-link.active .nav-icon svg,
+.role-maintainer .sidebar .nav-link.active .nav-icon svg * {
+  color: #fff !important;
+}
+
+.role-maintainer .sidebar .nav-link:not(.active) .nav-icon,
+.role-maintainer .sidebar .nav-link:not(.active) .nav-icon svg,
+.role-maintainer .sidebar .nav-link:not(.active) .nav-icon svg * {
+  color: var(--selection-purple-dark) !important;
+}
+
+/* Maintainer has one Alert destination, so it behaves as a direct page link. */
+.role-maintainer .sidebar .nav-link-direct {
+  background: transparent;
+  color: #718095;
+}
+
+.role-maintainer .sidebar .nav-link-direct.active {
+  background: var(--selection-purple-dark) !important;
+  color: #fff !important;
+}
+
+.role-maintainer .sidebar .nav-link-direct.active .nav-icon,
+.role-maintainer .sidebar .nav-link-direct.active .nav-icon svg,
+.role-maintainer .sidebar .nav-link-direct.active .nav-icon svg * {
+  color: #fff !important;
+}
