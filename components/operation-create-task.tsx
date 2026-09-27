@@ -130,7 +130,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
 
         {state.preview ? (
           <div className="metric-card compact-form" style={{ marginTop: 16 }}>
-            <div className="card-title">Preview Penugasan dan Hasil SJ</div>
+            <div className="card-title">Pratinjau Penugasan dan Hasil SJ</div>
             <div className="task-summary-grid">
               <div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div>
               <div><span>STD</span><strong>{timeValue(state.preview.std)}</strong></div>
@@ -162,7 +162,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
               {confirmState.error ? <p className="form-error" role="alert">{confirmState.error}</p> : null}
               {confirmState.success ? <p className="form-success" role="status">{confirmState.success}</p> : null}
               <div className="inline-actions">
-                <button type="button" className="secondary-button" onClick={sharePreview}>Share</button>
+                <button type="button" className="secondary-button" onClick={sharePreview}>Bagikan</button>
                 <button type="submit" disabled={confirmPending}>{confirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Penugasan'}</button>
               </div>
             </form>
