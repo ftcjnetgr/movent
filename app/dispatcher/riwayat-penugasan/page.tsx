@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
+import StatusBadge from '@/components/status-badge'
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Diajukan',
@@ -48,7 +49,7 @@ export default async function DispatcherAssignmentHistoryPage() {
                   <td>{task.start_point ?? '-'} → {task.destination ?? '-'}</td>
                   <td>{task.executor_snapshot?.full_name ?? task.external_executor ?? '-'}</td>
                   <td>{task.fleet_snapshot?.plat_number ?? task.external_fleet ?? task.fleet_ownership ?? '-'}</td>
-                  <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(task.status)}</span></td>
+                  <td><StatusBadge status={task.status} label={statusLabel(task.status)} /></td>
                   <td>
                     {task.fleet_ownership === 'Non-TGR'
                       ? (profile.role === 'Super User' && task.status !== 'Completed' && task.status !== 'Canceled' ? (
