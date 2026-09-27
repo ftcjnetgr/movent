@@ -31,7 +31,7 @@ function jakartaTimestamp(time: string) {
     day: '2-digit',
   }).format(now)
 
-  return `\${date}T\${time}:00+07:00`
+  return `${date}T${time}:00+07:00`
 }
 
 async function validate(formData: FormData) {
