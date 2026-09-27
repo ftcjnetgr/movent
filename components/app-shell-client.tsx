@@ -40,14 +40,10 @@ const navByRole: Record<string, NavGroup[]> = {
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/executor/profil', icon: 'user' }] },
   ],
   Maintainer: [
-    { label: 'Alert', icon: 'bell', items: [
-      { label: 'Penugasan', href: '/maintainer/alert/penugasan', icon: 'clipboard' },
-      { label: 'Maintenance', href: '/maintainer/alert/ticketing-maintenance', icon: 'wrench' },
-    ] },
-    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
-    { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
+    { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/maintainer/alert/ticketing-maintenance', icon: 'bell' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/maintainer/profil', icon: 'user' }] },
+    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
   ],
   Operation: [
     { label: 'Alert', icon: 'bell', items: [
