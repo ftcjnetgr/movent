@@ -42,6 +42,7 @@ const navByRole: Record<string, NavGroup[]> = {
   Maintainer: [
     { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/maintainer/alert/ticketing-maintenance', icon: 'bell' }] },
     { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
+    { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
     { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/maintainer/profil', icon: 'user' }] },
   ],
