@@ -89,7 +89,7 @@ const superUserNav: NavGroup[] = [
       { label: 'Executor', href: '/super-user/pengelolaan-database?db=executors', icon: 'user' },
       { label: 'Lokasi', href: '/super-user/pengelolaan-database?db=locations', icon: 'location' },
       { label: 'Produk', href: '/super-user/pengelolaan-database?db=products', icon: 'box' },
-      { label: 'List Maintenance', href: '/super-user/pengelolaan-database?db=maintenance_lists', icon: 'wrench' },
+      { label: 'Daftar Maintenance', href: '/super-user/pengelolaan-database?db=maintenance_lists', icon: 'wrench' },
       { label: 'Jadwal', href: '/super-user/pengelolaan-database?db=schedules', icon: 'calendar' },
     ],
   },
