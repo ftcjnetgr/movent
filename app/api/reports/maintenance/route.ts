@@ -20,14 +20,14 @@ export async function GET(request: NextRequest) {
   const to = params.get('to') ?? ''
 
   if (!validDate(from) || !validDate(to)) {
-    return NextResponse.json({ error: 'Periode report belum benar.' }, { status: 400 })
+    return NextResponse.json({ error: 'Periode laporan belum benar.' }, { status: 400 })
   }
 
   const fromDate = new Date(from + 'T00:00:00+07:00')
   const toDate = new Date(to + 'T00:00:00+07:00')
   const daysInclusive = Math.floor((toDate.getTime() - fromDate.getTime()) / 86400000) + 1
   if (daysInclusive < 1 || daysInclusive > 7) {
-    return NextResponse.json({ error: 'Rentang waktu maksimal 7 hari.' }, { status: 400 })
+    return NextResponse.json({ error: 'Rentang waktu laporan maksimal 7 hari.' }, { status: 400 })
   }
 
   try {
@@ -43,6 +43,6 @@ export async function GET(request: NextRequest) {
     }
     return NextResponse.json({ rows: report.rows })
   } catch {
-    return NextResponse.json({ error: 'Report belum berhasil dibuat.' }, { status: 500 })
+    return NextResponse.json({ error: 'Laporan belum berhasil dibuat.' }, { status: 500 })
   }
 }
