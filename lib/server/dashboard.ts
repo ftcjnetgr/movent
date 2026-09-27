@@ -110,34 +110,10 @@ function canceledFromTimestamp(task: TaskRow) {
 
 export async function getDashboardData(profile: AppProfile, dateFrom?: string, dateTo?: string) {
   const admin = createAdminClient()
-  const taskSelect = [
-    'transaction_id',
-    'created_at',
-    'status',
-    'source_type',
-    'task_type',
-    'created_by',
-    'fleet_ownership',
-    'schedule_id',
-    'start_point',
-    'destination',
-    'std',
-    'sta',
-    'assigned_at',
-    'accepted_at',
-    'driving_at',
-    'completed_at',
-    'external_departure_at',
-    'external_arrival_at',
-    'canceled_at',
-    'executor_snapshot',
-    'fleet_snapshot',
-  ].join(', ')
-
   const [{ data: allTasks }, { data: schedules }, { data: ticketings }] = await Promise.all([
     admin
       .from('tasks')
-      .select(taskSelect)
+      .select('transaction_id, created_at, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at, executor_snapshot, fleet_snapshot')
       .order('created_at', { ascending: false }),
     admin
       .from('schedules')
