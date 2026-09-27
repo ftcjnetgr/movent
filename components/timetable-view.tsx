@@ -146,7 +146,7 @@ function scheduleDensityStyle(total: number) {
 function renderScheduleDensityLegend() {
   return (
     <div className="schedule-density-legend" aria-label="Keterangan jumlah schedule">
-      <span className="schedule-density-legend-title">Jumlah schedule</span>
+      <span className="schedule-density-legend-title">Jumlah jadwal</span>
       {scheduleDensityPalette.map((_, index) => {
         const count = index + 1
         return (
@@ -616,18 +616,18 @@ export default function TimetableView({
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
-          <span>Schedule</span>
+          <span>Jadwal</span>
           {renderScheduleDensityLegend()}
         </div>
         {view === 'database' ? renderPlanTable(activeRows as Schedule[]) : renderLiveTable(activeRows as Task[])}
-        {!activeRows.length ? <div className="schedule-empty">Belum ada schedule yang cocok.</div> : null}
+        {!activeRows.length ? <div className="schedule-empty">Belum ada jadwal yang cocok.</div> : null}
       </section>
       {previewSchedules.length ? (
         <div className="schedule-preview-backdrop" role="presentation" onMouseDown={closeSchedulePreview}>
           <div className="schedule-preview-modal" role="dialog" aria-modal="true" aria-label="Preview schedule" onMouseDown={(event) => event.stopPropagation()}>
             <div className="schedule-preview-heading">
               <div>
-                <h2>Preview Schedule</h2>
+                <h2>Pratinjau Jadwal</h2>
                 <p>{previewSchedules.length} schedule dipilih</p>
               </div>
               <button type="button" className="schedule-preview-close" onClick={closeSchedulePreview} aria-label="Tutup">×</button>
@@ -635,7 +635,7 @@ export default function TimetableView({
             <div className="schedule-preview-list">
               {previewSchedules.map((item, index) => (
                 <div className="schedule-preview-item" key={item.schedule_id + "-" + index}>
-                  <div><span>Schedule ID</span><strong>{item.schedule_id}</strong></div>
+                  <div><span>ID Jadwal</span><strong>{item.schedule_id}</strong></div>
                   <div><span>Start Point</span><strong>{item.start_point || '-'}</strong></div>
                   <div><span>Destination</span><strong>{item.destination || '-'}</strong></div>
                   <div><span>{previewMode === 'live' ? 'ATD' : 'STD'}</span><strong>{timeValue(item.std)}</strong></div>
