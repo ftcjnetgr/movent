@@ -210,12 +210,18 @@ export async function confirmNonTgrDepartureByOperationAction(_state: State, for
     ? await query.maybeSingle()
     : await query.eq('created_by', profile.id).maybeSingle()
 
-  if (!task) return { error: 'Tugas Non-TGR tidak ditemukan atau sudah diproses.' }
+  if (!task) {
+    return { error: 'Tugas Non-TGR tidak ditemukan atau sudah diproses.' }
+  }
 
-  const { error } = await admin.from('tasks').update({
-    status: 'Driving',
-    external_departure_at: timestamp,
-  }).eq('id', task.id).eq('status', 'Assigned')
+  const { error } = await admin
+    .from('tasks')
+    .update({
+      status: 'Driving',
+      external_departure_at: timestamp,
+    })
+    .eq('id', task.id)
+    .eq('status', 'Assigned')
 
   if (error) return { error: 'Konfirmasi berangkat belum berhasil.' }
 
