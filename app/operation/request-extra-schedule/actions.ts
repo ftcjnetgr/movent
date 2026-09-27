@@ -1,24 +1,285 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
-type Preview={transactionId?:string;startPoint:string;destination:string;std:string;sta:string}
-type State={error?:string;success?:string;transactionId?:string;preview?:Preview}
-
-function jakartaTimestamp(time:string){if(!/^\d{2}:\d{2}$/.test(time))return null;const now=new Date();const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);return `${date}T${time}:00+07:00`}
-
-async function validate(formData:FormData){
- const startPoint=String(formData.get('startPoint')??'').trim(),destination=String(formData.get('destination')??'').trim(),std=String(formData.get('std')??'').trim(),sta=String(formData.get('sta')??'').trim()
- if(!startPoint||!destination||!std||!sta)return {error:'Start Point, Destinasi, STD, dan STA perlu diisi dulu, ya.'} as const
- const stdTimestamp=std.includes('T')?std:jakartaTimestamp(std),staTimestamp=sta.includes('T')?sta:jakartaTimestamp(sta);if(!stdTimestamp||!staTimestamp)return {error:'Format STD atau STA belum benar.'} as const;if(new Date(staTimestamp).getTime()<=new Date(stdTimestamp).getTime())return {error:'STA harus lebih besar dari STD.'} as const
- const admin=createAdminClient();const {data:transactionId,error:transactionError}=await admin.rpc('movent_next_transaction_id');if(transactionError||!transactionId)return {error:'ID transaksi belum berhasil dibuat.'} as const;const {data:locations}=await admin.from('locations').select('location, grouping, status').eq('status','Active').in('location',[startPoint,destination]);const names=new Set((locations??[]).map(x=>x.location));if(!names.has(startPoint)||!names.has(destination))return {error:'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.'} as const
- return {value:{transactionId:String(transactionId),startPoint,destination,std:stdTimestamp,sta:staTimestamp} satisfies Preview} as const
+type Preview = {
+  transactionId?: string
+  startPoint: string
+  destination: string
+  std: string
+  sta: string
 }
 
-export async function createExtraScheduleAction(_state:State,formData:FormData):Promise<State>{const profile=await getCurrentProfile();if(!['Operation','Super User'].includes(profile.role))return{error:'Kamu belum punya akses ke bagian ini.'};const v=await validate(formData);if('error'in v)return v;return{success:'Preview request sudah siap. Periksa sebelum konfirmasi.',preview:v.value}}
+type State = {
+  error?: string
+  success?: string
+  transactionId?: string
+  preview?: Preview
+}
 
-export async function confirmExtraScheduleAction(_state:State,formData:FormData):Promise<State>{const profile=await getCurrentProfile();if(!['Operation','Super User'].includes(profile.role))return{error:'Kamu belum punya akses ke bagian ini.'};const suppliedTransactionId=String(formData.get('transactionId')??'').trim(),startPoint=String(formData.get('startPoint')??'').trim(),destination=String(formData.get('destination')??'').trim(),std=String(formData.get('std')??'').trim(),sta=String(formData.get('sta')??'').trim();if(!suppliedTransactionId)return{error:'ID transaksi preview belum tersedia. Silakan buat preview request terlebih dahulu.'};if(!startPoint||!destination||!std||!sta)return{error:'Data request belum lengkap.'};const stdTimestamp=std.includes('T')?std:jakartaTimestamp(std),staTimestamp=sta.includes('T')?sta:jakartaTimestamp(sta);if(!stdTimestamp||!staTimestamp)return{error:'Format STD atau STA belum benar.'};if(new Date(staTimestamp).getTime()<=new Date(stdTimestamp).getTime())return{error:'STA harus lebih besar dari STD.'};const admin=createAdminClient();const transactionId = suppliedTransactionId;const{data:locations}=await admin.from('locations').select('location').eq('status','Active').in('location',[startPoint,destination]);const names=new Set((locations??[]).map(x=>x.location));if(!names.has(startPoint)||!names.has(destination))return{error:'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.'};const{data:locationRows}=await admin.from('locations').select('location,grouping,status').eq('status','Active').in('location',[startPoint,destination]);const startLocation=locationRows?.find((row)=>row.location===startPoint);const destinationLocation=locationRows?.find((row)=>row.location===destination);if(!startLocation||!destinationLocation)return{error:'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.'};const{data:inserted,error}=await admin.from('tasks').insert({transaction_id:transactionId,source_type:'Extra Schedule',task_type:'Extra Schedule',status:'Requested',created_by:profile.id,requested_by:profile.id,start_point:startPoint,start_point_snapshot:startLocation,destination,destination_snapshot:destinationLocation,std:stdTimestamp,sta:staTimestamp,requested_at:new Date().toISOString()}).select('transaction_id').single();if(error||!inserted){const{data:existing}=await admin.from('tasks').select('transaction_id').eq('transaction_id',transactionId).maybeSingle();if(existing)return{success:`Request ${existing.transaction_id} sudah diajukan.`,transactionId:existing.transaction_id};return{error:'Request Extra Schedule belum berhasil dibuat. Coba lagi, ya.'}};revalidatePath('/operation/beranda');revalidatePath('/operation/riwayat-permintaan');revalidatePath('/dispatcher/extra-schedule');revalidatePath('/controller/beranda');return{success:`Request ${transactionId} berhasil diajukan.`,transactionId}}
+function jakartaTimestamp(time: string) {
+  if (!/^\d{2}:\d{2}$/.test(time)) return null
 
-export async function cancelExtraScheduleAction(formData:FormData){const profile=await getCurrentProfile();const transactionId=String(formData.get('transactionId')??'').trim(),note=String(formData.get('note')??'').trim();if(!transactionId||!note)return{error:'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.'};if(!['Operation','Super User'].includes(profile.role))return{error:'Kamu belum punya akses ke bagian ini.'};const admin=createAdminClient();let q=admin.from('tasks').select('id,status,requested_by').eq('transaction_id',transactionId).eq('source_type','Extra Schedule').eq('status','Requested');if(profile.role!=='Super User')q=q.eq('requested_by',profile.id);const{data:task}=await q.maybeSingle();if(!task)return{error:'Request tidak ditemukan atau sudah tidak bisa dibatalkan.'};const{error}=await admin.from('tasks').update({status:'Canceled',canceled_at:new Date().toISOString(),canceled_from_status:'Requested',cancellation_note:note}).eq('id',task.id).eq('status','Requested');if(error)return{error:'Request belum berhasil dibatalkan. Coba lagi, ya.'};revalidatePath('/operation/riwayat-permintaan');revalidatePath('/dispatcher/extra-schedule')}
+  const now = new Date()
+  const date = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now)
+
+  return `\${date}T\${time}:00+07:00`
+}
+
+async function validate(formData: FormData) {
+  const startPoint = String(formData.get('startPoint') ?? '').trim()
+  const destination = String(formData.get('destination') ?? '').trim()
+  const std = String(formData.get('std') ?? '').trim()
+  const sta = String(formData.get('sta') ?? '').trim()
+
+  if (!startPoint || !destination || !std || !sta) {
+    return {
+      error: 'Start Point, Destinasi, STD, dan STA perlu diisi dulu, ya.',
+    } as const
+  }
+
+  const stdTimestamp = std.includes('T') ? std : jakartaTimestamp(std)
+  const staTimestamp = sta.includes('T') ? sta : jakartaTimestamp(sta)
+
+  if (!stdTimestamp || !staTimestamp) {
+    return { error: 'Format STD atau STA belum benar.' } as const
+  }
+
+  if (new Date(staTimestamp).getTime() <= new Date(stdTimestamp).getTime()) {
+    return { error: 'STA harus lebih besar dari STD.' } as const
+  }
+
+  const admin = createAdminClient()
+  const { data: transactionId, error: transactionError } =
+    await admin.rpc('movent_next_transaction_id')
+
+  if (transactionError || !transactionId) {
+    return { error: 'ID transaksi belum berhasil dibuat.' } as const
+  }
+
+  const { data: locations } = await admin
+    .from('locations')
+    .select('location, grouping, status')
+    .eq('status', 'Active')
+    .in('location', [startPoint, destination])
+
+  const names = new Set((locations ?? []).map((location) => location.location))
+
+  if (!names.has(startPoint) || !names.has(destination)) {
+    return {
+      error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.',
+    } as const
+  }
+
+  return {
+    value: {
+      transactionId: String(transactionId),
+      startPoint,
+      destination,
+      std: stdTimestamp,
+      sta: staTimestamp,
+    } satisfies Preview,
+  } as const
+}
+
+export async function createExtraScheduleAction(
+  _state: State,
+  formData: FormData,
+): Promise<State> {
+  const profile = await getCurrentProfile()
+
+  if (!['Operation', 'Super User'].includes(profile.role)) {
+    return { error: 'Kamu belum punya akses ke bagian ini.' }
+  }
+
+  const value = await validate(formData)
+
+  if ('error' in value) {
+    return value
+  }
+
+  return {
+    success: 'Preview request sudah siap. Periksa sebelum konfirmasi.',
+    preview: value.value,
+  }
+}
+
+export async function confirmExtraScheduleAction(
+  _state: State,
+  formData: FormData,
+): Promise<State> {
+  const profile = await getCurrentProfile()
+
+  if (!['Operation', 'Super User'].includes(profile.role)) {
+    return { error: 'Kamu belum punya akses ke bagian ini.' }
+  }
+
+  const suppliedTransactionId = String(formData.get('transactionId') ?? '').trim()
+  const startPoint = String(formData.get('startPoint') ?? '').trim()
+  const destination = String(formData.get('destination') ?? '').trim()
+  const std = String(formData.get('std') ?? '').trim()
+  const sta = String(formData.get('sta') ?? '').trim()
+
+  if (!suppliedTransactionId) {
+    return {
+      error: 'ID transaksi preview belum tersedia. Silakan buat preview request terlebih dahulu.',
+    }
+  }
+
+  if (!startPoint || !destination || !std || !sta) {
+    return { error: 'Data request belum lengkap.' }
+  }
+
+  const stdTimestamp = std.includes('T') ? std : jakartaTimestamp(std)
+  const staTimestamp = sta.includes('T') ? sta : jakartaTimestamp(sta)
+
+  if (!stdTimestamp || !staTimestamp) {
+    return { error: 'Format STD atau STA belum benar.' }
+  }
+
+  if (new Date(staTimestamp).getTime() <= new Date(stdTimestamp).getTime()) {
+    return { error: 'STA harus lebih besar dari STD.' }
+  }
+
+  const admin = createAdminClient()
+  const transactionId = suppliedTransactionId
+
+  const { data: locations } = await admin
+    .from('locations')
+    .select('location')
+    .eq('status', 'Active')
+    .in('location', [startPoint, destination])
+
+  const names = new Set((locations ?? []).map((location) => location.location))
+
+  if (!names.has(startPoint) || !names.has(destination)) {
+    return {
+      error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.',
+    }
+  }
+
+  const { data: locationRows } = await admin
+    .from('locations')
+    .select('location,grouping,status')
+    .eq('status', 'Active')
+    .in('location', [startPoint, destination])
+
+  const startLocation = locationRows?.find((row) => row.location === startPoint)
+  const destinationLocation = locationRows?.find(
+    (row) => row.location === destination,
+  )
+
+  if (!startLocation || !destinationLocation) {
+    return {
+      error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.',
+    }
+  }
+
+  const { data: inserted, error } = await admin
+    .from('tasks')
+    .insert({
+      transaction_id: transactionId,
+      source_type: 'Extra Schedule',
+      task_type: 'Extra Schedule',
+      status: 'Requested',
+      created_by: profile.id,
+      requested_by: profile.id,
+      start_point: startPoint,
+      start_point_snapshot: startLocation,
+      destination,
+      destination_snapshot: destinationLocation,
+      std: stdTimestamp,
+      sta: staTimestamp,
+      requested_at: new Date().toISOString(),
+    })
+    .select('transaction_id')
+    .single()
+
+  if (error || !inserted) {
+    const { data: existing } = await admin
+      .from('tasks')
+      .select('transaction_id')
+      .eq('transaction_id', transactionId)
+      .maybeSingle()
+
+    if (existing) {
+      return {
+        success: `Request ${existing.transaction_id} sudah diajukan.`,
+        transactionId: existing.transaction_id,
+      }
+    }
+
+    return {
+      error: 'Request Extra Schedule belum berhasil dibuat. Coba lagi, ya.',
+    }
+  }
+
+  revalidatePath('/operation/beranda')
+  revalidatePath('/operation/riwayat-permintaan')
+  revalidatePath('/dispatcher/extra-schedule')
+  revalidatePath('/controller/beranda')
+
+  return {
+    success: `Request ${transactionId} berhasil diajukan.`,
+    transactionId,
+  }
+}
+
+export async function cancelExtraScheduleAction(formData: FormData) {
+  const profile = await getCurrentProfile()
+  const transactionId = String(formData.get('transactionId') ?? '').trim()
+  const note = String(formData.get('note') ?? '').trim()
+
+  if (!transactionId || !note) {
+    return { error: 'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.' }
+  }
+
+  if (!['Operation', 'Super User'].includes(profile.role)) {
+    return { error: 'Kamu belum punya akses ke bagian ini.' }
+  }
+
+  const admin = createAdminClient()
+
+  let query = admin
+    .from('tasks')
+    .select('id,status,requested_by')
+    .eq('transaction_id', transactionId)
+    .eq('source_type', 'Extra Schedule')
+    .eq('status', 'Requested')
+
+  if (profile.role !== 'Super User') {
+    query = query.eq('requested_by', profile.id)
+  }
+
+  const { data: task } = await query.maybeSingle()
+
+  if (!task) {
+    return { error: 'Request tidak ditemukan atau sudah tidak bisa dibatalkan.' }
+  }
+
+  const { error } = await admin
+    .from('tasks')
+    .update({
+      status: 'Canceled',
+      canceled_at: new Date().toISOString(),
+      canceled_from_status: 'Requested',
+      cancellation_note: note,
+    })
+    .eq('id', task.id)
+    .eq('status', 'Requested')
+
+  if (error) {
+    return { error: 'Request belum berhasil dibatalkan. Coba lagi, ya.' }
+  }
+
+  revalidatePath('/operation/riwayat-permintaan')
+  revalidatePath('/dispatcher/extra-schedule')
+}
