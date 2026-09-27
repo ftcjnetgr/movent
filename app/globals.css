@@ -9206,7 +9206,7 @@ td select:focus,
 .super-dashboard > * + *,
 .profile-settings-page > * + *,
 .schedule-page > * + * {
-  margin-top: 12px !important;
+  margin-top: 6px !important;
 }
 
 /* Subtitle → first content */
@@ -9235,5 +9235,5 @@ td select:focus,
 
 /* Avoid accidental extra spacing from legacy section-block rules at page level. */
 .role-page > .section-block {
-  margin-top: 12px !important;
+  margin-top: 6px !important;
 }
