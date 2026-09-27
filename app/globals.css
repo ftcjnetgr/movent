@@ -9162,3 +9162,9 @@ td select:focus,
   min-height: 132px !important;
   padding: 24px 16px !important;
 }
+
+
+/* Maintainer: give the page heading proper breathing room before the table card */
+.role-maintainer .role-page > .page-heading {
+  margin-bottom: 26px !important;
+}
