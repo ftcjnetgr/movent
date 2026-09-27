@@ -9310,3 +9310,25 @@ td select:focus,
 .role-page > .section-block {
   margin-top: var(--content-gap) !important;
 }
+
+
+/* FINAL SPACING FIX — equal horizontal/vertical rhythm */
+.super-dashboard {
+  gap: 0 !important;
+}
+
+.super-dashboard > * + * {
+  margin-top: var(--content-gap) !important;
+}
+
+.super-dashboard > .super-dashboard-heading + * {
+  margin-top: var(--subtitle-content-gap) !important;
+}
+
+/* Keep every dashboard grid on the same X spacing in both directions. */
+.super-dashboard .super-kpi-grid,
+.super-dashboard .super-dashboard-main-grid,
+.super-dashboard .super-dashboard-table-grid {
+  column-gap: var(--content-gap) !important;
+  row-gap: var(--content-gap) !important;
+}
