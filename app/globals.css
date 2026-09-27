@@ -9401,3 +9401,47 @@ td select:focus,
   column-gap: var(--content-gap) !important;
   row-gap: var(--content-gap) !important;
 }
+
+
+/* FINAL GLOBAL HEADING RHYTHM — every role / menu / submenu */
+.page-heading h1 + p,
+.page-heading h2 + p,
+.page-heading h3 + p,
+.super-dashboard-heading h1 + p,
+.super-dashboard-heading h2 + p,
+.super-dashboard-heading h3 + p,
+.dashboard-page-heading h1 + p,
+.dashboard-page-heading h2 + p,
+.dashboard-page-heading h3 + p,
+.alert-page-heading h1 + p,
+.alert-page-heading h2 + p,
+.alert-page-heading h3 + p,
+.schedule-page-heading h1 + p,
+.schedule-page-heading h2 + p,
+.schedule-page-heading h3 + p,
+[class*="page-heading"] h1 + p,
+[class*="page-heading"] h2 + p,
+[class*="page-heading"] h3 + p {
+  margin-top: 3px !important;
+}
+
+.page-heading h1,
+.page-heading h2,
+.page-heading h3,
+.super-dashboard-heading h1,
+.super-dashboard-heading h2,
+.super-dashboard-heading h3,
+.dashboard-page-heading h1,
+.dashboard-page-heading h2,
+.dashboard-page-heading h3,
+.alert-page-heading h1,
+.alert-page-heading h2,
+.alert-page-heading h3,
+.schedule-page-heading h1,
+.schedule-page-heading h2,
+.schedule-page-heading h3,
+[class*="page-heading"] h1,
+[class*="page-heading"] h2,
+[class*="page-heading"] h3 {
+  margin-bottom: 0 !important;
+}
