@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import ReportForm from '@/app/controller/penarikan-report/report-form'
+import ReportForm from '@/components/reports/report-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 

@@ -1,7 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDashboardData } from '@/lib/server/dashboard'
 import { getCurrentProfile } from '@/lib/server/profile'
-import StatusBadge from '@/components/status-badge'
+import StatusBadge from '@/components/shared/status-badge'
 
 function SummaryIcon({ name }: { name: 'clipboard' | 'wrench' | 'check' | 'play' | 'clock' }) {
   const common = {

@@ -1,4 +1,4 @@
-import ExecutorTaskCard from '@/components/executor-task-card'
+import ExecutorTaskCard from '@/components/executor/task-card'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
