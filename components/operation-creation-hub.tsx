@@ -46,7 +46,7 @@ export default function OperationCreationHub({
           </button>
           <button type="button" className="creation-choice-card" onClick={() => setChoice('schedule')}>
             <span className="creation-choice-icon">JS</span>
-            <span><strong>Request Extra Schedule</strong><small>Ajukan jadwal tambahan ke Dispatcher.</small></span>
+            <span><strong>Ajukan Jadwal Tambahan</strong><small>Ajukan jadwal tambahan ke Dispatcher.</small></span>
             <b>→</b>
           </button>
         </div>
@@ -58,7 +58,7 @@ export default function OperationCreationHub({
     <section className="section-block">
       <div className="creation-flow-toolbar">
         <div>
-          <strong>{choice === 'supply' ? 'Supply Non-TGR' : 'Request Extra Schedule'}</strong>
+          <strong>{choice === 'supply' ? 'Supply Non-TGR' : 'Ajukan Jadwal Tambahan'}</strong>
         </div>
         <button type="button" className="secondary-button" onClick={() => setChoice(null)}>Ganti proses</button>
       </div>
@@ -67,7 +67,7 @@ export default function OperationCreationHub({
         <OperationCreateTask locations={locations} products={products} tasks={tasks} />
       ) : (
         <div className="metric-card operation-request-card">
-          <p className="muted">Isi Start Point, Destination, STD, dan STA. Setelah dikonfirmasi, request masuk ke Dispatcher.</p>
+          <p className="muted">Isi titik mulai, destinasi, STD, dan STA. Setelah dikonfirmasi, request masuk ke Dispatcher.</p>
           <OperationRequestExtraScheduleForm locations={locations} />
         </div>
       )}
