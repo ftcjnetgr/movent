@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useState, useTransition } from 'react'
+import StatusBadge from '@/components/status-badge'
 
 import {
   acceptMaintenanceTicketAction,
@@ -63,7 +64,7 @@ export default function MaintainerTicketCard({ ticket }: { ticket: Ticket }) {
           <span className="eyebrow">Maintenance</span>
           <h2>{ticket.transaction_id}</h2>
         </div>
-        <span className={`status-badge status-${ticket.status.toLowerCase().replaceAll(' ', '-')}`}>{ticketStatusLabel(ticket.status)}</span>
+        <StatusBadge status={ticket.status} label={ticketStatusLabel(ticket.status)} />
       </div>
       <div className="task-next-step">
         <span>LANGKAH BERIKUTNYA</span>
