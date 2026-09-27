@@ -8974,17 +8974,19 @@ td select:focus,
 }
 
 
-/* Maintainer sidebar: same navigation treatment as Dispatcher */
-.role-maintainer .sidebar .nav-link {
+/* Maintainer sidebar: same active/inactive treatment as Controller */
+.role-maintainer .sidebar .nav-link,
+.role-maintainer .sidebar .nav-link-direct {
   background: transparent !important;
-  color: var(--theme-primary) !important;
+  color: var(--theme-slate-600) !important;
   font-weight: 400 !important;
   box-shadow: none !important;
 }
 
-.role-maintainer .sidebar .nav-link:hover {
-  background: var(--theme-primary-soft) !important;
-  color: var(--theme-primary) !important;
+.role-maintainer .sidebar .nav-link:hover,
+.role-maintainer .sidebar .nav-link-direct:hover {
+  background: var(--theme-slate-50) !important;
+  color: var(--theme-slate-900) !important;
 }
 
 .role-maintainer .sidebar .nav-link.active,
@@ -8995,19 +8997,33 @@ td select:focus,
   box-shadow: inset 2px 0 0 var(--theme-primary) !important;
 }
 
-.role-maintainer .sidebar .nav-link .nav-icon,
-.role-maintainer .sidebar .nav-link .nav-icon svg,
-.role-maintainer .sidebar .nav-link .nav-icon svg * {
+.role-maintainer .sidebar .nav-link.active .nav-icon,
+.role-maintainer .sidebar .nav-link.active .nav-icon svg,
+.role-maintainer .sidebar .nav-link.active .nav-icon svg *,
+.role-maintainer .sidebar .nav-link-direct.active .nav-icon,
+.role-maintainer .sidebar .nav-link-direct.active .nav-icon svg,
+.role-maintainer .sidebar .nav-link-direct.active .nav-icon svg * {
   color: var(--theme-primary) !important;
 }
 
-/* Keep the Maintainer direct Alert item visually identical to other nav items. */
-.role-maintainer .sidebar .nav-link-direct {
-  background: transparent !important;
-  color: var(--theme-primary) !important;
+.role-maintainer .sidebar .nav-link:not(.active) .nav-icon,
+.role-maintainer .sidebar .nav-link:not(.active) .nav-icon svg,
+.role-maintainer .sidebar .nav-link:not(.active) .nav-icon svg *,
+.role-maintainer .sidebar .nav-link-direct:not(.active) .nav-icon,
+.role-maintainer .sidebar .nav-link-direct:not(.active) .nav-icon svg,
+.role-maintainer .sidebar .nav-link-direct:not(.active) .nav-icon svg * {
+  color: var(--theme-slate-600) !important;
 }
 
-/* Match Dispatcher content width/padding without changing other roles. */
+/* Match Controller content width and section/card rhythm. */
 .role-maintainer .page-content {
-  max-width: 1280px !important;
+  max-width: 1600px !important;
+}
+
+.role-maintainer .role-page > .section-block {
+  margin-top: 20px !important;
+}
+
+.role-maintainer .metric-grid {
+  gap: 12px !important;
 }
