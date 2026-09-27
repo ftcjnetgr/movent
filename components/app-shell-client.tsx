@@ -10,28 +10,28 @@ type NavGroup = { label: string; icon: string; items: NavItem[]; nonCollapsible?
 
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
-    { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/controller/alert', icon: 'bell' }] },
-    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/controller/beranda', icon: 'home' }] },
-    { label: 'Schedule', icon: 'calendar', items: [{ label: 'Schedule', href: '/controller/timetable', icon: 'calendar' }] },
-    { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }] },
+    { label: 'Notifikasi', icon: 'bell', items: [{ label: 'Notifikasi', href: '/controller/alert', icon: 'bell' }] },
+    { label: 'Beranda', icon: 'home', items: [{ label: 'Beranda', href: '/controller/beranda', icon: 'home' }] },
+    { label: 'Jadwal', icon: 'calendar', items: [{ label: 'Jadwal', href: '/controller/timetable', icon: 'calendar' }] },
+    { label: 'Laporan', icon: 'report', items: [{ label: 'Laporan', href: '/controller/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/controller/profil', icon: 'user' }] },
   ],
   Dispatcher: [
 
-    { label: 'Alert', icon: 'bell', items: [
+    { label: 'Notifikasi', icon: 'bell', items: [
       { label: 'Penugasan', href: '/dispatcher/alert/penugasan', icon: 'clipboard' },
       { label: 'Maintenance', href: '/dispatcher/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
     { label: 'Jadwal Tambahan', icon: 'calendar', items: [{ label: 'Jadwal Tambahan', href: '/dispatcher/extra-schedule', icon: 'calendar' }] },
     { label: 'Armada Non TGR', icon: 'truck', items: [{ label: 'Armada Non TGR', href: '/dispatcher/armada-non-tgr', icon: 'truck' }] },
-    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },    { label: 'Dashboard', icon: 'home', items: [
+    { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/dispatcher/profil', icon: 'user' }] },    { label: 'Beranda', icon: 'home', items: [
       { label: 'Penugasan', href: '/dispatcher/riwayat-penugasan', icon: 'clipboard' },
       { label: 'Maintenance', href: '/dispatcher/maintenance-armada', icon: 'wrench' },
     ], nonCollapsible: true },
 
   ],
   Executor: [
-    { label: 'Alert', icon: 'bell', items: [
+    { label: 'Notifikasi', icon: 'bell', items: [
       { label: 'Penugasan', href: '/executor/alert/penugasan', icon: 'clipboard' },
       { label: 'Maintenance', href: '/executor/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
@@ -40,26 +40,26 @@ const navByRole: Record<string, NavGroup[]> = {
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/executor/profil', icon: 'user' }] },
   ],
   Maintainer: [
-    { label: 'Alert', icon: 'bell', items: [{ label: 'Alert', href: '/maintainer/alert/ticketing-maintenance', icon: 'bell' }] },
-    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/maintainer/beranda', icon: 'home' }] },
+    { label: 'Notifikasi', icon: 'bell', items: [{ label: 'Notifikasi', href: '/maintainer/alert/ticketing-maintenance', icon: 'bell' }] },
+    { label: 'Beranda', icon: 'home', items: [{ label: 'Beranda', href: '/maintainer/beranda', icon: 'home' }] },
     { label: 'Maintenance', icon: 'wrench', items: [{ label: 'Maintenance', href: '/maintainer/tiket-maintenance', icon: 'wrench' }] },
-    { label: 'Penarikan Report', icon: 'report', items: [{ label: 'Penarikan Report', href: '/maintainer/penarikan-report', icon: 'report' }] },
+    { label: 'Laporan', icon: 'report', items: [{ label: 'Laporan', href: '/maintainer/penarikan-report', icon: 'report' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/maintainer/profil', icon: 'user' }] },
   ],
   Operation: [
-    { label: 'Alert', icon: 'bell', items: [
+    { label: 'Notifikasi', icon: 'bell', items: [
       { label: 'Penugasan', href: '/operation/alert/penugasan', icon: 'clipboard' },
       { label: 'Maintenance', href: '/operation/alert/ticketing-maintenance', icon: 'wrench' },
     ] },
-    { label: 'Dashboard', icon: 'home', items: [{ label: 'Dashboard', href: '/operation/beranda', icon: 'home' }] },
-    { label: 'Riwayat Extra Schedule', icon: 'calendar', items: [{ label: 'Riwayat Extra Schedule', href: '/operation/riwayat-permintaan', icon: 'history' }] },
+    { label: 'Beranda', icon: 'home', items: [{ label: 'Beranda', href: '/operation/beranda', icon: 'home' }] },
+    { label: 'Riwayat Jadwal Tambahan', icon: 'calendar', items: [{ label: 'Riwayat Jadwal Tambahan', href: '/operation/riwayat-permintaan', icon: 'history' }] },
     { label: 'Pengaturan', icon: 'user', items: [{ label: 'Pengaturan', href: '/operation/profil', icon: 'user' }] },
   ],
 }
 
 const superUserNav: NavGroup[] = [
   {
-    label: 'Alert',
+    label: 'Notifikasi',
     icon: 'bell',
     items: [
       { label: 'Penugasan', href: '/alert/penugasan', icon: 'clipboard' },
@@ -75,14 +75,14 @@ const superUserNav: NavGroup[] = [
     label: 'Operasional',
     icon: 'calendar',
     items: [
-      { label: 'Schedule', href: '/controller/timetable?view=plan', icon: 'calendar' },
+      { label: 'Jadwal', href: '/controller/timetable?view=plan', icon: 'calendar' },
       { label: 'Penugasan', href: '/controller/beranda', icon: 'clipboard' },
       { label: 'Maintenance', href: '/controller/beranda/ticketing', icon: 'ticket' },
-      { label: 'Monitoring', href: '/controller/timetable?view=live', icon: 'truck' },
+      { label: 'Pantauan', href: '/controller/timetable?view=live', icon: 'truck' },
     ],
   },
   {
-    label: 'Master Data',
+    label: 'Data Utama',
     icon: 'database',
     items: [
       { label: 'Armada', href: '/super-user/pengelolaan-database?db=fleets', icon: 'truck' },
@@ -90,22 +90,22 @@ const superUserNav: NavGroup[] = [
       { label: 'Lokasi', href: '/super-user/pengelolaan-database?db=locations', icon: 'location' },
       { label: 'Produk', href: '/super-user/pengelolaan-database?db=products', icon: 'box' },
       { label: 'List Maintenance', href: '/super-user/pengelolaan-database?db=maintenance_lists', icon: 'wrench' },
-      { label: 'Schedule', href: '/super-user/pengelolaan-database?db=schedules', icon: 'calendar' },
+      { label: 'Jadwal', href: '/super-user/pengelolaan-database?db=schedules', icon: 'calendar' },
     ],
   },
   {
     label: 'Manajemen',
     icon: 'settings',
     items: [
-      { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
-      { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
-      { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
+      { label: 'Pengguna', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
+      { label: 'Basis Data', href: '/super-user/pengelolaan-database', icon: 'database' },
+      { label: 'Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
     ],
   },
   {
     label: 'Laporan',
     icon: 'report',
-    items: [{ label: 'Penarikan Report', href: '/controller/penarikan-report', icon: 'report' }],
+    items: [{ label: 'Laporan', href: '/controller/penarikan-report', icon: 'report' }],
   },
   {
     label: 'Pengaturan',
@@ -175,9 +175,9 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
         label: 'Manajemen',
         icon: 'settings',
         items: [
-          { label: 'Manajemen User', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
-          { label: 'Manajemen Database', href: '/super-user/pengelolaan-database', icon: 'database' },
-          { label: 'Manajemen Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
+          { label: 'Pengguna', href: '/super-user/pengelolaan-pengguna', icon: 'user' },
+          { label: 'Basis Data', href: '/super-user/pengelolaan-database', icon: 'database' },
+          { label: 'Transaksi', href: '/super-user/pengelolaan-transaksi', icon: 'clipboard' },
         ],
       },
     ]
@@ -277,8 +277,8 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
         <div className="sidebar-footer">
           <button type="button" className="sidebar-logout" onClick={logout}><span className="nav-icon"><Icon name="logout" /></span><span>Keluar</span></button>
           <div className="sidebar-credit">
-            <span>Part of FTC Go Project</span>
-            <span>Developed by Fleet Traffic Control</span>
+            <span>Bagian dari Proyek FTC Go</span>
+            <span>Dikembangkan oleh Fleet Traffic Control</span>
           </div>
         </div>
       </aside>
@@ -299,7 +299,7 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
                 <input type="date" name="to" value={filterTo} onChange={(e) => setFilterTo(e.target.value)} min={filterFrom} />
               </label>
               <button type="submit">Terapkan</button>
-              <button type="button" className="topbar-date-reset" onClick={() => router.push(pathname)}>Reset</button>
+              <button type="button" className="topbar-date-reset" onClick={() => router.push(pathname)}>Atur ulang</button>
             </form>
           ) : null}
         </header>
