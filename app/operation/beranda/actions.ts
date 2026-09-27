@@ -53,17 +53,54 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
 
   const admin = createAdminClient()
   const [{ data: startLocation }, { data: destinationLocation }] = await Promise.all([
-    admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle(),
-    admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle(),
+    admin
+      .from('locations')
+      .select('location, grouping, status')
+      .eq('location', startPoint)
+      .eq('status', 'Active')
+      .maybeSingle(),
+    admin
+      .from('locations')
+      .select('location, grouping, status')
+      .eq('location', destination)
+      .eq('status', 'Active')
+      .maybeSingle(),
   ])
-  if (!startLocation || !destinationLocation) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' } as const
+  if (!startLocation || !destinationLocation) {
+    return {
+      error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.',
+    } as const
+  }
 
   const sjs: { sjNumber: string; sjQty: number; sjWeight: number; product: string; productSnapshot: { product: string; status: string }; sjNote: string | null }[] = []
   for (let i = 0; i < sjNumbers.length; i++) {
-    if (!sjNumbers[i] || !products[i] || !Number.isFinite(sjQtys[i]) || sjQtys[i] < 0 || !Number.isFinite(sjWeights[i]) || sjWeights[i] < 0) return { error: 'Nomor SJ, Qty, Berat, dan Produk wajib diisi pada setiap SJ.' } as const
-    const { data: productData } = await admin.from('products').select('product, status').eq('product', products[i]).eq('status', 'Active').maybeSingle()
+    if (
+      !sjNumbers[i] ||
+      !products[i] ||
+      !Number.isFinite(sjQtys[i]) ||
+      sjQtys[i] < 0 ||
+      !Number.isFinite(sjWeights[i]) ||
+      sjWeights[i] < 0
+    ) {
+      return {
+        error: 'Nomor SJ, Qty, Berat, dan Produk wajib diisi pada setiap SJ.',
+      } as const
+    }
+    const { data: productData } = await admin
+      .from('products')
+      .select('product, status')
+      .eq('product', products[i])
+      .eq('status', 'Active')
+      .maybeSingle()
     if (!productData) return { error: `Produk pada SJ ke-${i + 1} belum tersedia.` } as const
-    sjs.push({ sjNumber: sjNumbers[i], sjQty: sjQtys[i], sjWeight: sjWeights[i], product: products[i], productSnapshot: productData, sjNote: sjNotes[i] || null })
+    sjs.push({
+      sjNumber: sjNumbers[i],
+      sjQty: sjQtys[i],
+      sjWeight: sjWeights[i],
+      product: products[i],
+      productSnapshot: productData,
+      sjNote: sjNotes[i] || null,
+    })
   }
 
   return {
@@ -136,7 +173,15 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
 
   const { data: taskRow } = await admin.from('tasks').select('id').eq('transaction_id', transactionId).maybeSingle()
   if (!taskRow) return { error: 'Tugas dibuat, tetapi detail SJ belum ditemukan.' }
-  const sjRows = value.sjs.map((sj) => ({ task_id: taskRow.id, sj_number: sj.sjNumber, sj_qty: sj.sjQty, sj_weight: sj.sjWeight, product: sj.product, product_snapshot: sj.productSnapshot, note: sj.sjNote }))
+  const sjRows = value.sjs.map((sj) => ({
+    task_id: taskRow.id,
+    sj_number: sj.sjNumber,
+    sj_qty: sj.sjQty,
+    sj_weight: sj.sjWeight,
+    product: sj.product,
+    product_snapshot: sj.productSnapshot,
+    note: sj.sjNote,
+  }))
   const { error: sjError } = await admin.from('task_sj_items').insert(sjRows)
   if (sjError) { await admin.from('tasks').delete().eq('id', taskRow.id).eq('status', 'Assigned'); return { error: 'Tugas dan detail SJ belum berhasil disimpan. Silakan coba lagi.' } }
 
@@ -154,7 +199,13 @@ export async function confirmNonTgrDepartureByOperationAction(_state: State, for
   if (!transactionId || !timestamp) return { error: 'Tanggal dan jam ATD perlu diisi dulu, ya.' }
 
   const admin = createAdminClient()
-  const query = admin.from('tasks').select('id, status, created_by').eq('transaction_id', transactionId).eq('task_type', 'Supply').eq('fleet_ownership', 'Non-TGR').eq('status', 'Assigned')
+  const query = admin
+    .from('tasks')
+    .select('id, status, created_by')
+    .eq('transaction_id', transactionId)
+    .eq('task_type', 'Supply')
+    .eq('fleet_ownership', 'Non-TGR')
+    .eq('status', 'Assigned')
   const { data: task } = profile.role === 'Super User'
     ? await query.maybeSingle()
     : await query.eq('created_by', profile.id).maybeSingle()
