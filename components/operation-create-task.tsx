@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react'
 import { jsPDF } from 'jspdf'
 import SearchableMasterSelect from '@/components/searchable-master-select'
+import StatusBadge from '@/components/status-badge'
 import { createNonTgrSupplyAction, confirmNonTgrDepartureByOperationAction, confirmNonTgrSupplyAction } from '@/app/operation/beranda/actions'
 
 type Option = { value: string; label: string; searchText?: string }
@@ -179,7 +180,7 @@ export default function OperationCreateTask({ locations, products, tasks }: { lo
             <div className="task-card" key={task.transaction_id}>
               <div className="task-card-top">
                 <div><span className="eyebrow">Supply Non-TGR</span><h3>{task.transaction_id}</h3></div>
-                <span className="status-badge status-assigned">Ditugaskan</span>
+                <StatusBadge status="Assigned" label="Ditugaskan" />
               </div>
               <div className="task-summary-grid">
                 <div><span>Rute Perjalanan</span><strong>{task.start_point} → {task.destination}</strong></div>
