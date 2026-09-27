@@ -9337,7 +9337,7 @@ td select:focus,
 /* GLOBAL RHYTHM — ALL ROLES / ALL PAGES */
 :root {
   --content-gap: 12px;
-  --heading-subtitle-gap: 12px;
+  --heading-subtitle-gap: 6px;
   --subtitle-content-gap: 24px;
 }
 
