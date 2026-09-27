@@ -158,7 +158,7 @@ export default function ExecutorTaskCard({ task, products, sjItems }: { task: Ta
       doc.setFontSize(16)
       doc.text('SURAT JALAN', 10, 14)
       doc.setFontSize(10)
-      doc.text('Transaction ID: ' + task.transaction_id, 10, 22)
+      doc.text('ID Transaksi: ' + task.transaction_id, 10, 22)
       doc.text('SJ ke-' + (index + 1), 10, 30)
       doc.text('Nomor SJ: ' + item.sj_number, 10, 38)
       doc.text('Qty: ' + item.sj_qty, 10, 46)
@@ -219,7 +219,7 @@ export default function ExecutorTaskCard({ task, products, sjItems }: { task: Ta
         <div className="metric-card section-block">
           <div className="card-title">Pratinjau tugas</div>
           <div className="task-summary-grid">
-            <div><span>Transaction ID</span><strong>{task.transaction_id}</strong></div>
+            <div><span>ID Transaksi</span><strong>{task.transaction_id}</strong></div>
             <div><span>Jenis</span><strong>{task.task_type}</strong></div>
             <div><span>Titik Mulai</span><strong>{task.start_point ?? '-'}</strong></div>
             <div><span>Destinasi</span><strong>{task.destination ?? '-'}</strong></div>
@@ -245,7 +245,7 @@ export default function ExecutorTaskCard({ task, products, sjItems }: { task: Ta
           </div>
           <SearchableMasterSelect label="Produk" name="product" options={productOptions} placeholder="Pilih Produk" required />
           <label>Catatan<textarea name="note" rows={3} /></label>
-          <button type="submit" disabled={isPending}>Submit SJ</button>
+          <button type="submit" disabled={isPending}>Kirim SJ</button>
         </form>
       ) : null}
 
