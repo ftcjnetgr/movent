@@ -8959,3 +8959,16 @@ td select:focus,
   display: none !important;
   content: none !important;
 }
+
+
+/* Status pills: icon + label always aligned consistently */
+.status-badge {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.status-badge svg {
+  flex: 0 0 auto;
+}
