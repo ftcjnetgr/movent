@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'MOVENT',
-  description: 'Movement Management',
+  description: 'Manajemen Pergerakan',
   icons: {
     icon: '/assets/branding/movent-icon.svg',
   },
