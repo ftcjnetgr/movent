@@ -9332,3 +9332,72 @@ td select:focus,
   column-gap: var(--content-gap) !important;
   row-gap: var(--content-gap) !important;
 }
+
+
+/* GLOBAL RHYTHM — ALL ROLES / ALL PAGES */
+:root {
+  --content-gap: 12px;
+  --heading-subtitle-gap: 12px;
+  --subtitle-content-gap: 24px;
+}
+
+/* One spacing system across every role and page. */
+.page-content,
+.super-dashboard {
+  gap: 0 !important;
+}
+
+.page-content > * + *,
+.super-dashboard > * + * {
+  margin-top: var(--content-gap) !important;
+}
+
+.page-heading,
+.super-dashboard-heading,
+.section-heading,
+.super-panel-heading,
+.report-type-heading,
+.report-filter-heading,
+.password-card-heading,
+.creation-flow-toolbar {
+  margin-bottom: 0 !important;
+}
+
+.page-heading h1 + p,
+.page-heading h2 + p,
+.page-heading h3 + p,
+.super-dashboard-heading h1 + p,
+.super-panel-heading h2 + p,
+.section-heading h2 + p,
+.report-type-heading h2 + p,
+.report-filter-heading h2 + p,
+.password-card-heading h1 + p {
+  margin-top: var(--heading-subtitle-gap) !important;
+}
+
+.page-heading + *,
+.super-dashboard-heading + *,
+.section-heading + *,
+.report-type-heading + *,
+.report-filter-heading + *,
+.password-card-heading + *,
+.creation-flow-toolbar + * {
+  margin-top: var(--subtitle-content-gap) !important;
+}
+
+/* Uniform card/grid spacing, vertical and horizontal. */
+.metric-grid,
+.super-kpi-grid,
+.dashboard-main-grid,
+.section-grid,
+.super-dashboard-main-grid,
+.super-dashboard-table-grid,
+.super-dashboard-bottom-grid,
+.creation-choice-grid,
+.alert-overview-grid,
+.alert-dashboard-summary,
+.report-type-buttons,
+.form-row {
+  column-gap: var(--content-gap) !important;
+  row-gap: var(--content-gap) !important;
+}
