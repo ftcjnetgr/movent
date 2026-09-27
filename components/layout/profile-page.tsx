@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import ChangePasswordForm from '@/components/change-password-form'
+import ChangePasswordForm from '@/components/shared/change-password-form'
 
 type ProfileData = {
   full_name: string
