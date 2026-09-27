@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import DispatcherCreateTask from '@/components/dispatcher-create-task'
-import DispatcherMaintenanceForm from '@/components/dispatcher-maintenance-form'
+import DispatcherCreateTask from '@/components/dispatcher/create-task'
+import DispatcherMaintenanceForm from '@/components/dispatcher/maintenance-form'
 
 type Props = {
   locations: string[]

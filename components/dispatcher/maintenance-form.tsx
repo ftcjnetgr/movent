@@ -6,7 +6,7 @@ import {
   createMaintenanceTicketAction,
   confirmMaintenanceTicketAction,
 } from '@/app/dispatcher/maintenance-armada/actions'
-import SearchableMasterSelect from '@/components/searchable-master-select'
+import SearchableMasterSelect from '@/components/shared/forms/searchable-master-select'
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Diajukan',

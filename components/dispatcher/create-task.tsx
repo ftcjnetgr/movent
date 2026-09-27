@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from 'react'
 import { jsPDF } from 'jspdf'
-import SearchableMasterSelect from '@/components/searchable-master-select'
+import SearchableMasterSelect from '@/components/shared/forms/searchable-master-select'
 import { createDispatcherTaskAction, confirmDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
 
 const initialState: {

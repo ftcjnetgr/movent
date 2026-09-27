@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import SearchableMasterSelect from '@/components/searchable-master-select'
+import SearchableMasterSelect from '@/components/shared/forms/searchable-master-select'
 import { confirmExtraScheduleAssignmentAction, confirmExtraScheduleRequestAction, previewExtraScheduleAssignmentAction } from '@/app/dispatcher/extra-schedule/actions'
 
 type Row = { transaction_id: string; start_point: string; destination: string; std: string | null; sta: string | null; created_at: string | null }
