@@ -11,7 +11,7 @@ export default function LoginPage() {
 
   return (
     <main className="login-page">
-      <section className="login-simple-shell" aria-label="Login MOVENT">
+      <section className="login-simple-shell" aria-label="Masuk ke MOVENT">
         <aside className="login-simple-visual">
           <div className="login-simple-content">
             <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="login-simple-logo" />
@@ -32,7 +32,7 @@ export default function LoginPage() {
             <form action={formAction}>
               <label>
                 Username
-                <input name="username" autoComplete="username" autoFocus placeholder="Username kamu" />
+                <input name="username" autoComplete="username" autoFocus placeholder="Nama pengguna kamu" />
               </label>
               <label>
                 Password
@@ -41,12 +41,12 @@ export default function LoginPage() {
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
-                    placeholder="Password kamu"
+                    placeholder="Kata sandi kamu"
                   />
                   <button
                     type="button"
                     className="login-password-toggle"
-                    aria-label={showPassword ? 'Sembunyikan password' : 'Lihat password'}
+                    aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Lihat kata sandi'}
                     aria-pressed={showPassword}
                     onClick={() => setShowPassword((visible) => !visible)}
                   >
