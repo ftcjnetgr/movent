@@ -15,9 +15,7 @@ export default async function ControllerReportPage() {
     <>
     <div className="page-heading"><div><h1>Penarikan Laporan</h1><p>Pilih periode dan filter yang kamu butuhkan, lalu tarik laporannya.</p></div></div>
       <section className="section-block">
-        <div className="metric-card report-card">
-          <ReportForm startPoints={options} destinations={options} executors={executorOptions} />
-        </div>
+        <ReportForm startPoints={options} destinations={options} executors={executorOptions} />
       </section>
     </>
   )
