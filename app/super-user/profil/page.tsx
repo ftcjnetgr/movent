@@ -1,6 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
-import ProfilePage from '@/components/profile-page'
+import ProfilePage from '@/components/layout/profile-page'
 
 export default async function SuperUserProfilePage() {
   const profile = await getCurrentProfile()
