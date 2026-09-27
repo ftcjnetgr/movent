@@ -88,7 +88,7 @@ export default async function MaintainerBerandaPage() {
     <div className="super-dashboard maintainer-dashboard">
       <div className="super-dashboard-heading dashboard-page-heading">
         <div>
-          <h1>Dashboard</h1>
+          <h1>Beranda</h1>
           <p>Ringkasan maintenance armada yang perlu dipantau dan diselesaikan.</p>
         </div>
       </div>
