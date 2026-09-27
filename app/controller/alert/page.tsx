@@ -20,10 +20,10 @@ export default async function AlertPage({
     <div className="role-page alert-page">
       <div className="super-dashboard-heading alert-page-heading">
         <div>
-          <h1>Alert</h1>
+          <h1>Notifikasi</h1>
           <p>Pantau kondisi operasional yang membutuhkan perhatian.</p>
         </div>
-        <nav className="alert-view-tabs" aria-label="Alert">
+        <nav className="alert-view-tabs" aria-label="Notifikasi">
           <Link href="/controller/alert" className={view === 'penugasan' ? 'active' : ''}>Penugasan{data.taskAlerts.length > 0 ? <span className="alert-tab-badge">{data.taskAlerts.length > 99 ? '99+' : data.taskAlerts.length}</span> : null}</Link>
           <Link href="/controller/alert?view=maintenance" className={view === 'maintenance' ? 'active' : ''}>Maintenance{data.ticketAlerts.length > 0 ? <span className="alert-tab-badge">{data.ticketAlerts.length > 99 ? '99+' : data.ticketAlerts.length}</span> : null}</Link>
         </nav>
