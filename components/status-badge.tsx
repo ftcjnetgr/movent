@@ -43,12 +43,22 @@ function StatusIcon({ status }: { status: StatusName }) {
   }
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  Requested: 'Diajukan',
+  Assigned: 'Ditugaskan',
+  Confirmed: 'Dikonfirmasi',
+  Driving: 'Sedang berjalan',
+  'In Progress': 'Sedang dikerjakan',
+  Completed: 'Selesai',
+  Canceled: 'Dibatalkan',
+}
+
 export default function StatusBadge({ status, label }: { status: string; label?: string }) {
   const className = `status-badge status-${status.toLowerCase().replaceAll(' ', '-')}`
   return (
     <span className={className}>
       <StatusIcon status={status} />
-      <span>{label ?? status}</span>
+      <span>{label ?? STATUS_LABELS[status] ?? status}</span>
     </span>
   )
 }
