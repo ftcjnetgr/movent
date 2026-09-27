@@ -1,4 +1,4 @@
-import MaintainerMaintenanceTable from '@/components/maintainer-maintenance-table'
+import MaintainerMaintenanceTable from '@/components/maintainer/maintenance-table'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 

@@ -1,4 +1,4 @@
-import OperationCreationHub from '@/components/operation-creation-hub'
+import OperationCreationHub from '@/components/operation/creation-hub'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export default async function OperationBerandaPage() {
