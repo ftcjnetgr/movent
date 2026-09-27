@@ -84,7 +84,7 @@ export default function MaintainerMaintenanceTable({ tickets }: { tickets: Ticke
         <table className="maintainer-maintenance-table">
           <thead>
             <tr>
-              <th>Transaction ID</th>
+              <th>ID transaksi</th>
               <th>Maintenance</th>
               <th>Lokasi</th>
               <th>Armada</th>
