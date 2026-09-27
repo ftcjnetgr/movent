@@ -9237,3 +9237,76 @@ td select:focus,
 .role-page > .section-block {
   margin-top: 4px !important;
 }
+
+
+/* =========================================================
+   GLOBAL SPACING STANDARD
+   Controller dashboard summary-card horizontal gap = 12px baseline.
+   Use the same 12px for card/content gaps everywhere.
+   Heading → subtitle = 12px.
+   Subtitle → first content = 24px.
+   ========================================================= */
+
+:root {
+  --content-gap: 12px;
+  --heading-subtitle-gap: 12px;
+  --subtitle-content-gap: 24px;
+}
+
+/* Heading rhythm */
+.page-heading h1,
+.super-dashboard-heading h1 {
+  margin: 0 !important;
+}
+
+.page-heading p,
+.super-dashboard-heading p {
+  margin: var(--heading-subtitle-gap) 0 0 !important;
+}
+
+/* Two-line breathing room from subtitle to first content */
+.page-content > .page-heading + *,
+.role-page > .page-heading + *,
+.super-dashboard > .super-dashboard-heading + *,
+.profile-settings-page > .page-heading + * {
+  margin-top: var(--subtitle-content-gap) !important;
+}
+
+/* All top-level content/card rhythm */
+.page-content > * + *,
+.role-page > * + *,
+.super-dashboard > * + *,
+.profile-settings-page > * + *,
+.schedule-page > * + * {
+  margin-top: var(--content-gap) !important;
+}
+
+/* Card/grid gaps use the same 12px baseline horizontally and vertically */
+.metric-grid,
+.super-kpi-grid,
+.section-grid,
+.dashboard-main-grid,
+.super-dashboard-main-grid,
+.super-dashboard-table-grid,
+.task-list,
+.ticket-grid,
+.creation-choice-grid,
+.task-create-choice-grid,
+.database-management-actions,
+.user-management-actions,
+.schedule-summary-grid {
+  gap: var(--content-gap) !important;
+}
+
+/* Keep the larger subtitle → content gap after heading from the generic sibling rule. */
+.page-content > .page-heading + *,
+.role-page > .page-heading + *,
+.super-dashboard > .super-dashboard-heading + *,
+.profile-settings-page > .page-heading + * {
+  margin-top: var(--subtitle-content-gap) !important;
+}
+
+/* Page-level section blocks follow the same content gap. */
+.role-page > .section-block {
+  margin-top: var(--content-gap) !important;
+}
