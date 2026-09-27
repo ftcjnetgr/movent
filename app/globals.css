@@ -9127,3 +9127,38 @@ td select:focus,
     overflow-x: auto;
   }
 }
+
+
+/* Maintainer Maintenance: tighten and align card padding to Controller rhythm */
+.role-maintainer .maintainer-maintenance-table-card {
+  padding: 18px !important;
+}
+
+.role-maintainer .maintainer-maintenance-toolbar {
+  margin: 0 0 14px !important;
+  padding: 0 2px !important;
+  gap: 18px !important;
+}
+
+.role-maintainer .maintainer-maintenance-toolbar .section-heading {
+  margin: 0 !important;
+}
+
+.role-maintainer .maintainer-status-filter {
+  margin: 0 !important;
+}
+
+.role-maintainer .maintainer-status-filter select {
+  min-height: 40px;
+}
+
+.role-maintainer .maintainer-maintenance-table-card .table-wrap {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.role-maintainer .maintainer-maintenance-table-card .empty-state {
+  margin: 4px 0 0 !important;
+  min-height: 132px !important;
+  padding: 24px 16px !important;
+}
