@@ -12,14 +12,14 @@ export default function ChangePasswordForm({ first }: { first: boolean }) {
     <section className={first ? 'password-page password-page-first' : 'password-card-wrap'}>
       <div className="password-card">
         <div className="password-card-heading">
-          <span className="eyebrow">SETTING</span>
+          <span className="eyebrow">PENGATURAN</span>
           <h1>Buat kata sandi baru</h1>
-          <p>Kata sandi bawaan cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
+          <p>Kata sandi awal cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
         </div>
 
         <form action={formAction} className="password-form">
           <label>
-            Password baru
+            Kata sandi baru
             <input name="newPassword" type="password" autoComplete="new-password" autoFocus />
           </label>
 
@@ -37,7 +37,7 @@ export default function ChangePasswordForm({ first }: { first: boolean }) {
 
         <div className="password-card-footer">
           <span>Minimal 6 karakter</span>
-          <span>Kata sandi bawaan nggak bisa dipakai lagi.</span>
+          <span>Kata sandi awal nggak bisa dipakai lagi.</span>
         </div>
       </div>
     </section>
