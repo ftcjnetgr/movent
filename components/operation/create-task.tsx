@@ -2,8 +2,8 @@
 
 import { useActionState, useState } from 'react'
 import { jsPDF } from 'jspdf'
-import SearchableMasterSelect from '@/components/searchable-master-select'
-import StatusBadge from '@/components/status-badge'
+import SearchableMasterSelect from '@/components/shared/forms/searchable-master-select'
+import StatusBadge from '@/components/shared/status-badge'
 import { createNonTgrSupplyAction, confirmNonTgrDepartureByOperationAction, confirmNonTgrSupplyAction } from '@/app/operation/beranda/actions'
 
 type Option = { value: string; label: string; searchText?: string }

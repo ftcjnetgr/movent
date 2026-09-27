@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState, useTransition } from 'react'
-import StatusBadge from '@/components/status-badge'
+import StatusBadge from '@/components/shared/status-badge'
 import {
   acceptMaintenanceTicketAction,
   completeMaintenanceAction,

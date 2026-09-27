@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import OperationCreateTask from '@/components/operation-create-task'
-import OperationRequestExtraScheduleForm from '@/components/operation-request-extra-schedule-form'
+import OperationCreateTask from '@/components/operation/create-task'
+import OperationRequestExtraScheduleForm from '@/components/operation/request-extra-schedule-form'
 
 export default function OperationCreationHub({
   locations,

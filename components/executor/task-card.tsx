@@ -2,8 +2,8 @@
 
 import { FormEvent, useState, useTransition } from 'react'
 import { jsPDF } from 'jspdf'
-import SearchableMasterSelect from '@/components/searchable-master-select'
-import StatusBadge from '@/components/status-badge'
+import SearchableMasterSelect from '@/components/shared/forms/searchable-master-select'
+import StatusBadge from '@/components/shared/status-badge'
 
 import {
   acceptExtraScheduleAction,
