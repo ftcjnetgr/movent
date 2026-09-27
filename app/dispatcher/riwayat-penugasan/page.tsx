@@ -36,11 +36,11 @@ export default async function DispatcherAssignmentHistoryPage() {
 
   return (
     <>
-    <div className="page-heading"><div><h1>Riwayat Penugasan</h1><p>Seluruh tugas yang dibuat oleh Dispatcher ini, termasuk seluruh statusnya.</p></div></div>
+    <div className="page-heading"><div><h1>Riwayat Penugasan</h1><p>Semua penugasan yang dibuat di sini, lengkap dengan statusnya.</p></div></div>
       <section className="data-table-card">
         <div className="table-wrap">
           <table>
-            <thead><tr><th>ID Transaksi</th><th>Jenis tugas</th><th>Rute</th><th>Executor</th><th>Armada</th><th>Status</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>ID transaksi</th><th>Jenis penugasan</th><th>Rute</th><th>Executor</th><th>Armada</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody>
               {visible.map((task) => (
                 <tr key={task.transaction_id}>
@@ -53,15 +53,15 @@ export default async function DispatcherAssignmentHistoryPage() {
                   <td>
                     {task.fleet_ownership === 'Non-TGR'
                       ? (profile.role === 'Super User' && task.status !== 'Completed' && task.status !== 'Canceled' ? (
-                          <details><summary className="link-button">Batalkan tugas</summary><form action={cancelDispatcherTaskFormAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Tulis alasan pembatalan" required /><button type="submit">Ya, batalkan</button></form></details>
+                          <details><summary className="link-button">Batalkan penugasan</summary><form action={cancelDispatcherTaskFormAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Kenapa mau dibatalkan?" required /><button type="submit">Batalkan penugasan</button></form></details>
                         ) : <span className="muted">-</span>)
                       : (task.status === 'Assigned' && (profile.role === 'Super User' || task.created_by === profile.id) ? (
-                          <details><summary className="link-button">Batalkan tugas</summary><form action={cancelDispatcherTaskFormAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Tulis alasan pembatalan" required /><button type="submit">Ya, batalkan</button></form></details>
+                          <details><summary className="link-button">Batalkan penugasan</summary><form action={cancelDispatcherTaskFormAction} className="compact-form" style={{marginTop:12}}><input type="hidden" name="transactionId" value={task.transaction_id} /><input name="note" placeholder="Kenapa mau dibatalkan?" required /><button type="submit">Batalkan penugasan</button></form></details>
                         ) : <span className="muted">-</span>)}
                   </td>
                 </tr>
               ))}
-              {!visible.length ? <tr><td colSpan={7}><div className="empty-state">Belum ada penugasan yang bisa dilihat.</div></td></tr> : null}
+              {!visible.length ? <tr><td colSpan={7}><div className="empty-state">Belum ada penugasan untuk ditampilkan.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
