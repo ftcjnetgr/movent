@@ -68,7 +68,7 @@ export default function ProfilePage({
             onClick={() => setSection('security')}
           >
             <span>Keamanan</span>
-            <small>Password akun</small>
+            <small>Kata sandi akun</small>
           </button>
         </nav>
 
@@ -97,7 +97,7 @@ export default function ProfilePage({
               <div className="profile-settings-section-heading">
                 <div>
                   <h2>Keamanan Akun</h2>
-                  <p>Perbarui password untuk menjaga akses akun tetap aman.</p>
+                  <p>Perbarui kata sandi untuk menjaga akses akun tetap aman.</p>
                 </div>
               </div>
               <ChangePasswordForm first={false} />
