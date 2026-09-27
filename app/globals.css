@@ -1,17 +1,13 @@
-/* MOVENT — UI/UX rebuilt from zero
-   visual layer only. no business logic, data flow, auth, or database rules live here.
-*/
-
 :root {
-  --bg: #f7f7fb;
+  --bg: #f3f6fa;
   --surface: #ffffff;
-  --surface-2: #fafafc;
-  --surface-3: #f1f5f9;
+  --surface-2: #f8fafc;
+  --surface-3: #eef3f8;
   --line: #e2e8f0;
-  --line-strong: #cbd5e1;
-  --text: #1e293b;
-  --text-2: #475569;
-  --muted: #94a3b8;
+  --line-strong: #cfd8e5;
+  --text: #152238;
+  --text-2: #526174;
+  --muted: #8794a6;
   --primary: #4f46e5;
   --primary-dark: #4338ca;
   --primary-soft: #eef2ff;
@@ -24,9 +20,70 @@
   --info-soft: #edf7fb;
   --radius: 14px;
   --radius-sm: 10px;
-  --shadow: 0 1px 2px rgba(22, 32, 51, .03), 0 10px 28px rgba(22, 32, 51, .045);
-  --shadow-hover: 0 10px 28px rgba(22, 32, 51, .08);
+  --shadow: 0 1px 2px rgba(15, 23, 42, .03), 0 12px 32px rgba(15, 23, 42, .055);
+  --shadow-hover: 0 16px 38px rgba(15, 23, 42, .09);
+  --brand-indigo: #4f46e5;
+  --brand-indigo-dark: #3730a3;
+  --brand-indigo-soft: #eef2ff;
+  --slate-950: #0f172a;
+  --slate-900: #1e293b;
+  --slate-800: #334155;
+  --slate-700: #475569;
+  --slate-600: #64748b;
+  --slate-500: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+  --theme-primary: #4f46e5;
+  --theme-primary-dark: #3730a3;
+  --theme-primary-soft: #eef2ff;
+  --theme-primary-soft-2: #e8eaff;
+  --theme-slate-950: #0f172a;
+  --theme-slate-900: #1e293b;
+  --theme-slate-800: #334155;
+  --theme-slate-700: #475569;
+  --theme-slate-600: #64748b;
+  --theme-slate-500: #94a3b8;
+  --theme-slate-300: #cbd5e1;
+  --theme-slate-200: #e2e8f0;
+  --theme-slate-100: #f1f5f9;
+  --theme-slate-50: #f8fafc;
+  --theme-color: #4f46e5;
+  --theme-color-dark: #3730a3;
+  --theme-color-mid: #6366f1;
+  --theme-color-soft: #eef2ff;
+  --theme-color-soft-2: #e0e7ff;
+  --theme-color-light: #c7d2fe;
+  --theme-ink: #334155;
+  --theme-muted: #64748b;
+  --theme-line: #dbe2ee;
+  --status-requested: #2563eb;
+  --status-confirmed: #0891b2;
+  --status-assigned: #ea580c;
+  --status-driving: #16a34a;
+  --status-in-progress: #ea580c;
+  --status-completed: #7c3aed;
+  --status-canceled: #dc2626;
+  --status-requested-soft: #eff6ff;
+  --status-confirmed-soft: #ecfeff;
+  --status-assigned-soft: #fff7ed;
+  --status-driving-soft: #f0fdf4;
+  --status-completed-soft: #f5f3ff;
+  --status-canceled-soft: #fef2f2;
+  --selection-purple-dark: #3730a3;
+  --selection-purple-light: #eef2ff;
+  --selection-purple-border: #c7d2fe;
+  --content-gap: 12px;
+  --heading-subtitle-gap: 3px;
+  --subtitle-content-gap: 24px;
 }
+
+/* MOVENT — UI/UX rebuilt from zero
+   visual layer only. no business logic, data flow, auth, or database rules live here.
+*/
+
+
 
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
@@ -1943,22 +2000,7 @@ tbody tr:hover td { background: #fbfdff; }
    premium operational workspace: calm, sharp, useful
    ========================================================= */
 
-:root {
-  --bg: #f3f6fa;
-  --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --surface-3: #eef3f8;
-  --line: #e2e8f0;
-  --line-strong: #cfd8e5;
-  --text: #152238;
-  --text-2: #526174;
-  --muted: #8794a6;
-  --primary: #4f46e5;
-  --primary-dark: #4338ca;
-  --primary-soft: #eef2ff;
-  --shadow: 0 1px 2px rgba(15, 23, 42, .03), 0 12px 32px rgba(15, 23, 42, .055);
-  --shadow-hover: 0 16px 38px rgba(15, 23, 42, .09);
-}
+
 
 body {
   background:
@@ -5767,21 +5809,7 @@ html {
    independent from the brand palette.
    ========================================================= */
 
-:root {
-  --brand-indigo: #4f46e5;
-  --brand-indigo-dark: #3730a3;
-  --brand-indigo-soft: #eef2ff;
-  --slate-950: #0f172a;
-  --slate-900: #1e293b;
-  --slate-800: #334155;
-  --slate-700: #475569;
-  --slate-600: #64748b;
-  --slate-500: #94a3b8;
-  --slate-300: #cbd5e1;
-  --slate-200: #e2e8f0;
-  --slate-100: #f1f5f9;
-  --slate-50: #f8fafc;
-}
+
 
 /* primary actions */
 button,
@@ -5879,22 +5907,7 @@ th {
    transactions, reports, settings, timetable and all shared UI.
    ========================================================= */
 
-:root {
-  --theme-primary: #4f46e5;
-  --theme-primary-dark: #3730a3;
-  --theme-primary-soft: #eef2ff;
-  --theme-primary-soft-2: #e8eaff;
-  --theme-slate-950: #0f172a;
-  --theme-slate-900: #1e293b;
-  --theme-slate-800: #334155;
-  --theme-slate-700: #475569;
-  --theme-slate-600: #64748b;
-  --theme-slate-500: #94a3b8;
-  --theme-slate-300: #cbd5e1;
-  --theme-slate-200: #e2e8f0;
-  --theme-slate-100: #f1f5f9;
-  --theme-slate-50: #f8fafc;
-}
+
 
 /* base surfaces */
 body,
@@ -6103,17 +6116,7 @@ td select:focus,
    density levels stay inside the same indigo/slate family.
    ========================================================= */
 
-:root {
-  --theme-color: #4f46e5;
-  --theme-color-dark: #3730a3;
-  --theme-color-mid: #6366f1;
-  --theme-color-soft: #eef2ff;
-  --theme-color-soft-2: #e0e7ff;
-  --theme-color-light: #c7d2fe;
-  --theme-ink: #334155;
-  --theme-muted: #64748b;
-  --theme-line: #dbe2ee;
-}
+
 
 /* every primary accent */
 button,
@@ -6284,15 +6287,7 @@ td select:focus,
 .schedule-density-legend-item i { border-color: var(--theme-color-light) !important; }
 
 /* shared success / warning / danger tokens intentionally collapse into one brand family */
-:root {
-  --success: var(--theme-color);
-  --success-soft: var(--theme-color-soft);
-  --warning: var(--theme-color-dark);
-  --warning-soft: var(--theme-color-soft);
-  --danger: var(--theme-color-dark);
-  --danger-soft: var(--theme-color-soft);
-  --info-soft: var(--theme-color-soft);
-}
+
 
 
 /* =========================================================
@@ -6328,15 +6323,7 @@ td select:focus,
 }
 
 /* restore semantic tokens */
-:root {
-  --success: #15966b;
-  --success-soft: #eaf8f2;
-  --warning: #b56b00;
-  --warning-soft: #fff6e6;
-  --danger: #c53d46;
-  --danger-soft: #fff0f1;
-  --info-soft: #edf7fb;
-}
+
 
 /* schedule density is intentionally categorical:
    each color represents a different schedule count. */
@@ -6790,22 +6777,7 @@ td select:focus,
    COLOR SEPARATION — HIGH CONTRAST SEMANTIC STATES
    ========================================================= */
 
-:root {
-  --status-requested: #2563eb;
-  --status-confirmed: #0891b2;
-  --status-assigned: #ea580c;
-  --status-driving: #16a34a;
-  --status-in-progress: #ea580c;
-  --status-completed: #7c3aed;
-  --status-canceled: #dc2626;
 
-  --status-requested-soft: #eff6ff;
-  --status-confirmed-soft: #ecfeff;
-  --status-assigned-soft: #fff7ed;
-  --status-driving-soft: #f0fdf4;
-  --status-completed-soft: #f5f3ff;
-  --status-canceled-soft: #fef2f2;
-}
 
 /* status badge — strong separation */
 .status-requested,
@@ -8739,11 +8711,7 @@ td select:focus,
 
 
 /* FINAL unified purple selection palette across MOVENT */
-:root {
-  --selection-purple-dark: #3730a3;
-  --selection-purple-light: #eef2ff;
-  --selection-purple-border: #c7d2fe;
-}
+
 
 /* Active / selected / pre-selected */
 .schedule-day-row button.active,
@@ -9247,11 +9215,7 @@ td select:focus,
    Subtitle → first content = 24px.
    ========================================================= */
 
-:root {
-  --content-gap: 3px;
-  --heading-subtitle-gap: 3px;
-  --subtitle-content-gap: 3px;
-}
+
 
 /* Heading rhythm */
 .page-heading h1,
@@ -9335,11 +9299,7 @@ td select:focus,
 
 
 /* GLOBAL RHYTHM — ALL ROLES / ALL PAGES */
-:root {
-  --content-gap: 3px;
-  --heading-subtitle-gap: 3px;
-  --subtitle-content-gap: 3px;
-}
+
 
 /* One spacing system across every role and page. */
 .page-content,
@@ -9448,11 +9408,7 @@ td select:focus,
 
 
 /* FINAL GLOBAL RHYTHM — all roles / pages / menus / submenus */
-:root {
-  --content-gap: 12px;
-  --heading-subtitle-gap: 3px;
-  --subtitle-content-gap: 24px;
-}
+
 
 .page-content > * + *,
 .role-page > * + *,
