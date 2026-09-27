@@ -19,10 +19,10 @@ export default function OperationRequestExtraScheduleForm({locations}:{locations
   {state.preview?<div className="metric-card" style={{marginTop:16}}>
    <h3>{state.preview.transactionId}</h3>
    <div className="task-summary-grid"><div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div><div><span>STD</span><strong>{state.preview.std.slice(11,16)}</strong></div><div><span>STA</span><strong>{state.preview.sta.slice(11,16)}</strong></div></div>
-   <p className="muted">Periksa data sebelum request dikonfirmasi.</p>
+   <p className="muted">Periksa data sebelum permintaan dikonfirmasi.</p>
    <form action={confirmAction} className="compact-form">
     <input type="hidden" name="transactionId" value={state.preview.transactionId}/><input type="hidden" name="startPoint" value={state.preview.startPoint}/><input type="hidden" name="destination" value={state.preview.destination}/><input type="hidden" name="std" value={state.preview.std.slice(11,16)}/><input type="hidden" name="sta" value={state.preview.sta.slice(11,16)}/>
-    <div className="form-actions"><button type="submit" disabled={confirmPending}>{confirmPending?"Mengonfirmasi...":"Konfirmasi Request"}</button><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Edit Request</button></div>
+    <div className="form-actions"><button type="submit" disabled={confirmPending}>{confirmPending?"Mengonfirmasi...":"Konfirmasi Permintaan"}</button><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Ubah Permintaan</button></div>
    </form>
   </div>:null}
  </div>
