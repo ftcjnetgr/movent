@@ -9248,9 +9248,9 @@ td select:focus,
    ========================================================= */
 
 :root {
-  --content-gap: 12px;
+  --content-gap: 3px;
   --heading-subtitle-gap: 3px;
-  --subtitle-content-gap: 24px;
+  --subtitle-content-gap: 3px;
 }
 
 /* Heading rhythm */
@@ -9336,9 +9336,9 @@ td select:focus,
 
 /* GLOBAL RHYTHM — ALL ROLES / ALL PAGES */
 :root {
-  --content-gap: 12px;
+  --content-gap: 3px;
   --heading-subtitle-gap: 3px;
-  --subtitle-content-gap: 24px;
+  --subtitle-content-gap: 3px;
 }
 
 /* One spacing system across every role and page. */
@@ -9444,4 +9444,48 @@ td select:focus,
 [class*="page-heading"] h2,
 [class*="page-heading"] h3 {
   margin-bottom: 0 !important;
+}
+
+
+/* FINAL GLOBAL TIGHT RHYTHM — all roles / pages / menus / submenus */
+.page-content > * + *,
+.role-page > * + *,
+.super-dashboard > * + *,
+.profile-settings-page > * + *,
+.schedule-page > * + *,
+.page-content .section-block + *,
+.role-page .section-block + *,
+.page-content .card + *,
+.page-content .panel + *,
+.page-content .table-card + *,
+.page-content .content-card + *,
+.role-page .card + *,
+.role-page .panel + *,
+.role-page .table-card + *,
+.role-page .content-card + * {
+  margin-top: 3px !important;
+}
+
+.metric-grid,
+.super-kpi-grid,
+.dashboard-main-grid,
+.section-grid,
+.super-dashboard-main-grid,
+.super-dashboard-table-grid,
+.super-dashboard-bottom-grid,
+.creation-choice-grid,
+.alert-overview-grid,
+.alert-dashboard-summary,
+.report-type-buttons,
+.form-row,
+.task-list,
+.ticket-grid,
+.creation-choice-grid,
+.task-create-choice-grid,
+.database-management-actions,
+.user-management-actions,
+.schedule-summary-grid {
+  column-gap: 3px !important;
+  row-gap: 3px !important;
+  gap: 3px !important;
 }
