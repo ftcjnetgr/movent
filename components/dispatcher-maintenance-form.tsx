@@ -108,7 +108,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
         </div>
 
         <div className="metric-card">
-          <div className="card-title">Preview Maintenance</div>
+          <div className="card-title">Pratinjau Maintenance</div>
           {state.preview ? (
             <>
               <h2>{state.preview.transactionId}</h2>
@@ -132,7 +132,7 @@ export default function DispatcherMaintenanceForm({ maintenanceLists, locations,
                 {state.success ? <p className="form-success" role="status">{state.success}</p> : null}
                 <div className="form-actions">
                   <button type="submit" disabled={isConfirmPending}>{isConfirmPending ? 'Mengonfirmasi...' : 'Konfirmasi Maintenance'}</button>
-                  <button type="button" className="secondary-button" onClick={() => setState({})}>Edit Maintenance</button>
+                  <button type="button" className="secondary-button" onClick={() => setState({})}>Ubah Maintenance</button>
                 </div>
               </form>
             </>
