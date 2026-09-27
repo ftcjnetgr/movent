@@ -129,7 +129,7 @@ export default function ReportForm({ startPoints, destinations, executors, mode 
     setShowDownloadOptions(false)
     setRows([])
     setErrorMessage('')
-
+  }
 
   async function preview() {
     setLoading(true)
