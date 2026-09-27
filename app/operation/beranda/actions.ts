@@ -183,7 +183,17 @@ export async function confirmNonTgrSupplyAction(_state: State, formData: FormDat
     note: sj.sjNote,
   }))
   const { error: sjError } = await admin.from('task_sj_items').insert(sjRows)
-  if (sjError) { await admin.from('tasks').delete().eq('id', taskRow.id).eq('status', 'Assigned'); return { error: 'Tugas dan detail SJ belum berhasil disimpan. Silakan coba lagi.' } }
+  if (sjError) {
+    await admin
+      .from('tasks')
+      .delete()
+      .eq('id', taskRow.id)
+      .eq('status', 'Assigned')
+
+    return {
+      error: 'Tugas dan detail SJ belum berhasil disimpan. Silakan coba lagi.',
+    }
+  }
 
   revalidateOperationPaths()
   return { success: `Tugas ${transactionId} berhasil dikonfirmasi dan ditugaskan.`, transactionId }
