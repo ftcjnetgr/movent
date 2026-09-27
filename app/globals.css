@@ -9168,3 +9168,9 @@ td select:focus,
 .role-maintainer .role-page > .page-heading {
   margin-bottom: 26px !important;
 }
+
+
+/* Maintainer dashboard heading-to-content spacing matches the Controller dashboard */
+.role-maintainer .maintainer-dashboard {
+  gap: 20px !important;
+}
