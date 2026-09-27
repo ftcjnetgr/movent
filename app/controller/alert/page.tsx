@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import DashboardAlertList from '@/components/dashboard-alert-list'
+import DashboardAlertList from '@/components/shared/alerts/dashboard-alert-list'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
 

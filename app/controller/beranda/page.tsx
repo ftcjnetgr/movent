@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
-import StatusBadge from '@/components/status-badge'
+import StatusBadge from '@/components/shared/status-badge'
 
 
 function SummaryIcon({ name }: { name: 'clipboard' | 'truck' | 'check' | 'wrench' | 'play' }) {
