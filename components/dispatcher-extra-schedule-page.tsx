@@ -77,8 +77,8 @@ export default function DispatcherExtraSchedulePage() {
   return (
     <div>
       <div className="page-heading">
-        <h1>Extra Schedule</h1>
-        <p>Konfirmasi request terlebih dahulu, lalu pilih Executor dan Armada.</p>
+        <h1>Jadwal Tambahan</h1>
+        <p>Konfirmasi permintaan dulu, lalu pilih pelaksana dan armada.</p>
       </div>
 
       {preview ? (
@@ -91,13 +91,13 @@ export default function DispatcherExtraSchedulePage() {
           </div>
           <div className="inline-actions">
             <button type="button" onClick={confirmAssignment}>Konfirmasi Penugasan</button>
-            <button type="button" className="secondary" onClick={() => setPreview(null)}>Edit Penugasan</button>
+            <button type="button" className="secondary" onClick={() => setPreview(null)}>Ubah Penugasan</button>
           </div>
         </section>
       ) : null}
 
       <section className="data-table-card section-block">
-        <div className="section-heading"><div><h2>Request baru</h2><p>Terima request dari Operation sebelum melakukan assignment.</p></div></div>
+        <div className="section-heading"><div><h2>Permintaan baru</h2><p>Terima request dari Operation sebelum melakukan assignment.</p></div></div>
         {loading ? <div className="empty-state">Lagi memuat request...</div> : null}
         {!loading && data.requests.length === 0 ? <div className="empty-state">Belum ada request baru.</div> : null}
         {!loading && data.requests.length > 0 ? (
@@ -108,7 +108,7 @@ export default function DispatcherExtraSchedulePage() {
                 <td><strong>{row.transaction_id}</strong></td>
                 <td>{row.start_point} → {row.destination}</td>
                 <td>{time(row.std)}</td><td>{time(row.sta)}</td>
-                <td><button type="button" onClick={() => confirm(row.transaction_id)}>Terima Request</button>{feedback[row.transaction_id] ? <div className="inline-feedback">{feedback[row.transaction_id]}</div> : null}</td>
+                <td><button type="button" onClick={() => confirm(row.transaction_id)}>Terima permintaan</button>{feedback[row.transaction_id] ? <div className="inline-feedback">{feedback[row.transaction_id]}</div> : null}</td>
               </tr>
             ))}</tbody>
           </table></div>
@@ -116,8 +116,8 @@ export default function DispatcherExtraSchedulePage() {
       </section>
 
       <section className="data-table-card section-block">
-        <div className="section-heading"><div><h2>Siap ditugaskan</h2><p>Request yang sudah dikonfirmasi dan tinggal dipilihkan Executor serta Armada.</p></div></div>
-        {data.confirmed.length === 0 ? <div className="empty-state">Belum ada request yang siap di-assign.</div> : (
+        <div className="section-heading"><div><h2>Siap ditugaskan</h2><p>Request yang sudah dikonfirmasi dan tinggal dipilihkan pelaksana serta armada.</p></div></div>
+        {data.confirmed.length === 0 ? <div className="empty-state">Belum ada request yang siap ditugaskan.</div> : (
           <div className="table-wrap"><table>
             <thead><tr><th>ID</th><th>Rute</th><th>STD</th><th>STA</th><th>Executor</th><th>Armada</th><th>Aksi</th></tr></thead>
             <tbody>{data.confirmed.map((row) => (
@@ -127,7 +127,7 @@ export default function DispatcherExtraSchedulePage() {
                 <td>{time(row.std)}</td><td>{time(row.sta)}</td>
                 <td><SearchableMasterSelect label="Executor" name={'executor-' + row.transaction_id} options={executorOptions} placeholder="Pilih executor" value={selectedExecutor[row.transaction_id] ?? ''} onValueChange={(value) => setSelectedExecutor((current) => ({ ...current, [row.transaction_id]: value }))} /></td>
                 <td><SearchableMasterSelect label="Armada" name={'fleet-' + row.transaction_id} options={fleetOptions} placeholder="Pilih armada" value={selectedFleet[row.transaction_id] ?? ''} onValueChange={(value) => setSelectedFleet((current) => ({ ...current, [row.transaction_id]: value }))} /></td>
-                <td><button type="button" onClick={() => previewAssignment(row.transaction_id)}>Preview Tugas</button>{feedback[row.transaction_id] ? <div className="inline-feedback">{feedback[row.transaction_id]}</div> : null}</td>
+                <td><button type="button" onClick={() => previewAssignment(row.transaction_id)}>Pratinjau Tugas</button>{feedback[row.transaction_id] ? <div className="inline-feedback">{feedback[row.transaction_id]}</div> : null}</td>
               </tr>
             ))}</tbody>
           </table></div>
