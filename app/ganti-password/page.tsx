@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import AppShell from '@/components/app-shell'
+import AppShell from '@/components/layout/app-shell'
 import { getCurrentProfile } from '@/lib/server/profile'
-import ChangePasswordForm from '@/components/change-password-form'
+import ChangePasswordForm from '@/components/shared/change-password-form'
 
 export default async function ChangePasswordPage({
   searchParams,
