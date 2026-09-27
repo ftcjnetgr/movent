@@ -3,6 +3,7 @@ import OperasionalExtraScheduleAlert from '@/components/operation-extra-schedule
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelExtraScheduleAction } from '../request-extra-schedule/actions'
+import StatusBadge from '@/components/status-badge'
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Diajukan',
@@ -82,7 +83,7 @@ export default async function OperasionalHistoryPage() {
                   <td>{request.start_point} → {request.destination}</td>
                   <td>{formatDateTime(request.std)}</td>
                   <td>{formatDateTime(request.sta)}</td>
-                  <td><span className={`status-badge status-${String(request.status).toLowerCase().replaceAll(' ', '-')}`}>{statusLabel(request.status)}</span></td>
+                  <td><StatusBadge status={request.status} label={statusLabel(request.status)} /></td>
                   <td>{formatDateTime(request.created_at)}</td>
                   <td>
                     <details>
