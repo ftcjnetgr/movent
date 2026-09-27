@@ -9193,11 +9193,11 @@ td select:focus,
 }
 
 .page-heading p {
-  margin: 8px 0 0 !important;
+  margin: 6px 0 0 !important;
 }
 
 .page-heading + * {
-  margin-top: 24px !important;
+  margin-top: 12px !important;
 }
 
 /* Main page containers: one-line rhythm between sibling content blocks */
@@ -9209,12 +9209,12 @@ td select:focus,
   margin-top: 12px !important;
 }
 
-/* Preserve the larger two-line gap immediately after the page heading. */
+/* Subtitle → first content */
 .page-content > .page-heading + *,
 .role-page > .page-heading + *,
 .super-dashboard > .super-dashboard-heading + *,
 .profile-settings-page > .page-heading + * {
-  margin-top: 24px !important;
+  margin-top: 12px !important;
 }
 
 /* Dashboard-style heading uses the same 1x heading → subtitle rhythm. */
@@ -9223,14 +9223,14 @@ td select:focus,
 }
 
 .super-dashboard-heading p {
-  margin: 8px 0 0 !important;
+  margin: 6px 0 0 !important;
 }
 
 /* Schedule/report/profile pages use the same spacing regardless of role. */
 .schedule-page-heading + *,
 .report-workspace,
 .profile-settings-page > .profile-settings-workspace {
-  margin-top: 24px !important;
+  margin-top: 12px !important;
 }
 
 /* Avoid accidental extra spacing from legacy section-block rules at page level. */
