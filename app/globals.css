@@ -9174,3 +9174,66 @@ td select:focus,
 .role-maintainer .maintainer-dashboard {
   gap: 20px !important;
 }
+
+
+/* =========================================================
+   GLOBAL PAGE RHYTHM
+   1x line: heading → subtitle
+   2x line: subtitle → first content
+   1x line: content/card → next content/card
+   Applies to every role and page without changing component flow.
+   ========================================================= */
+
+.page-heading {
+  margin-bottom: 0 !important;
+}
+
+.page-heading h1 {
+  margin: 0 !important;
+}
+
+.page-heading p {
+  margin: 8px 0 0 !important;
+}
+
+.page-heading + * {
+  margin-top: 24px !important;
+}
+
+/* Main page containers: one-line rhythm between sibling content blocks */
+.page-content > * + *,
+.role-page > * + *,
+.super-dashboard > * + *,
+.profile-settings-page > * + *,
+.schedule-page > * + * {
+  margin-top: 12px !important;
+}
+
+/* Preserve the larger two-line gap immediately after the page heading. */
+.page-content > .page-heading + *,
+.role-page > .page-heading + *,
+.super-dashboard > .super-dashboard-heading + *,
+.profile-settings-page > .page-heading + * {
+  margin-top: 24px !important;
+}
+
+/* Dashboard-style heading uses the same 1x heading → subtitle rhythm. */
+.super-dashboard-heading h1 {
+  margin: 0 !important;
+}
+
+.super-dashboard-heading p {
+  margin: 8px 0 0 !important;
+}
+
+/* Schedule/report/profile pages use the same spacing regardless of role. */
+.schedule-page-heading + *,
+.report-workspace,
+.profile-settings-page > .profile-settings-workspace {
+  margin-top: 24px !important;
+}
+
+/* Avoid accidental extra spacing from legacy section-block rules at page level. */
+.role-page > .section-block {
+  margin-top: 12px !important;
+}
