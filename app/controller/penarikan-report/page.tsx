@@ -1,4 +1,4 @@
-import ReportForm from './report-form'
+import ReportForm from '@/components/reports/report-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export default async function ControllerReportPage() {

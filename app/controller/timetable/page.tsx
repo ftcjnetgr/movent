@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import TimetableView from '@/components/timetable-view'
+import TimetableView from '@/components/shared/timetable-view'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getTimetableData } from '@/lib/server/timetable'
 
