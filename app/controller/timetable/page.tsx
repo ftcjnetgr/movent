@@ -17,12 +17,12 @@ export default async function ControllerTimetablePage({
     <>
       <div className="page-heading schedule-page-heading">
         <div>
-          <h1>Schedule</h1>
-          <p>{view === 'live' ? 'Pantau posisi penugasan hari ini secara real-time.' : 'Lihat rencana schedule berdasarkan hari yang kamu pilih.'}</p>
+          <h1>Jadwal</h1>
+          <p>{view === 'live' ? 'Pantau posisi penugasan hari ini secara langsung.' : 'Lihat jadwal sesuai hari yang kamu pilih.'}</p>
         </div>
-        <nav className="alert-view-tabs" aria-label="Schedule">
-          <Link href="/controller/timetable?view=plan" className={view === 'plan' ? 'active' : ''}>By Plan</Link>
-          <Link href="/controller/timetable?view=live" className={view === 'live' ? 'active' : ''}>Live Tracking</Link>
+        <nav className="alert-view-tabs" aria-label="Jadwal">
+          <Link href="/controller/timetable?view=plan" className={view === 'plan' ? 'active' : ''}>Rencana</Link>
+          <Link href="/controller/timetable?view=live" className={view === 'live' ? 'active' : ''}>Pantau Langsung</Link>
         </nav>
       </div>
       <TimetableView
