@@ -116,7 +116,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
     <div className="super-dashboard">
       <div className="super-dashboard-heading dashboard-page-heading">
         <div>
-          <h1>Dashboard</h1>
+          <h1>Beranda</h1>
           <p>Ini ringkasan operasional sesuai periode yang dipilih. Biar gampang dipantau, semuanya kami rangkum di sini.</p>
         </div>
         <nav className="dashboard-view-tabs" aria-label="Dashboard">
@@ -220,7 +220,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
           </div>
           <div className="super-table-wrap">
             <table className="controller-detail-table">
-              <thead><tr><th>Penugasan</th><th>Rute</th><th>Driver</th><th>Armada</th><th>Jadwal</th><th>Status</th></tr></thead>
+              <thead><tr><th>Penugasan</th><th>Rute</th><th>Pengemudi</th><th>Armada</th><th>Jadwal</th><th>Status</th></tr></thead>
               <tbody>
                 {tasks.map((task) => (
                   <tr key={task.transaction_id}>
