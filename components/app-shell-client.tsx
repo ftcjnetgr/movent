@@ -164,8 +164,16 @@ export default function AppShellClient({ profile, children, alertCounts }: { pro
   const queryFilterTo = searchParams.get('to') ?? queryFilterFrom
   const [filterFrom, setFilterFrom] = useState(queryFilterFrom)
   const [filterTo, setFilterTo] = useState(queryFilterTo)
-  const totalAlertCount = alertCounts.task + alertCounts.maintenance
-  const alertCountForItem = (label: string) => label === 'Penugasan' ? alertCounts.task : label === 'Maintenance' ? alertCounts.maintenance : 0
+  const totalAlertCount = currentRole === 'Maintainer'
+    ? alertCounts.maintenance
+    : alertCounts.task + alertCounts.maintenance
+  const alertCountForItem = (label: string) => label === 'Penugasan'
+    ? alertCounts.task
+    : label === 'Maintenance'
+      ? alertCounts.maintenance
+      : currentRole === 'Maintainer'
+        ? alertCounts.maintenance
+        : 0
   const navGroups = useMemo(() => {
     const roleNav = navByRole[currentRole] ?? []
     if (profile.role !== 'Super User') return roleNav
