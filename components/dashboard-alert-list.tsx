@@ -206,7 +206,7 @@ export default function DashboardAlertList({
 
                 <div className="alert-hub-summary">
                   <div>
-                    <span>Schedule Hub</span>
+                    <span>Hub Jadwal</span>
                     <h2>{activeHub}</h2>
                   </div>
                   <div className="alert-hub-summary-stat">
@@ -227,9 +227,9 @@ export default function DashboardAlertList({
                 <table className="alert-table alert-group-table task-alert-group-table">
                   <thead>
                     <tr>
-                      <th>Schedule</th>
+                      <th>Jadwal</th>
                       <th>Status</th>
-                      <th>Driver</th>
+                      <th>Pengemudi</th>
                       <th>Armada</th>
                       <th>Rute</th>
                       <th>STD</th>
@@ -266,14 +266,14 @@ export default function DashboardAlertList({
               <div className="alert-hub-tabs-list" role="tablist" aria-label="Schedule Hub">
                 <button type="button" role="tab" aria-selected="true" className="alert-hub-tab is-active" disabled>
                   <span>Belum ada schedule hub</span>
-                  <small>0 schedule</small>
+                  <small>0 jadwal</small>
                 </button>
               </div>
 
               <div className="alert-hub-summary">
                 <div>
-                  <span>Schedule Hub</span>
-                  <h2>Belum ada schedule hub</h2>
+                  <span>Hub Jadwal</span>
+                  <h2>Belum ada hub jadwal</h2>
                 </div>
                 <div className="alert-hub-summary-stat">
                   <strong>0</strong>
@@ -293,9 +293,9 @@ export default function DashboardAlertList({
                 <table className="alert-table alert-group-table task-alert-group-table">
                   <thead>
                     <tr>
-                      <th>Schedule</th>
+                      <th>Jadwal</th>
                       <th>Status</th>
-                      <th>Driver</th>
+                      <th>Pengemudi</th>
                       <th>Armada</th>
                       <th>Rute</th>
                       <th>STD</th>
@@ -379,7 +379,7 @@ export default function DashboardAlertList({
                   <table className="alert-table alert-group-table maintenance-alert-group-table">
                     <thead>
                       <tr>
-                        <th>Transaction ID</th>
+                        <th>ID transaksi</th>
                         <th>Maintenance</th>
                         <th>Status</th>
                         <th>Batas</th>
