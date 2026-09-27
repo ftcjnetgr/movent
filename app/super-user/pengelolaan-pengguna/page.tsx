@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { addUserAction, importUsersAction, lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
 import DatabaseActionPreview from '@/components/database-action-preview'
-import DatabaseEditPreview from '@/components/database-edit-preview'
+import DatabaseUbahPreview from '@/components/database-edit-preview'
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
     Controller: 'Controller',
@@ -60,30 +60,30 @@ export default async function UserManagementPage() {
     <div className="page-heading">
         <div>
           <h1>Kelola Pengguna</h1>
-          <p>Atur akses dan data pengguna dari sini.</p>
+          <p>Atur akses dan data pengguna di sini.</p>
         </div>
       </div>
 
       <section className="user-management-actions section-block">
-        <DatabaseActionPreview title="Import banyak data">
-          <p className="muted">Kolom wajib: username, email, nik, full_name, role. Kolom opsional: phone_number, status.</p>
-          <p className="muted">Password awal untuk user baru mengikuti mekanisme login awal aplikasi.</p>
+        <DatabaseActionPreview title="Tambah dari file">
+          <p className="muted">Isi file dengan kolom wajib: username, email, NIK, nama lengkap, dan role. Nomor telepon serta status boleh diisi kalau ada.</p>
+          <p className="muted">Pengguna baru akan mendapat kata sandi awal sesuai aturan login aplikasi.</p>
           <form action={importUsersFormAction} className="data-form database-action-form">
-            <label>File CSV / XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
-            <button type="submit">Import data</button>
+            <label>File CSV atau XLSX<input type="file" name="file" accept=".csv,.xlsx" required /></label>
+            <button type="submit">Impor pengguna</button>
           </form>
         </DatabaseActionPreview>
 
-        <DatabaseActionPreview title="Tambah data">
+        <DatabaseActionPreview title="Tambah pengguna">
           <form action={addUserFormAction} className="data-form compact-form database-action-form">
-            <label>Username<input name="username" required /></label>
+            <label>Nama pengguna<input name="username" required /></label>
             <label>Email<input name="email" type="email" required /></label>
             <label>NIK<input name="nik" required /></label>
             <label>Nama lengkap<input name="fullName" required /></label>
-            <label>No. telepon<input name="phoneNumber" /></label>
+            <label>Nomor telepon<input name="phoneNumber" /></label>
             <label>Role<select name="role" defaultValue="Controller" required>{['Controller','Dispatcher','Operation','Executor','Maintainer','Super User'].map((role) => <option key={role} value={role}>{role}</option>)}</select></label>
-            <label>Status<select name="status" defaultValue="Active" required><option value="Active">Active</option><option value="Locked">Locked</option></select></label>
-            <button type="submit">Tambah data</button>
+            <label>Status<select name="status" defaultValue="Active" required><option value="Active">Aktif</option><option value="Locked">Terkunci</option></select></label>
+            <button type="submit">Tambah pengguna</button>
           </form>
         </DatabaseActionPreview>
       </section>
@@ -91,7 +91,7 @@ export default async function UserManagementPage() {
       <section className="data-table-card user-management-table-card">
         <div className="table-wrap">
           <table>
-            <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Auth</th><th>Percobaan Login Gagal</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Akun</th><th>Gagal masuk</th><th>Aksi</th></tr></thead>
             <tbody>
               {(users ?? []).map((user) => (
                 <tr key={user.id}>
@@ -101,33 +101,33 @@ export default async function UserManagementPage() {
                   </td>
                   <td>{roleLabel(user.role)}</td>
                   <td><span className={'status-badge status-' + String(user.status).toLowerCase()}>{userStatusLabel(user.status)}</span></td>
-                  <td>{user.auth_user_id ? 'Terhubung' : 'Belum terhubung'}</td>
+                  <td>{user.auth_user_id ? 'Terhubung' : 'Belum tersambung'}</td>
                   <td>{user.failed_login_attempts}</td>
                   <td>
                     <div className="admin-row-actions">
-                    <DatabaseEditPreview>
+                    <DatabaseUbahPreview>
                       <form action={updateUserProfileFormAction} className="data-form compact-form database-action-form">
                         <input type="hidden" name="id" value={user.id} />
-                        <label>Username<input name="username" defaultValue={user.username} required /></label>
+                        <label>Nama pengguna<input name="username" defaultValue={user.username} required /></label>
                         <label>Email<input name="email" type="email" defaultValue={user.email} required /></label>
                         <label>NIK<input name="nik" defaultValue={user.nik} required /></label>
                         <label>Nama lengkap<input name="fullName" defaultValue={user.full_name} required /></label>
-                        <label>No. telepon<input name="phoneNumber" defaultValue={user.phone_number ?? ''} /></label>
+                        <label>Nomor telepon<input name="phoneNumber" defaultValue={user.phone_number ?? ''} /></label>
                         <label>Role<select name="role" defaultValue={user.role} required>{['Controller','Dispatcher','Operation','Executor','Maintainer','Super User'].map((role) => <option key={role}>{role}</option>)}</select></label>
-                        <button type="submit">Simpan perubahan</button>
+                        <button type="submit">Simpan</button>
                       </form>
-                    </DatabaseEditPreview>
+                    </DatabaseUbahPreview>
                     <div className="admin-row-action-secondary admin-user-lock-actions">
                       <form action={lockUserFormAction}>
                         <input type="hidden" name="id" value={user.id} />
                         <button type="submit" className="user-action-lock" disabled={user.status === 'Locked'}>
-                          Kunci akun
+                          Kunci
                         </button>
                       </form>
                       <form action={unlockUserFormAction}>
                         <input type="hidden" name="id" value={user.id} />
                         <button type="submit" className="user-action-unlock" disabled={user.status !== 'Locked'}>
-                          Buka akun
+                          Buka
                         </button>
                       </form>
                     </div>
@@ -135,7 +135,7 @@ export default async function UserManagementPage() {
                   </td>
                 </tr>
               ))}
-              {!(users ?? []).length ? <tr><td colSpan={6}><div className="empty-state">Belum ada pengguna.</div></td></tr> : null}
+              {!(users ?? []).length ? <tr><td colSpan={6}><div className="empty-state">Belum ada pengguna. Coba tambah pengguna pertama di sini.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
