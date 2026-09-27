@@ -234,7 +234,7 @@ export default function DashboardAlertList({
                       <th>Rute</th>
                       <th>STD</th>
                       <th>STA</th>
-                      <th>Target</th>
+                      <th>Keterangan</th>
                       <th>Waktu</th>
                     </tr>
                   </thead>
@@ -300,7 +300,7 @@ export default function DashboardAlertList({
                       <th>Rute</th>
                       <th>STD</th>
                       <th>STA</th>
-                      <th>Target</th>
+                      <th>Keterangan</th>
                       <th>Waktu</th>
                     </tr>
                   </thead>
@@ -382,7 +382,7 @@ export default function DashboardAlertList({
                         <th>ID transaksi</th>
                         <th>Maintenance</th>
                         <th>Status</th>
-                        <th>Batas</th>
+                        <th>Keterangan</th>
                         <th>Waktu</th>
                       </tr>
                     </thead>
