@@ -1,4 +1,4 @@
-import AppShell from '@/components/app-shell'
+import AppShell from '@/components/layout/app-shell'
 import { requireRole } from '@/lib/server/role-guard'
 
 export const dynamic = 'force-dynamic'

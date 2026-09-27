@@ -1,4 +1,4 @@
-import DispatcherMaintenanceForm from '@/components/dispatcher-maintenance-form'
+import DispatcherMaintenanceForm from '@/components/dispatcher/maintenance-form'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 
