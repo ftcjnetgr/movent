@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelDispatcherTaskAction } from '@/app/dispatcher/beranda/actions'
-import StatusBadge from '@/components/status-badge'
+import StatusBadge from '@/components/shared/status-badge'
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Diajukan',
