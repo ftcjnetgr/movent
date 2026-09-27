@@ -9193,11 +9193,11 @@ td select:focus,
 }
 
 .page-heading p {
-  margin: 6px 0 0 !important;
+  margin: 4px 0 0 !important;
 }
 
 .page-heading + * {
-  margin-top: 12px !important;
+  margin-top: 8px !important;
 }
 
 /* Main page containers: one-line rhythm between sibling content blocks */
@@ -9206,7 +9206,7 @@ td select:focus,
 .super-dashboard > * + *,
 .profile-settings-page > * + *,
 .schedule-page > * + * {
-  margin-top: 6px !important;
+  margin-top: 4px !important;
 }
 
 /* Subtitle → first content */
@@ -9223,17 +9223,17 @@ td select:focus,
 }
 
 .super-dashboard-heading p {
-  margin: 6px 0 0 !important;
+  margin: 4px 0 0 !important;
 }
 
 /* Schedule/report/profile pages use the same spacing regardless of role. */
 .schedule-page-heading + *,
 .report-workspace,
 .profile-settings-page > .profile-settings-workspace {
-  margin-top: 12px !important;
+  margin-top: 8px !important;
 }
 
 /* Avoid accidental extra spacing from legacy section-block rules at page level. */
 .role-page > .section-block {
-  margin-top: 6px !important;
+  margin-top: 4px !important;
 }
