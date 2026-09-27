@@ -9027,3 +9027,103 @@ td select:focus,
 .role-maintainer .metric-grid {
   gap: 12px !important;
 }
+
+
+/* Maintainer Maintenance page: table-first workflow */
+.role-maintainer .maintainer-maintenance-table-card {
+  width: 100%;
+  padding: 16px;
+}
+
+.role-maintainer .maintainer-maintenance-toolbar {
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.role-maintainer .maintainer-status-filter {
+  display: grid;
+  grid-template-columns: auto 170px;
+  align-items: center;
+  gap: 8px;
+  color: var(--theme-slate-600);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.role-maintainer .maintainer-status-filter select {
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--theme-slate-300);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--theme-slate-700);
+}
+
+.role-maintainer .maintainer-maintenance-table {
+  min-width: 980px;
+}
+
+.role-maintainer .maintainer-maintenance-table th,
+.role-maintainer .maintainer-maintenance-table td {
+  vertical-align: middle;
+}
+
+.role-maintainer .maintainer-maintenance-table td {
+  white-space: nowrap;
+}
+
+.role-maintainer .maintainer-maintenance-table td:nth-child(2),
+.role-maintainer .maintainer-maintenance-table td:nth-child(3) {
+  white-space: normal;
+  min-width: 150px;
+}
+
+.role-maintainer .maintainer-complete-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 250px;
+}
+
+.role-maintainer .maintainer-complete-inline input {
+  min-height: 38px;
+  width: 130px;
+  padding: 7px 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--text);
+  outline: 0;
+}
+
+.role-maintainer .maintainer-complete-inline button {
+  min-height: 38px;
+  padding-inline: 11px;
+}
+
+.role-maintainer .maintainer-complete-inline .secondary-button {
+  background: #fff !important;
+  color: var(--theme-slate-700) !important;
+  border-color: var(--theme-slate-300) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 900px) {
+  .role-maintainer .maintainer-maintenance-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .role-maintainer .maintainer-status-filter {
+    grid-template-columns: 1fr;
+  }
+
+  .role-maintainer .maintainer-status-filter select {
+    width: 100%;
+  }
+
+  .role-maintainer .maintainer-maintenance-table-card .table-wrap {
+    overflow-x: auto;
+  }
+}
