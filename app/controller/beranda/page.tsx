@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { getDashboardData } from '@/lib/server/dashboard'
+import StatusBadge from '@/components/status-badge'
 
 
 function SummaryIcon({ name }: { name: 'clipboard' | 'truck' | 'check' | 'wrench' | 'play' }) {
@@ -228,7 +229,7 @@ export default async function ControllerPenugasanDashboardPage({ searchParams }:
                     <td>{task.executor_snapshot?.full_name ?? '-'}</td>
                     <td>{task.fleet_snapshot?.plat_number ?? '-'}</td>
                     <td><strong>{timeLabel(task.std)}</strong><small>STA {timeLabel(task.sta)}</small></td>
-                    <td><span className={'status-badge status-' + task.status.toLowerCase().replaceAll(' ', '-')}>{statusLabel(task.status)}</span></td>
+                    <td><StatusBadge status={task.status} label={statusLabel(task.status)} /></td>
                   </tr>
                 ))}
                 {!tasks.length ? <tr><td colSpan={6} className="super-empty-cell">Belum ada penugasan.</td></tr> : null}
