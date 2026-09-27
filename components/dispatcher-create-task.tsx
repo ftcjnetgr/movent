@@ -45,9 +45,9 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
   const [confirmState, confirmAction, confirmPending] = useActionState(confirmDispatcherTaskAction, initialState)
   const [activeFlow, setActiveFlow] = useState<Flow>(null)
   const [supplyOwnership, setSupplyOwnership] = useState<SupplyOwnership>(null)
-  const [scheduleId, setScheduleId] = useState('')
+  const [scheduleId, setJadwalId] = useState('')
 
-  const selectedSchedule = schedules.find((schedule) => schedule.schedule_id === scheduleId)
+  const selectedJadwal = schedules.find((schedule) => schedule.schedule_id === scheduleId)
 
   const locationOptions = locations.map((location) => ({ value: location, label: location }))
   const scheduleOptions = schedules.map((schedule) => ({
@@ -74,7 +74,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
   function resetCreateFlow() {
     setActiveFlow(null)
     setSupplyOwnership(null)
-    setScheduleId('')
+    setJadwalId('')
   }
 
   function shareNonTgrSj() {
@@ -141,7 +141,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
               <span className="task-create-choice-icon">DM</span>
               <span>
                 <strong>Distribusi Mobil</strong>
-                <small>Start Point, Destinasi, waktu, Executor, dan Armada.</small>
+                <small>Titik mulai, destinasi, waktu, pelaksana, dan armada.</small>
               </span>
               <b>→</b>
             </button>
@@ -163,7 +163,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
           <div className="task-create-flow-head">
             <div>
               <span className="eyebrow">Distribusi Mobil</span>
-              <strong>Buat tugas distribusi mobil</strong>
+              <strong>Buat penugasan distribusi mobil</strong>
             </div>
             <button type="button" className="secondary-button" onClick={resetCreateFlow}>Kembali</button>
           </div>
@@ -239,29 +239,29 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
               <span className="eyebrow">Supply · Armada TGR</span>
               <strong>Pilih jadwal yang mau dipakai</strong>
             </div>
-            <button type="button" className="secondary-button" onClick={() => { setSupplyOwnership(null); setScheduleId('') }}>Kembali</button>
+            <button type="button" className="secondary-button" onClick={() => { setSupplyOwnership(null); setJadwalId('') }}>Kembali</button>
           </div>
 
           <form action={formAction} className="data-form task-create-form">
             <input type="hidden" name="taskType" value="Supply" />
             <input type="hidden" name="fleetOwnership" value="TGR" />
             <SearchableMasterSelect
-              label="Schedule"
+              label="Jadwal"
               name="scheduleId"
               options={scheduleOptions}
               placeholder="Pilih schedule"
               value={scheduleId}
-              onValueChange={setScheduleId}
+              onValueChange={setJadwalId}
               required
             />
-            {selectedSchedule ? (
+            {selectedJadwal ? (
               <>
                 <div className="selected-schedule-summary">
-                  <div><span>Schedule</span><strong>{selectedSchedule.schedule_id}</strong></div>
-                  <div><span>Trip</span><strong>{selectedSchedule.trip}</strong></div>
-                  <div><span>Rute</span><strong>{selectedSchedule.start_point} → {selectedSchedule.destination}</strong></div>
-                  <div><span>STD</span><strong>{selectedSchedule.std.slice(0, 5)}</strong></div>
-                  <div><span>STA</span><strong>{selectedSchedule.sta.slice(0, 5)}</strong></div>
+                  <div><span>Jadwal</span><strong>{selectedJadwal.schedule_id}</strong></div>
+                  <div><span>Trip</span><strong>{selectedJadwal.trip}</strong></div>
+                  <div><span>Rute</span><strong>{selectedJadwal.start_point} → {selectedJadwal.destination}</strong></div>
+                  <div><span>STD</span><strong>{selectedJadwal.std.slice(0, 5)}</strong></div>
+                  <div><span>STA</span><strong>{selectedJadwal.sta.slice(0, 5)}</strong></div>
                 </div>
                 <div className="form-section">
                   <div className="form-section-title">Penugasan</div>
@@ -341,13 +341,13 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
 
       {state.preview ? (
         <div className="metric-card section-block">
-          <div className="card-title">Preview Tugas</div>
+          <div className="card-title">Pratinjau Tugas</div>
           <div className="task-summary-grid">
             <div><span>ID Transaksi</span><strong>{state.preview.transactionId}</strong></div>
             <div><span>Rute</span><strong>{state.preview.startPoint} → {state.preview.destination}</strong></div>
             <div><span>Executor</span><strong>{state.preview.externalExecutor}</strong></div>
             <div><span>Armada</span><strong>{state.preview.externalFleet}</strong></div>
-            {state.preview.scheduleId ? <div><span>Schedule</span><strong>{state.preview.scheduleId}</strong></div> : null}
+            {state.preview.scheduleId ? <div><span>Jadwal</span><strong>{state.preview.scheduleId}</strong></div> : null}
           </div>
           <p className="muted">Periksa data sebelum penugasan dikonfirmasi.</p>
           <form action={confirmAction} className="compact-form">
@@ -362,7 +362,7 @@ export default function DispatcherCreateTask({ locations, schedules, executors, 
             <input type="hidden" name="sta" value={state.preview.sta ?? ""}/>
             <div className="form-actions">
               <button type="submit" disabled={confirmPending}>{confirmPending ? "Mengonfirmasi..." : "Konfirmasi Penugasan"}</button>
-              <button type="button" className="secondary-button" onClick={resetCreateFlow}>Edit Tugas</button>
+              <button type="button" className="secondary-button" onClick={resetCreateFlow}>Ubah Tugas</button>
             </div>
           </form>
         </div>
