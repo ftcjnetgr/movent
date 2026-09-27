@@ -9598,3 +9598,20 @@ td select:focus,
   row-gap: var(--content-gap) !important;
   gap: var(--content-gap) !important;
 }
+
+
+/* FIX DOUBLE-GAP: dashboard containers use gap for regular spacing.
+   Keep only one spacing source between sibling blocks. */
+.role-maintainer .maintainer-dashboard {
+  gap: var(--content-gap) !important;
+}
+
+.role-maintainer .maintainer-dashboard > * {
+  margin-top: 0 !important;
+}
+
+.role-maintainer .maintainer-dashboard > .super-dashboard-heading + *,
+.role-maintainer .maintainer-dashboard > .page-heading + *,
+.role-maintainer .maintainer-dashboard > [class*="page-heading"] + * {
+  margin-top: var(--content-gap) !important;
+}
