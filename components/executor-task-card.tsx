@@ -3,6 +3,7 @@
 import { FormEvent, useState, useTransition } from 'react'
 import { jsPDF } from 'jspdf'
 import SearchableMasterSelect from '@/components/searchable-master-select'
+import StatusBadge from '@/components/status-badge'
 
 import {
   acceptExtraScheduleAction,
@@ -176,7 +177,7 @@ export default function ExecutorTaskCard({ task, products, sjItems }: { task: Ta
           <span className="eyebrow">{task.task_type}</span>
           <h2>{task.transaction_id}</h2>
         </div>
-        <span className={`status-badge status-${task.status.toLowerCase().replaceAll(' ', '-')}`}>{statusLabel(task.status)}</span>
+        <StatusBadge status={task.status} label={statusLabel(task.status)} />
       </div>
 
       <div className="task-next-step">
