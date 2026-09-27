@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import StatusBadge from '@/components/status-badge'
 
 type TaskAlert = {
   kind: 'unassigned' | 'assigned'
@@ -242,7 +243,7 @@ export default function DashboardAlertList({
                       <tr key={`${item.scheduleId}-${item.transactionId ?? 'schedule'}`} className={item.late ? 'is-alert-late' : ''}>
                         <td><strong>{item.scheduleId}</strong>{item.transactionId ? <small>{item.transactionId}</small> : null}</td>
                         <td>
-                          <span className={`alert-kind-badge ${item.kind}`}>{item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'}</span>
+                          <StatusBadge status={item.kind === 'unassigned' ? 'Requested' : 'Assigned'} label={item.kind === 'unassigned' ? 'Belum ditugaskan' : 'Sudah ditugaskan'} />
                           <small className="alert-context">{item.kind === 'unassigned' ? 'Schedule belum punya penugasan' : 'Melewati batas STA'}</small>
                         </td>
                         <td>{item.driverName ?? 'Belum ada driver'}</td>
@@ -390,7 +391,7 @@ export default function DashboardAlertList({
                         <tr key={item.transactionId} className={item.late ? 'is-alert-late' : ''}>
                           <td><strong>{item.transactionId}</strong></td>
                           <td>{item.maintenance}</td>
-                          <td><span className="alert-kind-badge maintenance">{item.status}</span></td>
+                          <td><StatusBadge status={item.status === 'Dibuat' ? 'Requested' : item.status === 'Dikonfirmasi' ? 'Confirmed' : 'In Progress'} label={item.status} /></td>
                           <td>{item.threshold}</td>
                           <td><b className={item.late ? 'is-late' : ''}>{item.label} · {item.indicator}</b></td>
                         </tr>
