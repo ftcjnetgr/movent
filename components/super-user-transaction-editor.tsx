@@ -116,7 +116,7 @@ export function SuperUserTicketEditor({ ticket, maintenanceLists, locations, fle
   return (
     <details className="transaction-editor">
       <summary className="link-button">Ubah transaksi</summary>
-      {ticket.status === 'Completed' ? <p className="muted">Tiket yang sudah selesai nggak bisa diubah.</p> : (
+      {ticket.status === 'Completed' ? <p className="muted">Maintenance yang sudah selesai nggak bisa diubah.</p> : (
         <form action={formAction} className="data-form compact-form" style={{marginTop:12}}>
           <input type="hidden" name="transactionId" value={ticket.transaction_id} />
           <SearchableMasterSelect label="Daftar Maintenance" name="maintenanceList" options={maintenanceLists} placeholder="Pilih jenis maintenance" defaultValue={ticket.maintenance_list ?? ''} required />
