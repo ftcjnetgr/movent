@@ -39,7 +39,7 @@ export default function DatabaseActionPreview({
             <div className="database-action-modal-heading">
               <div>
                 <h2>{title}</h2>
-                <p>Kelola data <strong> {title === 'Tambah data' ? 'satu per satu' : 'secara massal'}</strong> di sini.</p>
+                <p>Kelola data <strong> {title === 'Tambah pengguna' ? 'satu per satu' : 'secara massal'}</strong> di sini.</p>
               </div>
               <button
                 type="button"
