@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation'
-import OperasionalExtraScheduleAlert from '@/components/operation-extra-schedule-alert'
+import OperationExtraScheduleAlert from '@/components/operation/extra-schedule-alert'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { cancelExtraScheduleAction } from '../request-extra-schedule/actions'
-import StatusBadge from '@/components/status-badge'
+import StatusBadge from '@/components/shared/status-badge'
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: 'Diajukan',
@@ -60,7 +60,7 @@ export default async function OperasionalHistoryPage() {
         </div>
       </div>
 
-      <OperasionalExtraScheduleAlert requests={alertRequests} />
+      <OperationExtraScheduleAlert requests={alertRequests} />
 
       <section className="data-table-card">
         <div className="table-wrap">

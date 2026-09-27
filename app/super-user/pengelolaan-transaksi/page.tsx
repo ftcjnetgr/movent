@@ -1,4 +1,4 @@
-import { SuperUserTaskEditor, SuperUserTicketEditor } from '@/components/super-user-transaction-editor'
+import { SuperUserTaskEditor, SuperUserTicketEditor } from '@/components/super-user/transaction-editor'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 function statusLabel(status: string) {

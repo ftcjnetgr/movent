@@ -1,8 +1,8 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { addUserAction, importUsersAction, lockUserAction, unlockUserAction, updateUserProfileAction } from './actions'
-import DatabaseActionPreview from '@/components/database-action-preview'
-import DatabaseUbahPreview from '@/components/database-edit-preview'
+import DatabaseActionPreview from '@/components/shared/database/action-preview'
+import DatabaseUbahPreview from '@/components/shared/database/edit-preview'
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
     Controller: 'Controller',

@@ -1,8 +1,8 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCurrentProfile } from '@/lib/server/profile'
 import { addMasterRowAction, deleteMasterRowAction, importMasterDatabaseAction, updateMasterRowAction } from './actions'
-import DatabaseActionPreview from '@/components/database-action-preview'
-import DatabaseEditPreview from '@/components/database-edit-preview'
+import DatabaseActionPreview from '@/components/shared/database/action-preview'
+import DatabaseEditPreview from '@/components/shared/database/edit-preview'
 
 async function importMasterDatabaseFormAction(formData: FormData) {
   'use server'
