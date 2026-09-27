@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
 export default function DatabaseEditPreview({
-  title = 'Edit data',
+  title = 'Ubah data',
   children,
 }: {
   title?: string
