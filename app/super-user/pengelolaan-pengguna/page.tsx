@@ -91,7 +91,7 @@ export default async function UserManagementPage() {
       <section className="data-table-card user-management-table-card">
         <div className="table-wrap">
           <table>
-            <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Akun</th><th>Gagal masuk</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>Pengguna</th><th>Peran</th><th>Status</th><th>Akun</th><th>Gagal masuk</th><th>Aksi</th></tr></thead>
             <tbody>
               {(users ?? []).map((user) => (
                 <tr key={user.id}>
