@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useState } from 'react'
-import SearchableMasterSelect from '@/components/searchable-master-select'
+import SearchableMasterSelect from '@/components/shared/forms/searchable-master-select'
 import { updateTaskTransactionAction, updateTicketTransactionAction } from '@/app/super-user/pengelolaan-transaksi/actions'
 
 type Master = { value: string; label: string; searchText?: string }

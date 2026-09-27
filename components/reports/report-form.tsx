@@ -74,7 +74,6 @@ const reportLabels: Record<string, string> = {
   maintenance_list: 'Jenis Maintenance',
   maintenance_snapshot: 'Detail Maintenance',
   fleet_plat_number: 'Nomor Armada',
-  fleet_snapshot: 'Detail Armada',
   location: 'Lokasi',
   location_snapshot: 'Detail Lokasi',
   in_progress_at: 'Mulai Dikerjakan',
