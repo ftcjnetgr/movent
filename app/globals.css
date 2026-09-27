@@ -9249,7 +9249,7 @@ td select:focus,
 
 :root {
   --content-gap: 12px;
-  --heading-subtitle-gap: 12px;
+  --heading-subtitle-gap: 6px;
   --subtitle-content-gap: 24px;
 }
 
