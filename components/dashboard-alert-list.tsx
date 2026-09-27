@@ -306,7 +306,7 @@ export default function DashboardAlertList({
                   </thead>
                   <tbody>
                     <tr className="alert-empty-row">
-                      <td colSpan={9}>Tidak ada alert tugas saat ini.</td>
+                      <td colSpan={9}>Tidak ada notifikasi penugasan saat ini.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -397,7 +397,7 @@ export default function DashboardAlertList({
                         </tr>
                       )) : (
                         <tr className="alert-empty-row">
-                          <td colSpan={5}>Belum ada maintenance yang masuk alert.</td>
+                          <td colSpan={5}>Belum ada maintenance yang masuk notifikasi.</td>
                         </tr>
                       )}
                     </tbody>
