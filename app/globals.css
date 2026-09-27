@@ -9525,3 +9525,76 @@ td select:focus,
 [class*="page-heading"] + * {
   margin-top: var(--subtitle-content-gap) !important;
 }
+
+
+/* CANONICAL SPACING OVERRIDES — same rhythm for every role/menu/submenu */
+.role-maintainer .role-page > .page-heading {
+  margin-bottom: 0 !important;
+}
+
+.role-maintainer .role-page > .section-block {
+  margin-top: var(--content-gap) !important;
+}
+
+.role-maintainer .maintainer-dashboard {
+  gap: var(--content-gap) !important;
+}
+
+.role-maintainer .maintainer-dashboard > * + * {
+  margin-top: var(--content-gap) !important;
+}
+
+/* Keep every role-specific dashboard/layout on the same baseline. */
+[class*="role-"] .page-content > * + *,
+[class*="role-"] .role-page > * + *,
+[class*="role-"] .super-dashboard > * + *,
+[class*="role-"] .profile-settings-page > * + *,
+[class*="role-"] .schedule-page > * + * {
+  margin-top: var(--content-gap) !important;
+}
+
+/* Heading → subtitle is the only 3px spacing. */
+[class*="role-"] .page-heading h1 + p,
+[class*="role-"] .page-heading h2 + p,
+[class*="role-"] .page-heading h3 + p,
+[class*="role-"] .super-dashboard-heading h1 + p,
+[class*="role-"] .super-dashboard-heading h2 + p,
+[class*="role-"] .super-dashboard-heading h3 + p,
+[class*="role-"] [class*="page-heading"] h1 + p,
+[class*="role-"] [class*="page-heading"] h2 + p,
+[class*="role-"] [class*="page-heading"] h3 + p {
+  margin-top: var(--heading-subtitle-gap) !important;
+}
+
+/* Subtitle → first content stays 24px everywhere. */
+[class*="role-"] .page-content > .page-heading + *,
+[class*="role-"] .role-page > .page-heading + *,
+[class*="role-"] .super-dashboard > .super-dashboard-heading + *,
+[class*="role-"] .profile-settings-page > .page-heading + *,
+[class*="role-"] [class*="page-heading"] + * {
+  margin-top: var(--subtitle-content-gap) !important;
+}
+
+/* All dashboard/card grids use the same 12px horizontal and vertical gap. */
+[class*="role-"] .metric-grid,
+[class*="role-"] .super-kpi-grid,
+[class*="role-"] .dashboard-main-grid,
+[class*="role-"] .section-grid,
+[class*="role-"] .super-dashboard-main-grid,
+[class*="role-"] .super-dashboard-table-grid,
+[class*="role-"] .super-dashboard-bottom-grid,
+[class*="role-"] .creation-choice-grid,
+[class*="role-"] .alert-overview-grid,
+[class*="role-"] .alert-dashboard-summary,
+[class*="role-"] .report-type-buttons,
+[class*="role-"] .form-row,
+[class*="role-"] .task-list,
+[class*="role-"] .ticket-grid,
+[class*="role-"] .task-create-choice-grid,
+[class*="role-"] .database-management-actions,
+[class*="role-"] .user-management-actions,
+[class*="role-"] .schedule-summary-grid {
+  column-gap: var(--content-gap) !important;
+  row-gap: var(--content-gap) !important;
+  gap: var(--content-gap) !important;
+}
