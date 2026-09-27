@@ -9447,7 +9447,13 @@ td select:focus,
 }
 
 
-/* FINAL GLOBAL TIGHT RHYTHM — all roles / pages / menus / submenus */
+/* FINAL GLOBAL RHYTHM — all roles / pages / menus / submenus */
+:root {
+  --content-gap: 12px;
+  --heading-subtitle-gap: 3px;
+  --subtitle-content-gap: 24px;
+}
+
 .page-content > * + *,
 .role-page > * + *,
 .super-dashboard > * + *,
@@ -9463,7 +9469,7 @@ td select:focus,
 .role-page .panel + *,
 .role-page .table-card + *,
 .role-page .content-card + * {
-  margin-top: 3px !important;
+  margin-top: var(--content-gap) !important;
 }
 
 .metric-grid,
@@ -9480,12 +9486,42 @@ td select:focus,
 .form-row,
 .task-list,
 .ticket-grid,
-.creation-choice-grid,
 .task-create-choice-grid,
 .database-management-actions,
 .user-management-actions,
 .schedule-summary-grid {
-  column-gap: 3px !important;
-  row-gap: 3px !important;
-  gap: 3px !important;
+  column-gap: var(--content-gap) !important;
+  row-gap: var(--content-gap) !important;
+  gap: var(--content-gap) !important;
+}
+
+/* Heading → subtitle stays tighter than the other spacing. */
+.page-heading h1 + p,
+.page-heading h2 + p,
+.page-heading h3 + p,
+.super-dashboard-heading h1 + p,
+.super-dashboard-heading h2 + p,
+.super-dashboard-heading h3 + p,
+.dashboard-page-heading h1 + p,
+.dashboard-page-heading h2 + p,
+.dashboard-page-heading h3 + p,
+.alert-page-heading h1 + p,
+.alert-page-heading h2 + p,
+.alert-page-heading h3 + p,
+.schedule-page-heading h1 + p,
+.schedule-page-heading h2 + p,
+.schedule-page-heading h3 + p,
+[class*="page-heading"] h1 + p,
+[class*="page-heading"] h2 + p,
+[class*="page-heading"] h3 + p {
+  margin-top: var(--heading-subtitle-gap) !important;
+}
+
+/* Subtitle → first content stays 2x the normal content gap. */
+.page-content > .page-heading + *,
+.role-page > .page-heading + *,
+.super-dashboard > .super-dashboard-heading + *,
+.profile-settings-page > .page-heading + *,
+[class*="page-heading"] + * {
+  margin-top: var(--subtitle-content-gap) !important;
 }
