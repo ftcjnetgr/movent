@@ -149,7 +149,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-panel-heading">
             <div>
               <h2>Aktivitas Maintenance</h2>
-              <p>Maintenance yang dibuat berdasarkan data terbaru.</p>
+              <p>Biar gampang dipantau, maintenance terbaru ada di sini.</p>
             </div>
 
             <div className="super-chart-legend">
