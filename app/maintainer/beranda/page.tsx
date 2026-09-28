@@ -5,15 +5,12 @@ import { compareStatus, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
-    (
-      {
-        Requested: "Udah Diajukan",
-        Confirmed: "Udah Diterima",
-        "In Progress": "Lagi Dikerjain",
-        Completed: "Udah Selesai",
-        Canceled: "Dibatalkan",
-      } as Record<string, string>
-    )[status] ?? status
+    {
+      Requested: "Udah Diajukan",
+      Confirmed: "Udah Diterima",
+      "In Progress": "Lagi Dikerjain",
+      Completed: "Udah Selesai",
+    }[status] ?? status
   );
 }
 
@@ -109,17 +106,6 @@ export default async function MaintainerBerandaPage() {
       </div>
 
       <section className="super-kpi-grid maintenance-kpi-grid">
-        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-total">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Assigned" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Semua Maintenance</span>
-            <strong>{totalMaintenance}</strong>
-            <small>Total maintenance</small>
-          </div>
-        </div>
-
         <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-requested">
           <div className="super-kpi-icon">
             <StatusIcon status="Requested" size={20} />
@@ -127,7 +113,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-kpi-content">
             <span>Udah Diajukan</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
-            <small>Nunggu diterima</small>
+            <small>Menunggu diterima</small>
           </div>
         </div>
 
@@ -138,7 +124,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-            <small>Udah diterima</small>
+            <small>Siap dikerjain</small>
           </div>
         </div>
 
@@ -149,7 +135,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-kpi-content">
             <span>Lagi Dikerjain</span>
             <strong>{data.ticketCounts["In Progress"] ?? 0}</strong>
-            <small>Lagi diproses</small>
+            <small>Masih diproses</small>
           </div>
         </div>
 
@@ -174,13 +160,10 @@ export default async function MaintainerBerandaPage() {
             </div>
 
             <div className="super-chart-legend">
-              <span className="status-legend status-legend-requested"><i className="legend-blue" /> Diajukan</span>
-              <span className="status-legend status-legend-confirmed"><i className="legend-cyan" /> Udah Diterima</span>
-              <span className="status-legend status-legend-in-progress"><i className="legend-orange" /> Lagi Dikerjain</span>
-              <span>
-                <i className="legend-purple" /> Selesai
-              </span>
-              <span className="status-legend status-legend-canceled"><i className="legend-red" /> Dibatalkan</span>
+              <span><i className="legend-requested" /> Udah Diajukan</span>
+              <span><i className="legend-confirmed" /> Udah Diterima</span>
+              <span><i className="legend-in-progress" /> Lagi Dikerjain</span>
+              <span><i className="legend-completed" /> Udah Selesai</span>
             </div>
           </div>
 
@@ -197,45 +180,34 @@ export default async function MaintainerBerandaPage() {
                   <div className="super-chart-stack">
                     {item.requested > 0 ? (
                       <span
-                        className="bar-completed"
+                        className="bar-requested"
                         style={{
-                          height: `${(item.requested / maxHour) * 100}%`,
+                          height: String((item.requested / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
-
                     {item.confirmed > 0 ? (
                       <span
-                        className="bar-driving"
+                        className="bar-confirmed"
                         style={{
-                          height: `${(item.confirmed / maxHour) * 100}%`,
+                          height: String((item.confirmed / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
-
                     {item.inProgress > 0 ? (
                       <span
-                        className="bar-unassigned"
+                        className="bar-in-progress"
                         style={{
-                          height: `${(item.inProgress / maxHour) * 100}%`,
+                          height:
+                            String((item.inProgress / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
-
                     {item.completed > 0 ? (
                       <span
-                        className="bar-maintenance-completed"
+                        className="bar-completed"
                         style={{
-                          height: `${(item.completed / maxHour) * 100}%`,
-                        }}
-                      />
-                    ) : null}
-
-                    {item.canceled > 0 ? (
-                      <span
-                        className="bar-canceled"
-                        style={{
-                          height: `${(item.canceled / maxHour) * 100}%`,
+                          height: String((item.completed / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
