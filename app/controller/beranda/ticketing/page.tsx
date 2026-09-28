@@ -203,21 +203,13 @@ export default async function ControllerTicketingDashboardPage({
               <p>Maintenance yang dibuat berdasarkan periode yang dipilih.</p>
             </div>
             <div className="super-chart-legend">
-              <span>
-                <i className="legend-blue" /> Diajukan
-              </span>
-              <span>
-                <i className="legend-cyan" /> Udah Diterima
-              </span>
-              <span>
-                <i className="legend-orange" /> Lagi Dikerjain
-              </span>
+              <span className="status-legend status-legend-requested"><StatusIcon status="Requested" size={12} /> Diajukan</span>
+              <span className="status-legend status-legend-confirmed"><StatusIcon status="Confirmed" size={12} /> Udah Diterima</span>
+              <span className="status-legend status-legend-in-progress"><StatusIcon status="In Progress" size={12} /> Lagi Dikerjain</span>
               <span>
                 <i className="legend-purple" /> Selesai
               </span>
-              <span>
-                <i className="legend-red" /> Dibatalkan
-              </span>
+              <span className="status-legend status-legend-canceled"><StatusIcon status="Canceled" size={12} /> Dibatalkan</span>
             </div>
           </div>
           <div className="super-chart">
