@@ -666,7 +666,7 @@ export default function AppShellClient({
             </div>
             {profile.role === "Super User" ? (
               <label className="mode-select">
-                <span>Mode</span>
+                <span>Mode tampilan</span>
                 <select
                   value={currentRole}
                   onChange={(e) => navigateTo(modeRoutes[e.target.value])}
@@ -824,7 +824,7 @@ export default function AppShellClient({
             <span className="nav-icon">
               <Icon name="logout" />
             </span>
-            <span>Keluar</span>
+            <span>Keluar dulu</span>
           </button>
           <div className="sidebar-credit">
             <span>Bagian dari Proyek FTC Go</span>
@@ -848,7 +848,7 @@ export default function AppShellClient({
             <span className="search-icon">⌕</span>
             <input
               aria-label="Pencarian"
-              placeholder="Cari tugas, armada, lokasi..."
+              placeholder="Mau cari tugas, armada, atau lokasi?"
             />
           </div>
           {isDashboardDateFilter ? (
@@ -872,7 +872,7 @@ export default function AppShellClient({
                   min={filterFrom}
                 />
               </label>
-              <button type="submit">Terapkan</button>
+              <button type="submit">Pakai filter</button>
               <button
                 type="button"
                 className="topbar-date-reset"
