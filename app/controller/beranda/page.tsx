@@ -7,17 +7,70 @@ import { compareStatus, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
-    (
-      {
-        Requested: "Udah Diajukan",
-        Confirmed: "Udah Diterima",
-        Assigned: "Ditugaskan",
-        Driving: "Lagi Jalan",
-        Completed: "Udah Selesai",
-        Canceled: "Dibatalkan",
-      } as Record<string, string>
-    )[status] ?? status
+    {
+      Assigned: "Udah Ditugaskan",
+      Confirmed: "Udah Diterima",
+      Ready: "Siap Jalan",
+      Driving: "Lagi Jalan",
+      Completed: "Udah Selesai",
+      Canceled: "Dibatalin",
+    }[status] ?? status
   );
+}
+
+
+function isReadyToGo(task: {
+  status: string;
+  task_type: string;
+  fleet_ownership: string | null;
+  sj_number: string | null;
+  odometer_start: number | null;
+}) {
+  if (task.status !== "Confirmed" || task.odometer_start === null) return false;
+
+  if (task.task_type === "Supply" && task.fleet_ownership === "TGR") {
+    return Boolean(task.sj_number);
+  }
+
+  return true;
+}
+
+function displayTaskStatus(task: {
+  status: string;
+  task_type: string;
+  fleet_ownership: string | null;
+  sj_number: string | null;
+  odometer_start: number | null;
+}) {
+  return isReadyToGo(task) ? "Ready" : task.status;
+}
+
+function sortByStatusAndTime<T extends {
+  status: string;
+  task_type: string;
+  fleet_ownership: string | null;
+  sj_number: string | null;
+  odometer_start: number | null;
+  std: string | null;
+  created_at: string;
+}>(rows: T[]) {
+  return [...rows].sort((a, b) => {
+    const statusOrder = compareStatus(
+      displayTaskStatus(a),
+      displayTaskStatus(b),
+    );
+
+    if (statusOrder !== 0) return statusOrder;
+
+    const aTime = a.std
+      ? new Date(a.std).getTime()
+      : new Date(a.created_at).getTime();
+    const bTime = b.std
+      ? new Date(b.std).getTime()
+      : new Date(b.created_at).getTime();
+
+    return aTime - bTime;
+  });
 }
 
 function timeLabel(value: string | null) {
@@ -74,7 +127,7 @@ export default async function ControllerPenugasanDashboardPage({
       admin
         .from("tasks")
         .select(
-          "transaction_id, task_type, status, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, created_at",
+          "id, transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, sj_number, odometer_start, created_at",
         )
         .order("created_at", { ascending: false })
         .gte("created_at", rangeStart)
@@ -82,7 +135,7 @@ export default async function ControllerPenugasanDashboardPage({
         .limit(8),
       admin
         .from("tasks")
-        .select("status, created_at")
+        .select("status, task_type, fleet_ownership, sj_number, odometer_start, std, created_at")
         .gte("std", rangeStart)
         .lt("std", rangeEnd),
       admin
@@ -95,17 +148,17 @@ export default async function ControllerPenugasanDashboardPage({
   const tasks = [...(tasksResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
   const activities = activityResult.data ?? [];
   const activeTasks =
-    (data.taskCounts.Assigned ?? 0) +
-    (data.taskCounts.Confirmed ?? 0) +
-    (data.taskCounts.Driving ?? 0);
+    taskStatusCounts.Assigned +
+    taskStatusCounts.Confirmed +
+    taskStatusCounts.Ready +
+    taskStatusCounts.Driving;
 
-  const completedTasks = activities.filter(
-    (task) => task.status === "Completed",
-  ).length;
+  const completedTasks = taskStatusCounts.Completed;
 
   const byHour = Array.from({ length: 24 }, (_, hour) => {
     const rows = activities.filter((task) => {
       if (!task.created_at) return false;
+
       return (
         new Date(task.created_at)
           .toLocaleString("en-US", {
@@ -116,19 +169,34 @@ export default async function ControllerPenugasanDashboardPage({
           .slice(0, 2) === String(hour).padStart(2, "0")
       );
     });
+
     return {
       hour,
-      total: rows.length,
-      completed: rows.filter((row) => row.status === "Completed").length,
-      driving: rows.filter((row) =>
-        ["Assigned", "Confirmed", "Driving"].includes(row.status),
-      ).length,
-      canceled: rows.filter((row) => row.status === "Canceled").length,
-      unassigned: 0,
+      assigned: rows.filter((task) => displayTaskStatus(task) === "Assigned")
+        .length,
+      confirmed: rows.filter((task) => displayTaskStatus(task) === "Confirmed")
+        .length,
+      ready: rows.filter((task) => displayTaskStatus(task) === "Ready").length,
+      driving: rows.filter((task) => displayTaskStatus(task) === "Driving").length,
+      completed: rows.filter((task) => displayTaskStatus(task) === "Completed")
+        .length,
+      canceled: rows.filter((task) => displayTaskStatus(task) === "Canceled")
+        .length,
     };
   });
 
-  const maxHour = Math.max(1, ...byHour.map((item) => item.total));
+  const maxHour = Math.max(
+    1,
+    ...byHour.map(
+      (item) =>
+        item.assigned +
+        item.confirmed +
+        item.ready +
+        item.driving +
+        item.completed +
+        item.canceled,
+    ),
+  );
   return (
     <div className="super-dashboard">
       <div className="super-dashboard-heading dashboard-page-heading">
@@ -153,54 +221,69 @@ export default async function ControllerPenugasanDashboardPage({
       </div>
 
       <section className="super-kpi-grid assignment-kpi-grid">
-        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-total">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Requested" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Semua Tugas</span>
-            <strong>{totalTaskResult.count ?? 0}</strong>
-            <small>Semua data</small>
-          </div>
-        </div>
         <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-assigned">
           <div className="super-kpi-icon">
             <StatusIcon status="Assigned" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Ditugaskan</span>
-            <strong>{data.taskCounts.Assigned ?? 0}</strong>
-            <small>Menunggu mulai</small>
+            <span>Udah Ditugaskan</span>
+            <strong>{taskStatusCounts.Assigned}</strong>
+            <small>Menunggu diterima</small>
           </div>
         </div>
+
         <div className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed">
           <div className="super-kpi-icon">
             <StatusIcon status="Confirmed" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
-            <strong>{data.taskCounts.Confirmed ?? 0}</strong>
-            <small>Udah diterima</small>
+            <strong>{taskStatusCounts.Confirmed}</strong>
+            <small>Belum siap jalan</small>
           </div>
         </div>
+
+        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-ready">
+          <div className="super-kpi-icon">
+            <StatusIcon status="Ready" size={20} />
+          </div>
+          <div className="super-kpi-content">
+            <span>Siap Jalan</span>
+            <strong>{taskStatusCounts.Ready}</strong>
+            <small>Udah siap berangkat</small>
+          </div>
+        </div>
+
         <div className="super-kpi-card kpi-green status-kpi-card status-kpi-driving">
           <div className="super-kpi-icon">
             <StatusIcon status="Driving" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
-            <strong>{data.taskCounts.Driving ?? 0}</strong>
+            <strong>{taskStatusCounts.Driving}</strong>
             <small>Sedang berjalan</small>
           </div>
         </div>
+
         <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed">
           <div className="super-kpi-icon">
             <StatusIcon status="Completed" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
-            <strong>{data.taskCounts.Completed ?? 0}</strong>
-            <small>Udah selesai</small>
+            <strong>{taskStatusCounts.Completed}</strong>
+            <small>Udah beres</small>
+          </div>
+        </div>
+
+        <div className="super-kpi-card kpi-red status-kpi-card status-kpi-canceled">
+          <div className="super-kpi-icon">
+            <StatusIcon status="Canceled" size={20} />
+          </div>
+          <div className="super-kpi-content">
+            <span>Dibatalin</span>
+            <strong>{taskStatusCounts.Canceled}</strong>
+            <small>Nggak lanjut</small>
           </div>
         </div>
       </section>
@@ -216,10 +299,24 @@ export default async function ControllerPenugasanDashboardPage({
               </p>
             </div>
             <div className="super-chart-legend">
-              <span className="status-legend status-legend-assigned"><i className="legend-orange" /> Ditugaskan</span>
-              <span className="status-legend status-legend-driving"><i className="legend-green" /> Lagi Jalan</span>
-              <span className="status-legend status-legend-completed"><i className="legend-purple" /> Udah Selesai</span>
-              <span className="status-legend status-legend-canceled"><i className="legend-red" /> Dibatalkan</span>
+              <span>
+                <i className="legend-assigned" /> Udah Ditugaskan
+              </span>
+              <span>
+                <i className="legend-confirmed" /> Udah Diterima
+              </span>
+              <span>
+                <i className="legend-ready" /> Siap Jalan
+              </span>
+              <span>
+                <i className="legend-driving" /> Lagi Jalan
+              </span>
+              <span>
+                <i className="legend-completed" /> Udah Selesai
+              </span>
+              <span>
+                <i className="legend-canceled" /> Dibatalin
+              </span>
             </div>
           </div>
           <div className="super-chart">
@@ -232,25 +329,43 @@ export default async function ControllerPenugasanDashboardPage({
               {byHour.map((item) => (
                 <div className="super-chart-column" key={item.hour}>
                   <div className="super-chart-stack">
-                    {item.completed > 0 ? (
+                    {item.assigned > 0 ? (
                       <span
-                        className="bar-completed"
+                        className="bar-assigned"
                         style={{
-                          height: `${(item.completed / maxHour) * 100}%`,
+                          height: ${(item.assigned / maxHour) * 100} + "%",
+                        }}
+                      />
+                    ) : null}
+                    {item.confirmed > 0 ? (
+                      <span
+                        className="bar-confirmed"
+                        style={{
+                          height: ${(item.confirmed / maxHour) * 100} + "%",
+                        }}
+                      />
+                    ) : null}
+                    {item.ready > 0 ? (
+                      <span
+                        className="bar-ready"
+                        style={{
+                          height: ${(item.ready / maxHour) * 100} + "%",
                         }}
                       />
                     ) : null}
                     {item.driving > 0 ? (
                       <span
                         className="bar-driving"
-                        style={{ height: `${(item.driving / maxHour) * 100}%` }}
+                        style={{
+                          height: ${(item.driving / maxHour) * 100} + "%",
+                        }}
                       />
                     ) : null}
-                    {item.unassigned > 0 ? (
+                    {item.completed > 0 ? (
                       <span
-                        className="bar-unassigned"
+                        className="bar-completed"
                         style={{
-                          height: `${(item.unassigned / maxHour) * 100}%`,
+                          height: ${(item.completed / maxHour) * 100} + "%",
                         }}
                       />
                     ) : null}
@@ -258,7 +373,7 @@ export default async function ControllerPenugasanDashboardPage({
                       <span
                         className="bar-canceled"
                         style={{
-                          height: `${(item.canceled / maxHour) * 100}%`,
+                          height: ${(item.canceled / maxHour) * 100} + "%",
                         }}
                       />
                     ) : null}
@@ -337,8 +452,8 @@ export default async function ControllerPenugasanDashboardPage({
                     </td>
                     <td>
                       <StatusBadge
-                        status={task.status}
-                        label={statusLabel(task.status)}
+                        status={displayTaskStatus(task)}
+                        label={statusLabel(displayTaskStatus(task))}
                       />
                     </td>
                   </tr>
