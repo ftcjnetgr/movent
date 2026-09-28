@@ -46,7 +46,7 @@ export default function LoginPage() {
 
             <form action={formAction}>
               <label>
-                Username kamu
+                Username
                 <input
                   name="username"
                   autoComplete="username"
@@ -55,7 +55,7 @@ export default function LoginPage() {
                 />
               </label>
               <label>
-                Password kamu
+                Password
                 <span className="login-password-field">
                   <input
                     name="password"
