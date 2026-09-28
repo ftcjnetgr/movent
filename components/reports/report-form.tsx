@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 
 type Option = { value: string; label: string };
 type Row = Record<string, string | null>;
@@ -88,8 +89,8 @@ const reportTypes = [
   },
   {
     value: "CANCELED",
-    label: "Penugasan Dibatalkan",
-    description: "Lihat penugasan yang dibatalkan pada periode pilihan.",
+    label: "Penugasan yang dibatalin",
+    description: "Lihat penugasan yang dibatalin di periode yang dipilih.",
   },
 ];
 
@@ -102,7 +103,7 @@ const reportLabels: Record<string, string> = {
   status: "Status",
   created_by: "Dibuat Oleh",
   requested_by: "Diminta Oleh",
-  assigned_by: "Ditugaskan Oleh",
+  assigned_by: "Yang Nugasihin",
   executor_nik: "NIK Pelaksana",
   executor_snapshot: "Detail Pelaksana",
   fleet_snapshot: "Detail Armada",
@@ -129,8 +130,8 @@ const reportLabels: Record<string, string> = {
   accepted_at: "Waktu Diterima",
   driving_at: "Waktu Berangkat",
   completed_at: "Waktu Selesai",
-  canceled_at: "Waktu Dibatalkan",
-  canceled_from_status: "Status Sebelum Dibatalkan",
+  canceled_at: "Waktu Dibalikin",
+  canceled_from_status: "Status Sebelum Dibatalin",
   cancellation_note: "Alasan Pembatalan",
   external_departure_at: "Keberangkatan Eksternal",
   external_arrival_at: "Kedatangan Eksternal",
