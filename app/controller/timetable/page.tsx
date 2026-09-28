@@ -20,8 +20,8 @@ export default async function ControllerTimetablePage({
           <h1>Jadwal</h1>
           <p>
             {view === "live"
-              ? "Pantau posisi penugasan hari ini secara langsung."
-              : "Lihat jadwal sesuai hari yang kamu pilih."}
+              ? "Pantau penugasan hari ini langsung dari sini."
+              : "Pilih harinya, terus lihat jadwalnya di sini."}
           </p>
         </div>
         <nav className="alert-view-tabs" aria-label="Jadwal">
