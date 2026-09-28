@@ -127,7 +127,9 @@ export default async function ControllerPenugasanDashboardPage({
       admin
         .from("tasks")
         .select(
-          "id, transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, sj_number, odometer_start, created_at",
+          "id, transaction_id, task_type, status, fleet_ownership, start_point, " +
+          "destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, " +
+          "sj_number, odometer_start, created_at",
         )
         .order("created_at", { ascending: false })
         .gte("created_at", rangeStart)
