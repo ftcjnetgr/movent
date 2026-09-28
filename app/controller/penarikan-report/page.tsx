@@ -29,7 +29,7 @@ export default async function ControllerReportPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Penarikan Laporan</h1>
+          <h1>Tarik laporan</h1>
           <p>
             Pilih periode dan filter yang kamu butuhkan, lalu tarik laporannya.
           </p>
