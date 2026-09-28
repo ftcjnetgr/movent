@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
-import { compareStatus, STATUS_LABELS, StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, STATUS_LABELS, STATUS_SUBCOPY, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
@@ -106,7 +106,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-kpi-content">
             <span>Udah Diajuin</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
-            <small>Tinggal diterima</small>
+            <small>{STATUS_SUBCOPY.Requested}</small>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-            <small>Tinggal mulai</small>
+            <small>{STATUS_SUBCOPY.Confirmed}</small>
           </div>
         </div>
 
@@ -128,7 +128,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-kpi-content">
             <span>Lagi Dikerjain</span>
             <strong>{data.ticketCounts["In Progress"] ?? 0}</strong>
-            <small>Lagi dikerjain</small>
+            <small>{STATUS_SUBCOPY["In Progress"]}</small>
           </div>
         </div>
 
@@ -139,7 +139,7 @@ export default async function MaintainerBerandaPage() {
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{data.ticketCounts.Completed ?? 0}</strong>
-            <small>Udah beres</small>
+            <small>{STATUS_SUBCOPY.Completed}</small>
           </div>
         </div>
       </section>
