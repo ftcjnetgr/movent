@@ -3,15 +3,7 @@ import { getCurrentProfile } from "@/lib/server/profile";
 import { submitNonTgrArrivalAction } from "./actions";
 
 function statusLabel(status: string) {
-  const labels: Record<string, string> = {
-    Requested: "Udah Diajuin",
-    Assigned: "Udah Ditugasin",
-    Confirmed: "Diterima",
-    Driving: "Lagi Jalan",
-    Completed: "Udah Selesai",
-    Canceled: "Dibatalin",
-  };
-  return labels[status] ?? status;
+  return STATUS_LABELS[status] ?? status;
 }
 
 async function submitNonTgrArrivalFormAction(formData: FormData) {
