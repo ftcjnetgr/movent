@@ -64,7 +64,7 @@ export default function ProfilePage({
       <div className="page-heading profile-settings-heading">
         <div>
           <h1>{title}</h1>
-          <p>Atur informasi akun dan keamanan akses kamu.</p>
+          <p>Atur info akun dan keamanan kamu di sini, ya.</p>
         </div>
       </div>
 
@@ -84,7 +84,7 @@ export default function ProfilePage({
             onClick={() => setSection("security")}
           >
             <span>Keamanan</span>
-            <small>Kata sandi akun</small>
+            <small>Password akun kamu</small>
           </button>
         </nav>
 
@@ -93,10 +93,10 @@ export default function ProfilePage({
             <div className="profile-settings-section">
               <div className="profile-settings-section-heading">
                 <div>
-                  <h2>Informasi Akun</h2>
-                  <p>Informasi akun yang sedang digunakan.</p>
+                  <h2>Info akun kamu</h2>
+                  <p>Info akun yang lagi kamu pakai.</p>
                 </div>
-                <span className="profile-settings-state">Profil Aktif</span>
+                <span className="profile-settings-state">Profil kamu</span>
               </div>
 
               <div className="profile-settings-fields">
@@ -112,7 +112,7 @@ export default function ProfilePage({
             <div className="profile-settings-section profile-settings-security">
               <div className="profile-settings-section-heading">
                 <div>
-                  <h2>Keamanan Akun</h2>
+                  <h2>Keamanan akun</h2>
                   <p>
                     Perbarui kata sandi untuk menjaga akses akun tetap aman.
                   </p>
