@@ -72,16 +72,16 @@ export default function MaintainerMaintenanceTable({
     <section className="data-table-card maintainer-maintenance-table-card">
       <div className="section-heading maintainer-maintenance-toolbar">
         <div>
-          <h2>Pengajuan Maintenance</h2>
-          <p>Kelola pengajuan maintenance dan lanjutkan sesuai statusnya.</p>
+          <h2>Maintenance</h2>
+          <p>Tinggal lanjutin sesuai statusnya, ya.</p>
         </div>
         <label className="maintainer-status-filter">
-          <span>Filter status</span>
+          <span>Lihat status</span>
           <select
             value={statusFilter}
             onChange={(event) => setStatusFilter(event.target.value)}
           >
-            <option value="all">Semua status</option>
+            <option value="all">Semua</option>
             <option value="Requested">Udah Diajuin</option>
             <option value="Confirmed">Udah Diterima</option>
             <option value="In Progress">Lagi Dikerjain</option>
@@ -191,7 +191,7 @@ export default function MaintainerMaintenanceTable({
 
                   {ticket.status === "Completed" ||
                   ticket.status === "Canceled" ? (
-                    <span className="muted">Tidak ada aksi</span>
+                    <span className="muted">Nggak ada yang perlu dilakukan</span>
                   ) : null}
 
                   {message[ticket.transaction_id] ? (
@@ -207,7 +207,7 @@ export default function MaintainerMaintenanceTable({
               <tr>
                 <td colSpan={7}>
                   <div className="empty-state">
-                    Tidak ada pengajuan maintenance untuk filter ini.
+                    Nggak ada maintenance untuk pilihan ini.
                   </div>
                 </td>
               </tr>
