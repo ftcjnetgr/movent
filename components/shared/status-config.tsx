@@ -3,6 +3,7 @@ export type StatusName =
   | "Assigned"
   | "Confirmed"
   | "Driving"
+  | "Ready"
   | "In Progress"
   | "Completed"
   | "Canceled"
@@ -14,9 +15,8 @@ export const STATUS_ORDER: Record<string, number> = {
   Requested: 0,
   Assigned: 1,
   Confirmed: 2,
-  Driving: 3,
-  Ready: 4,
-  Driving: 5,
+  Ready: 3,
+  Driving: 4,
   "In Progress": 6,
   Completed: 7,
   Canceled: 8,
