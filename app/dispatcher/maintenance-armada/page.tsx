@@ -44,8 +44,8 @@ export default async function DispatcherMaintenanceArmadaPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Daftar Maintenance Armada</h1>
-          <p>Yuk, buat maintenance untuk armada dari sini.</p>
+          <h1>Maintenance armada</h1>
+          <p>Mau bikin maintenance? Mulai dari sini, ya.</p>
         </div>
       </div>
       <DispatcherMaintenanceForm
