@@ -155,13 +155,13 @@ function displayCellValue(key: string, value: string | null) {
   if (value === null || value === "") return "-";
   if (key !== "status") return value;
   const labels: Record<string, string> = {
-    Requested: "Diajukan",
-    Assigned: "Ditugaskan",
+    Requested: "Udah Diajuin",
+    Assigned: "Udah Ditugasin",
     Confirmed: "Dikonfirmasi",
     Driving: "Berangkat",
     Completed: "Selesai",
     Canceled: "Dibatalkan",
-    "In Progress": "Sedang dikerjakan",
+    "In Progress": "Lagi Dikerjain",
   };
   return labels[value] ?? value;
 }
@@ -300,8 +300,8 @@ export default function ReportForm({
           <div className="report-type-heading">
             <div>
               <span className="eyebrow">JENIS LAPORAN</span>
-              <h2>Penarikan Laporan Maintenance</h2>
-              <p>Laporan khusus data maintenance.</p>
+              <h2>Yuk, tarik laporan maintenance</h2>
+              <p>Khusus buat lihat data maintenance.</p>
             </div>
           </div>
           <div className="report-type-buttons report-type-single">
@@ -323,7 +323,7 @@ export default function ReportForm({
             <div>
               <span className="eyebrow">JENIS LAPORAN</span>
               <h2>Pilih laporan yang mau kamu tarik</h2>
-              <p>Satu pilihan aktif untuk setiap penarikan.</p>
+              <p>Pilih satu jenis laporan tiap kali tarik, ya.</p>
             </div>
           </div>
           <div className="report-type-buttons">
@@ -354,8 +354,8 @@ export default function ReportForm({
       <div className="report-filter-card">
         <div className="report-filter-heading">
           <div>
-            <h2>Filter Laporan</h2>
-            <p>Pilih rentang waktu sampai 7 hari.</p>
+            <h2>Mau lihat yang mana?</h2>
+            <p>Pilih rentang waktunya, maksimal 7 hari.</p>
           </div>
         </div>
         <div
@@ -446,7 +446,7 @@ export default function ReportForm({
               onClick={preview}
               disabled={loading || !from || !to}
             >
-              {loading ? "Sedang mengambil..." : "Tarik laporan"}
+              {loading ? "Lagi ambil laporan..." : "Ambil laporan"}
             </button>
             {hasPulled ? (
               <div className="report-result-download">
@@ -490,7 +490,7 @@ export default function ReportForm({
       <div className="report-preview">
         <div className="section-heading report-result-heading">
           <div>
-            <h2>Hasil Laporan</h2>
+            <h2>Laporannya ada di sini.</h2>
             <p>{rows.length} data ditemukan.</p>
           </div>
         </div>
