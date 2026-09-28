@@ -519,7 +519,13 @@ export default function DashboardAlertList({
                                       ? "Confirmed"
                                       : "In Progress"
                                 }
-                                label={item.status}
+                                label={
+                                  STATUS_LABELS[item.status === "Dibuat"
+                                    ? "Requested"
+                                    : item.status === "Dikonfirmasi"
+                                      ? "Confirmed"
+                                      : "In Progress"] ?? item.status
+                                }
                               />
                             </td>
                             <td>{item.threshold}</td>
