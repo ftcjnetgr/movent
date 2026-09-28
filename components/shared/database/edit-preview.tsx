@@ -46,7 +46,7 @@ export default function DatabaseEditPreview({
             <div className="database-action-modal-heading">
               <div>
                 <h2>{title}</h2>
-                <p>Perbarui data yang dipilih di sini.</p>
+                <p>Mau ubah data ini? Cek dulu sebelum disimpan, ya.</p>
               </div>
               <button
                 type="button"
