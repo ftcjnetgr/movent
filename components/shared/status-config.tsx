@@ -15,9 +15,11 @@ export const STATUS_ORDER: Record<string, number> = {
   Assigned: 1,
   Confirmed: 2,
   Driving: 3,
-  "In Progress": 4,
-  Completed: 5,
-  Canceled: 6,
+  Ready: 4,
+  Driving: 5,
+  "In Progress": 6,
+  Completed: 7,
+  Canceled: 8,
 };
 
 export function compareStatus(a: string, b: string) {
@@ -25,13 +27,14 @@ export function compareStatus(a: string, b: string) {
 }
 
 export const STATUS_LABELS: Record<string, string> = {
-  Requested: "Diajukan",
-  Assigned: "Ditugaskan",
-  Confirmed: "Dikonfirmasi",
-  Driving: "Sedang berjalan",
-  "In Progress": "Sedang dikerjakan",
-  Completed: "Selesai",
-  Canceled: "Dibatalkan",
+  Requested: "Udah Diajukan",
+  Assigned: "Udah Ditugaskan",
+  Confirmed: "Udah Diterima",
+  Ready: "Siap Jalan",
+  Driving: "Lagi Jalan",
+  "In Progress": "Lagi Dikerjain",
+  Completed: "Udah Selesai",
+  Canceled: "Dibatalin",
 };
 
 export function StatusIcon({
@@ -73,6 +76,13 @@ export function StatusIcon({
         <svg {...common}>
           <path d="m12 3 7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" />
           <path d="m8.5 11.5 2.25 2.25L15.5 9" />
+        </svg>
+      );
+    case "Ready":
+      return (
+        <svg {...common}>
+          <path d="M5 19h14M6 16h12l-2-7H8l-2 7Z" />
+          <path d="M9 12h6M8 16h8" />
         </svg>
       );
     case "Driving":
