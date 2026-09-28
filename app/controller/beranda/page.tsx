@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
 import StatusBadge from "@/components/shared/status-badge";
-import { compareStatus, STATUS_LABELS, StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, STATUS_LABELS, STATUS_SUBCOPY, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
@@ -236,7 +236,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Ditugasin</span>
             <strong>{taskStatusCounts.Assigned}</strong>
-            <small>Tinggal diterima</small>
+            <small>{STATUS_SUBCOPY.Assigned}</small>
           </div>
         </div>
 
@@ -247,7 +247,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{taskStatusCounts.Confirmed}</strong>
-            <small>Tinggal siap jalan</small>
+            <small>{STATUS_SUBCOPY.Confirmed}</small>
           </div>
         </div>
 
@@ -258,7 +258,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Siap Jalan</span>
             <strong>{taskStatusCounts.Ready}</strong>
-            <small>Tinggal berangkat</small>
+            <small>{STATUS_SUBCOPY.Ready}</small>
           </div>
         </div>
 
@@ -269,7 +269,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{taskStatusCounts.Driving}</strong>
-            <small>Lagi di jalan</small>
+            <small>{STATUS_SUBCOPY.Driving}</small>
           </div>
         </div>
 
@@ -280,7 +280,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{taskStatusCounts.Completed}</strong>
-            <small>Udah beres</small>
+            <small>{STATUS_SUBCOPY.Completed}</small>
           </div>
         </div>
 
@@ -291,7 +291,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Dibatalin</span>
             <strong>{taskStatusCounts.Canceled}</strong>
-            <small>Nggak lanjut</small>
+            <small>{STATUS_SUBCOPY.Canceled}</small>
           </div>
         </div>
       </section>
