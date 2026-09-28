@@ -6,7 +6,7 @@ import { cancelExtraScheduleAction } from "../request-extra-schedule/actions";
 import StatusBadge from "@/components/shared/status-badge";
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: "Udah Diajukan",
+    Requested: "Udah Diajuin",
     Assigned: "Udah Ditugasin",
     Confirmed: "Udah Diterima",
     Driving: "Lagi Jalan",
