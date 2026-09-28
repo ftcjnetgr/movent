@@ -27,7 +27,7 @@ export function compareStatus(a: string, b: string) {
 }
 
 export const STATUS_LABELS: Record<string, string> = {
-  Requested: "Udah Diajukan",
+  Requested: "Udah Diajuin",
   Assigned: "Udah Ditugasin",
   Confirmed: "Udah Diterima",
   Ready: "Siap Jalan",
