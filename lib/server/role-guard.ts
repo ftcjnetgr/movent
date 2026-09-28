@@ -1,22 +1,22 @@
-import { redirect } from 'next/navigation'
-import { getCurrentProfile } from '@/lib/server/profile'
+import { redirect } from "next/navigation";
+import { getCurrentProfile } from "@/lib/server/profile";
 
 export async function requireRole(role: string) {
-  const profile = await getCurrentProfile()
+  const profile = await getCurrentProfile();
 
-  if (profile.role !== role && profile.role !== 'Super User') {
-    redirect('/login')
+  if (profile.role !== role && profile.role !== "Super User") {
+    redirect("/login");
   }
 
-  return profile
+  return profile;
 }
 
 export async function requireSuperUser() {
-  const profile = await getCurrentProfile()
+  const profile = await getCurrentProfile();
 
-  if (profile.role !== 'Super User') {
-    redirect('/login')
+  if (profile.role !== "Super User") {
+    redirect("/login");
   }
 
-  return profile
+  return profile;
 }

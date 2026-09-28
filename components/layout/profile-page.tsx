@@ -1,47 +1,63 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from 'react'
-import ChangePasswordForm from '@/components/shared/change-password-form'
+import { useMemo, useState } from "react";
+import ChangePasswordForm from "@/components/shared/change-password-form";
 
 type ProfileData = {
-  full_name: string
-  username: string
-  nik?: string | null
-  role: string
-  email?: string | null
-  phone_number?: string | null
-  status?: string | null
-  password_changed_at?: string | null
-}
+  full_name: string;
+  username: string;
+  nik?: string | null;
+  role: string;
+  email?: string | null;
+  phone_number?: string | null;
+  status?: string | null;
+  password_changed_at?: string | null;
+};
 
 export default function ProfilePage({
   title,
   profile,
 }: {
-  title: string
-  profile: ProfileData
+  title: string;
+  profile: ProfileData;
 }) {
-  const [section, setSection] = useState<'profile' | 'security'>('profile')
+  const [section, setSection] = useState<"profile" | "security">("profile");
 
   const initials = useMemo(() => {
-    const parts = profile.full_name.trim().split(/\s+/).filter(Boolean)
-    return parts.slice(0, 2).map((part) => part[0]?.toUpperCase()).join('') || 'U'
-  }, [profile.full_name])
+    const parts = profile.full_name.trim().split(/\s+/).filter(Boolean);
+    return (
+      parts
+        .slice(0, 2)
+        .map((part) => part[0]?.toUpperCase())
+        .join("") || "U"
+    );
+  }, [profile.full_name]);
 
   const fields = [
-    ['Nama Lengkap', profile.full_name],
-    ['Username', profile.username],
-    ...(profile.email !== undefined ? [['Email', profile.email || '-']] : []),
-    ['NIK', profile.nik || '-'],
-    ...(profile.phone_number !== undefined ? [['No. Telepon', profile.phone_number || '-']] : []),
-    ['Role', profile.role],
-    ...(profile.status !== undefined ? [['Status', profile.status || '-']] : []),
-    ...(profile.password_changed_at ? [['Terakhir Ganti Password', new Intl.DateTimeFormat('id-ID', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-      timeZone: 'Asia/Jakarta',
-    }).format(new Date(profile.password_changed_at))]] : []),
-  ] as Array<[string, string]>
+    ["Nama Lengkap", profile.full_name],
+    ["Username", profile.username],
+    ...(profile.email !== undefined ? [["Email", profile.email || "-"]] : []),
+    ["NIK", profile.nik || "-"],
+    ...(profile.phone_number !== undefined
+      ? [["No. Telepon", profile.phone_number || "-"]]
+      : []),
+    ["Role", profile.role],
+    ...(profile.status !== undefined
+      ? [["Status", profile.status || "-"]]
+      : []),
+    ...(profile.password_changed_at
+      ? [
+          [
+            "Terakhir Ganti Password",
+            new Intl.DateTimeFormat("id-ID", {
+              dateStyle: "medium",
+              timeStyle: "short",
+              timeZone: "Asia/Jakarta",
+            }).format(new Date(profile.password_changed_at)),
+          ],
+        ]
+      : []),
+  ] as Array<[string, string]>;
 
   return (
     <div className="profile-settings-page">
@@ -56,16 +72,16 @@ export default function ProfilePage({
         <nav className="profile-settings-nav" aria-label="Pengaturan akun">
           <button
             type="button"
-            className={section === 'profile' ? 'active' : ''}
-            onClick={() => setSection('profile')}
+            className={section === "profile" ? "active" : ""}
+            onClick={() => setSection("profile")}
           >
             <span>Profil</span>
             <small>Informasi akun</small>
           </button>
           <button
             type="button"
-            className={section === 'security' ? 'active' : ''}
-            onClick={() => setSection('security')}
+            className={section === "security" ? "active" : ""}
+            onClick={() => setSection("security")}
           >
             <span>Keamanan</span>
             <small>Kata sandi akun</small>
@@ -73,7 +89,7 @@ export default function ProfilePage({
         </nav>
 
         <div className="profile-settings-content">
-          {section === 'profile' ? (
+          {section === "profile" ? (
             <div className="profile-settings-section">
               <div className="profile-settings-section-heading">
                 <div>
@@ -97,7 +113,9 @@ export default function ProfilePage({
               <div className="profile-settings-section-heading">
                 <div>
                   <h2>Keamanan Akun</h2>
-                  <p>Perbarui kata sandi untuk menjaga akses akun tetap aman.</p>
+                  <p>
+                    Perbarui kata sandi untuk menjaga akses akun tetap aman.
+                  </p>
                 </div>
               </div>
               <ChangePasswordForm first={false} />
@@ -106,5 +124,5 @@ export default function ProfilePage({
         </div>
       </section>
     </div>
-  )
+  );
 }

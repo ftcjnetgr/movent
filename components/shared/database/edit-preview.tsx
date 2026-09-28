@@ -1,33 +1,41 @@
-'use client'
+"use client";
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from "react";
 
 export default function DatabaseEditPreview({
-  title = 'Ubah data',
+  title = "Ubah data",
   children,
 }: {
-  title?: string
-  children: ReactNode
+  title?: string;
+  children: ReactNode;
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!open) return
+    if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [open])
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
     <>
-      <button type="button" className="link-button database-edit-trigger" onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        className="link-button database-edit-trigger"
+        onClick={() => setOpen(true)}
+      >
         Edit
       </button>
 
       {open ? (
-        <div className="database-action-modal-backdrop" role="presentation" onMouseDown={() => setOpen(false)}>
+        <div
+          className="database-action-modal-backdrop"
+          role="presentation"
+          onMouseDown={() => setOpen(false)}
+        >
           <div
             className="database-action-modal"
             role="dialog"
@@ -49,12 +57,10 @@ export default function DatabaseEditPreview({
                 ×
               </button>
             </div>
-            <div className="database-action-modal-body">
-              {children}
-            </div>
+            <div className="database-action-modal-body">{children}</div>
           </div>
         </div>
       ) : null}
     </>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { notFound } from 'next/navigation'
-import DashboardAlertList from '@/components/shared/alerts/dashboard-alert-list'
-import { getCurrentProfile } from '@/lib/server/profile'
-import { getDashboardData } from '@/lib/server/dashboard'
+import { notFound } from "next/navigation";
+import DashboardAlertList from "@/components/shared/alerts/dashboard-alert-list";
+import { getCurrentProfile } from "@/lib/server/profile";
+import { getDashboardData } from "@/lib/server/dashboard";
 
 export default async function AlertPage() {
-  const profile = await getCurrentProfile()
-  if (!['Controller', 'Super User'].includes(profile.role)) notFound()
-  const data = await getDashboardData(profile)
+  const profile = await getCurrentProfile();
+  if (!["Controller", "Super User"].includes(profile.role)) notFound();
+  const data = await getDashboardData(profile);
 
   return (
     <div className="role-page alert-page">
@@ -19,5 +19,5 @@ export default async function AlertPage() {
         ticketAlerts={data.ticketAlerts}
       />
     </div>
-  )
+  );
 }

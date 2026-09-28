@@ -1,68 +1,77 @@
-'use server'
+"use server";
 
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-import { createAdminClient } from '@/lib/supabase/admin'
-import { getCurrentProfile } from '@/lib/server/profile'
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentProfile } from "@/lib/server/profile";
 
-type Result = { error?: string; success?: string }
+type Result = { error?: string; success?: string };
 
 function manualTimestamp(value: string) {
-  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value)
-  if (!match) return null
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
+  if (!match) return null;
 
-  const [, year, month, day, hour, minute] = match
-  const iso = `${year}-${month}-${day}T${hour}:${minute}:00+07:00`
-  const parsed = new Date(iso)
+  const [, year, month, day, hour, minute] = match;
+  const iso = `${year}-${month}-${day}T${hour}:${minute}:00+07:00`;
+  const parsed = new Date(iso);
 
-  if (Number.isNaN(parsed.getTime())) return null
-  return parsed.toISOString()
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed.toISOString();
 }
 
-export async function submitNonTgrArrivalAction(formData: FormData): Promise<Result> {
-  const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
+export async function submitNonTgrArrivalAction(
+  formData: FormData,
+): Promise<Result> {
+  const profile = await getCurrentProfile();
+  if (!["Dispatcher", "Super User"].includes(profile.role))
+    return { error: "Kamu belum punya akses ke bagian ini." };
 
-  const transactionId = String(formData.get('transactionId') ?? '').trim()
-  const arrival = String(formData.get('arrival') ?? '').trim()
-  const timestamp = manualTimestamp(arrival)
-  if (!transactionId || !timestamp) return { error: 'Tanggal dan jam kedatangan perlu diisi dulu, ya.' }
+  const transactionId = String(formData.get("transactionId") ?? "").trim();
+  const arrival = String(formData.get("arrival") ?? "").trim();
+  const timestamp = manualTimestamp(arrival);
+  if (!transactionId || !timestamp)
+    return { error: "Tanggal dan jam kedatangan perlu diisi dulu, ya." };
 
-  const admin = createAdminClient()
+  const admin = createAdminClient();
   const { data: task } = await admin
-    .from('tasks')
-    .select('id, status, fleet_ownership, external_departure_at')
-    .eq('transaction_id', transactionId)
-    .eq('task_type', 'Supply')
-    .eq('fleet_ownership', 'Non-TGR')
-    .eq('status', 'Driving')
-    .maybeSingle()
+    .from("tasks")
+    .select("id, status, fleet_ownership, external_departure_at")
+    .eq("transaction_id", transactionId)
+    .eq("task_type", "Supply")
+    .eq("fleet_ownership", "Non-TGR")
+    .eq("status", "Driving")
+    .maybeSingle();
 
-  if (!task || !task.external_departure_at) return { error: 'Tugas belum memiliki waktu keberangkatan.' }
-  if (new Date(timestamp).getTime() < new Date(task.external_departure_at).getTime()) return { error: 'ATA tidak boleh lebih awal dari ATD.' }
+  if (!task || !task.external_departure_at)
+    return { error: "Tugas belum memiliki waktu keberangkatan." };
+  if (
+    new Date(timestamp).getTime() <
+    new Date(task.external_departure_at).getTime()
+  )
+    return { error: "ATA tidak boleh lebih awal dari ATD." };
 
   const { error } = await admin
-    .from('tasks')
+    .from("tasks")
     .update({
-      status: 'Completed',
+      status: "Completed",
       external_arrival_at: timestamp,
     })
-    .eq('id', task.id)
-    .eq('status', 'Driving')
+    .eq("id", task.id)
+    .eq("status", "Driving");
 
-  if (error) return { error: 'Submit kedatangan belum berhasil.' }
+  if (error) return { error: "Submit kedatangan belum berhasil." };
 
-  revalidatePaths()
-  redirect('/dispatcher/armada-non-tgr')
+  revalidatePaths();
+  redirect("/dispatcher/armada-non-tgr");
 }
 
 function revalidatePaths() {
-  revalidatePath('/dispatcher/armada-non-tgr')
-  revalidatePath('/dispatcher/beranda')
-  revalidatePath('/dispatcher/riwayat-penugasan')
-  revalidatePath('/dispatcher/timetable')
-  revalidatePath('/operation/beranda')
-  revalidatePath('/controller/beranda')
-  revalidatePath('/controller/timetable')
+  revalidatePath("/dispatcher/armada-non-tgr");
+  revalidatePath("/dispatcher/beranda");
+  revalidatePath("/dispatcher/riwayat-penugasan");
+  revalidatePath("/dispatcher/timetable");
+  revalidatePath("/operation/beranda");
+  revalidatePath("/controller/beranda");
+  revalidatePath("/controller/timetable");
 }

@@ -1,61 +1,88 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from "next/server";
 
-import { getCurrentProfile } from '@/lib/server/profile'
-import { queryOperationalReport, type ReportFilters } from '@/lib/server/report'
+import { getCurrentProfile } from "@/lib/server/profile";
+import {
+  queryOperationalReport,
+  type ReportFilters,
+} from "@/lib/server/report";
 
 function validDate(value: string) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
-  const parsed = new Date(`${value}T00:00:00+07:00`)
-  if (Number.isNaN(parsed.getTime())) return false
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(parsed) === value
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00+07:00`);
+  if (Number.isNaN(parsed.getTime())) return false;
+  return (
+    new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(
+      parsed,
+    ) === value
+  );
 }
 
-function normalizeType(value: string): ReportFilters['type'] | null {
-  if (value === 'STD' || value === 'STA' || value === 'CANCELED') return value
-  return null
+function normalizeType(value: string): ReportFilters["type"] | null {
+  if (value === "STD" || value === "STA" || value === "CANCELED") return value;
+  return null;
 }
 
 export async function GET(request: NextRequest) {
-  const profile = await getCurrentProfile()
-  if (!['Controller', 'Maintainer', 'Super User'].includes(profile.role)) {
-    return NextResponse.json({ error: 'Akses tidak tersedia.' }, { status: 403 })
+  const profile = await getCurrentProfile();
+  if (!["Controller", "Maintainer", "Super User"].includes(profile.role)) {
+    return NextResponse.json(
+      { error: "Akses tidak tersedia." },
+      { status: 403 },
+    );
   }
 
-  const params = request.nextUrl.searchParams
-  const type = normalizeType(params.get('type') ?? 'STD')
-  const from = params.get('from') ?? ''
-  const to = params.get('to') ?? ''
-  const startPoint = params.get('startPoint') ?? ''
-  const destination = params.get('destination') ?? ''
-  const executorNik = params.get('executorNik') ?? ''
+  const params = request.nextUrl.searchParams;
+  const type = normalizeType(params.get("type") ?? "STD");
+  const from = params.get("from") ?? "";
+  const to = params.get("to") ?? "";
+  const startPoint = params.get("startPoint") ?? "";
+  const destination = params.get("destination") ?? "";
+  const executorNik = params.get("executorNik") ?? "";
 
   if (!type || !validDate(from) || !validDate(to)) {
-    return NextResponse.json({ error: 'Periode laporan belum benar.' }, { status: 400 })
+    return NextResponse.json(
+      { error: "Periode laporan belum benar." },
+      { status: 400 },
+    );
   }
 
-  const fromDate = new Date(`${from}T00:00:00+07:00`)
-  const toDate = new Date(`${to}T00:00:00+07:00`)
-  const daysInclusive = Math.floor((toDate.getTime() - fromDate.getTime()) / 86400000) + 1
+  const fromDate = new Date(`${from}T00:00:00+07:00`);
+  const toDate = new Date(`${to}T00:00:00+07:00`);
+  const daysInclusive =
+    Math.floor((toDate.getTime() - fromDate.getTime()) / 86400000) + 1;
   if (daysInclusive < 1 || daysInclusive > 7) {
-    return NextResponse.json({ error: 'Rentang waktu laporan maksimal 7 hari.' }, { status: 400 })
+    return NextResponse.json(
+      { error: "Rentang waktu laporan maksimal 7 hari." },
+      { status: 400 },
+    );
   }
 
   try {
-    const report = await queryOperationalReport({ type, from, to, startPoint, destination, executorNik })
-    const format = params.get('format') ?? 'json'
+    const report = await queryOperationalReport({
+      type,
+      from,
+      to,
+      startPoint,
+      destination,
+      executorNik,
+    });
+    const format = params.get("format") ?? "json";
 
-    if (format === 'csv') {
+    if (format === "csv") {
       return new NextResponse(report.csv, {
         status: 200,
         headers: {
-          'Content-Type': 'text/csv; charset=utf-8',
-          'Content-Disposition': `attachment; filename="movent-operational-report-${type.toLowerCase()}-${from}-${to}.csv"`,
+          "Content-Type": "text/csv; charset=utf-8",
+          "Content-Disposition": `attachment; filename="movent-operational-report-${type.toLowerCase()}-${from}-${to}.csv"`,
         },
-      })
+      });
     }
 
-    return NextResponse.json({ rows: report.rows })
+    return NextResponse.json({ rows: report.rows });
   } catch {
-    return NextResponse.json({ error: 'Laporan belum berhasil dibuat.' }, { status: 500 })
+    return NextResponse.json(
+      { error: "Laporan belum berhasil dibuat." },
+      { status: 500 },
+    );
   }
 }

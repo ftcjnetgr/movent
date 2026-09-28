@@ -1,15 +1,22 @@
-'use client'
+"use client";
 
-import { useActionState } from 'react'
-import { changePasswordAction } from '@/app/ganti-password/actions'
+import { useActionState } from "react";
+import { changePasswordAction } from "@/app/ganti-password/actions";
 
-const initialState: { error?: string } = {}
+const initialState: { error?: string } = {};
 
 export default function ChangePasswordForm({ first }: { first: boolean }) {
-  const [state, formAction, pending] = useActionState(changePasswordAction, initialState)
+  const [state, formAction, pending] = useActionState(
+    changePasswordAction,
+    initialState,
+  );
 
   return (
-    <section className={first ? 'password-page password-page-first' : 'password-card-wrap'}>
+    <section
+      className={
+        first ? "password-page password-page-first" : "password-card-wrap"
+      }
+    >
       <div className="password-card">
         <div className="password-card-heading">
           <span className="eyebrow">PENGATURAN</span>
@@ -20,18 +27,31 @@ export default function ChangePasswordForm({ first }: { first: boolean }) {
         <form action={formAction} className="password-form">
           <label>
             Kata sandi baru
-            <input name="newPassword" type="password" autoComplete="new-password" autoFocus />
+            <input
+              name="newPassword"
+              type="password"
+              autoComplete="new-password"
+              autoFocus
+            />
           </label>
 
           <label>
             Ulangi kata sandi baru
-            <input name="confirmPassword" type="password" autoComplete="new-password" />
+            <input
+              name="confirmPassword"
+              type="password"
+              autoComplete="new-password"
+            />
           </label>
 
-          {state.error ? <p className="form-error" role="alert">{state.error}</p> : null}
+          {state.error ? (
+            <p className="form-error" role="alert">
+              {state.error}
+            </p>
+          ) : null}
 
           <button type="submit" disabled={pending}>
-            {pending ? 'Menyimpan...' : 'Simpan kata sandi'}
+            {pending ? "Menyimpan..." : "Simpan kata sandi"}
           </button>
         </form>
 
@@ -41,5 +61,5 @@ export default function ChangePasswordForm({ first }: { first: boolean }) {
         </div>
       </div>
     </section>
-  )
+  );
 }

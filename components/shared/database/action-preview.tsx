@@ -1,34 +1,42 @@
-'use client'
+"use client";
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from "react";
 
 export default function DatabaseActionPreview({
   title,
   children,
 }: {
-  title: string
-  children: ReactNode
+  title: string;
+  children: ReactNode;
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!open) return
+    if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [open])
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
     <>
-      <button type="button" className="database-action-card" onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        className="database-action-card"
+        onClick={() => setOpen(true)}
+      >
         <span>{title}</span>
         <small>+</small>
       </button>
 
       {open ? (
-        <div className="database-action-modal-backdrop" role="presentation" onMouseDown={() => setOpen(false)}>
+        <div
+          className="database-action-modal-backdrop"
+          role="presentation"
+          onMouseDown={() => setOpen(false)}
+        >
           <div
             className="database-action-modal"
             role="dialog"
@@ -39,7 +47,16 @@ export default function DatabaseActionPreview({
             <div className="database-action-modal-heading">
               <div>
                 <h2>{title}</h2>
-                <p>Kelola data <strong> {title === 'Tambah pengguna' ? 'satu per satu' : 'secara massal'}</strong> di sini.</p>
+                <p>
+                  Kelola data{" "}
+                  <strong>
+                    {" "}
+                    {title === "Tambah pengguna"
+                      ? "satu per satu"
+                      : "secara massal"}
+                  </strong>{" "}
+                  di sini.
+                </p>
               </div>
               <button
                 type="button"
@@ -50,12 +67,10 @@ export default function DatabaseActionPreview({
                 ×
               </button>
             </div>
-            <div className="database-action-modal-body">
-              {children}
-            </div>
+            <div className="database-action-modal-body">{children}</div>
           </div>
         </div>
       ) : null}
     </>
-  )
+  );
 }

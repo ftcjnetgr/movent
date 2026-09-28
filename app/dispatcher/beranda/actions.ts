@@ -1,230 +1,329 @@
-'use server'
+"use server";
 
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-import { createAdminClient } from '@/lib/supabase/admin'
-import { getCurrentProfile } from '@/lib/server/profile'
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentProfile } from "@/lib/server/profile";
 
 type State = {
-  error?: string
-  success?: string
-  transactionId?: string
+  error?: string;
+  success?: string;
+  transactionId?: string;
   preview?: {
-    transactionId?: string
-    flow: 'tgr' | 'distribusi'
-    startPoint: string
-    destination: string
-    externalExecutor: string
-    externalFleet: string
-    sjNumber: string
-    sjQty: number
-    sjWeight: number
-    product: string
-    sjNote: string | null
-    scheduleId?: string
-    executorNik?: string
-    platNumber?: string
-    std?: string
-    sta?: string
-  }
-}
+    transactionId?: string;
+    flow: "tgr" | "distribusi";
+    startPoint: string;
+    destination: string;
+    externalExecutor: string;
+    externalFleet: string;
+    sjNumber: string;
+    sjQty: number;
+    sjWeight: number;
+    product: string;
+    sjNote: string | null;
+    scheduleId?: string;
+    executorNik?: string;
+    platNumber?: string;
+    std?: string;
+    sta?: string;
+  };
+};
 
 function todayTimestamp(time: string) {
-  const [hour, minute] = time.split(':').map(Number)
-  if (!Number.isInteger(hour) || !Number.isInteger(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) return null
-  const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
-  return `${date}T${time}:00+07:00`
+  const [hour, minute] = time.split(":").map(Number);
+  if (
+    !Number.isInteger(hour) ||
+    !Number.isInteger(minute) ||
+    hour < 0 ||
+    hour > 23 ||
+    minute < 0 ||
+    minute > 59
+  )
+    return null;
+  const date = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  return `${date}T${time}:00+07:00`;
 }
 
-async function activeExecutorAndFleet(admin: ReturnType<typeof createAdminClient>, executorNik: string, platNumber: string) {
+async function activeExecutorAndFleet(
+  admin: ReturnType<typeof createAdminClient>,
+  executorNik: string,
+  platNumber: string,
+) {
   const [{ data: executor }, { data: fleet }] = await Promise.all([
-    admin.from('executors').select('executor_nik, full_name, status').eq('executor_nik', executorNik).eq('status', 'Active').maybeSingle(),
-    admin.from('fleets').select('plat_number, fleet_type, status').eq('plat_number', platNumber).eq('status', 'Active').maybeSingle(),
-  ])
-  return { executor, fleet }
+    admin
+      .from("executors")
+      .select("executor_nik, full_name, status")
+      .eq("executor_nik", executorNik)
+      .eq("status", "Active")
+      .maybeSingle(),
+    admin
+      .from("fleets")
+      .select("plat_number, fleet_type, status")
+      .eq("plat_number", platNumber)
+      .eq("status", "Active")
+      .maybeSingle(),
+  ]);
+  return { executor, fleet };
 }
-
 
 function scheduleStdNotPassed(std: string) {
-  const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
-  const stdAt = new Date(`${date}T${std}+07:00`)
-  return new Date() <= stdAt
+  const date = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const stdAt = new Date(`${date}T${std}+07:00`);
+  return new Date() <= stdAt;
 }
 
 async function nextTransaction(admin: ReturnType<typeof createAdminClient>) {
-  const { data, error } = await admin.rpc('movent_next_transaction_id')
-  if (error || !data) return null
-  return data as string
+  const { data, error } = await admin.rpc("movent_next_transaction_id");
+  if (error || !data) return null;
+  return data as string;
 }
 
-export async function createDispatcherTaskAction(_state: State, formData: FormData): Promise<State> {
-  const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) return { error: 'Kamu belum punya akses ke bagian ini.' }
+export async function createDispatcherTaskAction(
+  _state: State,
+  formData: FormData,
+): Promise<State> {
+  const profile = await getCurrentProfile();
+  if (!["Dispatcher", "Super User"].includes(profile.role))
+    return { error: "Kamu belum punya akses ke bagian ini." };
 
-  const taskType = String(formData.get('taskType') ?? '')
-  const ownership = String(formData.get('fleetOwnership') ?? '')
-  if (profile.role === 'Dispatcher' && taskType === 'Supply' && ownership === 'Non-TGR') {
-    return { error: 'Tugas Supply Non-TGR dibuat oleh Operation.' }
+  const taskType = String(formData.get("taskType") ?? "");
+  const ownership = String(formData.get("fleetOwnership") ?? "");
+  if (
+    profile.role === "Dispatcher" &&
+    taskType === "Supply" &&
+    ownership === "Non-TGR"
+  ) {
+    return { error: "Tugas Supply Non-TGR dibuat oleh Operation." };
   }
-  const admin = createAdminClient()
+  const admin = createAdminClient();
 
-  if (taskType === 'Supply' && ownership === 'TGR') {
-    const scheduleId = String(formData.get('scheduleId') ?? '').trim()
-    const executorNik = String(formData.get('executorNik') ?? '').trim()
-    const platNumber = String(formData.get('platNumber') ?? '').trim()
-    if (!scheduleId || !executorNik || !platNumber) return { error: 'Schedule, Executor, dan Armada perlu diisi dulu, ya.' }
+  if (taskType === "Supply" && ownership === "TGR") {
+    const scheduleId = String(formData.get("scheduleId") ?? "").trim();
+    const executorNik = String(formData.get("executorNik") ?? "").trim();
+    const platNumber = String(formData.get("platNumber") ?? "").trim();
+    if (!scheduleId || !executorNik || !platNumber)
+      return { error: "Schedule, Executor, dan Armada perlu diisi dulu, ya." };
 
-    const { data: schedule } = await admin.from('schedules').select('*').eq('schedule_id', scheduleId).eq('status', 'Active').maybeSingle()
-    if (!schedule) return { error: 'Schedule tidak tersedia.' }
-    if (!scheduleStdNotPassed(schedule.std)) return { error: 'Schedule sudah melewati STD dan tidak bisa dipakai lagi.' }
+    const { data: schedule } = await admin
+      .from("schedules")
+      .select("*")
+      .eq("schedule_id", scheduleId)
+      .eq("status", "Active")
+      .maybeSingle();
+    if (!schedule) return { error: "Schedule tidak tersedia." };
+    if (!scheduleStdNotPassed(schedule.std))
+      return {
+        error: "Schedule sudah melewati STD dan tidak bisa dipakai lagi.",
+      };
 
-    const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
-    if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
+    const { executor, fleet } = await activeExecutorAndFleet(
+      admin,
+      executorNik,
+      platNumber,
+    );
+    if (!executor || !fleet)
+      return { error: "Executor atau Armada belum tersedia." };
 
-    const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
+    const transactionId = await nextTransaction(admin);
+    if (!transactionId)
+      return { error: "ID transaksi belum berhasil dibuat. Coba lagi, ya." };
     return {
-      success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.',
+      success: "Preview tugas sudah siap. Periksa sebelum konfirmasi.",
       preview: {
         transactionId,
-        flow: 'tgr',
+        flow: "tgr",
         startPoint: schedule.start_point,
         destination: schedule.destination,
         externalExecutor: executor.full_name,
         externalFleet: fleet.plat_number,
-        sjNumber: '',
+        sjNumber: "",
         sjQty: 0,
         sjWeight: 0,
-        product: '',
+        product: "",
         sjNote: null,
         scheduleId: schedule.schedule_id,
         executorNik: executor.executor_nik,
         platNumber: fleet.plat_number,
-        std: todayTimestamp(schedule.std) ?? '',
-        sta: todayTimestamp(schedule.sta) ?? '',
+        std: todayTimestamp(schedule.std) ?? "",
+        sta: todayTimestamp(schedule.sta) ?? "",
       },
-    }
+    };
   }
 
-  if (taskType === 'Distribusi Mobil') {
-    const startPoint = String(formData.get('startPoint') ?? '').trim()
-    const destination = String(formData.get('destination') ?? '').trim()
-    const std = String(formData.get('std') ?? '').trim()
-    const sta = String(formData.get('sta') ?? '').trim()
-    const executorNik = String(formData.get('executorNik') ?? '').trim()
-    const platNumber = String(formData.get('platNumber') ?? '').trim()
-    if (!startPoint || !destination || !std || !sta || !executorNik || !platNumber) return { error: 'Start Point, Destinasi, STD, STA, Executor, dan Armada perlu diisi dulu, ya.' }
+  if (taskType === "Distribusi Mobil") {
+    const startPoint = String(formData.get("startPoint") ?? "").trim();
+    const destination = String(formData.get("destination") ?? "").trim();
+    const std = String(formData.get("std") ?? "").trim();
+    const sta = String(formData.get("sta") ?? "").trim();
+    const executorNik = String(formData.get("executorNik") ?? "").trim();
+    const platNumber = String(formData.get("platNumber") ?? "").trim();
+    if (
+      !startPoint ||
+      !destination ||
+      !std ||
+      !sta ||
+      !executorNik ||
+      !platNumber
+    )
+      return {
+        error:
+          "Start Point, Destinasi, STD, STA, Executor, dan Armada perlu diisi dulu, ya.",
+      };
 
     const [startLocation, destinationLocation] = await Promise.all([
-      admin.from('locations').select('location, grouping, status').eq('location', startPoint).eq('status', 'Active').maybeSingle(),
-      admin.from('locations').select('location, grouping, status').eq('location', destination).eq('status', 'Active').maybeSingle(),
-    ])
-    if (!startLocation.data || !destinationLocation.data) return { error: 'Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.' }
-    const timestamps = [todayTimestamp(std), todayTimestamp(sta)]
-    if (!timestamps[0] || !timestamps[1]) return { error: 'STD atau STA belum benar.' }
-    if (new Date(timestamps[1]!).getTime() <= new Date(timestamps[0]!).getTime()) return { error: 'STA harus lebih besar dari STD.' }
-    const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
-    if (!executor || !fleet) return { error: 'Executor atau Armada belum tersedia.' }
-    const transactionId = await nextTransaction(admin)
-    if (!transactionId) return { error: 'ID transaksi belum berhasil dibuat. Coba lagi, ya.' }
+      admin
+        .from("locations")
+        .select("location, grouping, status")
+        .eq("location", startPoint)
+        .eq("status", "Active")
+        .maybeSingle(),
+      admin
+        .from("locations")
+        .select("location, grouping, status")
+        .eq("location", destination)
+        .eq("status", "Active")
+        .maybeSingle(),
+    ]);
+    if (!startLocation.data || !destinationLocation.data)
+      return {
+        error:
+          "Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.",
+      };
+    const timestamps = [todayTimestamp(std), todayTimestamp(sta)];
+    if (!timestamps[0] || !timestamps[1])
+      return { error: "STD atau STA belum benar." };
+    if (
+      new Date(timestamps[1]!).getTime() <= new Date(timestamps[0]!).getTime()
+    )
+      return { error: "STA harus lebih besar dari STD." };
+    const { executor, fleet } = await activeExecutorAndFleet(
+      admin,
+      executorNik,
+      platNumber,
+    );
+    if (!executor || !fleet)
+      return { error: "Executor atau Armada belum tersedia." };
+    const transactionId = await nextTransaction(admin);
+    if (!transactionId)
+      return { error: "ID transaksi belum berhasil dibuat. Coba lagi, ya." };
     return {
-      success: 'Preview tugas sudah siap. Periksa sebelum konfirmasi.',
+      success: "Preview tugas sudah siap. Periksa sebelum konfirmasi.",
       preview: {
         transactionId,
-        flow: 'distribusi',
+        flow: "distribusi",
         startPoint,
         destination,
         externalExecutor: executor.full_name,
         externalFleet: fleet.plat_number,
-        sjNumber: '',
+        sjNumber: "",
         sjQty: 0,
         sjWeight: 0,
-        product: '',
+        product: "",
         sjNote: null,
         executorNik: executor.executor_nik,
         platNumber: fleet.plat_number,
         std: timestamps[0]!,
         sta: timestamps[1]!,
       },
-    }
+    };
   }
 
-  if (taskType === 'Supply' && ownership === 'Non-TGR') {
-    return { error: 'Tugas Supply Non-TGR dibuat oleh Operation.' }
+  if (taskType === "Supply" && ownership === "Non-TGR") {
+    return { error: "Tugas Supply Non-TGR dibuat oleh Operation." };
   }
 
-  return { error: 'Jenis tugasnya belum lengkap. Coba cek lagi, ya.' }
+  return { error: "Jenis tugasnya belum lengkap. Coba cek lagi, ya." };
 }
-
 
 export async function confirmDispatcherTaskAction(
   _state: State,
   formData: FormData,
 ): Promise<State> {
-  const profile = await getCurrentProfile()
-  if (!['Dispatcher', 'Super User'].includes(profile.role)) {
-    return { error: 'Kamu belum punya akses ke bagian ini.' }
+  const profile = await getCurrentProfile();
+  if (!["Dispatcher", "Super User"].includes(profile.role)) {
+    return { error: "Kamu belum punya akses ke bagian ini." };
   }
 
-  const flow = String(formData.get('flow') ?? '')
-  const suppliedTransactionId = String(formData.get('transactionId') ?? '').trim()
-  const executorNik = String(formData.get('executorNik') ?? '').trim()
-  const platNumber = String(formData.get('platNumber') ?? '').trim()
-  const scheduleId = String(formData.get('scheduleId') ?? '').trim()
+  const flow = String(formData.get("flow") ?? "");
+  const suppliedTransactionId = String(
+    formData.get("transactionId") ?? "",
+  ).trim();
+  const executorNik = String(formData.get("executorNik") ?? "").trim();
+  const platNumber = String(formData.get("platNumber") ?? "").trim();
+  const scheduleId = String(formData.get("scheduleId") ?? "").trim();
 
-  const admin = createAdminClient()
-  const transactionId = suppliedTransactionId
+  const admin = createAdminClient();
+  const transactionId = suppliedTransactionId;
 
   if (!transactionId) {
-    return { error: 'ID transaksi preview belum tersedia. Silakan buat preview tugas terlebih dahulu.' }
+    return {
+      error:
+        "ID transaksi preview belum tersedia. Silakan buat preview tugas terlebih dahulu.",
+    };
   }
 
-  const { executor, fleet } = await activeExecutorAndFleet(admin, executorNik, platNumber)
+  const { executor, fleet } = await activeExecutorAndFleet(
+    admin,
+    executorNik,
+    platNumber,
+  );
   if (!executor || !fleet) {
-    return { error: 'Executor atau Armada belum tersedia.' }
+    return { error: "Executor atau Armada belum tersedia." };
   }
 
-  if (flow === 'tgr') {
+  if (flow === "tgr") {
     const { data: schedule } = await admin
-      .from('schedules')
-      .select('*')
-      .eq('schedule_id', scheduleId)
-      .eq('status', 'Active')
-      .maybeSingle()
+      .from("schedules")
+      .select("*")
+      .eq("schedule_id", scheduleId)
+      .eq("status", "Active")
+      .maybeSingle();
 
     if (!schedule) {
-      return { error: 'Schedule tidak tersedia.' }
+      return { error: "Schedule tidak tersedia." };
     }
 
     if (!scheduleStdNotPassed(schedule.std)) {
-      return { error: 'Schedule sudah melewati STD dan tidak bisa dipakai lagi.' }
+      return {
+        error: "Schedule sudah melewati STD dan tidak bisa dipakai lagi.",
+      };
     }
 
-    const std = String(formData.get('std') ?? '').trim()
-    const sta = String(formData.get('sta') ?? '').trim()
+    const std = String(formData.get("std") ?? "").trim();
+    const sta = String(formData.get("sta") ?? "").trim();
 
     if (!std || !sta) {
-      return { error: 'Waktu preview belum tersedia.' }
+      return { error: "Waktu preview belum tersedia." };
     }
 
     if (
       Number.isNaN(new Date(std).getTime()) ||
       Number.isNaN(new Date(sta).getTime())
     ) {
-      return { error: 'Waktu preview belum benar.' }
+      return { error: "Waktu preview belum benar." };
     }
 
     if (new Date(sta).getTime() <= new Date(std).getTime()) {
-      return { error: 'STA harus lebih besar dari STD.' }
+      return { error: "STA harus lebih besar dari STD." };
     }
 
-    const { error } = await admin.from('tasks').insert({
+    const { error } = await admin.from("tasks").insert({
       transaction_id: transactionId,
-      source_type: 'Schedule',
-      task_type: 'Supply',
-      fleet_ownership: 'TGR',
-      status: 'Assigned',
+      source_type: "Schedule",
+      task_type: "Supply",
+      fleet_ownership: "TGR",
+      status: "Assigned",
       created_by: profile.id,
       assigned_by: profile.id,
       executor_nik: executor.executor_nik,
@@ -239,67 +338,67 @@ export async function confirmDispatcherTaskAction(
       std,
       sta,
       assigned_at: new Date().toISOString(),
-    })
+    });
 
     if (error) {
       const { data: existing } = await admin
-        .from('tasks')
-        .select('transaction_id')
-        .eq('transaction_id', transactionId)
-        .maybeSingle()
+        .from("tasks")
+        .select("transaction_id")
+        .eq("transaction_id", transactionId)
+        .maybeSingle();
 
       if (existing) {
         return {
           success: `Tugas ${existing.transaction_id} sudah dikonfirmasi.`,
           transactionId: existing.transaction_id,
-        }
+        };
       }
 
-      return { error: 'Tugas belum berhasil dikonfirmasi.' }
+      return { error: "Tugas belum berhasil dikonfirmasi." };
     }
-  } else if (flow === 'distribusi') {
-    const startPoint = String(formData.get('startPoint') ?? '').trim()
-    const destination = String(formData.get('destination') ?? '').trim()
-    const std = String(formData.get('std') ?? '').trim()
-    const sta = String(formData.get('sta') ?? '').trim()
+  } else if (flow === "distribusi") {
+    const startPoint = String(formData.get("startPoint") ?? "").trim();
+    const destination = String(formData.get("destination") ?? "").trim();
+    const std = String(formData.get("std") ?? "").trim();
+    const sta = String(formData.get("sta") ?? "").trim();
 
-    const ts1 = std.includes('T') ? std : todayTimestamp(std)
-    const ts2 = sta.includes('T') ? sta : todayTimestamp(sta)
+    const ts1 = std.includes("T") ? std : todayTimestamp(std);
+    const ts2 = sta.includes("T") ? sta : todayTimestamp(sta);
 
     if (!startPoint || !destination || !ts1 || !ts2) {
-      return { error: 'Data tugas belum lengkap.' }
+      return { error: "Data tugas belum lengkap." };
     }
 
     if (new Date(ts2).getTime() <= new Date(ts1).getTime()) {
-      return { error: 'STA harus lebih besar dari STD.' }
+      return { error: "STA harus lebih besar dari STD." };
     }
 
     const [{ data: startLocation }, { data: destinationLocation }] =
       await Promise.all([
         admin
-          .from('locations')
-          .select('location,grouping,status')
-          .eq('location', startPoint)
-          .eq('status', 'Active')
+          .from("locations")
+          .select("location,grouping,status")
+          .eq("location", startPoint)
+          .eq("status", "Active")
           .maybeSingle(),
         admin
-          .from('locations')
-          .select('location,grouping,status')
-          .eq('location', destination)
-          .eq('status', 'Active')
+          .from("locations")
+          .select("location,grouping,status")
+          .eq("location", destination)
+          .eq("status", "Active")
           .maybeSingle(),
-      ])
+      ]);
 
     if (!startLocation || !destinationLocation) {
-      return { error: 'Lokasi belum tersedia.' }
+      return { error: "Lokasi belum tersedia." };
     }
 
-    const { error } = await admin.from('tasks').insert({
+    const { error } = await admin.from("tasks").insert({
       transaction_id: transactionId,
-      source_type: 'Manual',
-      task_type: 'Distribusi Mobil',
-      fleet_ownership: 'Non-TGR',
-      status: 'Assigned',
+      source_type: "Manual",
+      task_type: "Distribusi Mobil",
+      fleet_ownership: "Non-TGR",
+      status: "Assigned",
       created_by: profile.id,
       assigned_by: profile.id,
       executor_nik: executor.executor_nik,
@@ -312,71 +411,93 @@ export async function confirmDispatcherTaskAction(
       std: ts1,
       sta: ts2,
       assigned_at: new Date().toISOString(),
-    })
+    });
 
     if (error) {
       const { data: existing } = await admin
-        .from('tasks')
-        .select('transaction_id')
-        .eq('transaction_id', transactionId)
-        .maybeSingle()
+        .from("tasks")
+        .select("transaction_id")
+        .eq("transaction_id", transactionId)
+        .maybeSingle();
 
       if (existing) {
         return {
           success: `Tugas ${existing.transaction_id} sudah dikonfirmasi.`,
           transactionId: existing.transaction_id,
-        }
+        };
       }
 
-      return { error: 'Tugas belum berhasil dikonfirmasi.' }
+      return { error: "Tugas belum berhasil dikonfirmasi." };
     }
   } else {
-    return { error: 'Preview tugas tidak valid.' }
+    return { error: "Preview tugas tidak valid." };
   }
 
-  revalidateTaskPaths()
+  revalidateTaskPaths();
   return {
     success: `Tugas ${transactionId} berhasil dikonfirmasi.`,
     transactionId,
-  }
+  };
 }
 
 export async function cancelDispatcherTaskAction(formData: FormData) {
-  const profile = await getCurrentProfile()
-  const transactionId = String(formData.get('transactionId') ?? '').trim()
-  const note = String(formData.get('note') ?? '').trim()
-  if (!transactionId || !note) return { error: 'Transaction ID dan alasan pembatalan perlu diisi dulu, ya.' }
+  const profile = await getCurrentProfile();
+  const transactionId = String(formData.get("transactionId") ?? "").trim();
+  const note = String(formData.get("note") ?? "").trim();
+  if (!transactionId || !note)
+    return {
+      error: "Transaction ID dan alasan pembatalan perlu diisi dulu, ya.",
+    };
 
-  const admin = createAdminClient()
-  const { data: task } = await admin.from('tasks').select('id, status, created_by, fleet_ownership').eq('transaction_id', transactionId).maybeSingle()
-  if (!task) return { error: 'Tugas nggak ditemukan.' }
-  if (task.fleet_ownership === 'Non-TGR') {
-    if (profile.role !== 'Super User') return { error: 'Tugas Armada Non-TGR hanya dapat dibatalkan oleh Super User.' }
-    if (!['Assigned', 'Driving'].includes(task.status)) return { error: 'Tugas sudah selesai atau tidak bisa dibatalkan.' }
+  const admin = createAdminClient();
+  const { data: task } = await admin
+    .from("tasks")
+    .select("id, status, created_by, fleet_ownership")
+    .eq("transaction_id", transactionId)
+    .maybeSingle();
+  if (!task) return { error: "Tugas nggak ditemukan." };
+  if (task.fleet_ownership === "Non-TGR") {
+    if (profile.role !== "Super User")
+      return {
+        error: "Tugas Armada Non-TGR hanya dapat dibatalkan oleh Super User.",
+      };
+    if (!["Assigned", "Driving"].includes(task.status))
+      return { error: "Tugas sudah selesai atau tidak bisa dibatalkan." };
   } else {
-    if (task.status !== 'Assigned') return { error: 'Tugas sudah diterima atau memang sudah nggak bisa dibatalkan.' }
-    if (profile.role !== 'Super User' && (profile.role !== 'Dispatcher' || task.created_by !== profile.id)) {
-      return { error: 'Kamu belum punya akses ke bagian ini.' }
+    if (task.status !== "Assigned")
+      return {
+        error: "Tugas sudah diterima atau memang sudah nggak bisa dibatalkan.",
+      };
+    if (
+      profile.role !== "Super User" &&
+      (profile.role !== "Dispatcher" || task.created_by !== profile.id)
+    ) {
+      return { error: "Kamu belum punya akses ke bagian ini." };
     }
   }
 
-  const { error } = await admin.from('tasks').update({
-    status: 'Canceled',
-    canceled_at: new Date().toISOString(),
-    canceled_from_status: task.status,
-    cancellation_note: note,
-  }).eq('id', task.id).eq('status', task.status)
-  if (error) return { error: 'Tugas belum berhasil dibatalkan. Coba lagi, ya.' }
-  revalidateTaskPaths()
-  redirect('/dispatcher/riwayat-penugasan')
+  const { error } = await admin
+    .from("tasks")
+    .update({
+      status: "Canceled",
+      canceled_at: new Date().toISOString(),
+      canceled_from_status: task.status,
+      cancellation_note: note,
+    })
+    .eq("id", task.id)
+    .eq("status", task.status);
+  if (error)
+    return { error: "Tugas belum berhasil dibatalkan. Coba lagi, ya." };
+  revalidateTaskPaths();
+  redirect("/dispatcher/riwayat-penugasan");
 }
 
 function revalidateTaskPaths() {
-  revalidatePath('/dispatcher/beranda')
-  revalidatePath('/dispatcher/riwayat-penugasan')
-  revalidatePath('/dispatcher/armada-non-tgr')
-  revalidatePath('/dispatcher/timetable')
-  revalidatePath('/controller/beranda')
-  revalidatePath('/controller/timetable')
-  revalidatePath('/executor/tugas-saya')
+  revalidatePath("/dispatcher/beranda");
+  revalidatePath("/dispatcher/riwayat-penugasan");
+  revalidatePath("/dispatcher/armada-non-tgr");
+  revalidatePath("/dispatcher/timetable");
+  revalidatePath("/controller/beranda");
+  revalidatePath("/controller/timetable");
+  revalidatePath("/executor/tugas-saya");
 }

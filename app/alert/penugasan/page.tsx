@@ -1,10 +1,10 @@
-import DashboardAlertList from '@/components/shared/alerts/dashboard-alert-list'
-import { getCurrentProfile } from '@/lib/server/profile'
-import { getDashboardData } from '@/lib/server/dashboard'
+import DashboardAlertList from "@/components/shared/alerts/dashboard-alert-list";
+import { getCurrentProfile } from "@/lib/server/profile";
+import { getDashboardData } from "@/lib/server/dashboard";
 
 export default async function AlertPage() {
-  const profile = await getCurrentProfile()
-  const data = await getDashboardData(profile)
+  const profile = await getCurrentProfile();
+  const data = await getDashboardData(profile);
 
   return (
     <div className="role-page alert-page">
@@ -17,5 +17,5 @@ export default async function AlertPage() {
         ticketAlerts={data.ticketAlerts}
       />
     </div>
-  )
+  );
 }

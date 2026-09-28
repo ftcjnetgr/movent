@@ -1,18 +1,25 @@
-import MaintainerMaintenanceTable from '@/components/maintainer/maintenance-table'
-import { createAdminClient } from '@/lib/supabase/admin'
-import { getCurrentProfile } from '@/lib/server/profile'
+import MaintainerMaintenanceTable from "@/components/maintainer/maintenance-table";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentProfile } from "@/lib/server/profile";
 
 export default async function MaintainerTicketMaintenancePage() {
-  const profile = await getCurrentProfile()
-  const admin = createAdminClient()
+  const profile = await getCurrentProfile();
+  const admin = createAdminClient();
   const { data: tickets } = await admin
-    .from('ticketings')
-    .select('transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, maintainer_user_id')
-    .order('created_at', { ascending: true })
+    .from("ticketings")
+    .select(
+      "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, maintainer_user_id",
+    )
+    .order("created_at", { ascending: true });
 
-  const visible = profile.role === 'Maintainer'
-    ? (tickets ?? []).filter((ticket) => ticket.status === 'Requested' || ticket.maintainer_user_id === profile.id)
-    : (tickets ?? [])
+  const visible =
+    profile.role === "Maintainer"
+      ? (tickets ?? []).filter(
+          (ticket) =>
+            ticket.status === "Requested" ||
+            ticket.maintainer_user_id === profile.id,
+        )
+      : (tickets ?? []);
 
   return (
     <div className="role-page">
@@ -25,5 +32,5 @@ export default async function MaintainerTicketMaintenancePage() {
 
       <MaintainerMaintenanceTable tickets={visible} />
     </div>
-  )
+  );
 }

@@ -1,22 +1,37 @@
-'use client'
+"use client";
 
-import { useActionState, useState } from 'react'
-import { loginAction } from './actions'
+import { useActionState, useState } from "react";
+import { loginAction } from "./actions";
 
-const initialState: { error?: string } = {}
+const initialState: { error?: string } = {};
 
 export default function LoginPage() {
-  const [state, formAction, pending] = useActionState(loginAction, initialState)
-  const [showPassword, setShowPassword] = useState(false)
+  const [state, formAction, pending] = useActionState(
+    loginAction,
+    initialState,
+  );
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="login-page">
       <section className="login-simple-shell" aria-label="Masuk ke MOVENT">
         <aside className="login-simple-visual">
           <div className="login-simple-content">
-            <img src="/assets/branding/movent-dark.svg" alt="MOVENT" className="login-simple-logo" />
+            <img
+              src="/assets/branding/movent-dark.svg"
+              alt="MOVENT"
+              className="login-simple-logo"
+            />
             <div className="login-simple-message">
-              <h1>setiap<br />pergerakan,<br />satu<br />kendali.</h1>
+              <h1>
+                setiap
+                <br />
+                pergerakan,
+                <br />
+                satu
+                <br />
+                kendali.
+              </h1>
             </div>
           </div>
           <div className="login-simple-left-footer">Part of FTC Go Project</div>
@@ -32,21 +47,30 @@ export default function LoginPage() {
             <form action={formAction}>
               <label>
                 Username
-                <input name="username" autoComplete="username" autoFocus placeholder="Nama pengguna kamu" />
+                <input
+                  name="username"
+                  autoComplete="username"
+                  autoFocus
+                  placeholder="Nama pengguna kamu"
+                />
               </label>
               <label>
                 Password
                 <span className="login-password-field">
                   <input
                     name="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     placeholder="Kata sandi kamu"
                   />
                   <button
                     type="button"
                     className="login-password-toggle"
-                    aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Lihat kata sandi'}
+                    aria-label={
+                      showPassword
+                        ? "Sembunyikan kata sandi"
+                        : "Lihat kata sandi"
+                    }
                     aria-pressed={showPassword}
                     onClick={() => setShowPassword((visible) => !visible)}
                   >
@@ -67,15 +91,25 @@ export default function LoginPage() {
                   </button>
                 </span>
               </label>
-              {state.error ? <p className="form-error login-error" role="alert">{state.error}</p> : null}
-              <button type="submit" className="login-simple-submit" disabled={pending}>
-                {pending ? 'Sebentar ya...' : 'Masuk'}
+              {state.error ? (
+                <p className="form-error login-error" role="alert">
+                  {state.error}
+                </p>
+              ) : null}
+              <button
+                type="submit"
+                className="login-simple-submit"
+                disabled={pending}
+              >
+                {pending ? "Sebentar ya..." : "Masuk"}
               </button>
             </form>
           </div>
-          <div className="login-simple-right-footer">Developed by Fleet Traffic Control</div>
+          <div className="login-simple-right-footer">
+            Developed by Fleet Traffic Control
+          </div>
         </div>
       </section>
     </main>
-  )
+  );
 }
