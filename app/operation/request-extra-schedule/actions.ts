@@ -109,7 +109,7 @@ export async function createExtraScheduleAction(
   }
 
   return {
-    success: "Preview request sudah siap. Periksa sebelum konfirmasi.",
+    success: "Preview permintaannya sudah siap. Cek dulu sebelum lanjut, ya.",
     preview: value.value,
   };
 }
@@ -135,12 +135,12 @@ export async function confirmExtraScheduleAction(
   if (!suppliedTransactionId) {
     return {
       error:
-        "ID transaksi preview belum tersedia. Silakan buat preview request terlebih dahulu.",
+        "ID transaksi preview belum ada. Buat preview permintaan dulu, ya.",
     };
   }
 
   if (!startPoint || !destination || !std || !sta) {
-    return { error: "Data request belum lengkap." };
+    return { error: "Data permintaannya belum lengkap. Cek lagi, ya." };
   }
 
   const stdTimestamp = std.includes("T") ? std : jakartaTimestamp(std);
@@ -221,13 +221,13 @@ export async function confirmExtraScheduleAction(
 
     if (existing) {
       return {
-        success: `Request ${existing.transaction_id} sudah diajukan.`,
+        success: `Permintaan ${existing.transaction_id} sudah diajuin.`,
         transactionId: existing.transaction_id,
       };
     }
 
     return {
-      error: "Request Extra Schedule belum berhasil dibuat. Coba lagi, ya.",
+      error: "Permintaan jadwal tambahan belum berhasil dibuat. Coba lagi, ya.",
     };
   }
 
@@ -237,7 +237,7 @@ export async function confirmExtraScheduleAction(
   revalidatePath("/controller/beranda");
 
   return {
-    success: `Request ${transactionId} berhasil diajukan.`,
+    success: `Permintaan ${transactionId} berhasil diajuin.`,
     transactionId,
   };
 }
@@ -274,7 +274,7 @@ export async function cancelExtraScheduleAction(formData: FormData) {
 
   if (!task) {
     return {
-      error: "Request tidak ditemukan atau sudah tidak bisa dibatalkan.",
+      error: "Permintaannya nggak ditemukan atau sudah nggak bisa dibatalin.",
     };
   }
 
@@ -290,7 +290,7 @@ export async function cancelExtraScheduleAction(formData: FormData) {
     .eq("status", "Requested");
 
   if (error) {
-    return { error: "Request belum berhasil dibatalkan. Coba lagi, ya." };
+    return { error: "Permintaannya belum berhasil dibatalin. Coba lagi, ya." };
   }
 
   revalidatePath("/operation/riwayat-permintaan");
