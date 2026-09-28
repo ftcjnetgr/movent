@@ -86,13 +86,13 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
     sjNumbers.length !== sjWeights.length ||
     sjNumbers.length !== products.length
   ) {
-    return { error: "Data setiap SJ belum lengkap." } as const;
+    return { error: "Data setiap SJ belum lengkap. Cek lagi, ya." } as const;
   }
 
   const stdTimestamp = jakartaTimestamp(std);
   const staTimestamp = jakartaTimestamp(sta);
   if (!stdTimestamp || !staTimestamp)
-    return { error: "Format STD atau STA belum benar." } as const;
+    return { error: "Format STD atau STA belum benar. Cek lagi, ya." } as const;
   if (new Date(staTimestamp).getTime() <= new Date(stdTimestamp).getTime())
     return { error: "STA harus lebih besar dari STD." } as const;
 
@@ -115,7 +115,7 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
   if (!startLocation || !destinationLocation) {
     return {
       error:
-        "Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.",
+        "Start point dan destinasi harus dipilih dari lokasi yang aktif, ya.",
     } as const;
   }
 
@@ -137,7 +137,7 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
       sjWeights[i] < 0
     ) {
       return {
-        error: "Nomor SJ, Qty, Berat, dan Produk wajib diisi pada setiap SJ.",
+        error: "Nomor SJ, Qty, berat, dan produk perlu diisi di setiap SJ, ya.",
       } as const;
     }
     const { data: productData } = await admin
@@ -189,7 +189,7 @@ export async function createNonTgrSupplyAction(
 
   return {
     success:
-      "SJ sudah disubmit. Periksa preview penugasan dan hasil SJ sebelum dikonfirmasi.",
+      "SJ sudah masuk. Cek preview penugasan dan hasil SJ sebelum lanjut, ya.",
     preview: validated.value,
   };
 }
@@ -210,7 +210,7 @@ export async function confirmNonTgrSupplyAction(
   if (!transactionId)
     return {
       error:
-        "ID transaksi preview belum tersedia. Silakan buat preview tugas terlebih dahulu.",
+        "ID transaksi preview belum ada. Buat preview tugas dulu, ya.",
     };
 
   const { snapshots } = validated;
@@ -265,7 +265,7 @@ export async function confirmNonTgrSupplyAction(
     .eq("transaction_id", transactionId)
     .maybeSingle();
   if (!taskRow)
-    return { error: "Tugas dibuat, tetapi detail SJ belum ditemukan." };
+    return { error: "Tugasnya sudah dibuat, tapi detail SJ belum ketemu." };
   const sjRows = value.sjs.map((sj) => ({
     task_id: taskRow.id,
     sj_number: sj.sjNumber,
@@ -284,13 +284,13 @@ export async function confirmNonTgrSupplyAction(
       .eq("status", "Assigned");
 
     return {
-      error: "Tugas dan detail SJ belum berhasil disimpan. Silakan coba lagi.",
+      error: "Tugas dan detail SJ belum berhasil disimpan. Coba lagi, ya.",
     };
   }
 
   revalidateOperationPaths();
   return {
-    success: `Tugas ${transactionId} berhasil dikonfirmasi dan ditugaskan.`,
+    success: `Tugas ${transactionId} berhasil dikonfirmasi dan ditugasin.`,
     transactionId,
   };
 }
@@ -335,10 +335,10 @@ export async function confirmNonTgrDepartureByOperationAction(
     .eq("id", task.id)
     .eq("status", "Assigned");
 
-  if (error) return { error: "Konfirmasi berangkat belum berhasil." };
+  if (error) return { error: "Konfirmasi berangkat belum berhasil. Coba lagi, ya." };
 
   revalidateOperationPaths();
-  return { success: `ATD ${transactionId} berhasil dikonfirmasi.` };
+  return { success: `ATD ${transactionId} sudah dikonfirmasi.` };
 }
 
 function revalidateOperationPaths() {
