@@ -82,7 +82,7 @@ export default function MaintainerMaintenanceTable({
             onChange={(event) => setStatusFilter(event.target.value)}
           >
             <option value="all">Semua status</option>
-            <option value="Requested">Udah Diajukan</option>
+            <option value="Requested">Udah Diajuin</option>
             <option value="Confirmed">Udah Diterima</option>
             <option value="In Progress">Lagi Dikerjain</option>
             <option value="Completed">Udah Selesai</option>
