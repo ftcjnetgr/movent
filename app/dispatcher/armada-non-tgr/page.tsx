@@ -7,9 +7,9 @@ function statusLabel(status: string) {
     Requested: "Udah Diajuin",
     Assigned: "Udah Ditugasin",
     Confirmed: "Diterima",
-    Driving: "Berangkat",
-    Completed: "Udah selesai",
-    Canceled: "Dibatalkan",
+    Driving: "Lagi Jalan",
+    Completed: "Udah Selesai",
+    Canceled: "Dibatalin",
   };
   return labels[status] ?? status;
 }
@@ -115,7 +115,7 @@ export default async function ArmadaNonTgrPage() {
                       </form>
                     ) : null}
                     {task.status === "Completed" ? (
-                      <span className="muted">Udah selesai</span>
+                      <span className="muted">Udah Selesai</span>
                     ) : null}
                   </td>
                 </tr>
