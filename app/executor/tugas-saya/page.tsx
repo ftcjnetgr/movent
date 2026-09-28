@@ -53,7 +53,7 @@ export default async function ExecutorTugasSayaPage() {
     <div className="role-page">
       <div className="page-heading">
         <div>
-          <h1>Tugas Saya</h1>
+          <h1>Tugas kamu</h1>
           <p>
             Fokus ke tugas yang perlu kamu selesaikan. Semua langkah berikutnya
             ada di setiap kartu.
@@ -68,11 +68,11 @@ export default async function ExecutorTugasSayaPage() {
             <strong>{activeCount}</strong>
           </div>
           <div className="metric-card">
-            <span>Menunggu Diterima</span>
+            <span>Tinggal diterima</span>
             <strong>{waitingCount}</strong>
           </div>
           <div className="metric-card">
-            <span>Sedang Berangkat</span>
+            <span>Lagi jalan</span>
             <strong>{drivingCount}</strong>
           </div>
           <div className="metric-card">
@@ -89,8 +89,8 @@ export default async function ExecutorTugasSayaPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <h2>Tugas yang Perlu Dikerjakan</h2>
-            <p>Kerjakan dari status paling awal sampai selesai.</p>
+            <h2>Yang perlu kamu kerjain</h2>
+            <p>Ikutin dari tahap awal sampai selesai, ya.</p>
           </div>
         </div>
         <section className="task-list">
@@ -104,8 +104,8 @@ export default async function ExecutorTugasSayaPage() {
           ))}
           {!tasks?.length ? (
             <div className="metric-card">
-              <span>Semua aman</span>
-              <strong>Tidak ada tugas aktif</strong>
+              <span>Aman, belum ada tugas</span>
+              <strong>Belum ada tugas aktif di sini.</strong>
               <p>
                 Belum ada penugasan yang perlu kamu kerjakan. Tugas yang selesai
                 bisa kamu lihat di Riwayat Tugas.
