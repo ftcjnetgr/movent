@@ -11,7 +11,7 @@ function statusLabel(status: string) {
       {
         Requested: "Udah Diajukan",
         Confirmed: "Udah Diterima",
-        Assigned: "Siap Jalan",
+        Assigned: "Ditugaskan",
         Driving: "Lagi Jalan",
         Completed: "Udah Selesai",
         Canceled: "Dibatalkan",
@@ -168,9 +168,9 @@ export default async function ControllerPenugasanDashboardPage({
             <StatusIcon status="Assigned" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Siap Jalan</span>
+            <span>Ditugaskan</span>
             <strong>{data.taskCounts.Assigned ?? 0}</strong>
-            <small>Belum mulai</small>
+            <small>Menunggu mulai</small>
           </div>
         </div>
         <div className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed">
@@ -216,7 +216,7 @@ export default async function ControllerPenugasanDashboardPage({
               </p>
             </div>
             <div className="super-chart-legend">
-              <span className="status-legend status-legend-assigned"><i className="legend-orange" /> Siap Jalan</span>
+              <span className="status-legend status-legend-assigned"><i className="legend-orange" /> Ditugaskan</span>
               <span className="status-legend status-legend-driving"><i className="legend-green" /> Lagi Jalan</span>
               <span className="status-legend status-legend-completed"><i className="legend-purple" /> Udah Selesai</span>
               <span className="status-legend status-legend-canceled"><i className="legend-red" /> Dibatalkan</span>
