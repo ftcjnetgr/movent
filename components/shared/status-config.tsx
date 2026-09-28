@@ -10,6 +10,20 @@ export type StatusName =
 
 export type StatusIconSize = number;
 
+export const STATUS_ORDER: Record<string, number> = {
+  Requested: 0,
+  Assigned: 1,
+  Confirmed: 2,
+  Driving: 3,
+  "In Progress": 4,
+  Completed: 5,
+  Canceled: 6,
+};
+
+export function compareStatus(a: string, b: string) {
+  return (STATUS_ORDER[a] ?? 999) - (STATUS_ORDER[b] ?? 999);
+}
+
 export const STATUS_LABELS: Record<string, string> = {
   Requested: "Diajukan",
   Assigned: "Ditugaskan",
