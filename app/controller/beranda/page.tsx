@@ -278,7 +278,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{taskStatusCounts.Driving}</strong>
-            <small>Lagi di perjalanan</small>
+            <small>Lagi di jalan</small>
           </div>
         </div>
 
@@ -434,7 +434,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-panel-heading">
             <div>
               <h2>Penugasan Terbaru</h2>
-              <p>Ringkasan penugasan terbaru tanpa membuka detail halaman.</p>
+              <p>Biar nggak perlu buka-buka lagi, detail singkatnya ada di sini.</p>
             </div>
           </div>
           <div className="super-table-wrap">
@@ -478,7 +478,7 @@ export default async function ControllerPenugasanDashboardPage({
                 {!tasks.length ? (
                   <tr>
                     <td colSpan={6} className="super-empty-cell">
-                      Belum ada penugasan.
+                      Belum ada penugasan di sini.
                     </td>
                   </tr>
                 ) : null}
