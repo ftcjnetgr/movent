@@ -145,8 +145,25 @@ export default async function ControllerPenugasanDashboardPage({
         .lt("std", rangeEnd),
     ]);
 
-  const tasks = [...(tasksResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
+  const rawTasks = tasksResult.data ?? [];
   const activities = activityResult.data ?? [];
+  const tasks = sortByStatusAndTime(rawTasks);
+
+  const taskStatusCounts = {
+    Assigned: activities.filter((task) => displayTaskStatus(task) === "Assigned")
+      .length,
+    Confirmed: activities.filter((task) => displayTaskStatus(task) === "Confirmed")
+      .length,
+    Ready: activities.filter((task) => displayTaskStatus(task) === "Ready")
+      .length,
+    Driving: activities.filter((task) => displayTaskStatus(task) === "Driving")
+      .length,
+    Completed: activities.filter((task) => displayTaskStatus(task) === "Completed")
+      .length,
+    Canceled: activities.filter((task) => displayTaskStatus(task) === "Canceled")
+      .length,
+  };
+
   const activeTasks =
     taskStatusCounts.Assigned +
     taskStatusCounts.Confirmed +
@@ -333,7 +350,7 @@ export default async function ControllerPenugasanDashboardPage({
                       <span
                         className="bar-assigned"
                         style={{
-                          height: ${(item.assigned / maxHour) * 100} + "%",
+                          height: String((item.assigned / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
@@ -341,7 +358,7 @@ export default async function ControllerPenugasanDashboardPage({
                       <span
                         className="bar-confirmed"
                         style={{
-                          height: ${(item.confirmed / maxHour) * 100} + "%",
+                          height: String((item.confirmed / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
@@ -349,7 +366,7 @@ export default async function ControllerPenugasanDashboardPage({
                       <span
                         className="bar-ready"
                         style={{
-                          height: ${(item.ready / maxHour) * 100} + "%",
+                          height: String((item.ready / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
@@ -357,7 +374,7 @@ export default async function ControllerPenugasanDashboardPage({
                       <span
                         className="bar-driving"
                         style={{
-                          height: ${(item.driving / maxHour) * 100} + "%",
+                          height: String((item.driving / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
@@ -365,7 +382,7 @@ export default async function ControllerPenugasanDashboardPage({
                       <span
                         className="bar-completed"
                         style={{
-                          height: ${(item.completed / maxHour) * 100} + "%",
+                          height: String((item.completed / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
@@ -373,7 +390,7 @@ export default async function ControllerPenugasanDashboardPage({
                       <span
                         className="bar-canceled"
                         style={{
-                          height: ${(item.canceled / maxHour) * 100} + "%",
+                          height: String((item.canceled / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
