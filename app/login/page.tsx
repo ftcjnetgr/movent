@@ -14,7 +14,7 @@ export default function LoginPage() {
 
   return (
     <main className="login-page">
-      <section className="login-simple-shell" aria-label="Masuk ke MOVENT">
+      <section className="login-simple-shell" aria-label="Yuk, masuk ke MOVENT">
         <aside className="login-simple-visual">
           <div className="login-simple-content">
             <img
@@ -41,12 +41,12 @@ export default function LoginPage() {
           <div className="login-simple-form">
             <div className="login-simple-form-heading">
               <h2>Halo, balik lagi 👋</h2>
-              <p>Masuk dulu, biar operasional hari ini tetap jalan.</p>
+              <p>Yuk, masuk dulu, biar operasional hari ini tetap jalan.</p>
             </div>
 
             <form action={formAction}>
               <label>
-                Username
+                Username kamu
                 <input
                   name="username"
                   autoComplete="username"
@@ -61,7 +61,7 @@ export default function LoginPage() {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    placeholder="Kata sandi kamu"
+                    placeholder="Password kamu kamu"
                   />
                   <button
                     type="button"
@@ -101,7 +101,7 @@ export default function LoginPage() {
                 className="login-simple-submit"
                 disabled={pending}
               >
-                {pending ? "Sebentar ya..." : "Masuk"}
+                {pending ? "Sebentar ya..." : "Yuk, masuk"}
               </button>
             </form>
           </div>
