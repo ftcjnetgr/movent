@@ -55,7 +55,8 @@ export default async function DispatcherBerandaPage() {
     admin
       .from("ticketings")
       .select(
-        "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note",
+        "transaction_id, status, maintenance_list, location, fleet_plat_number, " +
+        "created_at, created_by, cancellation_note",
       )
       .eq("created_by", profile.id)
       .order("created_at", { ascending: false }),
