@@ -216,10 +216,10 @@ export default async function ControllerPenugasanDashboardPage({
               </p>
             </div>
             <div className="super-chart-legend">
-              <span className="status-legend status-legend-completed"><StatusIcon status="Completed" size={12} /> Udah Selesai</span>
-              <span className="status-legend status-legend-driving"><StatusIcon status="Driving" size={12} /> Lagi Jalan</span>
-              <span className="status-legend status-legend-assigned"><StatusIcon status="Assigned" size={12} /> Siap Jalan</span>
-              <span className="status-legend status-legend-canceled"><StatusIcon status="Canceled" size={12} /> Dibatalkan</span>
+              <span className="status-legend status-legend-completed"><i className="legend-purple" /> Udah Selesai</span>
+              <span className="status-legend status-legend-driving"><i className="legend-green" /> Lagi Jalan</span>
+              <span className="status-legend status-legend-assigned"><i className="legend-orange" /> Siap Jalan</span>
+              <span className="status-legend status-legend-canceled"><i className="legend-red" /> Dibatalkan</span>
             </div>
           </div>
           <div className="super-chart">
