@@ -6,8 +6,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: "Diajukan",
-    Assigned: "Ditugaskan",
+    Requested: "Udah Diajuin",
+    Assigned: "Udah Ditugasin",
     Confirmed: "Dikonfirmasi",
     Driving: "Berangkat",
     Completed: "Selesai",
@@ -17,9 +17,9 @@ function statusLabel(status: string) {
 }
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: "Diajukan",
+    Requested: "Udah Diajuin",
     Confirmed: "Dikonfirmasi",
-    "In Progress": "Sedang dikerjakan",
+    "In Progress": "Lagi Dikerjain",
     Completed: "Selesai",
     Canceled: "Dibatalkan",
   };
@@ -150,7 +150,7 @@ export default async function SuperUserTransactionManagementPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Kelola Transaksi</h1>
+          <h1>Yuk, kelola transaksi</h1>
           <p>
             Edit transaksi yang masih bisa diubah. Transaksi yang sudah selesai
             tetap terkunci.
@@ -162,7 +162,7 @@ export default async function SuperUserTransactionManagementPage() {
         <div className="section-heading">
           <div>
             <h2>Tugas</h2>
-            <p>Semua transaksi tugas dari berbagai alur.</p>
+            <p>Semua tugas dari berbagai alur ada di sini.</p>
           </div>
         </div>
         <div className="table-wrap">
@@ -229,7 +229,7 @@ export default async function SuperUserTransactionManagementPage() {
         <div className="section-heading">
           <div>
             <h2>Tiket Maintenance</h2>
-            <p>Semua tiket maintenance dari Dispatcher.</p>
+            <p>Semua maintenance dari Dispatcher ada di sini.</p>
           </div>
         </div>
         <div className="table-wrap">
