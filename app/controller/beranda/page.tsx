@@ -6,16 +6,7 @@ import StatusBadge from "@/components/shared/status-badge";
 import { compareStatus, STATUS_LABELS, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
-  return (
-    {
-      Assigned: "Udah Ditugasin",
-      Confirmed: "Udah Diterima",
-      Ready: "Siap Jalan",
-      Driving: "Lagi Jalan",
-      Completed: "Udah Selesai",
-      Canceled: "Dibatalin",
-    }[status] ?? status
-  );
+  return STATUS_LABELS[status] ?? status;
 }
 
 
