@@ -147,7 +147,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diajukan</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
-            <small>Menunggu diterima</small>
+            <small>Tinggal diterima</small>
           </div>
         </div>
 
@@ -158,7 +158,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-            <small>Siap dikerjain</small>
+            <small>Tinggal mulai</small>
           </div>
         </div>
 
@@ -169,7 +169,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Dikerjain</span>
             <strong>{data.ticketCounts["In Progress"] ?? 0}</strong>
-            <small>Masih diproses</small>
+            <small>Lagi dikerjain</small>
           </div>
         </div>
 
@@ -289,7 +289,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-panel-heading">
             <div>
               <h2>Maintenance Terbaru</h2>
-              <p>Ringkasan maintenance terbaru tanpa membuka detail halaman.</p>
+              <p>Biar nggak perlu buka-buka lagi, detail singkatnya ada di sini.</p>
             </div>
           </div>
           <div className="super-table-wrap">
@@ -328,7 +328,7 @@ export default async function ControllerTicketingDashboardPage({
                 {!tickets.length ? (
                   <tr>
                     <td colSpan={6} className="super-empty-cell">
-                      Belum ada maintenance.
+                      Belum ada maintenance di sini.
                     </td>
                   </tr>
                 ) : null}
