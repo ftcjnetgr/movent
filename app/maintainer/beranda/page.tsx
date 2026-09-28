@@ -1,67 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
-
-function SummaryIcon({
-  name,
-}: {
-  name: "clipboard" | "truck" | "check" | "wrench" | "progress";
-}) {
-  const common = {
-    viewBox: "0 0 24 24",
-    width: 20,
-    height: 20,
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.8,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-  };
-
-  if (name === "clipboard") {
-    return (
-      <svg {...common}>
-        <rect x="6" y="5" width="12" height="16" rx="2" />
-        <path d="M9 5V3h6v2M9 10h6M9 14h6M9 18h4" />
-      </svg>
-    );
-  }
-
-  if (name === "truck") {
-    return (
-      <svg {...common}>
-        <path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z" />
-        <circle cx="7" cy="18" r="2" />
-        <circle cx="18" cy="18" r="2" />
-      </svg>
-    );
-  }
-
-  if (name === "check") {
-    return (
-      <svg {...common}>
-        <circle cx="12" cy="12" r="9" />
-        <path d="m8 12 2.5 2.5L16 9" />
-      </svg>
-    );
-  }
-
-  if (name === "wrench") {
-    return (
-      <svg {...common}>
-        <path d="M14 6a4 4 0 0 1-5 5L4 16l4 4 5-5a4 4 0 0 1 5-5l-4-4Z" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg {...common}>
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 7v5l3 2" />
-    </svg>
-  );
-}
+import { StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
@@ -169,7 +109,7 @@ export default async function MaintainerBerandaPage() {
       </div>
 
       <section className="super-kpi-grid maintenance-kpi-grid">
-        <div className="super-kpi-card kpi-blue">
+        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-total">
           <div className="super-kpi-icon">
             <SummaryIcon name="wrench" />
           </div>
@@ -182,7 +122,7 @@ export default async function MaintainerBerandaPage() {
 
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">
-            <SummaryIcon name="clipboard" />
+            <StatusIcon status="Assigned" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Diajukan</span>
@@ -191,9 +131,9 @@ export default async function MaintainerBerandaPage() {
           </div>
         </div>
 
-        <div className="super-kpi-card kpi-cyan">
+        <div className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed">
           <div className="super-kpi-icon">
-            <SummaryIcon name="check" />
+            <StatusIcon status="Confirmed" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
@@ -202,7 +142,7 @@ export default async function MaintainerBerandaPage() {
           </div>
         </div>
 
-        <div className="super-kpi-card kpi-orange">
+        <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-requested">
           <div className="super-kpi-icon">
             <SummaryIcon name="progress" />
           </div>
@@ -213,9 +153,9 @@ export default async function MaintainerBerandaPage() {
           </div>
         </div>
 
-        <div className="super-kpi-card kpi-purple">
+        <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed">
           <div className="super-kpi-icon">
-            <SummaryIcon name="check" />
+            <StatusIcon status="Completed" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
