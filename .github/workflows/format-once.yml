@@ -19,7 +19,6 @@ jobs:
           npx --yes prettier@3.6.2 --write \
             "app/**/*.ts" \
             "app/**/*.tsx" \
-            "components/**/*.ts" \
             "components/**/*.tsx" \
             "lib/**/*.ts" \
             "proxy.ts" \
