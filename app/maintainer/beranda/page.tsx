@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
-import { compareStatus, StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, STATUS_LABELS, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
@@ -111,7 +111,7 @@ export default async function MaintainerBerandaPage() {
             <StatusIcon status="Requested" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Udah Udah Diajuin</span>
+            <span>Udah Diajuin</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
             <small>Tinggal diterima</small>
           </div>
@@ -160,7 +160,7 @@ export default async function MaintainerBerandaPage() {
             </div>
 
             <div className="super-chart-legend">
-              <span><i className="legend-requested" /> Udah Udah Diajuin</span>
+              <span><i className="legend-requested" /> Udah Diajuin</span>
               <span><i className="legend-confirmed" /> Udah Diterima</span>
               <span><i className="legend-in-progress" /> Lagi Dikerjain</span>
               <span><i className="legend-completed" /> Udah Selesai</span>
