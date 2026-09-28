@@ -2,7 +2,7 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
-import { compareStatus, StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, STATUS_LABELS, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
@@ -145,7 +145,7 @@ export default async function ControllerTicketingDashboardPage({
             <StatusIcon status="Requested" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Udah Diajukan</span>
+            <span>Udah Diajuin</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
             <small>Tinggal diterima</small>
           </div>
@@ -193,7 +193,7 @@ export default async function ControllerTicketingDashboardPage({
               <p>Maintenance yang dibuat berdasarkan periode yang dipilih.</p>
             </div>
             <div className="super-chart-legend">
-              <span><i className="legend-requested" /> Udah Diajukan</span>
+              <span><i className="legend-requested" /> Udah Diajuin</span>
               <span><i className="legend-confirmed" /> Udah Diterima</span>
               <span><i className="legend-in-progress" /> Lagi Dikerjain</span>
               <span><i className="legend-completed" /> Udah Selesai</span>
