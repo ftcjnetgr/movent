@@ -70,7 +70,7 @@ function maintenanceStatusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: "Dibuat",
     Confirmed: "Dikonfirmasi",
-    "In Progress": "Sedang dikerjakan",
+    "In Progress": "Lagi Dikerjain",
   };
   return labels[status] ?? status;
 }
@@ -170,7 +170,7 @@ export default function DashboardAlertList({
     mode === "task"
       ? "Pantau schedule yang mendekati atau melewati batas waktu penugasan."
       : mode === "ticket"
-        ? "Pantau maintenance yang belum bergerak sesuai batas waktu proses."
+        ? "Cek maintenance yang belum jalan sesuai waktunya."
         : "Pantau kondisi operasional yang membutuhkan perhatian.";
 
   const taskGroups = useMemo(() => {
@@ -303,17 +303,17 @@ export default function DashboardAlertList({
                                 }
                                 label={
                                   item.kind === "unassigned"
-                                    ? "Belum ditugaskan"
-                                    : "Sudah ditugaskan"
+                                    ? "Belum ditugasin"
+                                    : "Udah ditugasin"
                                 }
                               />
                               <small className="alert-context">
                                 {item.kind === "unassigned"
-                                  ? "Schedule belum punya penugasan"
+                                  ? "Schedule ini belum punya penugasan"
                                   : "Melewati batas STA"}
                               </small>
                             </td>
-                            <td>{item.driverName ?? "Belum ada driver"}</td>
+                            <td>{item.driverName ?? "Belum ada driver di sini"}</td>
                             <td>{item.fleetPlat ?? "-"}</td>
                             <td>
                               {item.startPoint} → {item.destination}
@@ -411,7 +411,7 @@ export default function DashboardAlertList({
                 )
                 ? activeTicketLocation
                 : ticketGroups[0][0]
-              : "Belum ada lokasi";
+              : "Belum ada lokasi di sini";
             const activeItems = hasGroups
               ? (ticketGroups.find(
                   ([location]) => location === activeLocation,
