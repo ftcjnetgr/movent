@@ -1,12 +1,11 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
-import StatusBadge from "@/components/shared/status-badge";
 
 function SummaryIcon({
   name,
 }: {
-  name: "clipboard" | "wrench" | "check" | "play" | "clock";
+  name: "clipboard" | "truck" | "check" | "wrench" | "progress";
 }) {
   const common = {
     viewBox: "0 0 24 24",
@@ -19,35 +18,46 @@ function SummaryIcon({
     strokeLinejoin: "round" as const,
     "aria-hidden": true,
   };
-  if (name === "clipboard")
+
+  if (name === "clipboard") {
     return (
       <svg {...common}>
         <rect x="6" y="5" width="12" height="16" rx="2" />
         <path d="M9 5V3h6v2M9 10h6M9 14h6M9 18h4" />
       </svg>
     );
-  if (name === "wrench")
+  }
+
+  if (name === "truck") {
     return (
       <svg {...common}>
-        <path d="M14 6a4 4 0 0 1-5 5L4 16l4 4 5-5a4 4 0 0 1 5-5l-4-4Z" />
+        <path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z" />
+        <circle cx="7" cy="18" r="2" />
+        <circle cx="18" cy="18" r="2" />
       </svg>
     );
-  if (name === "check")
+  }
+
+  if (name === "check") {
     return (
       <svg {...common}>
         <circle cx="12" cy="12" r="9" />
         <path d="m8 12 2.5 2.5L16 9" />
       </svg>
     );
-  if (name === "play")
+  }
+
+  if (name === "wrench") {
     return (
       <svg {...common}>
-        <path d="M8 5v14l11-7-11-7Z" />
+        <path d="M14 6a4 4 0 0 1-5 5L4 16l4 4 5-5a4 4 0 0 1 5-5l-4-4Z" />
       </svg>
     );
+  }
+
   return (
     <svg {...common}>
-      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="8.5" />
       <path d="M12 7v5l3 2" />
     </svg>
   );
@@ -57,18 +67,23 @@ function statusLabel(status: string) {
   return (
     (
       {
-        Requested: "Diajukan",
-        Confirmed: "Dikonfirmasi",
-        "In Progress": "Sedang dikerjakan",
-        Completed: "Selesai",
+        Requested: "Udah Diajukan",
+        Confirmed: "Udah Diterima",
+        "In Progress": "Lagi Dikerjain",
+        Completed: "Udah Selesai",
         Canceled: "Dibatalkan",
       } as Record<string, string>
     )[status] ?? status
   );
 }
 
-function timeLabel(value: string | null) {
+function statusClass(status: string) {
+  return "status-" + status.toLowerCase().replaceAll(" ", "-");
+}
+
+function shortTime(value: string | null) {
   if (!value) return "-";
+
   return new Date(value).toLocaleTimeString("id-ID", {
     hour: "2-digit",
     minute: "2-digit",
@@ -79,16 +94,16 @@ function timeLabel(value: string | null) {
 export default async function MaintainerBerandaPage() {
   const profile = await getCurrentProfile();
   const admin = createAdminClient();
-  const [data, ticketResult, allActiveResult] = await Promise.all([
+
+  const [data, ticketResult, activityResult] = await Promise.all([
     getDashboardData(profile),
     admin
       .from("ticketings")
       .select(
         "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at",
       )
-      .not("status", "in", "(Completed,Canceled)")
       .order("created_at", { ascending: false })
-      .limit(8),
+      .limit(12),
     admin
       .from("ticketings")
       .select("status, created_at")
@@ -97,15 +112,17 @@ export default async function MaintainerBerandaPage() {
   ]);
 
   const tickets = ticketResult.data ?? [];
-  const activityRows = allActiveResult.data ?? [];
-  const activeCount = activityRows.filter(
-    (row) => !["Completed", "Canceled"].includes(row.status),
-  ).length;
-  const completedCount = data.ticketCounts.Completed ?? 0;
+  const activities = activityResult.data ?? [];
+
+  const totalMaintenance = Object.values(data.ticketCounts).reduce(
+    (total, count) => total + (count ?? 0),
+    0,
+  );
 
   const byHour = Array.from({ length: 24 }, (_, hour) => {
-    const rows = activityRows.filter((ticket) => {
+    const rows = activities.filter((ticket) => {
       if (!ticket.created_at) return false;
+
       return (
         new Date(ticket.created_at)
           .toLocaleString("en-US", {
@@ -116,18 +133,29 @@ export default async function MaintainerBerandaPage() {
           .slice(0, 2) === String(hour).padStart(2, "0")
       );
     });
+
     return {
       hour,
-      total: rows.length,
-      completed: rows.filter((row) => row.status === "Completed").length,
-      progress: rows.filter((row) => row.status === "In Progress").length,
-      requested: rows.filter(
-        (row) => row.status === "Requested" || row.status === "Confirmed",
-      ).length,
+      requested: rows.filter((ticket) => ticket.status === "Requested").length,
+      confirmed: rows.filter((ticket) => ticket.status === "Confirmed").length,
+      inProgress: rows.filter((ticket) => ticket.status === "In Progress")
+        .length,
+      completed: rows.filter((ticket) => ticket.status === "Completed").length,
+      canceled: rows.filter((ticket) => ticket.status === "Canceled").length,
     };
   });
 
-  const maxHour = Math.max(1, ...byHour.map((item) => item.total));
+  const maxHour = Math.max(
+    1,
+    ...byHour.map(
+      (item) =>
+        item.requested +
+        item.confirmed +
+        item.inProgress +
+        item.completed +
+        item.canceled,
+    ),
+  );
 
   return (
     <div className="super-dashboard maintainer-dashboard">
@@ -140,116 +168,147 @@ export default async function MaintainerBerandaPage() {
         </div>
       </div>
 
-      <section className="super-kpi-grid assignment-kpi-grid">
+      <section className="super-kpi-grid maintenance-kpi-grid">
+        <div className="super-kpi-card kpi-blue">
+          <div className="super-kpi-icon">
+            <SummaryIcon name="wrench" />
+          </div>
+          <div className="super-kpi-content">
+            <span>Semua Maintenance</span>
+            <strong>{totalMaintenance}</strong>
+            <small>Total maintenance</small>
+          </div>
+        </div>
+
         <div className="super-kpi-card kpi-blue">
           <div className="super-kpi-icon">
             <SummaryIcon name="clipboard" />
           </div>
           <div className="super-kpi-content">
-            <span>Semua Maintenance</span>
-            <strong>{activityRows.length}</strong>
-            <small>Data maintenance</small>
-          </div>
-        </div>
-        <div className="super-kpi-card kpi-orange">
-          <div className="super-kpi-icon">
-            <SummaryIcon name="clock" />
-          </div>
-          <div className="super-kpi-content">
-            <span>Diajukan</span>
+            <span>Udah Diajukan</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
-            <small>Menunggu konfirmasi</small>
+            <small>Nunggu diterima</small>
           </div>
         </div>
+
         <div className="super-kpi-card kpi-cyan">
           <div className="super-kpi-icon">
             <SummaryIcon name="check" />
           </div>
           <div className="super-kpi-content">
-            <span>Dikonfirmasi</span>
+            <span>Udah Diterima</span>
             <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-            <small>Siap dikerjakan</small>
+            <small>Udah diterima</small>
           </div>
         </div>
-        <div className="super-kpi-card kpi-green">
+
+        <div className="super-kpi-card kpi-orange">
           <div className="super-kpi-icon">
-            <SummaryIcon name="play" />
+            <SummaryIcon name="progress" />
           </div>
           <div className="super-kpi-content">
-            <span>Sedang Dikerjakan</span>
+            <span>Lagi Dikerjain</span>
             <strong>{data.ticketCounts["In Progress"] ?? 0}</strong>
-            <small>Maintenance aktif</small>
+            <small>Lagi diproses</small>
           </div>
         </div>
+
         <div className="super-kpi-card kpi-purple">
           <div className="super-kpi-icon">
             <SummaryIcon name="check" />
           </div>
           <div className="super-kpi-content">
-            <span>Selesai</span>
-            <strong>{completedCount}</strong>
-            <small>Maintenance selesai</small>
+            <span>Udah Selesai</span>
+            <strong>{data.ticketCounts.Completed ?? 0}</strong>
+            <small>Udah beres</small>
           </div>
         </div>
       </section>
 
-      <section className="super-dashboard-main-grid">
+      <section className="super-dashboard-main-grid maintenance-dashboard-main-grid">
         <div className="super-panel super-chart-panel">
           <div className="super-panel-heading">
             <div>
               <h2>Aktivitas Maintenance</h2>
-              <p>
-                Distribusi pengajuan dan pengerjaan maintenance berdasarkan
-                waktu dibuat.
-              </p>
+              <p>Maintenance yang dibuat berdasarkan data terbaru.</p>
             </div>
+
             <div className="super-chart-legend">
+              <span>
+                <i className="legend-blue" /> Diajukan
+              </span>
+              <span>
+                <i className="legend-cyan" /> Udah Diterima
+              </span>
+              <span>
+                <i className="legend-orange" /> Lagi Dikerjain
+              </span>
               <span>
                 <i className="legend-purple" /> Selesai
               </span>
               <span>
-                <i className="legend-green" /> Sedang dikerjakan
-              </span>
-              <span>
-                <i className="legend-orange" /> Diajukan / dikonfirmasi
+                <i className="legend-red" /> Dibatalkan
               </span>
             </div>
           </div>
+
           <div className="super-chart">
             <div className="super-chart-y">
               <span>{maxHour}</span>
               <span>{Math.ceil(maxHour / 2)}</span>
               <span>0</span>
             </div>
+
             <div className="super-chart-bars">
               {byHour.map((item) => (
                 <div className="super-chart-column" key={item.hour}>
                   <div className="super-chart-stack">
-                    {item.completed > 0 ? (
-                      <span
-                        className="bar-completed"
-                        style={{
-                          height: `${(item.completed / maxHour) * 100}%`,
-                        }}
-                      />
-                    ) : null}
-                    {item.progress > 0 ? (
-                      <span
-                        className="bar-driving"
-                        style={{
-                          height: `${(item.progress / maxHour) * 100}%`,
-                        }}
-                      />
-                    ) : null}
                     {item.requested > 0 ? (
                       <span
-                        className="bar-unassigned"
+                        className="bar-completed"
                         style={{
                           height: `${(item.requested / maxHour) * 100}%`,
                         }}
                       />
                     ) : null}
+
+                    {item.confirmed > 0 ? (
+                      <span
+                        className="bar-driving"
+                        style={{
+                          height: `${(item.confirmed / maxHour) * 100}%`,
+                        }}
+                      />
+                    ) : null}
+
+                    {item.inProgress > 0 ? (
+                      <span
+                        className="bar-unassigned"
+                        style={{
+                          height: `${(item.inProgress / maxHour) * 100}%`,
+                        }}
+                      />
+                    ) : null}
+
+                    {item.completed > 0 ? (
+                      <span
+                        className="bar-maintenance-completed"
+                        style={{
+                          height: `${(item.completed / maxHour) * 100}%`,
+                        }}
+                      />
+                    ) : null}
+
+                    {item.canceled > 0 ? (
+                      <span
+                        className="bar-canceled"
+                        style={{
+                          height: `${(item.canceled / maxHour) * 100}%`,
+                        }}
+                      />
+                    ) : null}
                   </div>
+
                   <small>{String(item.hour).padStart(2, "0")}</small>
                 </div>
               ))}
@@ -261,24 +320,33 @@ export default async function MaintainerBerandaPage() {
           <div className="super-panel-heading">
             <div>
               <h2>Aktivitas Sistem</h2>
-              <p>Ringkasan status maintenance.</p>
+              <p>Aktivitas terbaru maintenance.</p>
             </div>
           </div>
+
           <div className="super-activity-list">
             <div>
               <span className="activity-dot blue" />
               <span>{tickets.length} maintenance terbaru</span>
-              <time>hari ini</time>
+              <time>{shortTime(new Date().toISOString())}</time>
             </div>
-            <div>
-              <span className="activity-dot purple" />
-              <span>{completedCount} maintenance selesai</span>
-              <time>status</time>
-            </div>
+
             <div>
               <span className="activity-dot orange" />
-              <span>{activeCount} maintenance aktif</span>
-              <time>status</time>
+              <span>
+                {(data.ticketCounts.Confirmed ?? 0) +
+                  (data.ticketCounts["In Progress"] ?? 0)}{" "}
+                maintenance sedang berjalan
+              </span>
+              <time>{shortTime(new Date().toISOString())}</time>
+            </div>
+
+            <div>
+              <span className="activity-dot purple" />
+              <span>
+                {data.ticketCounts.Completed ?? 0} maintenance selesai
+              </span>
+              <time>{shortTime(new Date().toISOString())}</time>
             </div>
           </div>
         </div>
@@ -289,18 +357,20 @@ export default async function MaintainerBerandaPage() {
           <div className="super-panel-heading">
             <div>
               <h2>Maintenance Terbaru</h2>
-              <p>Pengajuan maintenance terbaru yang perlu dipantau.</p>
+              <p>Ringkasan maintenance terbaru tanpa membuka detail halaman.</p>
             </div>
           </div>
+
           <div className="super-table-wrap">
             <table className="controller-detail-table">
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Maintenance</th>
-                  <th>Lokasi</th>
                   <th>Armada</th>
-                  <th>Dibuat</th>
+                  <th>Lokasi</th>
                   <th>Status</th>
+                  <th>Waktu</th>
                 </tr>
               </thead>
               <tbody>
@@ -308,25 +378,27 @@ export default async function MaintainerBerandaPage() {
                   <tr key={ticket.transaction_id}>
                     <td>
                       <strong>{ticket.transaction_id}</strong>
-                      <small>{ticket.maintenance_list ?? "-"}</small>
                     </td>
-                    <td>{ticket.location ?? "-"}</td>
+                    <td>{ticket.maintenance_list ?? "-"}</td>
                     <td>{ticket.fleet_plat_number ?? "-"}</td>
+                    <td>{ticket.location ?? "-"}</td>
                     <td>
-                      <strong>{timeLabel(ticket.created_at)}</strong>
+                      <span
+                        className={`status-badge ${statusClass(ticket.status)}`}
+                      >
+                        {statusLabel(ticket.status)}
+                      </span>
                     </td>
                     <td>
-                      <StatusBadge
-                        status={ticket.status}
-                        label={statusLabel(ticket.status)}
-                      />
+                      <strong>{shortTime(ticket.created_at)}</strong>
                     </td>
                   </tr>
                 ))}
+
                 {!tickets.length ? (
                   <tr>
-                    <td colSpan={5} className="super-empty-cell">
-                      Belum ada maintenance aktif.
+                    <td colSpan={6} className="super-empty-cell">
+                      Belum ada maintenance.
                     </td>
                   </tr>
                 ) : null}
