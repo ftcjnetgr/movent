@@ -313,17 +313,8 @@ export default function TimetableView({
   }
 
   function statusLabel(status: string) {
-    const labels: Record<string, string> = {
-      Requested: "Udah Diajukan",
-      Confirmed: "Udah Diterima",
-      Assigned: "Siap Jalan",
-      Driving: "Lagi Jalan",
-      Completed: "Udah Selesai",
-      Canceled: "Dibatalkan",
-      "In Progress": "Lagi Dikerjain",
-      "Belum Ditugaskan": "Belum Ditugaskan",
-    };
-    return labels[status] ?? status;
+    if (status === "Belum Ditugasin") return status;
+    return STATUS_LABELS[status] ?? status;
   }
 
   function openSchedulePreview(
@@ -855,7 +846,7 @@ export default function TimetableView({
                     <span>Status</span>
                     <strong
                       className={
-                        previewStatus(item) === "Belum Ditugaskan"
+                        previewStatus(item) === "Belum Ditugasin"
                           ? "schedule-preview-status-unassigned"
                           : `status-badge ${statusClass(previewStatus(item))}`
                       }
