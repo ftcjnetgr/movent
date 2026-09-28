@@ -174,13 +174,13 @@ export default async function MaintainerBerandaPage() {
             </div>
 
             <div className="super-chart-legend">
-              <span className="status-legend status-legend-requested"><StatusIcon status="Requested" size={12} /> Diajukan</span>
-              <span className="status-legend status-legend-confirmed"><StatusIcon status="Confirmed" size={12} /> Udah Diterima</span>
-              <span className="status-legend status-legend-in-progress"><StatusIcon status="In Progress" size={12} /> Lagi Dikerjain</span>
+              <span className="status-legend status-legend-requested"><i className="legend-blue" /> Diajukan</span>
+              <span className="status-legend status-legend-confirmed"><i className="legend-cyan" /> Udah Diterima</span>
+              <span className="status-legend status-legend-in-progress"><i className="legend-orange" /> Lagi Dikerjain</span>
               <span>
                 <i className="legend-purple" /> Selesai
               </span>
-              <span className="status-legend status-legend-canceled"><StatusIcon status="Canceled" size={12} /> Dibatalkan</span>
+              <span className="status-legend status-legend-canceled"><i className="legend-red" /> Dibatalkan</span>
             </div>
           </div>
 
