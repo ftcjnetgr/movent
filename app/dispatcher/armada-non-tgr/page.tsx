@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { submitNonTgrArrivalAction } from "./actions";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
