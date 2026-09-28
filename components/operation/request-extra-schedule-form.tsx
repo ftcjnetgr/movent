@@ -68,7 +68,7 @@ export default function OperationRequestExtraScheduleForm({
           </p>
         ) : null}
         <button type="submit" disabled={pending}>
-          {pending ? "Menyiapkan preview..." : "Submit Request"}
+          {pending ? "Lagi siapin preview..." : "Ajukan permintaan"}
         </button>
       </form>
       {state.preview ? (
@@ -90,7 +90,7 @@ export default function OperationRequestExtraScheduleForm({
               <strong>{state.preview.sta.slice(11, 16)}</strong>
             </div>
           </div>
-          <p className="muted">Periksa data sebelum permintaan dikonfirmasi.</p>
+          <p className="muted">Cek dulu datanya sebelum kita kirim, ya.</p>
           <form action={confirmAction} className="compact-form">
             <input
               type="hidden"
@@ -119,7 +119,7 @@ export default function OperationRequestExtraScheduleForm({
             />
             <div className="form-actions">
               <button type="submit" disabled={confirmPending}>
-                {confirmPending ? "Mengonfirmasi..." : "Konfirmasi Permintaan"}
+                {confirmPending ? "Lagi konfirmasi..." : "Kirim permintaan"}
               </button>
               <button
                 type="button"
