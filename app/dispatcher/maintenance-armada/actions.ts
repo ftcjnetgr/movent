@@ -24,7 +24,7 @@ async function validate(formData: FormData) {
 
   if (!maintenanceList || !location || !platNumber) {
     return {
-      error: "Kebutuhan Maintenance, lokasi, dan armada perlu diisi dulu, ya.",
+      error: "Kebutuhan maintenance, lokasi, dan armadanya perlu diisi dulu, ya.",
     } as const;
   }
 
@@ -54,7 +54,7 @@ async function validate(formData: FormData) {
 
   if (!maintenance || !locationRow || !fleet) {
     return {
-      error: "Data maintenance, lokasi, atau armada belum tersedia.",
+      error: "Data maintenance, lokasi, atau armadanya belum tersedia.",
     } as const;
   }
 
@@ -63,7 +63,7 @@ async function validate(formData: FormData) {
   );
 
   if (transactionError || !transactionId) {
-    return { error: "ID transaksi belum berhasil dibuat." } as const;
+    return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." } as const;
   }
 
   return {
@@ -97,7 +97,7 @@ export async function createMaintenanceTicketAction(
   }
 
   return {
-    success: "Preview ticketing sudah siap. Periksa sebelum konfirmasi.",
+    success: "Preview maintenance-nya sudah siap. Cek dulu sebelum lanjut, ya.",
     preview: value.value,
   };
 }
@@ -122,12 +122,12 @@ export async function confirmMaintenanceTicketAction(
   if (!suppliedTransactionId) {
     return {
       error:
-        "ID transaksi preview belum tersedia. Silakan buat preview ticketing terlebih dahulu.",
+        "ID transaksi preview belum ada. Buat preview maintenance dulu, ya.",
     };
   }
 
   if (!maintenanceList || !location || !platNumber) {
-    return { error: "Data ticketing belum lengkap." };
+    return { error: "Data maintenance-nya belum lengkap. Cek lagi, ya." };
   }
 
   const admin = createAdminClient();
@@ -155,7 +155,7 @@ export async function confirmMaintenanceTicketAction(
     ]);
 
   if (!maintenance || !locationRow || !fleet) {
-    return { error: "Data ticketing sudah tidak tersedia. Buat preview baru." };
+    return { error: "Data maintenance-nya sudah nggak tersedia. Buat preview baru, ya." };
   }
 
   const transactionId = suppliedTransactionId;
@@ -182,12 +182,12 @@ export async function confirmMaintenanceTicketAction(
 
     if (existing) {
       return {
-        success: `Ticketing ${existing.transaction_id} sudah dikonfirmasi.`,
+        success: `Maintenance ${existing.transaction_id} sudah dikonfirmasi.`,
         transactionId: existing.transaction_id,
       };
     }
 
-    return { error: "Ticketing belum berhasil dibuat." };
+    return { error: "Maintenance belum berhasil dibuat. Coba lagi, ya." };
   }
 
   revalidatePath("/dispatcher/maintenance-armada");
@@ -195,7 +195,7 @@ export async function confirmMaintenanceTicketAction(
   revalidatePath("/controller/beranda");
 
   return {
-    success: `Ticketing ${transactionId} berhasil dikonfirmasi.`,
+    success: `Maintenance ${transactionId} berhasil dikonfirmasi.`,
     transactionId,
   };
 }
@@ -230,7 +230,7 @@ export async function cancelMaintenanceTicketAction(formData: FormData) {
   const { data: ticket } = await query.maybeSingle();
 
   if (!ticket) {
-    return { error: "Tiket tidak ditemukan atau sudah tidak bisa dibatalkan." };
+    return { error: "Maintenance-nya nggak ditemukan atau sudah nggak bisa dibatalin." };
   }
 
   const { error } = await admin
@@ -245,12 +245,12 @@ export async function cancelMaintenanceTicketAction(formData: FormData) {
     .eq("status", "Requested");
 
   if (error) {
-    return { error: "Tiket belum berhasil dibatalkan." };
+    return { error: "Maintenance-nya belum berhasil dibatalin. Coba lagi, ya." };
   }
 
   revalidatePath("/dispatcher/maintenance-armada");
   revalidatePath("/maintainer/tiket-maintenance");
   revalidatePath("/controller/beranda");
 
-  return { success: "Ticketing berhasil dibatalkan." };
+  return { success: "Maintenance berhasil dibatalin." };
 }
