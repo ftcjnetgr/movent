@@ -89,7 +89,7 @@ export function SuperUserTaskEditor({
   const isSchedule = Boolean(task.schedule_id);
   return (
     <details className="transaction-editor">
-      <summary className="link-button">Ubah transaksi</summary>
+      <summary className="link-button">Mau ubah transaksi?</summary>
       {task.status === "Completed" ? (
         <p className="muted">Transaksi yang sudah selesai nggak bisa diubah.</p>
       ) : (
@@ -288,7 +288,7 @@ export function SuperUserTaskEditor({
                   </div>
                 ))
               ) : (
-                <p className="muted">Belum ada data SJ.</p>
+                <p className="muted">Belum ada SJ di sini.</p>
               )}
             </>
           ) : null}
@@ -350,7 +350,7 @@ export function SuperUserTicketEditor({
   );
   return (
     <details className="transaction-editor">
-      <summary className="link-button">Ubah transaksi</summary>
+      <summary className="link-button">Mau ubah transaksi?</summary>
       {ticket.status === "Completed" ? (
         <p className="muted">
           Maintenance yang sudah selesai nggak bisa diubah.
