@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { jsPDF } from "jspdf";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 import StatusBadge from "@/components/shared/status-badge";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 import {
   createNonTgrSupplyAction,
   confirmNonTgrDepartureByOperationAction,
@@ -417,7 +418,7 @@ export default function OperationCreateTask({
                   <span className="eyebrow">Supply Non-TGR</span>
                   <h3>{task.transaction_id}</h3>
                 </div>
-                <StatusBadge status="Assigned" label="Ditugaskan" />
+                <StatusBadge status="Assigned" label={STATUS_LABELS.Assigned} />
               </div>
               <div className="task-summary-grid">
                 <div>
