@@ -124,7 +124,7 @@ export async function createDispatcherTaskAction(
     if (!schedule) return { error: "Schedule tidak tersedia." };
     if (!scheduleStdNotPassed(schedule.std))
       return {
-        error: "Schedule sudah melewati STD dan tidak bisa dipakai lagi.",
+        error: "Jadwalnya sudah lewat STD, jadi nggak bisa dipakai lagi, ya.",
       };
 
     const { executor, fleet } = await activeExecutorAndFleet(
@@ -133,13 +133,13 @@ export async function createDispatcherTaskAction(
       platNumber,
     );
     if (!executor || !fleet)
-      return { error: "Executor atau Armada belum tersedia." };
+      return { error: "Executor atau armadanya belum tersedia, ya." };
 
     const transactionId = await nextTransaction(admin);
     if (!transactionId)
-      return { error: "ID transaksi belum berhasil dibuat. Coba lagi, ya." };
+      return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." };
     return {
-      success: "Preview tugas sudah siap. Periksa sebelum konfirmasi.",
+      success: "Preview tugasnya sudah siap. Cek dulu sebelum lanjut, ya.",
       preview: {
         transactionId,
         flow: "tgr",
@@ -213,12 +213,12 @@ export async function createDispatcherTaskAction(
       platNumber,
     );
     if (!executor || !fleet)
-      return { error: "Executor atau Armada belum tersedia." };
+      return { error: "Executor atau armadanya belum tersedia, ya." };
     const transactionId = await nextTransaction(admin);
     if (!transactionId)
-      return { error: "ID transaksi belum berhasil dibuat. Coba lagi, ya." };
+      return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." };
     return {
-      success: "Preview tugas sudah siap. Periksa sebelum konfirmasi.",
+      success: "Preview tugasnya sudah siap. Cek dulu sebelum lanjut, ya.",
       preview: {
         transactionId,
         flow: "distribusi",
@@ -279,7 +279,7 @@ export async function confirmDispatcherTaskAction(
     platNumber,
   );
   if (!executor || !fleet) {
-    return { error: "Executor atau Armada belum tersedia." };
+    return { error: "Executor atau armadanya belum tersedia, ya." };
   }
 
   if (flow === "tgr") {
@@ -296,7 +296,7 @@ export async function confirmDispatcherTaskAction(
 
     if (!scheduleStdNotPassed(schedule.std)) {
       return {
-        error: "Schedule sudah melewati STD dan tidak bisa dipakai lagi.",
+        error: "Jadwalnya sudah lewat STD, jadi nggak bisa dipakai lagi, ya.",
       };
     }
 
@@ -354,7 +354,7 @@ export async function confirmDispatcherTaskAction(
         };
       }
 
-      return { error: "Tugas belum berhasil dikonfirmasi." };
+      return { error: "Tugasnya belum berhasil dikonfirmasi. Coba lagi, ya." };
     }
   } else if (flow === "distribusi") {
     const startPoint = String(formData.get("startPoint") ?? "").trim();
@@ -390,7 +390,7 @@ export async function confirmDispatcherTaskAction(
       ]);
 
     if (!startLocation || !destinationLocation) {
-      return { error: "Lokasi belum tersedia." };
+      return { error: "Lokasinya belum tersedia, ya." };
     }
 
     const { error } = await admin.from("tasks").insert({
@@ -427,10 +427,10 @@ export async function confirmDispatcherTaskAction(
         };
       }
 
-      return { error: "Tugas belum berhasil dikonfirmasi." };
+      return { error: "Tugasnya belum berhasil dikonfirmasi. Coba lagi, ya." };
     }
   } else {
-    return { error: "Preview tugas tidak valid." };
+    return { error: "Preview tugasnya sudah nggak valid. Buat ulang, ya." };
   }
 
   revalidateTaskPaths();
@@ -455,18 +455,18 @@ export async function cancelDispatcherTaskAction(formData: FormData) {
     .select("id, status, created_by, fleet_ownership")
     .eq("transaction_id", transactionId)
     .maybeSingle();
-  if (!task) return { error: "Tugas nggak ditemukan." };
+  if (!task) return { error: "Tugasnya nggak ditemukan." };
   if (task.fleet_ownership === "Non-TGR") {
     if (profile.role !== "Super User")
       return {
         error: "Tugas Armada Non-TGR hanya dapat dibatalkan oleh Super User.",
       };
     if (!["Assigned", "Driving"].includes(task.status))
-      return { error: "Tugas sudah selesai atau tidak bisa dibatalkan." };
+      return { error: "Tugasnya sudah selesai atau memang nggak bisa dibatalin." };
   } else {
     if (task.status !== "Assigned")
       return {
-        error: "Tugas sudah diterima atau memang sudah nggak bisa dibatalkan.",
+        error: "Tugasnya sudah diterima atau memang nggak bisa dibatalin lagi.",
       };
     if (
       profile.role !== "Super User" &&
@@ -487,7 +487,7 @@ export async function cancelDispatcherTaskAction(formData: FormData) {
     .eq("id", task.id)
     .eq("status", task.status);
   if (error)
-    return { error: "Tugas belum berhasil dibatalkan. Coba lagi, ya." };
+    return { error: "Tugasnya belum berhasil dibatalin. Coba lagi, ya." };
   revalidateTaskPaths();
   redirect("/dispatcher/riwayat-penugasan");
 }
