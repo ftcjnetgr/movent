@@ -181,7 +181,7 @@ export default function DispatcherCreateTask({
     <section className="section-block">
       <div className="section-heading">
         <div>
-          <h2>Buat Tugas Baru</h2>
+          <h2>Yuk, buat tugas baru</h2>
           <p>
             Pilih proses, lengkapi detail penugasan, lalu konfirmasi sebelum
             dikirim ke Executor.
@@ -193,8 +193,8 @@ export default function DispatcherCreateTask({
         <div className="task-create-workspace">
           <div className="task-create-intro">
             <span className="eyebrow">MULAI PENUGASAN</span>
-            <strong>Kamu mau bikin tugas yang mana?</strong>
-            <span>Pilih alur yang sesuai kebutuhan operasional hari ini.</span>
+            <strong>Mau bikin tugas yang mana?</strong>
+            <span>Pilih alur yang paling pas buat hari ini.</span>
           </div>
 
           <div className="task-create-choice-grid">
@@ -221,7 +221,7 @@ export default function DispatcherCreateTask({
               <span className="task-create-choice-icon">SP</span>
               <span>
                 <strong>Supply</strong>
-                <small>Pilih kepemilikan Armada TGR atau Non-TGR.</small>
+                <small>Pilih armada TGR atau Non-TGR, ya.</small>
               </span>
               <b>→</b>
             </button>
@@ -234,7 +234,7 @@ export default function DispatcherCreateTask({
           <div className="task-create-flow-head">
             <div>
               <span className="eyebrow">Distribusi Mobil</span>
-              <strong>Buat penugasan distribusi mobil</strong>
+              <strong>Yuk, buat penugasan distribusi mobil</strong>
             </div>
             <button
               type="button"
@@ -304,7 +304,7 @@ export default function DispatcherCreateTask({
             ) : null}
             <div className="form-actions">
               <button type="submit" disabled={pending}>
-                {pending ? "Sedang menyimpan..." : "Submit Tugas"}
+                {pending ? "Lagi nyimpen..." : "Buat tugas"}
               </button>
               <button
                 type="button"
@@ -364,7 +364,7 @@ export default function DispatcherCreateTask({
           <div className="task-create-flow-head">
             <div>
               <span className="eyebrow">Supply · Armada TGR</span>
-              <strong>Pilih jadwal yang mau dipakai</strong>
+              <strong>Mau pakai jadwal yang mana?</strong>
             </div>
             <button
               type="button"
@@ -444,7 +444,7 @@ export default function DispatcherCreateTask({
                 ) : null}
                 <div className="form-actions">
                   <button type="submit" disabled={pending}>
-                    {pending ? "Sedang menyimpan..." : "Submit Tugas"}
+                    {pending ? "Lagi nyimpen..." : "Buat tugas"}
                   </button>
                 </div>
               </>
@@ -462,7 +462,7 @@ export default function DispatcherCreateTask({
           <div className="task-create-flow-head">
             <div>
               <span className="eyebrow">Supply · Armada Non-TGR</span>
-              <strong>Buat tugas supply non-TGR</strong>
+              <strong>Yuk, buat tugas supply non-TGR</strong>
             </div>
             <button
               type="button"
@@ -569,7 +569,7 @@ export default function DispatcherCreateTask({
             ) : null}
             <div className="form-actions">
               <button type="submit" disabled={pending}>
-                {pending ? "Sedang menyimpan..." : "Submit Tugas"}
+                {pending ? "Lagi nyimpen..." : "Buat tugas"}
               </button>
               <button
                 type="button"
@@ -612,7 +612,7 @@ export default function DispatcherCreateTask({
               </div>
             ) : null}
           </div>
-          <p className="muted">Periksa data sebelum penugasan dikonfirmasi.</p>
+          <p className="muted">Cek dulu datanya sebelum tugas dibuat, ya.</p>
           <form action={confirmAction} className="compact-form">
             <input
               type="hidden"
@@ -649,7 +649,7 @@ export default function DispatcherCreateTask({
             <input type="hidden" name="sta" value={state.preview.sta ?? ""} />
             <div className="form-actions">
               <button type="submit" disabled={confirmPending}>
-                {confirmPending ? "Mengonfirmasi..." : "Konfirmasi Penugasan"}
+                {confirmPending ? "Lagi konfirmasi..." : "Tugasnya udah oke?"}
               </button>
               <button
                 type="button"
