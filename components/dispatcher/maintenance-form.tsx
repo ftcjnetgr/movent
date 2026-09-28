@@ -1,5 +1,6 @@
 "use client";
 
+import { STATUS_LABELS } from "@/components/shared/status-config";
 import { FormEvent, useState, useTransition } from "react";
 import {
   cancelMaintenanceTicketAction,
@@ -180,7 +181,7 @@ export default function DispatcherMaintenanceForm({
                 </div>
               </div>
               <p className="muted">
-                Periksa kembali data sebelum dikonfirmasi.
+                Cek lagi datanya sebelum lanjut, ya.
               </p>
               <form
                 action={(formData) => {
