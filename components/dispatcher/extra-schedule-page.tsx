@@ -247,14 +247,14 @@ export default function DispatcherExtraSchedulePage() {
           <div>
             <h2>Siap ditugasin</h2>
             <p>
-              Request yang sudah dikonfirmasi dan tinggal dipilihkan pelaksana
+              Request yang udah diterima dan tinggal dipilihkan pelaksana
               serta armada.
             </p>
           </div>
         </div>
         {data.confirmed.length === 0 ? (
           <div className="empty-state">
-            Belum ada request yang siap ditugaskan.
+            Belum ada request yang siap ditugasin.
           </div>
         ) : (
           <div className="table-wrap">
