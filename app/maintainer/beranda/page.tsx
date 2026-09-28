@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
-import { StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
@@ -51,7 +51,7 @@ export default async function MaintainerBerandaPage() {
       .limit(500),
   ]);
 
-  const tickets = ticketResult.data ?? [];
+  const tickets = [...(ticketResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
   const activities = activityResult.data ?? [];
 
   const totalMaintenance = Object.values(data.ticketCounts).reduce(
