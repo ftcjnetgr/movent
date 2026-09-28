@@ -21,7 +21,7 @@ export default async function AlertPage({
       <div className="super-dashboard-heading alert-page-heading">
         <div>
           <h1>Notifikasi</h1>
-          <p>Pantau kondisi operasional yang membutuhkan perhatian.</p>
+          <p>Ada beberapa hal yang perlu kamu cek di sini.</p>
         </div>
         <nav className="alert-view-tabs" aria-label="Notifikasi">
           <Link
