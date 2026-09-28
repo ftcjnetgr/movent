@@ -45,7 +45,7 @@ export default async function OperationBerandaPage() {
     <div className="role-page">
       <div className="page-heading">
         <div>
-          <h1>Operasional Harian</h1>
+          <h1>Operasional hari ini</h1>
           <p>
             Buat Supply Non-TGR dan ajukan Jadwal Tambahan tanpa pindah-pindah
             halaman.
@@ -62,19 +62,19 @@ export default async function OperationBerandaPage() {
       <section className="section-block">
         <div className="metric-grid">
           <div className="metric-card">
-            <span>Non-TGR Menunggu</span>
+            <span>Non-TGR masih nunggu</span>
             <strong>{tasks?.length ?? 0}</strong>
           </div>
           <div className="metric-card">
-            <span>Jadwal Tambahan Diajukan</span>
+            <span>Jadwal tambahan udah diajuin</span>
             <strong>{requested ?? 0}</strong>
           </div>
           <div className="metric-card">
-            <span>Jadwal Tambahan Selesai</span>
+            <span>Jadwal tambahan udah selesai</span>
             <strong>{completed ?? 0}</strong>
           </div>
           <div className="metric-card">
-            <span>Proses Berjalan</span>
+            <span>Lagi jalan</span>
             <strong>{(tasks?.length ?? 0) + (requested ?? 0)}</strong>
           </div>
         </div>
