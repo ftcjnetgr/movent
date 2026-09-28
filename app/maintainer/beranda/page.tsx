@@ -111,7 +111,7 @@ export default async function MaintainerBerandaPage() {
       <section className="super-kpi-grid maintenance-kpi-grid">
         <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-total">
           <div className="super-kpi-icon">
-            <SummaryIcon name="wrench" />
+            <StatusIcon status="Assigned" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Semua Maintenance</span>
@@ -120,9 +120,9 @@ export default async function MaintainerBerandaPage() {
           </div>
         </div>
 
-        <div className="super-kpi-card kpi-blue">
+        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-requested">
           <div className="super-kpi-icon">
-            <StatusIcon status="Assigned" size={20} />
+            <StatusIcon status="Requested" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Diajukan</span>
@@ -142,9 +142,9 @@ export default async function MaintainerBerandaPage() {
           </div>
         </div>
 
-        <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-requested">
+        <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-in-progress">
           <div className="super-kpi-icon">
-            <SummaryIcon name="progress" />
+            <StatusIcon status="In Progress" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Lagi Dikerjain</span>
