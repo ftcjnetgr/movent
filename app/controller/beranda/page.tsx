@@ -211,8 +211,7 @@ export default async function ControllerPenugasanDashboardPage({
         <div>
           <h1>Beranda</h1>
           <p>
-            Ini ringkasan operasional sesuai periode yang dipilih. Biar gampang
-            dipantau, semuanya kami rangkum di sini.
+            Biar gampang dipantau, semua penugasan di periode ini ada di sini.
           </p>
         </div>
         <nav className="dashboard-view-tabs" aria-label="Dashboard">
