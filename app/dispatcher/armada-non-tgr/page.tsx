@@ -4,11 +4,11 @@ import { submitNonTgrArrivalAction } from "./actions";
 
 function statusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: "Diajukan",
-    Assigned: "Ditugaskan",
+    Requested: "Udah Diajuin",
+    Assigned: "Udah Ditugasin",
     Confirmed: "Diterima",
     Driving: "Berangkat",
-    Completed: "Selesai",
+    Completed: "Udah selesai",
     Canceled: "Dibatalkan",
   };
   return labels[status] ?? status;
@@ -111,11 +111,11 @@ export default async function ArmadaNonTgrPage() {
                             required
                           />
                         </label>
-                        <button type="submit">Konfirmasi Tiba</button>
+                        <button type="submit">Udah sampai</button>
                       </form>
                     ) : null}
                     {task.status === "Completed" ? (
-                      <span className="muted">Selesai</span>
+                      <span className="muted">Udah selesai</span>
                     ) : null}
                   </td>
                 </tr>
