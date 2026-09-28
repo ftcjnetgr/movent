@@ -85,7 +85,7 @@ export default async function DispatcherBerandaPage() {
       <div className="page-heading">
         <div>
           <h1>Halo, Dispatcher!</h1>
-          <p>Atur penugasan dan pastikan semua perjalanan sesuai rencana.</p>
+          <p>Yuk, atur penugasan dan pastiin semua perjalanan jalan sesuai rencana.</p>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ export default async function DispatcherBerandaPage() {
           <div className="section-heading">
             <div>
               <h2>Tugas Terbaru</h2>
-              <p>Penugasan yang kamu buat.</p>
+              <p>Penugasan yang kamu buat ada di sini.</p>
             </div>
           </div>
           <div className="table-wrap">
@@ -183,7 +183,7 @@ export default async function DispatcherBerandaPage() {
           <div className="section-heading">
             <div>
               <h2>Ringkasan</h2>
-              <p>Per jenis proses.</p>
+              <p>Biar gampang lihat prosesnya.</p>
             </div>
           </div>
           {[
