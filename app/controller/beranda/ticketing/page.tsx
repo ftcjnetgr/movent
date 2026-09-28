@@ -5,14 +5,7 @@ import { getDashboardData } from "@/lib/server/dashboard";
 import { compareStatus, STATUS_LABELS, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
-  return (
-    {
-      Requested: "Udah Diajuin",
-      Confirmed: "Udah Diterima",
-      "In Progress": "Lagi Dikerjain",
-      Completed: "Udah Selesai",
-    }[status] ?? status
-  );
+  return STATUS_LABELS[status] ?? status;
 }
 
 function statusClass(status: string) {
