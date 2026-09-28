@@ -55,21 +55,21 @@ export default function LoginPage() {
                 />
               </label>
               <label>
-                Password
+                Password kamu
                 <span className="login-password-field">
                   <input
                     name="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    placeholder="Password kamu kamu"
+                    placeholder="Masukin password kamu"
                   />
                   <button
                     type="button"
                     className="login-password-toggle"
                     aria-label={
                       showPassword
-                        ? "Sembunyikan kata sandi"
-                        : "Lihat kata sandi"
+                        ? "Sembunyiin password"
+                        : "Lihat password"
                     }
                     aria-pressed={showPassword}
                     onClick={() => setShowPassword((visible) => !visible)}
