@@ -215,7 +215,7 @@ export default async function SuperUserTransactionManagementPage() {
       <section className="data-table-card section-block">
         <div className="section-heading">
           <div>
-            <h2>Tiket Maintenance</h2>
+            <h2>Maintenance</h2>
             <p>Semua maintenance dari Dispatcher ada di sini.</p>
           </div>
         </div>
@@ -264,7 +264,7 @@ export default async function SuperUserTransactionManagementPage() {
                 <tr>
                   <td colSpan={6}>
                     <div className="empty-state">
-                      Belum ada transaksi ticketing untuk sekarang.
+                      Belum ada transaksi maintenance untuk sekarang.
                     </div>
                   </td>
                 </tr>
