@@ -33,8 +33,8 @@ export default async function DispatcherAssignmentHistoryPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Riwayat Penugasan</h1>
-          <p>Semua penugasan yang dibuat di sini, lengkap dengan statusnya.</p>
+          <h1>Penugasan kamu</h1>
+          <p>Semua penugasan yang kamu buat ada di sini, lengkap sama statusnya.</p>
         </div>
       </div>
       <section className="data-table-card">
@@ -85,7 +85,7 @@ export default async function DispatcherAssignmentHistoryPage() {
                       task.status !== "Canceled" ? (
                         <details>
                           <summary className="link-button">
-                            Batalkan penugasan
+                            Batalin penugasan
                           </summary>
                           <form
                             action={cancelDispatcherTaskFormAction}
@@ -99,10 +99,10 @@ export default async function DispatcherAssignmentHistoryPage() {
                             />
                             <input
                               name="note"
-                              placeholder="Kenapa mau dibatalkan?"
+                              placeholder="Kenapa mau dibatalin?"
                               required
                             />
-                            <button type="submit">Batalkan penugasan</button>
+                            <button type="submit">Batalin penugasan</button>
                           </form>
                         </details>
                       ) : (
@@ -113,7 +113,7 @@ export default async function DispatcherAssignmentHistoryPage() {
                         task.created_by === profile.id) ? (
                       <details>
                         <summary className="link-button">
-                          Batalkan penugasan
+                          Batalin penugasan
                         </summary>
                         <form
                           action={cancelDispatcherTaskFormAction}
@@ -127,10 +127,10 @@ export default async function DispatcherAssignmentHistoryPage() {
                           />
                           <input
                             name="note"
-                            placeholder="Kenapa mau dibatalkan?"
+                            placeholder="Kenapa mau dibatalin?"
                             required
                           />
-                          <button type="submit">Batalkan penugasan</button>
+                          <button type="submit">Batalin penugasan</button>
                         </form>
                       </details>
                     ) : (
