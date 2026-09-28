@@ -32,8 +32,8 @@ export default async function ExecutorHistoryPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Riwayat Tugas</h1>
-          <p>Riwayat tugas yang sudah selesai.</p>
+          <h1>Tugas yang udah selesai</h1>
+          <p>Semua tugas yang udah selesai ada di sini.</p>
         </div>
       </div>
 
