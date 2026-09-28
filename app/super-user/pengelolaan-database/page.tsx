@@ -147,8 +147,8 @@ export default async function DatabaseManagementPage({
     <>
       <div className="page-heading">
         <div>
-          <h1>Kelola Database</h1>
-          <p>Kelola master data satu per satu atau melalui import CSV/XLSX.</p>
+          <h1>Yuk, kelola database</h1>
+          <p>Mau kelola satu-satu atau import CSV/XLSX? Pilih di sini, ya.</p>
         </div>
       </div>
 
@@ -170,7 +170,7 @@ export default async function DatabaseManagementPage({
               <input
                 name="q"
                 defaultValue={query}
-                placeholder="Ketik ID yang mau dicari"
+                placeholder="Ketik ID yang mau kamu cari"
               />
             </label>
           </div>
