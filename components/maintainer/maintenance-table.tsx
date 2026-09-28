@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import StatusBadge from "@/components/shared/status-badge";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 import {
   acceptMaintenanceTicketAction,
   completeMaintenanceAction,
@@ -16,14 +17,6 @@ type Ticket = {
   fleet_plat_number: string | null;
   created_at: string;
   maintainer_user_id: string | null;
-};
-
-const statusLabels: Record<string, string> = {
-  Requested: "Diajukan",
-  Confirmed: "Dikonfirmasi",
-  "In Progress": "Sedang dikerjakan",
-  Completed: "Selesai",
-  Canceled: "Dibatalkan",
 };
 
 function formatDate(value: string) {
@@ -89,10 +82,10 @@ export default function MaintainerMaintenanceTable({
             onChange={(event) => setStatusFilter(event.target.value)}
           >
             <option value="all">Semua status</option>
-            <option value="Requested">Diajukan</option>
-            <option value="Confirmed">Dikonfirmasi</option>
-            <option value="In Progress">Sedang dikerjakan</option>
-            <option value="Completed">Selesai</option>
+            <option value="Requested">Udah Diajukan</option>
+            <option value="Confirmed">Udah Diterima</option>
+            <option value="In Progress">Lagi Dikerjain</option>
+            <option value="Completed">Udah Selesai</option>
             <option value="Canceled">Dibatalkan</option>
           </select>
         </label>
@@ -123,7 +116,7 @@ export default function MaintainerMaintenanceTable({
                 <td>
                   <StatusBadge
                     status={ticket.status}
-                    label={statusLabels[ticket.status] ?? ticket.status}
+                    label={STATUS_LABELS[ticket.status] ?? ticket.status}
                   />
                 </td>
                 <td>{formatDate(ticket.created_at)}</td>
