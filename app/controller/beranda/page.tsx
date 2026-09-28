@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
 import StatusBadge from "@/components/shared/status-badge";
-import { StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
@@ -92,7 +92,7 @@ export default async function ControllerPenugasanDashboardPage({
         .lt("std", rangeEnd),
     ]);
 
-  const tasks = tasksResult.data ?? [];
+  const tasks = [...(tasksResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
   const activities = activityResult.data ?? [];
   const activeTasks =
     (data.taskCounts.Assigned ?? 0) +
@@ -216,9 +216,9 @@ export default async function ControllerPenugasanDashboardPage({
               </p>
             </div>
             <div className="super-chart-legend">
-              <span className="status-legend status-legend-completed"><i className="legend-purple" /> Udah Selesai</span>
-              <span className="status-legend status-legend-driving"><i className="legend-green" /> Lagi Jalan</span>
               <span className="status-legend status-legend-assigned"><i className="legend-orange" /> Siap Jalan</span>
+              <span className="status-legend status-legend-driving"><i className="legend-green" /> Lagi Jalan</span>
+              <span className="status-legend status-legend-completed"><i className="legend-purple" /> Udah Selesai</span>
               <span className="status-legend status-legend-canceled"><i className="legend-red" /> Dibatalkan</span>
             </div>
           </div>
