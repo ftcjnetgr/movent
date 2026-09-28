@@ -4,16 +4,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { cancelExtraScheduleAction } from "../request-extra-schedule/actions";
 import StatusBadge from "@/components/shared/status-badge";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 function statusLabel(status: string) {
-  const labels: Record<string, string> = {
-    Requested: "Udah Diajuin",
-    Assigned: "Udah Ditugasin",
-    Confirmed: "Udah Diterima",
-    Driving: "Lagi Jalan",
-    Completed: "Udah Selesai",
-    Canceled: "Dibatalin",
-  };
-  return labels[status] ?? status;
+  return STATUS_LABELS[status] ?? status;
 }
 
 async function cancelExtraScheduleFormAction(formData: FormData) {
