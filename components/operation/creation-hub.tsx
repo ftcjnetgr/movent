@@ -34,7 +34,7 @@ export default function OperationCreationHub({
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <h2>Buat Proses Baru</h2>
+            <h2>Yuk, mulai proses baru</h2>
             <p>
               Pilih dulu proses yang mau dibuat. Setelah itu baru isi detailnya.
             </p>
@@ -49,7 +49,7 @@ export default function OperationCreationHub({
             <span className="creation-choice-icon">SP</span>
             <span>
               <strong>Buat Supply Non-TGR</strong>
-              <small>Lengkapi detail perjalanan dan surat jalan.</small>
+              <small>Lengkapi detail perjalanan dan surat jalan, ya.</small>
             </span>
             <b>→</b>
           </button>
@@ -61,7 +61,7 @@ export default function OperationCreationHub({
             <span className="creation-choice-icon">JS</span>
             <span>
               <strong>Ajukan Jadwal Tambahan</strong>
-              <small>Ajukan jadwal tambahan ke Dispatcher.</small>
+              <small>Nanti kita terusin ke Dispatcher, ya.</small>
             </span>
             <b>→</b>
           </button>
