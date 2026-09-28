@@ -9,14 +9,7 @@ import {
 } from "@/app/dispatcher/maintenance-armada/actions";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 function ticketStatusLabel(status: string) {
-  const labels: Record<string, string> = {
-    Requested: "Udah Diajuin",
-    Confirmed: "Diterima",
-    "In Progress": "Lagi Dikerjain",
-    Completed: "Selesai",
-    Canceled: "Dibatalkan",
-  };
-  return labels[status] ?? status;
+  return STATUS_LABELS[status] ?? status;
 }
 
 type MaintenanceFormState = {
