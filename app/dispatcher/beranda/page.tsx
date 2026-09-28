@@ -103,16 +103,16 @@ export default async function DispatcherBerandaPage() {
 
       <section className="metric-grid dispatcher-summary-grid">
         <div className="metric-card dispatcher-summary-card dispatcher-summary-blue">
-          <span>Udah Ditugaskan</span>
+          <span>Udah Ditugasin</span>
           <strong>{active}</strong>
-          <small>Masih jalan</small>
+          <small>Lagi jalan</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-orange">
           <span>Lagi Jalan</span>
           <strong>
             {(data.taskCounts.Confirmed ?? 0) + (data.taskCounts.Driving ?? 0)}
           </strong>
-          <small>Udah diterima / jalan</small>
+          <small>Udah diterima, tinggal jalan</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-green">
           <span>Udah Selesai</span>
