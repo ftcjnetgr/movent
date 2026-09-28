@@ -162,21 +162,21 @@ export default function DashboardAlertList({
     (showTasks ? lateTaskCount : 0) + (showTickets ? lateTicketCount : 0);
   const heroTitle =
     mode === "task"
-      ? "Alert Penugasan"
+      ? "Ada yang perlu dicek"
       : mode === "ticket"
-        ? "Alert Maintenance"
-        : "Alert";
+        ? "Ada maintenance yang perlu dicek"
+        : "Ada yang perlu dicek";
   const heroDescription =
     mode === "task"
-      ? "Pantau schedule yang mendekati atau melewati batas waktu penugasan."
+      ? "Ada schedule yang waktunya mulai mepet atau udah lewat."
       : mode === "ticket"
-        ? "Cek maintenance yang belum jalan sesuai waktunya."
-        : "Pantau kondisi operasional yang membutuhkan perhatian.";
+        ? "Ada maintenance yang masih perlu dicek."
+        : "Ada beberapa hal yang perlu kamu cek di sini.";
 
   const taskGroups = useMemo(() => {
     const groups = new Map<string, typeof taskItems>();
     for (const item of taskItems) {
-      const hub = item.scheduleHubId || "Hub tidak tersedia";
+      const hub = item.scheduleHubId || "Hub-nya belum ada";
       groups.set(hub, [...(groups.get(hub) ?? []), item]);
     }
     return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]));
@@ -197,8 +197,8 @@ export default function DashboardAlertList({
           <div>
             <h1>{heroTitle}</h1>
             <p>
-              {heroDescription} {totalAlerts} kondisi aktif
-              {lateCount ? ` · ${lateCount} melewati batas` : ""}.
+              {heroDescription} {totalAlerts} hal aktif
+              {lateCount ? ` · ${lateCount} udah lewat batas` : ""}.
             </p>
           </div>
         </div>
@@ -259,7 +259,7 @@ export default function DashboardAlertList({
                     </div>
                     <div className="alert-hub-summary-stat">
                       <strong>{late}</strong>
-                      <span>melewati batas</span>
+                      <span>udah lewat batas</span>
                     </div>
                   </div>
 
@@ -368,7 +368,7 @@ export default function DashboardAlertList({
                 </div>
                 <div className="alert-hub-summary-stat">
                   <strong>0</strong>
-                  <span>melewati batas</span>
+                  <span>udah lewat batas</span>
                 </div>
               </div>
 
@@ -479,7 +479,7 @@ export default function DashboardAlertList({
                   </div>
                   <div className="alert-hub-summary-stat">
                     <strong>{late}</strong>
-                    <span>melewati batas</span>
+                    <span>udah lewat batas</span>
                   </div>
                 </div>
 
