@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 
 type Schedule = {
   schedule_id: string;
@@ -308,7 +309,7 @@ export default function TimetableView({
     ) {
       return item.status;
     }
-    return "Belum Ditugaskan";
+    return "Belum Ditugasin";
   }
 
   function statusLabel(status: string) {
