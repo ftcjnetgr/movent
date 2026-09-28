@@ -26,6 +26,17 @@ export function compareStatus(a: string, b: string) {
   return (STATUS_ORDER[a] ?? 999) - (STATUS_ORDER[b] ?? 999);
 }
 
+export const STATUS_SUBCOPY: Record<string, string> = {
+  Requested: "Tinggal diterima",
+  Assigned: "Tinggal diterima",
+  Confirmed: "Tinggal siap jalan",
+  Ready: "Tinggal berangkat",
+  Driving: "Lagi di jalan",
+  "In Progress": "Lagi dikerjain",
+  Completed: "Udah beres",
+  Canceled: "Nggak lanjut",
+};
+
 export const STATUS_LABELS: Record<string, string> = {
   Requested: "Udah Diajuin",
   Assigned: "Udah Ditugasin",
