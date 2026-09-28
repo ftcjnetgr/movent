@@ -56,8 +56,8 @@ export default async function OperasionalHistoryPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Riwayat Permintaan</h1>
-          <p>Semua permintaan jadwal tambahan yang pernah kamu ajukan.</p>
+          <h1>Permintaan kamu</h1>
+          <p>Semua jadwal tambahan yang pernah kamu ajukan ada di sini.</p>
         </div>
       </div>
 
@@ -97,7 +97,7 @@ export default async function OperasionalHistoryPage() {
                   <td>{formatDateTime(request.created_at)}</td>
                   <td>
                     <details>
-                      <summary className="link-button">Lihat detail</summary>
+                      <summary className="link-button">Lihat detailnya</summary>
                       <div
                         className="metric-card compact-form"
                         style={{ marginTop: 12 }}
@@ -150,7 +150,7 @@ export default async function OperasionalHistoryPage() {
                         </div>
                         {request.cancellation_note ? (
                           <div>
-                            <span className="muted">Catatan Pembatalan</span>
+                            <span className="muted">Kenapa dibatalin?</span>
                             <strong>{request.cancellation_note}</strong>
                           </div>
                         ) : null}
@@ -173,10 +173,10 @@ export default async function OperasionalHistoryPage() {
                           />
                           <input
                             name="note"
-                            placeholder="Tulis alasan pembatalan"
+                            placeholder="Tulis alasannya, ya"
                             required
                           />
-                          <button type="submit">Ya, batalkan</button>
+                          <button type="submit">Ya, batalin</button>
                         </form>
                       </details>
                     ) : null}
