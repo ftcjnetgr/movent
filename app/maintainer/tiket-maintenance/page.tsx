@@ -26,7 +26,7 @@ export default async function MaintainerTicketMaintenancePage() {
       <div className="page-heading">
         <div>
           <h1>Maintenance</h1>
-          <p>Kelola pengajuan maintenance dan lanjutkan sesuai alurnya.</p>
+          <p>Tinggal lanjutin maintenance sesuai tahapnya, ya.</p>
         </div>
       </div>
 
