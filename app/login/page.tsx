@@ -51,7 +51,7 @@ export default function LoginPage() {
                   name="username"
                   autoComplete="username"
                   autoFocus
-                  placeholder="Nama pengguna kamu"
+                  placeholder="Masukin username kamu"
                 />
               </label>
               <label>
