@@ -2,7 +2,7 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
-import { StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
@@ -73,7 +73,7 @@ export default async function ControllerTicketingDashboardPage({
       .limit(12),
   ]);
 
-  const tickets = ticketResult.data ?? [];
+  const tickets = [...(ticketResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
   const totalMaintenance = Object.values(data.ticketCounts).reduce(
     (total, count) => total + (count ?? 0),
     0,
