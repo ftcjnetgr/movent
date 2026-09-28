@@ -20,8 +20,8 @@ export default function ChangePasswordForm({ first }: { first: boolean }) {
       <div className="password-card">
         <div className="password-card-heading">
           <span className="eyebrow">PENGATURAN</span>
-          <h1>Buat kata sandi baru</h1>
-          <p>Kata sandi awal cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
+          <h1>Yuk, bikin password baru</h1>
+          <p>Password awal cuma sementara. Ganti dulu sebelum lanjut, ya.</p>
         </div>
 
         <form action={formAction} className="password-form">
@@ -51,13 +51,13 @@ export default function ChangePasswordForm({ first }: { first: boolean }) {
           ) : null}
 
           <button type="submit" disabled={pending}>
-            {pending ? "Menyimpan..." : "Simpan kata sandi"}
+            {pending ? "Lagi nyimpen..." : "Simpan password"}
           </button>
         </form>
 
         <div className="password-card-footer">
-          <span>Minimal 6 karakter</span>
-          <span>Kata sandi awal nggak bisa dipakai lagi.</span>
+          <span>Minimal 6 karakter, ya</span>
+          <span>Password awal nggak bisa dipakai lagi.</span>
         </div>
       </div>
     </section>
