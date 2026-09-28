@@ -3,18 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { cancelDispatcherTaskAction } from "@/app/dispatcher/beranda/actions";
 import StatusBadge from "@/components/shared/status-badge";
-function statusLabel(status: string) {
-  const labels: Record<string, string> = {
-    Requested: "Diajukan",
-    Assigned: "Ditugaskan",
-    Confirmed: "Diterima",
-    Driving: "Berangkat",
-    Completed: "Selesai",
-    Canceled: "Dibatalkan",
-  };
-  return labels[status] ?? status;
-}
-
+import { STATUS_LABELS } from "@/components/shared/status-config";
 async function cancelDispatcherTaskFormAction(formData: FormData) {
   "use server";
   await cancelDispatcherTaskAction(formData);
@@ -86,7 +75,7 @@ export default async function DispatcherAssignmentHistoryPage() {
                   <td>
                     <StatusBadge
                       status={task.status}
-                      label={statusLabel(task.status)}
+                      label={STATUS_LABELS[task.status] ?? task.status}
                     />
                   </td>
                   <td>
