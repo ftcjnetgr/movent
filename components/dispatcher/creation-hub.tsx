@@ -40,7 +40,7 @@ export default function DispatcherCreationHub(props: Props) {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <h2>Buat Proses Baru</h2>
+            <h2>Yuk, mulai proses baru</h2>
             <p>
               Pilih dulu proses yang mau dibuat. Setelah itu baru isi detailnya.
             </p>
@@ -69,7 +69,7 @@ export default function DispatcherCreationHub(props: Props) {
             <span className="creation-choice-icon">⌁</span>
             <span>
               <strong>Buat Maintenance</strong>
-              <small>Pilih kebutuhan maintenance, lokasi, dan armada.</small>
+              <small>Pilih kebutuhan maintenance, lokasi, dan armadanya, ya.</small>
             </span>
             <b>→</b>
           </button>
