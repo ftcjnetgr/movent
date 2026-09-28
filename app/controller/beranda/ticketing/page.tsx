@@ -7,7 +7,7 @@ import { compareStatus, StatusIcon } from "@/components/shared/status-config";
 function statusLabel(status: string) {
   return (
     {
-      Requested: "Udah Diajukan",
+      Requested: "Udah Diajuin",
       Confirmed: "Udah Diterima",
       "In Progress": "Lagi Dikerjain",
       Completed: "Udah Selesai",
