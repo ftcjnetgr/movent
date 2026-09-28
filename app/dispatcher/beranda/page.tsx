@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
 import StatusBadge from "@/components/shared/status-badge";
-import { STATUS_LABELS } from "@/components/shared/status-config";
+import { STATUS_LABELS, STATUS_SUBCOPY } from "@/components/shared/status-config";
 
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile();
@@ -105,24 +105,24 @@ export default async function DispatcherBerandaPage() {
         <div className="metric-card dispatcher-summary-card dispatcher-summary-blue">
           <span>Udah Ditugasin</span>
           <strong>{active}</strong>
-          <small>Lagi jalan</small>
+          <small>{STATUS_SUBCOPY.Assigned}</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-orange">
           <span>Lagi Jalan</span>
           <strong>
             {(data.taskCounts.Confirmed ?? 0) + (data.taskCounts.Driving ?? 0)}
           </strong>
-          <small>Udah diterima, tinggal jalan</small>
+          <small>{STATUS_SUBCOPY.Driving}</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-green">
           <span>Udah Selesai</span>
           <strong>{data.taskCounts.Completed ?? 0}</strong>
-          <small>Udah beres</small>
+          <small>{STATUS_SUBCOPY.Completed}</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-red">
           <span>Dibatalin</span>
           <strong>{canceledCount ?? 0}</strong>
-          <small>Nggak lanjut</small>
+          <small>{STATUS_SUBCOPY.Canceled}</small>
         </div>
       </section>
 
