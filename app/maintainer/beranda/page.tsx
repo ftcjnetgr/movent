@@ -111,7 +111,7 @@ export default async function MaintainerBerandaPage() {
             <StatusIcon status="Requested" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Udah Diajukan</span>
+            <span>Udah Udah Diajuin</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
             <small>Tinggal diterima</small>
           </div>
@@ -160,7 +160,7 @@ export default async function MaintainerBerandaPage() {
             </div>
 
             <div className="super-chart-legend">
-              <span><i className="legend-requested" /> Udah Diajukan</span>
+              <span><i className="legend-requested" /> Udah Udah Diajuin</span>
               <span><i className="legend-confirmed" /> Udah Diterima</span>
               <span><i className="legend-in-progress" /> Lagi Dikerjain</span>
               <span><i className="legend-completed" /> Udah Selesai</span>
