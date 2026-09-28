@@ -90,7 +90,7 @@ export default function SearchableMasterSelect({
               className="master-select-search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder={`Cari ${label.toLowerCase()}...`}
+              placeholder={`Mau cari ${label.toLowerCase()}?`}
               autoFocus
               aria-label={`Cari ${label.toLowerCase()}`}
             />
