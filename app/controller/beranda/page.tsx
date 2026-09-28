@@ -153,7 +153,7 @@ export default async function ControllerPenugasanDashboardPage({
       </div>
 
       <section className="super-kpi-grid assignment-kpi-grid">
-        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-requested">
+        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-total">
           <div className="super-kpi-icon">
             <StatusIcon status="Requested" size={20} />
           </div>
