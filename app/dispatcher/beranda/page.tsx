@@ -3,21 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
 import StatusBadge from "@/components/shared/status-badge";
-
-function statusLabel(status: string) {
-  return (
-    (
-      {
-        Requested: "Diajukan",
-        Confirmed: "Dikonfirmasi",
-        Assigned: "Ditugaskan",
-        Driving: "Berangkat",
-        Completed: "Selesai",
-        Dibatalkan: "Dibatalkan",
-      } as Record<string, string>
-    )[status] ?? status
-  );
-}
+import { STATUS_LABELS } from "@/components/shared/status-config";
 
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile();
@@ -117,26 +103,26 @@ export default async function DispatcherBerandaPage() {
 
       <section className="metric-grid dispatcher-summary-grid">
         <div className="metric-card dispatcher-summary-card dispatcher-summary-blue">
-          <span>Penugasan Dibuat</span>
+          <span>Udah Ditugaskan</span>
           <strong>{active}</strong>
-          <small>Penugasan aktif</small>
+          <small>Masih jalan</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-orange">
-          <span>Sedang Berjalan</span>
+          <span>Lagi Jalan</span>
           <strong>
             {(data.taskCounts.Confirmed ?? 0) + (data.taskCounts.Driving ?? 0)}
           </strong>
-          <small>Sudah diterima / berangkat</small>
+          <small>Udah diterima / jalan</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-green">
-          <span>Selesai</span>
+          <span>Udah Selesai</span>
           <strong>{data.taskCounts.Completed ?? 0}</strong>
-          <small>Penugasan selesai</small>
+          <small>Udah beres</small>
         </div>
         <div className="metric-card dispatcher-summary-card dispatcher-summary-red">
-          <span>Dibatalkan</span>
+          <span>Dibatalin</span>
           <strong>{canceledCount ?? 0}</strong>
-          <small>Penugasan dibatalkan</small>
+          <small>Nggak lanjut</small>
         </div>
       </section>
 
@@ -175,7 +161,7 @@ export default async function DispatcherBerandaPage() {
                     <td>
                       <StatusBadge
                         status={task.status}
-                        label={statusLabel(task.status)}
+                        label={STATUS_LABELS[task.status] ?? task.status}
                       />
                     </td>
                   </tr>
