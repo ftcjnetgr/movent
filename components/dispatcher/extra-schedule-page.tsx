@@ -73,7 +73,7 @@ export default function DispatcherExtraSchedulePage() {
   async function confirm(transactionId: string) {
     setFeedback((current) => ({
       ...current,
-      [transactionId]: "Sedang mengonfirmasi...",
+      [transactionId]: "Lagi konfirmasi...",
     }));
     const formData = new FormData();
     formData.set("transactionId", transactionId);
@@ -91,7 +91,7 @@ export default function DispatcherExtraSchedulePage() {
     if (!executorNik || !platNumber) {
       setFeedback((current) => ({
         ...current,
-        [transactionId]: "Executor dan armada perlu dipilih dulu, ya.",
+        [transactionId]: "Pilih executor dan armadanya dulu, ya.",
       }));
       return;
     }
@@ -146,7 +146,7 @@ export default function DispatcherExtraSchedulePage() {
     <div>
       <div className="page-heading">
         <h1>Jadwal Tambahan</h1>
-        <p>Konfirmasi permintaan dulu, lalu pilih pelaksana dan armada.</p>
+        <p>Terima permintaannya dulu, lalu pilih executor dan armadanya, ya.</p>
       </div>
 
       {preview ? (
@@ -188,15 +188,15 @@ export default function DispatcherExtraSchedulePage() {
       <section className="data-table-card section-block">
         <div className="section-heading">
           <div>
-            <h2>Permintaan baru</h2>
-            <p>Terima request dari Operation sebelum melakukan assignment.</p>
+            <h2>Ada permintaan baru</h2>
+            <p>Terima request dari Operation dulu, baru kita atur penugasannya.</p>
           </div>
         </div>
         {loading ? (
-          <div className="empty-state">Lagi memuat request...</div>
+          <div className="empty-state">Lagi cek request...</div>
         ) : null}
         {!loading && data.requests.length === 0 ? (
-          <div className="empty-state">Belum ada request baru.</div>
+          <div className="empty-state">Belum ada request baru di sini.</div>
         ) : null}
         {!loading && data.requests.length > 0 ? (
           <div className="table-wrap">
@@ -245,7 +245,7 @@ export default function DispatcherExtraSchedulePage() {
       <section className="data-table-card section-block">
         <div className="section-heading">
           <div>
-            <h2>Siap ditugaskan</h2>
+            <h2>Siap ditugasin</h2>
             <p>
               Request yang sudah dikonfirmasi dan tinggal dipilihkan pelaksana
               serta armada.
