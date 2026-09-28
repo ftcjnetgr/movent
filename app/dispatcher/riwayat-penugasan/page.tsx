@@ -16,9 +16,7 @@ export default async function DispatcherAssignmentHistoryPage() {
   const { data: tasks } = await admin
     .from("tasks")
     .select(
-      "transaction_id, task_type, status, fleet_ownership, created_by, start_point, " +
-        "destination, std, sta, created_at, executor_snapshot, fleet_snapshot, " +
-        "external_executor, external_fleet",
+      "transaction_id, task_type, status, fleet_ownership, created_by, start_point, destination, std, sta, created_at, executor_snapshot, fleet_snapshot, external_executor, external_fleet",
     )
     .order("created_at", { ascending: false });
 
