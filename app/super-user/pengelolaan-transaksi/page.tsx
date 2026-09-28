@@ -6,15 +6,11 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { STATUS_LABELS } from "@/components/shared/status-config";
 function statusLabel(status: string) {
-  const labels: Record<string, string> = {
-    Requested: "Udah Diajuin",
-    Assigned: "Udah Ditugasin",
-    Confirmed: "Udah Diterima",
-    Driving: "Lagi Jalan",
-    Completed: "Selesai",
-    Canceled: "Dibatalin",
-  };
-  return labels[status] ?? status;
+  return STATUS_LABELS[status] ?? status;
+}
+
+function ticketStatusLabel(status: string) {
+  return STATUS_LABELS[status] ?? status;
 }
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
