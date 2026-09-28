@@ -12,16 +12,6 @@ function statusLabel(status: string) {
 function ticketStatusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
 }
-function ticketStatusLabel(status: string) {
-  const labels: Record<string, string> = {
-    Requested: "Udah Diajuin",
-    Confirmed: "Udah Diterima",
-    "In Progress": "Lagi Dikerjain",
-    Completed: "Selesai",
-    Canceled: "Dibatalin",
-  };
-  return labels[status] ?? status;
-}
 
 function masterOptions(items: Array<{ value: string; label: string }>) {
   return items.map((item) => ({ ...item, searchText: item.label }));
