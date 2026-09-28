@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
 import StatusBadge from "@/components/shared/status-badge";
-import { compareStatus, StatusIcon } from "@/components/shared/status-config";
+import { compareStatus, STATUS_LABELS, StatusIcon } from "@/components/shared/status-config";
 
 function statusLabel(status: string) {
   return (
@@ -243,7 +243,7 @@ export default async function ControllerPenugasanDashboardPage({
             <StatusIcon status="Assigned" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Udah Ditugaskan</span>
+            <span>Udah Ditugasin</span>
             <strong>{taskStatusCounts.Assigned}</strong>
             <small>Tinggal diterima</small>
           </div>
@@ -317,7 +317,7 @@ export default async function ControllerPenugasanDashboardPage({
             </div>
             <div className="super-chart-legend">
               <span>
-                <i className="legend-assigned" /> Udah Ditugaskan
+                <i className="legend-assigned" /> Udah Ditugasin
               </span>
               <span>
                 <i className="legend-confirmed" /> Udah Diterima
