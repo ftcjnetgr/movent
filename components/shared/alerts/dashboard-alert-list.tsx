@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import StatusBadge from "@/components/shared/status-badge";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 
 type TaskAlert = {
   kind: "unassigned" | "assigned";
@@ -68,9 +69,9 @@ function maintenanceThresholdSeconds(status: string) {
 
 function maintenanceStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: "Dibuat",
-    Confirmed: "Dikonfirmasi",
-    "In Progress": "Lagi Dikerjain",
+    Requested: STATUS_LABELS.Requested,
+    Confirmed: STATUS_LABELS.Confirmed,
+    "In Progress": STATUS_LABELS["In Progress"],
   };
   return labels[status] ?? status;
 }
