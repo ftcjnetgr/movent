@@ -8,7 +8,7 @@ import { compareStatus, StatusIcon } from "@/components/shared/status-config";
 function statusLabel(status: string) {
   return (
     {
-      Assigned: "Udah Ditugaskan",
+      Assigned: "Udah Ditugasin",
       Confirmed: "Udah Diterima",
       Ready: "Siap Jalan",
       Driving: "Lagi Jalan",
@@ -245,7 +245,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Ditugaskan</span>
             <strong>{taskStatusCounts.Assigned}</strong>
-            <small>Menunggu diterima</small>
+            <small>Tinggal diterima</small>
           </div>
         </div>
 
@@ -256,7 +256,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{taskStatusCounts.Confirmed}</strong>
-            <small>Belum siap jalan</small>
+            <small>Tinggal siap jalan</small>
           </div>
         </div>
 
@@ -267,7 +267,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Siap Jalan</span>
             <strong>{taskStatusCounts.Ready}</strong>
-            <small>Udah siap berangkat</small>
+            <small>Tinggal berangkat</small>
           </div>
         </div>
 
@@ -278,7 +278,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{taskStatusCounts.Driving}</strong>
-            <small>Sedang berjalan</small>
+            <small>Lagi di perjalanan</small>
           </div>
         </div>
 
