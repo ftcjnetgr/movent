@@ -9,9 +9,9 @@ import {
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 function ticketStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    Requested: "Diajukan",
+    Requested: "Udah Diajuin",
     Confirmed: "Diterima",
-    "In Progress": "Sedang dikerjakan",
+    "In Progress": "Lagi Dikerjain",
     Completed: "Selesai",
     Canceled: "Dibatalkan",
   };
@@ -100,14 +100,14 @@ export default function DispatcherMaintenanceForm({
     <section>
       <section className="section-grid two-column">
         <div className="metric-card">
-          <div className="card-title">Buat Maintenance</div>
+          <div className="card-title">Yuk, buat maintenance</div>
           <p className="muted">
             Pilih kebutuhan maintenance, lokasi armada, dan armada yang akan
             ditangani.
           </p>
           {!showCreate ? (
             <button type="button" onClick={() => setShowCreate(true)}>
-              Buat Maintenance
+              Yuk, buat maintenance
             </button>
           ) : (
             <form onSubmit={handleCreate} className="data-form">
@@ -145,8 +145,8 @@ export default function DispatcherMaintenanceForm({
               <div className="form-actions">
                 <button type="submit" disabled={isCreatePending}>
                   {isCreatePending
-                    ? "Sedang menyimpan..."
-                    : "Submit Maintenance"}
+                    ? "Lagi nyimpen..."
+                    : "Buat maintenance"}
                 </button>
                 <button
                   type="button"
@@ -161,7 +161,7 @@ export default function DispatcherMaintenanceForm({
         </div>
 
         <div className="metric-card">
-          <div className="card-title">Pratinjau Maintenance</div>
+          <div className="card-title">Cek maintenance</div>
           {state.preview ? (
             <>
               <h2>{state.preview.transactionId}</h2>
@@ -228,7 +228,7 @@ export default function DispatcherMaintenanceForm({
                   <button type="submit" disabled={isConfirmPending}>
                     {isConfirmPending
                       ? "Mengonfirmasi..."
-                      : "Konfirmasi Maintenance"}
+                      : "Terima maintenance"}
                   </button>
                   <button
                     type="button"
@@ -251,8 +251,8 @@ export default function DispatcherMaintenanceForm({
       <section className="data-table-card section-block">
         <div className="section-heading">
           <div>
-            <h2>Maintenance yang sudah dibuat</h2>
-            <p>Maintenance yang masih tersimpan di riwayat pembuatan.</p>
+            <h2>Maintenance yang udah dibuat</h2>
+            <p>Yang masih tersimpan di riwayat pembuatan.</p>
           </div>
         </div>
         {cancelMessage ? <p className="form-success">{cancelMessage}</p> : null}
@@ -290,7 +290,7 @@ export default function DispatcherMaintenanceForm({
                   <td>
                     {ticket.status === "Requested" ? (
                       <details>
-                        <summary className="link-button">Batalkan</summary>
+                        <summary className="link-button">Batalin</summary>
                         <form
                           onSubmit={handleCancel}
                           className="compact-form"
@@ -303,7 +303,7 @@ export default function DispatcherMaintenanceForm({
                           />
                           <input
                             name="note"
-                            placeholder="Tulis alasan pembatalan"
+                            placeholder="Kenapa dibatalin?"
                             required
                           />
                           <button type="submit" disabled={isCancelPending}>
