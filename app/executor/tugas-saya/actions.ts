@@ -45,7 +45,7 @@ export async function acceptExtraScheduleAction(
     task.fleet_ownership === "Non-TGR" ||
     !allowedExecutor(profile.role, task.executor_nik, profile.nik)
   ) {
-    return { error: "Tugas tidak tersedia untuk kamu." };
+    return { error: "Tugas ini belum tersedia buat kamu." };
   }
 
   const { error } = await admin
@@ -54,10 +54,10 @@ export async function acceptExtraScheduleAction(
     .eq("id", task.id)
     .eq("status", "Assigned");
 
-  if (error) return { error: "Konfirmasi menerima tugas belum berhasil." };
+  if (error) return { error: "Penerimaan tugas belum berhasil. Coba lagi, ya." };
 
   revalidateExecutorPaths();
-  return { success: "Tugas sudah diterima." };
+  return { success: "Tugasnya udah diterima." };
 }
 
 export async function submitExtraScheduleSjAction(
@@ -79,7 +79,7 @@ export async function submitExtraScheduleSjAction(
     weight < 0 ||
     !product
   ) {
-    return { error: "Nomor SJ, Qty, Berat, dan Produk wajib diisi." };
+    return { error: "Nomor SJ, Qty, berat, dan produk perlu diisi dulu, ya." };
   }
 
   const { admin, task } = await getTask(transactionId, ["Confirmed"]);
@@ -88,7 +88,7 @@ export async function submitExtraScheduleSjAction(
     !requiresSj(task) ||
     !allowedExecutor(profile.role, task.executor_nik, profile.nik)
   ) {
-    return { error: "Tugas tidak tersedia untuk proses SJ." };
+    return { error: "Tugas ini belum tersedia untuk isi SJ." };
   }
 
   const { data: productData } = await admin
@@ -98,7 +98,7 @@ export async function submitExtraScheduleSjAction(
     .eq("status", "Active")
     .maybeSingle();
 
-  if (!productData) return { error: "Produk tidak tersedia." };
+  if (!productData) return { error: "Produknya nggak tersedia." };
 
   const { data: insertedSj, error } = await admin
     .from("task_sj_items")
@@ -114,7 +114,7 @@ export async function submitExtraScheduleSjAction(
     .select("id")
     .single();
 
-  if (error || !insertedSj) return { error: "SJ belum berhasil disimpan." };
+  if (error || !insertedSj) return { error: "SJ belum berhasil disimpan. Coba lagi, ya." };
 
   // Keep the legacy task-level fields populated for existing reports/records.
   const { error: legacyError } = await admin
@@ -136,11 +136,11 @@ export async function submitExtraScheduleSjAction(
       .delete()
       .eq("id", insertedSj.id)
       .eq("task_id", task.id);
-    return { error: "SJ belum berhasil disimpan. Silakan coba lagi." };
+    return { error: "SJ belum berhasil disimpan. Coba lagi, ya. Silakan coba lagi." };
   }
 
   revalidateExecutorPaths();
-  return { success: "SJ berhasil disimpan." };
+  return { success: "SJ sudah disimpan." };
 }
 
 export async function saveOdometerStartAction(
@@ -150,11 +150,11 @@ export async function saveOdometerStartAction(
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const value = Number(formData.get("odometerStart"));
   if (!Number.isFinite(value) || value < 0)
-    return { error: "Odometer Awal belum benar." };
+    return { error: "Odometer awal belum benar. Cek lagi, ya." };
 
   const { admin, task } = await getTask(transactionId, ["Confirmed"]);
   if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
-    return { error: "Tugas tidak tersedia untuk kamu." };
+    return { error: "Tugas ini belum tersedia buat kamu." };
   if (requiresSj(task)) {
     const { count } = await admin
       .from("task_sj_items")
@@ -168,9 +168,9 @@ export async function saveOdometerStartAction(
     .update({ odometer_start: value })
     .eq("id", task.id)
     .eq("status", "Confirmed");
-  if (error) return { error: "Odometer Awal belum berhasil disimpan." };
+  if (error) return { error: "Odometer awal belum berhasil disimpan. Coba lagi, ya." };
   revalidateExecutorPaths();
-  return { success: "Odometer Awal tersimpan." };
+  return { success: "Odometer awal sudah disimpan." };
 }
 
 export async function confirmDrivingAction(
@@ -184,7 +184,7 @@ export async function confirmDrivingAction(
     task.fleet_ownership === "Non-TGR" ||
     !allowedExecutor(profile.role, task.executor_nik, profile.nik)
   )
-    return { error: "Tugas tidak tersedia untuk kamu." };
+    return { error: "Tugas ini belum tersedia buat kamu." };
   if (requiresSj(task)) {
     const { count } = await admin
       .from("task_sj_items")
@@ -200,7 +200,7 @@ export async function confirmDrivingAction(
     .update({ status: "Driving", driving_at: new Date().toISOString() })
     .eq("id", task.id)
     .eq("status", "Confirmed");
-  if (error) return { error: "Konfirmasi Berangkat belum berhasil." };
+  if (error) return { error: "Konfirmasi berangkat belum berhasil. Coba lagi, ya." };
   revalidateExecutorPaths();
   return { success: "Berangkat sudah dikonfirmasi." };
 }
@@ -212,7 +212,7 @@ export async function confirmArrivalAction(
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const { admin, task } = await getTask(transactionId, ["Driving"]);
   if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
-    return { error: "Tugas tidak tersedia untuk kamu." };
+    return { error: "Tugas ini belum tersedia buat kamu." };
 
   const { error } = await admin
     .from("tasks")
@@ -221,7 +221,7 @@ export async function confirmArrivalAction(
     .eq("status", "Driving")
     .is("arrived_at", null);
 
-  if (error) return { error: "Konfirmasi Datang belum berhasil." };
+  if (error) return { error: "Konfirmasi datang belum berhasil. Coba lagi, ya." };
   revalidateExecutorPaths();
   return { success: "Kedatangan sudah dikonfirmasi." };
 }
@@ -233,15 +233,15 @@ export async function saveOdometerEndAction(
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const value = Number(formData.get("odometerEnd"));
   if (!Number.isFinite(value) || value < 0)
-    return { error: "Odometer Akhir belum benar." };
+    return { error: "Odometer akhir belum benar. Cek lagi, ya." };
 
   const { admin, task } = await getTask(transactionId, ["Driving"]);
   if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
-    return { error: "Tugas tidak tersedia untuk kamu." };
-  if (!task.arrived_at) return { error: "Konfirmasi Datang terlebih dahulu." };
+    return { error: "Tugas ini belum tersedia buat kamu." };
+  if (!task.arrived_at) return { error: "Konfirmasi kedatangan dulu, ya." };
   if (task.odometer_start !== null && value < Number(task.odometer_start))
     return {
-      error: "Odometer Akhir tidak boleh lebih kecil dari Odometer Awal.",
+      error: "Odometer akhir nggak boleh lebih kecil dari odometer awal, ya.",
     };
 
   const { error } = await admin
@@ -249,9 +249,9 @@ export async function saveOdometerEndAction(
     .update({ odometer_end: value })
     .eq("id", task.id)
     .eq("status", "Driving");
-  if (error) return { error: "Odometer Akhir belum berhasil disimpan." };
+  if (error) return { error: "Odometer akhir belum berhasil disimpan. Coba lagi, ya." };
   revalidateExecutorPaths();
-  return { success: "Odometer Akhir tersimpan." };
+  return { success: "Odometer akhir sudah disimpan." };
 }
 
 export async function confirmCompletedAction(
@@ -261,8 +261,8 @@ export async function confirmCompletedAction(
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const { admin, task } = await getTask(transactionId, ["Driving"]);
   if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
-    return { error: "Tugas tidak tersedia untuk kamu." };
-  if (!task.arrived_at) return { error: "Konfirmasi Datang terlebih dahulu." };
+    return { error: "Tugas ini belum tersedia buat kamu." };
+  if (!task.arrived_at) return { error: "Konfirmasi kedatangan dulu, ya." };
   if (task.odometer_end === null)
     return { error: "Isi Odometer Akhir terlebih dahulu." };
 
@@ -271,9 +271,9 @@ export async function confirmCompletedAction(
     .update({ status: "Completed", completed_at: new Date().toISOString() })
     .eq("id", task.id)
     .eq("status", "Driving");
-  if (error) return { error: "Konfirmasi selesai belum berhasil." };
+  if (error) return { error: "Penyelesaian tugas belum berhasil. Coba lagi, ya." };
   revalidateExecutorPaths();
-  return { success: "Tugas selesai." };
+  return { success: "Tugasnya udah selesai." };
 }
 
 function revalidateExecutorPaths() {
