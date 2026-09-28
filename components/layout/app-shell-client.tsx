@@ -16,9 +16,9 @@ type NavGroup = {
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     {
-      label: "Notifikasi",
+      label: "Info buat kamu",
       icon: "bell",
-      items: [{ label: "Notifikasi", href: "/controller/alert", icon: "bell" }],
+      items: [{ label: "Info buat kamu", href: "/controller/alert", icon: "bell" }],
     },
     {
       label: "Beranda",
@@ -44,16 +44,16 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Pengaturan",
+      label: "Atur akun",
       icon: "user",
       items: [
-        { label: "Pengaturan", href: "/controller/profil", icon: "user" },
+        { label: "Atur akun", href: "/controller/profil", icon: "user" },
       ],
     },
   ],
   Dispatcher: [
     {
-      label: "Notifikasi",
+      label: "Info buat kamu",
       icon: "bell",
       items: [
         {
@@ -91,10 +91,10 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Pengaturan",
+      label: "Atur akun",
       icon: "user",
       items: [
-        { label: "Pengaturan", href: "/dispatcher/profil", icon: "user" },
+        { label: "Atur akun", href: "/dispatcher/profil", icon: "user" },
       ],
     },
     {
@@ -117,7 +117,7 @@ const navByRole: Record<string, NavGroup[]> = {
   ],
   Executor: [
     {
-      label: "Notifikasi",
+      label: "Info buat kamu",
       icon: "bell",
       items: [
         {
@@ -133,11 +133,11 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Tugas Saya",
+      label: "Tugas kamu",
       icon: "clipboard",
       items: [
         {
-          label: "Tugas Saya",
+          label: "Tugas kamu",
           href: "/executor/tugas-saya",
           icon: "clipboard",
         },
@@ -155,18 +155,18 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Pengaturan",
+      label: "Atur akun",
       icon: "user",
-      items: [{ label: "Pengaturan", href: "/executor/profil", icon: "user" }],
+      items: [{ label: "Atur akun", href: "/executor/profil", icon: "user" }],
     },
   ],
   Maintainer: [
     {
-      label: "Notifikasi",
+      label: "Info buat kamu",
       icon: "bell",
       items: [
         {
-          label: "Notifikasi",
+          label: "Info buat kamu",
           href: "/maintainer/alert/ticketing-maintenance",
           icon: "bell",
         },
@@ -200,16 +200,16 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Pengaturan",
+      label: "Atur akun",
       icon: "user",
       items: [
-        { label: "Pengaturan", href: "/maintainer/profil", icon: "user" },
+        { label: "Atur akun", href: "/maintainer/profil", icon: "user" },
       ],
     },
   ],
   Operation: [
     {
-      label: "Notifikasi",
+      label: "Info buat kamu",
       icon: "bell",
       items: [
         {
@@ -230,27 +230,27 @@ const navByRole: Record<string, NavGroup[]> = {
       items: [{ label: "Beranda", href: "/operation/beranda", icon: "home" }],
     },
     {
-      label: "Riwayat Jadwal Tambahan",
+      label: "Permintaan jadwal",
       icon: "calendar",
       items: [
         {
-          label: "Riwayat Jadwal Tambahan",
+          label: "Permintaan jadwal",
           href: "/operation/riwayat-permintaan",
           icon: "history",
         },
       ],
     },
     {
-      label: "Pengaturan",
+      label: "Atur akun",
       icon: "user",
-      items: [{ label: "Pengaturan", href: "/operation/profil", icon: "user" }],
+      items: [{ label: "Atur akun", href: "/operation/profil", icon: "user" }],
     },
   ],
 };
 
 const superUserNav: NavGroup[] = [
   {
-    label: "Notifikasi",
+    label: "Info buat kamu",
     icon: "bell",
     items: [
       { label: "Penugasan", href: "/alert/penugasan", icon: "clipboard" },
@@ -325,7 +325,7 @@ const superUserNav: NavGroup[] = [
     ],
   },
   {
-    label: "Manajemen",
+    label: "Kelola",
     icon: "settings",
     items: [
       {
@@ -357,11 +357,11 @@ const superUserNav: NavGroup[] = [
     ],
   },
   {
-    label: "Pengaturan",
+    label: "Atur akun",
     icon: "settings",
     items: [
       {
-        label: "Pengaturan Sistem",
+        label: "Atur sistem",
         href: "/super-user/profil",
         icon: "settings",
       },
@@ -572,7 +572,7 @@ export default function AppShellClient({
     return [
       ...roleNav,
       {
-        label: "Manajemen",
+        label: "Kelola",
         icon: "settings",
         items: [
           {
