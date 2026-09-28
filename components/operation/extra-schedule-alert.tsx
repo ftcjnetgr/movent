@@ -58,8 +58,8 @@ export default function OperationExtraScheduleAlert({
       <div className="metric-card alert-card">
         <div className="section-heading">
           <div>
-            <h2>Peringatan Permintaan Jadwal Tambahan</h2>
-            <p>Permintaan yang masih menunggu penugasan Dispatcher.</p>
+            <h2>Ada permintaan jadwal tambahan</h2>
+            <p>Masih nunggu ditugasin Dispatcher.</p>
           </div>
           <strong>{alerts.length}</strong>
         </div>
