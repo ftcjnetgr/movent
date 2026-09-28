@@ -55,17 +55,17 @@ function statusLabel(status: string) {
 }
 
 function nextActionLabel(task: Task) {
-  if (task.status === "Assigned") return "Terima Penugasan";
+  if (task.status === "Assigned") return "Terima tugas";
   if (task.status === "Confirmed" && requiresSj(task) && !task.sj_number)
-    return "Isi Surat Jalan";
+    return "Isi surat jalan";
   if (task.status === "Confirmed" && task.odometer_start === null)
     return "Isi odometer awal";
-  if (task.status === "Confirmed") return "Konfirmasi Berangkat";
-  if (task.status === "Driving" && !task.arrived_at) return "Konfirmasi Tiba";
+  if (task.status === "Confirmed") return "Siap jalan?";
+  if (task.status === "Driving" && !task.arrived_at) return "Udah sampai?";
   if (task.status === "Driving" && task.odometer_end === null)
     return "Isi odometer akhir";
-  if (task.status === "Driving") return "Selesaikan Tugaskan tugas";
-  return "Lanjutkan tugas";
+  if (task.status === "Driving") return "Selesaikan tugas";
+  return "Lanjut yuk";
 }
 
 export default function ExecutorTaskCard({
@@ -203,7 +203,7 @@ export default function ExecutorTaskCard({
       </div>
 
       <div className="task-next-step">
-        <span>LANGKAH BERIKUTNYA</span>
+        <span>LANJUTNYA</span>
         <strong>{nextActionLabel(task)}</strong>
       </div>
 
