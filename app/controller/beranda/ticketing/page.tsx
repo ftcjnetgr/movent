@@ -183,7 +183,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-panel-heading">
             <div>
               <h2>Aktivitas Maintenance</h2>
-              <p>Maintenance yang dibuat berdasarkan periode yang dipilih.</p>
+              <p>Biar gampang dipantau, maintenance di periode ini ada di sini.</p>
             </div>
             <div className="super-chart-legend">
               <span><i className="legend-requested" /> Udah Diajuin</span>
