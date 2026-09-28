@@ -156,7 +156,7 @@ export default function OperationCreateTask({
   return (
     <div className="section-grid two-column section-block">
       <section className="metric-card">
-        <div className="card-title">Buat Tugas Baru</div>
+        <div className="card-title">Yuk, buat tugas baru</div>
         <p className="muted">
           Supply Armada Non TGR · isi data perjalanan dan Surat Jalan, lalu
           preview sebelum konfirmasi.
@@ -268,13 +268,13 @@ export default function OperationCreateTask({
             </p>
           ) : null}
           <button type="submit" disabled={pending}>
-            {pending ? "Menyiapkan preview..." : "Submit SJ"}
+            {pending ? "Lagi siapin preview..." : "Siapkan SJ"}
           </button>
         </form>
 
         {state.preview ? (
           <div className="metric-card compact-form" style={{ marginTop: 16 }}>
-            <div className="card-title">Pratinjau Penugasan dan Hasil SJ</div>
+            <div className="card-title">Cek penugasan & SJ</div>
             <div className="task-summary-grid">
               <div>
                 <span>Rute</span>
@@ -386,7 +386,7 @@ export default function OperationCreateTask({
                   Bagikan
                 </button>
                 <button type="submit" disabled={confirmPending}>
-                  {confirmPending ? "Mengonfirmasi..." : "Konfirmasi Penugasan"}
+                  {confirmPending ? "Lagi konfirmasi..." : "Tugasnya udah oke?"}
                 </button>
               </div>
             </form>
@@ -395,7 +395,7 @@ export default function OperationCreateTask({
       </section>
 
       <section className="metric-card">
-        <div className="card-title">Tugas Siap Berangkat</div>
+        <div className="card-title">Tugas siap jalan</div>
         <p className="muted">
           Pilih tugas yang siap berangkat, lalu masukkan ATD secara manual.
         </p>
@@ -460,7 +460,7 @@ export default function OperationCreateTask({
                   <input type="time" name="departure" required />
                 </label>
                 <button type="submit" disabled={departurePending}>
-                  {departurePending ? "Menyimpan..." : "Konfirmasi Berangkat"}
+                  {departurePending ? "Menyimpan..." : "Siap berangkat"}
                 </button>
               </form>
             </div>
