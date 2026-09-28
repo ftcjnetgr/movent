@@ -4,6 +4,7 @@ import { FormEvent, useState, useTransition } from "react";
 import { jsPDF } from "jspdf";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 import StatusBadge from "@/components/shared/status-badge";
+import { STATUS_LABELS } from "@/components/shared/status-config";
 
 import {
   acceptExtraScheduleAction,
@@ -50,14 +51,7 @@ function requiresSj(task: Task) {
 }
 
 function statusLabel(status: string) {
-  const labels: Record<string, string> = {
-    Assigned: "Ditugaskan",
-    Confirmed: "Diterima",
-    Driving: "Berangkat",
-    Completed: "Selesaikan Tugas",
-    Canceled: "Dibatalkan",
-  };
-  return labels[status] ?? status;
+  return STATUS_LABELS[status] ?? status;
 }
 
 function nextActionLabel(task: Task) {
