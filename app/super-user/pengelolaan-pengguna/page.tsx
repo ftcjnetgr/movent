@@ -70,8 +70,8 @@ export default async function UserManagementPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Kelola Pengguna</h1>
-          <p>Atur akses dan data pengguna di sini.</p>
+          <h1>Yuk, kelola pengguna</h1>
+          <p>Atur akses dan data pengguna di sini, ya.</p>
         </div>
       </div>
 
@@ -93,7 +93,7 @@ export default async function UserManagementPage() {
               File CSV atau XLSX
               <input type="file" name="file" accept=".csv,.xlsx" required />
             </label>
-            <button type="submit">Impor pengguna</button>
+            <button type="submit">Import pengguna</button>
           </form>
         </DatabaseActionPreview>
 
@@ -185,7 +185,7 @@ export default async function UserManagementPage() {
                     </span>
                   </td>
                   <td>
-                    {user.auth_user_id ? "Terhubung" : "Belum tersambung"}
+                    {user.auth_user_id ? "Terhubung" : "Belum nyambung"}
                   </td>
                   <td>{user.failed_login_attempts}</td>
                   <td>
@@ -255,7 +255,7 @@ export default async function UserManagementPage() {
                               ))}
                             </select>
                           </label>
-                          <button type="submit">Simpan</button>
+                          <button type="submit">Simpan perubahan</button>
                         </form>
                       </DatabaseUbahPreview>
                       <div className="admin-row-action-secondary admin-user-lock-actions">
