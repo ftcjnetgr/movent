@@ -31,8 +31,8 @@ export default async function MaintainerReportPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Penarikan Laporan</h1>
-          <p>Pilih periode maintenance, lalu tarik laporannya.</p>
+          <h1>Tarik laporan</h1>
+          <p>Pilih periodenya, terus ambil laporannya.</p>
         </div>
       </div>
       <section className="section-block">
