@@ -145,7 +145,7 @@ export default async function ControllerTicketingDashboardPage({
       <section className="super-kpi-grid maintenance-kpi-grid">
         <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-total">
           <div className="super-kpi-icon">
-            <StatusIcon status="Completed" size={20} />
+            <StatusIcon status="Assigned" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Semua Maintenance</span>
@@ -165,7 +165,7 @@ export default async function ControllerTicketingDashboardPage({
         </div>
         <div className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed">
           <div className="super-kpi-icon">
-            <StatusIcon status="Completed" size={20} />
+            <StatusIcon status="Confirmed" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
@@ -185,7 +185,7 @@ export default async function ControllerTicketingDashboardPage({
         </div>
         <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed">
           <div className="super-kpi-icon">
-            <SummaryIcon name="check" />
+            <StatusIcon status="Completed" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
