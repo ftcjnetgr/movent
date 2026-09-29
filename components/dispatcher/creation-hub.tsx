@@ -40,18 +40,15 @@ export default function DispatcherCreationHub(props: Props) {
   if (choice) {
     return (
       <section className="section-block dispatcher-create-flow">
-        <div className="creation-flow-toolbar">
-          <strong>Dispatcher</strong>
-          <button
-            type="button"
-            className="dispatcher-back-button"
-            onClick={() => setChoice(null)}
-            aria-label="Kembali"
-            title="Kembali"
-          >
-            <span aria-hidden="true">←</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          className="dispatcher-back-button"
+          onClick={() => setChoice(null)}
+          aria-label="Kembali"
+          title="Kembali"
+        >
+          <span aria-hidden="true">←</span>
+        </button>
 
         {choice === "task" ? (
           <DispatcherCreateTask
