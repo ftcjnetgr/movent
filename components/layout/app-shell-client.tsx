@@ -62,7 +62,7 @@ const navByRole: Record<string, NavGroup[]> = {
           icon: "clipboard",
         },
         {
-          label: "Maintenance",
+          label: "Perbaikan",
           href: "/dispatcher/alert/ticketing-maintenance",
           icon: "wrench",
         },
@@ -107,7 +107,7 @@ const navByRole: Record<string, NavGroup[]> = {
           icon: "clipboard",
         },
         {
-          label: "Maintenance",
+          label: "Perbaikan",
           href: "/dispatcher/maintenance-armada",
           icon: "wrench",
         },
@@ -126,7 +126,7 @@ const navByRole: Record<string, NavGroup[]> = {
           icon: "clipboard",
         },
         {
-          label: "Maintenance",
+          label: "Perbaikan",
           href: "/executor/alert/ticketing-maintenance",
           icon: "wrench",
         },
@@ -178,11 +178,11 @@ const navByRole: Record<string, NavGroup[]> = {
       items: [{ label: "Beranda", href: "/maintainer/beranda", icon: "home" }],
     },
     {
-      label: "Maintenance",
+      label: "Perbaikan",
       icon: "wrench",
       items: [
         {
-          label: "Maintenance",
+          label: "Perbaikan",
           href: "/maintainer/tiket-maintenance",
           icon: "wrench",
         },
@@ -218,7 +218,7 @@ const navByRole: Record<string, NavGroup[]> = {
           icon: "clipboard",
         },
         {
-          label: "Maintenance",
+          label: "Perbaikan",
           href: "/operation/alert/ticketing-maintenance",
           icon: "wrench",
         },
@@ -255,7 +255,7 @@ const superUserNav: NavGroup[] = [
     items: [
       { label: "Penugasan", href: "/alert/penugasan", icon: "clipboard" },
       {
-        label: "Maintenance",
+        label: "Perbaikan",
         href: "/alert/ticketing-maintenance",
         icon: "wrench",
       },
@@ -277,7 +277,7 @@ const superUserNav: NavGroup[] = [
       },
       { label: "Penugasan", href: "/controller/beranda", icon: "clipboard" },
       {
-        label: "Maintenance",
+        label: "Perbaikan",
         href: "/controller/beranda/ticketing",
         icon: "ticket",
       },
@@ -313,7 +313,7 @@ const superUserNav: NavGroup[] = [
         icon: "box",
       },
       {
-        label: "Daftar Maintenance",
+        label: "Daftar Perbaikan",
         href: "/super-user/pengelolaan-database?db=maintenance_lists",
         icon: "wrench",
       },
@@ -561,7 +561,7 @@ export default function AppShellClient({
   const alertCountForItem = (label: string) =>
     label === "Penugasan"
       ? alertCounts.task
-      : label === "Maintenance"
+      : label === "Perbaikan"
         ? alertCounts.maintenance
         : currentRole === "Maintainer"
           ? alertCounts.maintenance
