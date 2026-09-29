@@ -14,6 +14,7 @@ type Schedule = {
   schedule_id: string;
   route: string;
   category: string;
+  schedule_hub_id: string | null;
   start_point: string;
   destination: string;
   std: string;
