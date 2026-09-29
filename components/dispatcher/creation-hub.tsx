@@ -65,7 +65,6 @@ export default function DispatcherCreationHub(props: Props) {
       <section className="section-block dispatcher-create-flow">
         {choice === "task" ? (
           <DispatcherCreateTask
-            locationGroups={props.locationGroups}
             schedules={props.schedules}
             executors={props.executors}
             fleets={props.fleets}
