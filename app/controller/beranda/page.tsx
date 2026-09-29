@@ -234,7 +234,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Semua Penugasan</span>
             <strong>{totalTasks}</strong>
-            <small>{percentage(totalTasks, totalAllActivities)}% dari semua aktivitas</small>
+            <small>Total penugasan</small>
           </div>
         </div>
 
