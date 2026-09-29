@@ -44,12 +44,12 @@ export async function submitNonTgrArrivalAction(
     .maybeSingle();
 
   if (!task || !task.external_departure_at)
-    return { error: "Tugas belum memiliki waktu keberangkatan." };
+    return { error: "Tugas ini belum punya waktu berangkat." };
   if (
     new Date(timestamp).getTime() <
     new Date(task.external_departure_at).getTime()
   )
-    return { error: "ATA tidak boleh lebih awal dari ATD." };
+    return { error: "ATA nggak boleh lebih awal dari ATD, ya." };
 
   const { error } = await admin
     .from("tasks")
@@ -60,7 +60,7 @@ export async function submitNonTgrArrivalAction(
     .eq("id", task.id)
     .eq("status", "Driving");
 
-  if (error) return { error: "Submit kedatangan belum berhasil." };
+  if (error) return { error: "Kedatangannya belum berhasil disimpan. Coba lagi, ya." };
 
   revalidatePaths();
   redirect("/dispatcher/armada-non-tgr");
