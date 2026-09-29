@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Poppins } from "next/font/google";
+import SessionActivity from "@/components/auth/session-activity";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,7 +24,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={poppins.className}>{children}</body>
+      <body className={poppins.className}>
+        <SessionActivity />
+        {children}
+      </body>
     </html>
   );
 }
