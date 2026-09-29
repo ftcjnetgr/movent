@@ -100,11 +100,12 @@ export async function createDispatcherTaskAction(
     return { error: "Kamu belum punya akses ke bagian ini." };
 
   const taskType = String(formData.get("taskType") ?? "");
-  const ownership = String(formData.get("fleetOwnership") ?? "");
 
-  if (taskType !== "Supply" || ownership !== DISPATCHER_FLEET_OWNERSHIP) {
+  if (taskType !== "Supply") {
     return { error: "Tugas baru dari Dispatcher sekarang khusus Armada TGR, ya." };
   }
+
+  const ownership = DISPATCHER_FLEET_OWNERSHIP;
 
   const admin = createAdminClient();
 
