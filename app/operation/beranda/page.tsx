@@ -74,7 +74,7 @@ export default async function OperationBerandaPage() {
             <strong>{completed ?? 0}</strong>
           </div>
           <div className="metric-card">
-            <span>Lagi jalan</span>
+            <span>Lagi Jalan</span>
             <strong>{(tasks?.length ?? 0) + (requested ?? 0)}</strong>
           </div>
         </div>
