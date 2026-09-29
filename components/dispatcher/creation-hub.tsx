@@ -75,7 +75,7 @@ export default function DispatcherCreationHub(props: Props) {
   return (
     <>
       {createOpen ? (
-        <div className="dispatcher-create-menu" role="menu">
+        <div className={"dispatcher-create-menu " + (createOpen ? "is-open" : "")} role="menu">
           <button
             type="button"
             className="dispatcher-create-menu-item"
