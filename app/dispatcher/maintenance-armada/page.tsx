@@ -1,21 +1,21 @@
-import DispatcherPerbaikanForm from "@/components/dispatcher/perbaikan-form";
+import DispatcherMaintenanceForm from "@/components/dispatcher/maintenance-form";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 
-export default async function DispatcherPerbaikanArmadaPage() {
+export default async function DispatcherMaintenanceArmadaPage() {
   const profile = await getCurrentProfile();
   const admin = createAdminClient();
   const [
-    { data: perbaikanLists },
+    { data: maintenanceLists },
     { data: locations },
     { data: fleets },
     { data: tickets },
   ] = await Promise.all([
     admin
-      .from("perbaikan_lists")
-      .select("perbaikan_list")
+      .from("maintenance_lists")
+      .select("maintenance_list")
       .eq("status", "Active")
-      .order("perbaikan_list"),
+      .order("maintenance_list"),
     admin
       .from("locations")
       .select("location")
@@ -30,7 +30,7 @@ export default async function DispatcherPerbaikanArmadaPage() {
       let query = admin
         .from("ticketings")
         .select(
-          "transaction_id, status, perbaikan_list, location, fleet_plat_number, created_at, created_by, cancellation_note",
+          "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note",
         )
         .order("created_at", { ascending: false })
         .limit(20);
@@ -48,9 +48,9 @@ export default async function DispatcherPerbaikanArmadaPage() {
           <p>Mau bikin perbaikan? Mulai dari sini, ya.</p>
         </div>
       </div>
-      <DispatcherPerbaikanForm
-        perbaikanLists={(perbaikanLists ?? []).map(
-          (item) => item.perbaikan_list,
+      <DispatcherMaintenanceForm
+        maintenanceLists={(maintenanceLists ?? []).map(
+          (item) => item.maintenance_list,
         )}
         locations={(locations ?? []).map((item) => item.location)}
         fleets={fleets ?? []}
