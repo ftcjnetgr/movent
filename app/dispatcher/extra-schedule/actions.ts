@@ -50,11 +50,11 @@ export async function confirmExtraScheduleRequestAction(
     .eq("id", task.id)
     .eq("status", "Requested");
 
-  if (error) return { error: "Permintaannya belum berhasil dikonfirmasi. Coba lagi, ya." };
+  if (error) return { error: "Permintaannya belum berhasil diterima. Coba lagi, ya." };
 
   revalidatePaths();
   return {
-    success: `Request ${transactionId} sudah dikonfirmasi. Pilih Executor dan Armada untuk melanjutkan.`,
+    success: `Request ${transactionId} udah diterima. Pilih Executor dan Armada buat lanjut, ya.`,
   };
 }
 
