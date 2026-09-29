@@ -76,7 +76,7 @@ export default async function ExecutorTugasSayaPage() {
             <strong>{drivingCount}</strong>
           </div>
           <div className="metric-card">
-            <span>Selesai</span>
+            <span>Udah Selesai</span>
             <strong>—</strong>
           </div>
           <div className="metric-card">
