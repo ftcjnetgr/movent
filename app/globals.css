@@ -7635,20 +7635,19 @@ td select:focus,
 }
 
 /* =========================================================
-   DASHBOARD SUBMENU LAYOUT — 3 SUMMARY / 2 SYSTEM
+   DASHBOARD SUBMENU LAYOUT — 4 STATUS / 2 SYSTEM
    ========================================================= */
 
-/* KPI cards stay 5 equal columns.
-   The activity panel spans the same visual width as 3 cards,
-   while system activity spans the same width as 2 cards. */
+/* Match the six-card summary row:
+   activity spans 4 status-card widths and system activity spans 2. */
 .super-dashboard-main-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
   gap: 16px !important;
   align-items: stretch !important;
 }
 
 .super-dashboard-main-grid .super-chart-panel {
-  grid-column: span 3 !important;
+  grid-column: span 4 !important;
   min-width: 0;
 }
 
@@ -7657,7 +7656,7 @@ td select:focus,
   min-width: 0;
 }
 
-/* make the two panels equal in vertical rhythm */
+/* Keep both panels in the same vertical rhythm. */
 .super-dashboard-main-grid .super-panel {
   min-height: 330px;
 }
