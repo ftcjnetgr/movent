@@ -135,6 +135,8 @@ export default async function ControllerPenugasanDashboardPage({
   const activities = activityResult.data ?? [];
   const tasks = sortByStatusAndTime(rawTasks);
 
+  const totalTasks = activities.length;
+
   const taskStatusCounts = {
     Assigned: activities.filter((task) => displayTaskStatus(task) === "Assigned")
       .length,
@@ -223,6 +225,17 @@ export default async function ControllerPenugasanDashboardPage({
       </div>
 
       <section className="super-kpi-grid assignment-kpi-grid">
+        <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-total-tasks">
+          <div className="super-kpi-icon">
+            <StatusIcon status="" size={20} />
+          </div>
+          <div className="super-kpi-content">
+            <span>Semua Penugasan</span>
+            <strong>{totalTasks}</strong>
+            <small>Total penugasan</small>
+          </div>
+        </div>
+
         <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-assigned">
           <div className="super-kpi-icon">
             <StatusIcon status="Assigned" size={20} />
@@ -242,17 +255,6 @@ export default async function ControllerPenugasanDashboardPage({
             <span>Udah Diterima</span>
             <strong>{taskStatusCounts.Confirmed}</strong>
             <small>{STATUS_SUBCOPY.Confirmed}</small>
-          </div>
-        </div>
-
-        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-ready">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Ready" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Siap Jalan</span>
-            <strong>{taskStatusCounts.Ready}</strong>
-            <small>{STATUS_SUBCOPY.Ready}</small>
           </div>
         </div>
 
