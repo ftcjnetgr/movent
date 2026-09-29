@@ -112,7 +112,7 @@ export default async function ControllerPenugasanDashboardPage({
     new Date(`${to}T00:00:00+07:00`).getTime() + 86400000,
   ).toISOString();
 
-  const [data, tasksResult, activityResult, totalTaskResult] =
+  const [data, tasksResult, activityResult] =
     await Promise.all([
       getDashboardData(profile, from, to),
       admin
@@ -127,13 +127,8 @@ export default async function ControllerPenugasanDashboardPage({
       admin
         .from("tasks")
         .select("status, task_type, fleet_ownership, sj_number, odometer_start, std, created_at")
-        .gte("std", rangeStart)
-        .lt("std", rangeEnd),
-      admin
-        .from("tasks")
-        .select("*", { count: "exact", head: true })
-        .gte("std", rangeStart)
-        .lt("std", rangeEnd),
+        .gte("created_at", rangeStart)
+        .lt("created_at", rangeEnd),
     ]);
 
   const rawTasks = tasksResult.data ?? [];
