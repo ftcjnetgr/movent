@@ -14019,3 +14019,75 @@ td select:focus,
 .role-dispatcher .dispatcher-selected-schedule-preview-grid strong {
   text-transform: none !important;
 }
+
+
+/* Dispatcher schedule preview — real popup */
+.role-dispatcher .dispatcher-schedule-preview-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 5000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  background: rgba(15, 23, 42, 0.42) !important;
+  backdrop-filter: blur(3px);
+}
+
+.role-dispatcher .dispatcher-schedule-preview-modal {
+  width: min(100%, 380px);
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(15,23,42,.2);
+}
+
+.role-dispatcher .dispatcher-schedule-preview-modal .dispatcher-schedule-preview-head {
+  margin: 0;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-close {
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-close:hover,
+.role-dispatcher .dispatcher-schedule-preview-close:active {
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-modal .dispatcher-schedule-preview-actions {
+  margin-top: 2px;
+}
+
+@media (max-width: 430px) {
+  .role-dispatcher .dispatcher-schedule-preview-backdrop {
+    align-items: flex-end !important;
+    padding: 10px !important;
+  }
+
+  .role-dispatcher .dispatcher-schedule-preview-modal {
+    width: 100%;
+    border-radius: 18px 18px 14px 14px;
+    padding: 15px;
+  }
+}
