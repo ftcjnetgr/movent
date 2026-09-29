@@ -11419,3 +11419,12 @@ td select:focus,
   background: #fffde6 !important;
   color: #C9C400 !important;
 }
+
+
+/* FINAL CHART LEGEND COLOR — match Assigned/Requested status cards */
+.bar-assigned,
+.legend-assigned,
+.bar-requested,
+.legend-requested {
+  background: #C9C400 !important;
+}
