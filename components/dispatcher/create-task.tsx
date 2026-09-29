@@ -161,8 +161,9 @@ export default function DispatcherCreateTask({
     function handleDispatcherBack(event: Event) {
       if (!assignmentStep) return;
       const customEvent = event as CustomEvent<{ handled?: boolean }>;
-      if (!customEvent.detail) customEvent.detail = {};
-      customEvent.detail.handled = true;
+      if (customEvent.detail) {
+        customEvent.detail.handled = true;
+      }
       setChosenSchedule(null);
       setScheduleId("");
       setAssignmentStep(false);
