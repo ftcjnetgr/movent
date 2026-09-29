@@ -10873,3 +10873,30 @@ td select:focus,
     grid-template-columns: 1fr;
   }
 }
+
+/* FINAL TAB COLOR STANDARD — inactive tabs follow sidebar muted gray */
+.schedule-route-tabs button:not(.active),
+.schedule-route-tabs-standalone button:not(.active),
+.dashboard-view-tabs a:not(.active),
+.alert-view-tabs a:not(.active),
+.schedule-day-row button:not(.active),
+.schedule-direction button:not(.active),
+.schedule-category-buttons button:not(.active),
+.schedule-point-tabs button:not(.active),
+.schedule-summary-inline button:not(.active) {
+  color: #718095 !important;
+}
+
+.dashboard-view-tabs a:not(.active),
+.alert-view-tabs a:not(.active),
+.schedule-route-tabs button:not(.active),
+.schedule-route-tabs-standalone button:not(.active) {
+  background: transparent !important;
+}
+
+.dashboard-view-tabs a:not(.active):hover,
+.alert-view-tabs a:not(.active):hover,
+.schedule-route-tabs button:not(.active):hover,
+.schedule-route-tabs-standalone button:not(.active):hover {
+  color: #5f6d80 !important;
+}
