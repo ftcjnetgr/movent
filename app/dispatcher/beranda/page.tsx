@@ -1,4 +1,5 @@
 import DispatcherCreationHub from "@/components/dispatcher/creation-hub";
+import DispatcherSummaryInteractive from "@/components/dispatcher/dispatcher-summary-interactive";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
@@ -14,6 +15,7 @@ export default async function DispatcherBerandaPage() {
     { data: products },
     { data: maintenanceLists },
     { data: tickets },
+    { data: allTickets },
   ] = await Promise.all([
     admin
       .from("locations")
@@ -55,10 +57,16 @@ export default async function DispatcherBerandaPage() {
       )
       .eq("created_by", profile.id)
       .order("created_at", { ascending: false }),
+    admin
+      .from("ticketings")
+      .select("transaction_id, status, location, fleet_plat_number, created_at")
+      .order("created_at", { ascending: false }),
   ]);
   const { data: dispatcherTasks } = await admin
     .from("tasks")
-    .select("status, fleet_ownership, created_by")
+    .select(
+      "transaction_id, task_type, source_type, status, fleet_ownership, created_by, start_point, destination, executor_snapshot, fleet_snapshot, external_executor, external_fleet",
+    )
     .or(`created_by.eq.${profile.id},fleet_ownership.eq.Non-TGR`);
 
   const taskStatusCounts = {
@@ -91,73 +99,45 @@ export default async function DispatcherBerandaPage() {
         tickets={tickets ?? []}
       />
 
-      <section className="data-table-card dispatcher-status-card">
-        <div className="section-heading">
-          <div>
-            <h2>Status Penugasan</h2>
-            <p>Semua penugasan yang bisa kamu pantau.</p>
-          </div>
-        </div>
-        {[
-          ["Semua Tugas", taskStatusCounts.total],
-          ["Udah Ditugasin", taskStatusCounts.assigned],
-          ["Udah Diterima", taskStatusCounts.confirmed],
-          ["Lagi Jalan", taskStatusCounts.driving],
-          ["Udah Selesai", taskStatusCounts.completed],
-          ["Dibatalin", taskStatusCounts.canceled],
-        ].map(([label, count]) => (
-          <div className="summary-bar-row" key={String(label)}>
-            <span>{label}</span>
-            <strong>{count}</strong>
-            <i>
-              <b
-                style={{
-                  width:
-                    taskStatusCounts.total > 0
-                      ? String(
-                          Math.min(
-                            100,
-                            (Number(count) / taskStatusCounts.total) * 100,
-                          ),
-                        ) + "%"
-                      : "0%",
-                }}
-              />
-            </i>
-          </div>
-        ))}
-      </section>
-
-      <section className="data-table-card dispatcher-ringkasan-card">
-        <div className="section-heading">
-          <div>
-            <h2>Ringkasan</h2>
-            <p>Biar gampang lihat prosesnya.</p>
-          </div>
-        </div>
-        {[
-          ["Supply (TGR)", data.taskCounts.Assigned ?? 0],
-          ["Supply (Non TGR)", data.taskCounts.Confirmed ?? 0],
-          ["Distribusi", data.taskCounts.Driving ?? 0],
-          [
-            "Perbaikan",
-            Object.values(data.ticketCounts).reduce((a, b) => a + b, 0),
-          ],
-          ["Jadwal Tambahan", 0],
-        ].map(([label, count]) => (
-          <div className="summary-bar-row" key={String(label)}>
-            <span>{label}</span>
-            <strong>{count}</strong>
-            <i>
-              <b
-                style={{
-                  width: String(Math.min(100, Number(count) * 8)) + "%",
-                }}
-              />
-            </i>
-          </div>
-        ))}
-      </section>
+      <DispatcherSummaryInteractive
+        tasks={(dispatcherTasks ?? []).map((task) => ({
+          transaction_id: task.transaction_id,
+          task_type: task.task_type,
+          source_type: task.source_type,
+          status: task.status,
+          fleet_ownership: task.fleet_ownership,
+          start_point: task.start_point,
+          destination: task.destination,
+          executor_snapshot: task.executor_snapshot,
+          fleet_snapshot: task.fleet_snapshot,
+          external_executor: task.external_executor,
+          external_fleet: task.external_fleet,
+        }))}
+        tickets={(allTickets ?? [])
+          .filter((ticket) => {
+            const date = new Intl.DateTimeFormat("en-CA", {
+              timeZone: "Asia/Jakarta",
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }).format(new Date());
+            const ticketDate = new Intl.DateTimeFormat("en-CA", {
+              timeZone: "Asia/Jakarta",
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }).format(new Date(ticket.created_at));
+            return ticketDate === date;
+          })
+          .map((ticket) => ({
+            transaction_id: ticket.transaction_id,
+            status: ticket.status,
+            location: ticket.location,
+            fleet_plat_number: ticket.fleet_plat_number,
+          }))}
+        statusCounts={taskStatusCounts}
+        ticketCount={Object.values(data.ticketCounts).reduce((a, b) => a + b, 0)}
+      />
     </div>
   );
 }
