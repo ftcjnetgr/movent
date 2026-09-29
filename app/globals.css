@@ -12153,3 +12153,133 @@ td select:focus,
     display: none !important;
   }
 }
+
+
+/* FINAL DISPATCHER MODE — dedicated mobile UI at every viewport */
+.role-dispatcher .sidebar {
+  display: none !important;
+}
+
+.role-dispatcher .sidebar-overlay,
+.role-dispatcher .mobile-menu {
+  display: none !important;
+}
+
+.role-dispatcher .app-content {
+  padding-bottom: 78px !important;
+}
+
+.role-dispatcher .page-content {
+  width: calc(100% - 20px) !important;
+  max-width: 1180px !important;
+  margin-inline: auto !important;
+  padding: 12px 0 22px !important;
+}
+
+.role-dispatcher .page-heading {
+  align-items: flex-start !important;
+  flex-direction: column !important;
+}
+
+.role-dispatcher .page-heading h1 {
+  font-size: 22px !important;
+}
+
+.role-dispatcher .dispatcher-summary-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.role-dispatcher .metric-grid,
+.role-dispatcher .dashboard-main-grid,
+.role-dispatcher .section-grid,
+.role-dispatcher .form-row,
+.role-dispatcher .task-summary-grid,
+.role-dispatcher .creation-choice-grid,
+.role-dispatcher .task-create-choice-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.role-dispatcher .creation-choice-grid,
+.role-dispatcher .task-create-choice-grid,
+.role-dispatcher .form-actions,
+.role-dispatcher .inline-actions {
+  display: grid !important;
+  gap: 12px !important;
+}
+
+.role-dispatcher .form-actions button,
+.role-dispatcher .inline-actions button {
+  width: 100% !important;
+  min-height: 42px !important;
+}
+
+.role-dispatcher .table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.role-dispatcher .table-wrap table {
+  min-width: 680px !important;
+}
+
+.role-dispatcher .topbar {
+  min-height: 58px !important;
+  padding: 8px 12px !important;
+  gap: 8px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+}
+
+.role-dispatcher .topbar-search {
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.role-dispatcher .topbar-search input {
+  min-height: 40px !important;
+}
+
+/* navbar is always rendered for Dispatcher */
+.role-dispatcher .dispatcher-mobile-navbar {
+  position: fixed !important;
+  left: 8px !important;
+  right: 8px !important;
+  bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  z-index: 1000 !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 3px !important;
+  padding: 7px 6px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 17px !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.16) !important;
+  backdrop-filter: blur(14px);
+}
+
+.role-dispatcher .dispatcher-mobile-more-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1001 !important;
+}
+
+.role-dispatcher .dispatcher-mobile-more-menu {
+  position: fixed !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: calc(77px + env(safe-area-inset-bottom)) !important;
+  z-index: 1002 !important;
+}
+
+.role-dispatcher .dispatcher-mobile-more-menu.is-open {
+  display: grid !important;
+}
+
+@media (max-width: 480px) {
+  .role-dispatcher .page-content {
+    width: calc(100% - 16px) !important;
+  }
+}
