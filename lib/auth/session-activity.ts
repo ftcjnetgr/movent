@@ -1,0 +1,4 @@
+export const SESSION_ACTIVITY_COOKIE = "movent_activity_at";
+export const SESSION_ACTIVITY_MAX_AGE_SECONDS = 60 * 60 * 6;
+export const SESSION_ACTIVITY_MAX_AGE_MS =
+  SESSION_ACTIVITY_MAX_AGE_SECONDS * 1000;
