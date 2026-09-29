@@ -104,7 +104,7 @@ export async function createDispatcherTaskAction(
     taskType === "Supply" &&
     ownership === "Non-TGR"
   ) {
-    return { error: "Tugas Supply Non-TGR dibuat oleh Operation." };
+    return { error: "Tugas Supply Non-TGR dibuat dari Operation, ya." };
   }
   const admin = createAdminClient();
 
@@ -121,7 +121,7 @@ export async function createDispatcherTaskAction(
       .eq("schedule_id", scheduleId)
       .eq("status", "Active")
       .maybeSingle();
-    if (!schedule) return { error: "Schedule tidak tersedia." };
+    if (!schedule) return { error: "Schedule-nya nggak tersedia." };
     if (!scheduleStdNotPassed(schedule.std))
       return {
         error: "Jadwalnya sudah lewat STD, jadi nggak bisa dipakai lagi, ya.",
@@ -202,11 +202,11 @@ export async function createDispatcherTaskAction(
       };
     const timestamps = [todayTimestamp(std), todayTimestamp(sta)];
     if (!timestamps[0] || !timestamps[1])
-      return { error: "STD atau STA belum benar." };
+      return { error: "STD atau STA belum benar. Cek lagi, ya." };
     if (
       new Date(timestamps[1]!).getTime() <= new Date(timestamps[0]!).getTime()
     )
-      return { error: "STA harus lebih besar dari STD." };
+      return { error: "STA harus setelah STD, ya." };
     const { executor, fleet } = await activeExecutorAndFleet(
       admin,
       executorNik,
@@ -240,7 +240,7 @@ export async function createDispatcherTaskAction(
   }
 
   if (taskType === "Supply" && ownership === "Non-TGR") {
-    return { error: "Tugas Supply Non-TGR dibuat oleh Operation." };
+    return { error: "Tugas Supply Non-TGR dibuat dari Operation, ya." };
   }
 
   return { error: "Jenis tugasnya belum lengkap. Coba cek lagi, ya." };
@@ -291,7 +291,7 @@ export async function confirmDispatcherTaskAction(
       .maybeSingle();
 
     if (!schedule) {
-      return { error: "Schedule tidak tersedia." };
+      return { error: "Schedule-nya nggak tersedia." };
     }
 
     if (!scheduleStdNotPassed(schedule.std)) {
@@ -304,18 +304,18 @@ export async function confirmDispatcherTaskAction(
     const sta = String(formData.get("sta") ?? "").trim();
 
     if (!std || !sta) {
-      return { error: "Waktu preview belum tersedia." };
+      return { error: "Waktu preview-nya belum tersedia." };
     }
 
     if (
       Number.isNaN(new Date(std).getTime()) ||
       Number.isNaN(new Date(sta).getTime())
     ) {
-      return { error: "Waktu preview belum benar." };
+      return { error: "Waktu preview-nya belum benar. Cek lagi, ya." };
     }
 
     if (new Date(sta).getTime() <= new Date(std).getTime()) {
-      return { error: "STA harus lebih besar dari STD." };
+      return { error: "STA harus setelah STD, ya." };
     }
 
     const { error } = await admin.from("tasks").insert({
@@ -366,11 +366,11 @@ export async function confirmDispatcherTaskAction(
     const ts2 = sta.includes("T") ? sta : todayTimestamp(sta);
 
     if (!startPoint || !destination || !ts1 || !ts2) {
-      return { error: "Data tugas belum lengkap." };
+      return { error: "Data tugasnya belum lengkap. Cek lagi, ya." };
     }
 
     if (new Date(ts2).getTime() <= new Date(ts1).getTime()) {
-      return { error: "STA harus lebih besar dari STD." };
+      return { error: "STA harus setelah STD, ya." };
     }
 
     const [{ data: startLocation }, { data: destinationLocation }] =
