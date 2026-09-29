@@ -238,7 +238,7 @@ export default async function ControllerPenugasanDashboardPage({
           </div>
         </div>
 
-        <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-assigned">
+        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-assigned">
           <div className="super-kpi-icon">
             <StatusIcon status="Assigned" size={20} />
           </div>
@@ -260,7 +260,7 @@ export default async function ControllerPenugasanDashboardPage({
           </div>
         </div>
 
-        <div className="super-kpi-card kpi-green status-kpi-card status-kpi-driving">
+        <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-driving">
           <div className="super-kpi-icon">
             <StatusIcon status="Driving" size={20} />
           </div>
