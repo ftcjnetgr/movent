@@ -170,7 +170,7 @@ export default async function DatabaseManagementPage({
               <input
                 name="q"
                 defaultValue={query}
-                placeholder="Ketik ID yang mau kamu cari"
+                placeholder="Ketik ID yang mau kamu cari, ya"
               />
             </label>
           </div>
@@ -179,7 +179,7 @@ export default async function DatabaseManagementPage({
       </section>
 
       <section className="database-management-actions section-block">
-        <DatabaseActionPreview title="Import banyak data">
+        <DatabaseActionPreview title="Mau import banyak data?">
           <p className="muted">
             Data dengan ID yang sama akan diperbarui, ID baru akan ditambahkan,
             dan data lain tetap aman.
