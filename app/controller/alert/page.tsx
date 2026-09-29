@@ -39,7 +39,7 @@ export default async function AlertPage({
             href="/controller/alert?view=maintenance"
             className={view === "maintenance" ? "active" : ""}
           >
-            Maintenance
+            Perbaikan
             {data.ticketAlerts.length > 0 ? (
               <span className="alert-tab-badge">
                 {data.ticketAlerts.length > 99
