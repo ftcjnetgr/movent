@@ -846,13 +846,20 @@ export default function AppShellClient({
           >
             ☰
           </button>
-          <div className="topbar-search">
-            <span className="search-icon">⌕</span>
-            <input
-              aria-label="Pencarian"
-              placeholder="Mau cari tugas, armada, atau lokasi?"
-            />
-          </div>
+          {currentRole === "Dispatcher" ? (
+            <div className="dispatcher-topbar-copy">
+              <strong>Halo, Dispatcher!</strong>
+              <span>Yuk, atur penugasan dan pastiin semua perjalanan jalan sesuai rencana.</span>
+            </div>
+          ) : (
+            <div className="topbar-search">
+              <span className="search-icon">⌕</span>
+              <input
+                aria-label="Pencarian"
+                placeholder="Mau cari tugas, armada, atau lokasi?"
+              />
+            </div>
+          )
           {isDashboardDateFilter ? (
             <form className="topbar-date-filter" method="get" action={pathname}>
               <label>
