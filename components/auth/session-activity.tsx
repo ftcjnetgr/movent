@@ -68,6 +68,11 @@ export default function SessionActivity() {
 
     function touchActivity() {
       const now = Date.now();
+      const activityAt = readActivityAt();
+      if (!activityAt || now - activityAt >= SESSION_ACTIVITY_MAX_AGE_MS) {
+        void expireSession();
+        return;
+      }
       if (now - lastWriteRef.current < 10000) return;
       lastWriteRef.current = now;
       writeActivityAt(now);
