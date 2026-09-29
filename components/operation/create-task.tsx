@@ -20,6 +20,8 @@ type Preview = {
   sta: string;
   externalExecutor: string;
   externalFleet: string;
+  executorNik: string;
+  platNumber: string;
   sjs: {
     sjNumber: string;
     sjQty: number;
