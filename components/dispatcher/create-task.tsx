@@ -48,6 +48,7 @@ export default function DispatcherCreateTask({
     initialState,
   );
   const [scheduleId, setScheduleId] = useState("");
+  const [route, setRoute] = useState("Interhub");
   const [chosenSchedule, setChosenSchedule] = useState<Schedule | null>(null);
   const [assignmentStep, setAssignmentStep] = useState(false);
   const [query, setQuery] = useState("");
@@ -55,9 +56,13 @@ export default function DispatcherCreateTask({
 
   const filteredSchedules = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    if (!needle) return schedules;
+    const routeFiltered = route
+      ? schedules.filter((schedule) => schedule.route === route)
+      : schedules;
 
-    return schedules.filter((schedule) =>
+    if (!needle) return routeFiltered;
+
+    return routeFiltered.filter((schedule) =>
       [
         schedule.schedule_id,
         schedule.start_point,
@@ -69,7 +74,7 @@ export default function DispatcherCreateTask({
         .toLowerCase()
         .includes(needle),
     );
-  }, [query, schedules]);
+  }, [query, route, schedules]);
 
   const groupedSchedules = useMemo(() => {
     const groups = new Map<string, Schedule[]>();
@@ -85,6 +90,19 @@ export default function DispatcherCreateTask({
       a[0].localeCompare(b[0], "id"),
     );
   }, [filteredSchedules]);
+  const routes = useMemo(() => {
+    const unique = [...new Set(schedules.map((item) => item.route).filter(Boolean))];
+    const order = ["Interhub", "Transit", "Direct"];
+    return unique.sort((a, b) => {
+      const ai = order.indexOf(a);
+      const bi = order.indexOf(b);
+      if (ai === -1 && bi === -1) return a.localeCompare(b);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
+  }, [schedules]);
+
 
   useEffect(() => {
     if (!query.trim()) {
@@ -235,13 +253,33 @@ export default function DispatcherCreateTask({
         ) : (
           <div className="dispatcher-schedule-step">
             <div className="dispatcher-schedule-picker">
-              <div className="dispatcher-schedule-toolbar">
+              <div className="dispatcher-route-tabs" role="tablist" aria-label="Rute">
+              {routes.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={route === item ? "active" : ""}
+                  onClick={() => {
+                    setRoute(item);
+                    setChosenSchedule(null);
+                    setScheduleId("");
+                    setAssignmentStep(false);
+                  }}
+                  role="tab"
+                  aria-selected={route === item}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            <div className="dispatcher-schedule-toolbar">
                 <div className="dispatcher-schedule-search">
                   <input
                     type="search"
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Cari ID, start point, destination, STD, atau STA..."
+                    placeholder="Cari ID, Start Point, Destination, STD, atau STA..."
                     aria-label="Cari schedule"
                   />
                 </div>
@@ -252,7 +290,7 @@ export default function DispatcherCreateTask({
               <div className="dispatcher-schedule-card-groups">
                 {!groupedSchedules.length ? (
                   <div className="empty-state">
-                    Schedule yang kamu cari belum ketemu.
+                    Jadwal yang kamu cari belum ketemu.
                   </div>
                 ) : null}
 
