@@ -11399,3 +11399,23 @@ td select:focus,
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+
+/* FINAL REQUESTED COLOR — queued/assigned status uses Xhantic yellow */
+.super-dashboard .status-kpi-assigned .super-kpi-icon,
+.super-dashboard .status-kpi-requested .super-kpi-icon {
+  background: #EEED09 !important;
+  color: #000 !important;
+  border-color: #EEED09 !important;
+}
+
+.super-dashboard .status-kpi-assigned,
+.super-dashboard .status-kpi-requested {
+  border-top-color: #EEED09 !important;
+}
+
+.status-badge.status-assigned,
+.status-badge.status-requested {
+  background: #EEED09 !important;
+  color: #000 !important;
+}
