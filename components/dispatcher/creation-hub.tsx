@@ -37,43 +37,23 @@ export default function DispatcherCreationHub(props: Props) {
 
   if (!choice) {
     return (
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <h2>Yuk, mulai proses baru</h2>
-            <p>
-              Pilih dulu proses yang mau dibuat. Setelah itu baru isi detailnya.
-            </p>
-          </div>
-        </div>
-        <div className="creation-choice-grid">
-          <button
-            type="button"
-            className="creation-choice-card"
-            onClick={() => setChoice("task")}
-          >
-            <span className="creation-choice-icon">▤</span>
-            <span>
-              <strong>Buat Penugasan</strong>
-              <small>
-                Pilih jenis penugasan, lalu lengkapi detail perjalanan.
-              </small>
-            </span>
-            <b>→</b>
-          </button>
-          <button
-            type="button"
-            className="creation-choice-card"
-            onClick={() => setChoice("ticket")}
-          >
-            <span className="creation-choice-icon">⌁</span>
-            <span>
-              <strong>Buat Perbaikan</strong>
-              <small>Pilih kebutuhan perbaikan, lokasi, dan armadanya, ya.</small>
-            </span>
-            <b>→</b>
-          </button>
-        </div>
+      <section className="dispatcher-create-actions" aria-label="Buat proses">
+        <button
+          type="button"
+          className="dispatcher-create-button"
+          onClick={() => setChoice("task")}
+        >
+          <span className="dispatcher-create-plus" aria-hidden="true">＋</span>
+          <span>Buat Penugasan</span>
+        </button>
+        <button
+          type="button"
+          className="dispatcher-create-button"
+          onClick={() => setChoice("ticket")}
+        >
+          <span className="dispatcher-create-plus" aria-hidden="true">＋</span>
+          <span>Buat Perbaikan</span>
+        </button>
       </section>
     );
   }
