@@ -54,11 +54,9 @@ export default function DispatcherCreationHub(props: Props) {
 
         {choice === "task" ? (
           <DispatcherCreateTask
-            locations={props.locations}
             schedules={props.schedules}
             executors={props.executors}
             fleets={props.fleets}
-            products={props.products}
           />
         ) : (
           <DispatcherMaintenanceForm
