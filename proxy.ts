@@ -1,5 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  SESSION_ACTIVITY_COOKIE,
+  SESSION_ACTIVITY_MAX_AGE_MS,
+} from "@/lib/auth/session-activity";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -30,15 +34,29 @@ export async function proxy(request: NextRequest) {
 
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
+  const isPublicAuthPath =
+    request.nextUrl.pathname.startsWith("/login") ||
+    request.nextUrl.pathname.startsWith("/auth");
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+  const activityAt = Number(
+    request.cookies.get(SESSION_ACTIVITY_COOKIE)?.value ?? "",
+  );
+  const activityExpired =
+    !Number.isFinite(activityAt) ||
+    Date.now() - activityAt >= SESSION_ACTIVITY_MAX_AGE_MS;
+
+  if (!user || (!isPublicAuthPath && activityExpired)) {
+    response.cookies.set(SESSION_ACTIVITY_COOKIE, "", {
+      maxAge: 0,
+      path: "/",
+    });
+
+    if (!isPublicAuthPath) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
   }
 
   return response;
