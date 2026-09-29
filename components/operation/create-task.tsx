@@ -6,9 +6,9 @@ import SearchableMasterSelect from "@/components/shared/forms/searchable-master-
 import StatusBadge from "@/components/shared/status-badge";
 import { STATUS_LABELS } from "@/components/shared/status-config";
 import {
-  createNonTgrSupplyAction,
-  confirmNonTgrDepartureByOperationAction,
-  confirmNonTgrSupplyAction,
+  createTgrSupplyAction,
+  confirmTgrDepartureByOperationAction,
+  confirmTgrSupplyAction,
 } from "@/app/operation/beranda/actions";
 
 type Option = { value: string; label: string; searchText?: string };
@@ -62,21 +62,25 @@ export default function OperationCreateTask({
   locations,
   products,
   tasks,
+  executors,
+  fleets,
 }: {
   locations: string[];
   products: string[];
   tasks: Task[];
+  executors: Array<{ executor_nik: string; full_name: string }>;
+  fleets: Array<{ plat_number: string; fleet_type: string }>;
 }) {
   const [state, formAction, pending] = useActionState(
-    createNonTgrSupplyAction,
+    createTgrSupplyAction,
     {},
   );
   const [confirmState, confirmAction, confirmPending] = useActionState(
-    confirmNonTgrSupplyAction,
+    confirmTgrSupplyAction,
     {},
   );
   const [departureState, departureAction, departurePending] = useActionState(
-    confirmNonTgrDepartureByOperationAction,
+    confirmTgrDepartureByOperationAction,
     {},
   );
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -86,6 +90,16 @@ export default function OperationCreateTask({
     value,
     label: value,
     searchText: value,
+  }));
+  const executorOptions: Option[] = executors.map((item) => ({
+    value: item.executor_nik,
+    label: item.executor_nik + " - " + item.full_name,
+    searchText: item.executor_nik + " " + item.full_name,
+  }));
+  const fleetOptions: Option[] = fleets.map((item) => ({
+    value: item.plat_number,
+    label: item.plat_number + " - " + item.fleet_type,
+    searchText: item.plat_number + " " + item.fleet_type,
   }));
   function sharePreview() {
     if (!state.preview) return;
@@ -159,7 +173,7 @@ export default function OperationCreateTask({
       <section className="metric-card">
         <div className="card-title">Yuk, buat tugas baru</div>
         <p className="muted">
-          Supply Armada Non TGR · isi data perjalanan dan Surat Jalan, lalu
+          Supply Armada TGR · isi data perjalanan dan Surat Jalan, lalu
           preview sebelum konfirmasi.
         </p>
         <form action={formAction} className="data-form compact-form">
@@ -190,24 +204,20 @@ export default function OperationCreateTask({
             </label>
           </div>
           <div className="form-row">
-            <label>
-              Nama Executor
-              <input name="executorName" required />
-            </label>
-            <label>
-              No. WhatsApp Executor
-              <input name="executorPhone" inputMode="tel" required />
-            </label>
-          </div>
-          <div className="form-row">
-            <label>
-              No. Plat Armada
-              <input name="fleetPlate" required />
-            </label>
-            <label>
-              Tipe Armada
-              <input name="fleetType" required />
-            </label>
+            <SearchableMasterSelect
+              label="Executor"
+              name="executorNik"
+              options={executorOptions}
+              placeholder="Pilih executor"
+              required
+            />
+            <SearchableMasterSelect
+              label="Armada TGR"
+              name="platNumber"
+              options={fleetOptions}
+              placeholder="Pilih armada TGR"
+              required
+            />
           </div>
           {sjRows.map((row) => (
             <div key={row} className="metric-card compact-form">
@@ -335,29 +345,13 @@ export default function OperationCreateTask({
               />
               <input
                 type="hidden"
-                name="executorName"
-                value={state.preview.externalExecutor.split(" · ")[0]}
+                name="executorNik"
+                value={state.preview.executorNik}
               />
               <input
                 type="hidden"
-                name="executorPhone"
-                value={state.preview.externalExecutor
-                  .split(" · ")
-                  .slice(1)
-                  .join(" · ")}
-              />
-              <input
-                type="hidden"
-                name="fleetPlate"
-                value={state.preview.externalFleet.split(" · ")[0]}
-              />
-              <input
-                type="hidden"
-                name="fleetType"
-                value={state.preview.externalFleet
-                  .split(" · ")
-                  .slice(1)
-                  .join(" · ")}
+                name="platNumber"
+                value={state.preview.platNumber}
               />
               {state.preview.sjs.map((sj, index) => (
                 <span key={index}>
@@ -415,7 +409,7 @@ export default function OperationCreateTask({
             <div className="task-card" key={task.transaction_id}>
               <div className="task-card-top">
                 <div>
-                  <span className="eyebrow">Supply Non-TGR</span>
+                  <span className="eyebrow">Supply TGR</span>
                   <h3>{task.transaction_id}</h3>
                 </div>
                 <StatusBadge status="Assigned" label={STATUS_LABELS.Assigned} />
@@ -468,7 +462,7 @@ export default function OperationCreateTask({
           ))}
           {tasks.length === 0 ? (
             <div className="empty-state">
-              Belum ada Supply Non-TGR yang nunggu berangkat.
+              Belum ada Supply TGR yang nunggu berangkat.
             </div>
           ) : null}
         </div>
