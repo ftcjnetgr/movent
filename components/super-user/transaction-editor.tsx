@@ -91,7 +91,7 @@ export function SuperUserTaskEditor({
     <details className="transaction-editor">
       <summary className="link-button">Mau ubah transaksi?</summary>
       {task.status === "Completed" ? (
-        <p className="muted">Transaksi yang sudah selesai nggak bisa diubah.</p>
+        <p className="muted">Transaksi yang udah selesai nggak bisa diubah, ya.</p>
       ) : (
         <form
           action={formAction}
@@ -325,7 +325,7 @@ export function SuperUserTaskEditor({
             </p>
           ) : null}
           <button type="submit" disabled={pending}>
-            {pending ? "Sedang menyimpan..." : "Simpan perubahan"}
+            {pending ? "Lagi nyimpen..." : "Simpan perubahan"}
           </button>
         </form>
       )}
@@ -401,7 +401,7 @@ export function SuperUserTicketEditor({
             </p>
           ) : null}
           <button type="submit" disabled={pending}>
-            {pending ? "Sedang menyimpan..." : "Simpan perubahan"}
+            {pending ? "Lagi nyimpen..." : "Simpan perubahan"}
           </button>
         </form>
       )}
