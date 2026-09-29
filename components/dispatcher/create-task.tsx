@@ -238,23 +238,25 @@ export default function DispatcherCreateTask({
                             onClick={() => selectSchedule(schedule)}
                             aria-pressed={schedule.schedule_id === scheduleId}
                           >
-                            <div className="dispatcher-schedule-card-top">
+                            <div className="dispatcher-schedule-card-cell schedule-id">
+                              <small>Schedule ID</small>
                               <strong>{schedule.schedule_id}</strong>
-                              <span>
-                                {timeLabel(schedule.std)} –{" "}
-                                {timeLabel(schedule.sta)}
-                              </span>
                             </div>
-                            <div className="dispatcher-schedule-card-route">
-                              <div>
-                                <small>Start Point</small>
-                                <strong>{schedule.start_point}</strong>
-                              </div>
-                              <span aria-hidden="true">→</span>
-                              <div>
-                                <small>Destination</small>
-                                <strong>{schedule.destination}</strong>
-                              </div>
+                            <div className="dispatcher-schedule-card-cell">
+                              <small>Start Point</small>
+                              <strong>{schedule.start_point}</strong>
+                            </div>
+                            <div className="dispatcher-schedule-card-cell">
+                              <small>Destination</small>
+                              <strong>{schedule.destination}</strong>
+                            </div>
+                            <div className="dispatcher-schedule-card-cell time">
+                              <small>STD</small>
+                              <strong>{timeLabel(schedule.std)}</strong>
+                            </div>
+                            <div className="dispatcher-schedule-card-cell time">
+                              <small>STA</small>
+                              <strong>{timeLabel(schedule.sta)}</strong>
                             </div>
                           </button>
                         ))}
