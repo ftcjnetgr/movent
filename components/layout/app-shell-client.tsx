@@ -537,6 +537,7 @@ export default function AppShellClient({
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openGroups, setOpenGroups] = useState<string[]>([]);
+  const [dispatcherMobileMoreOpen, setDispatcherMobileMoreOpen] = useState(false);
   const currentRole =
     Object.keys(modeRoutes).find((role) =>
       pathname.startsWith("/" + role.toLowerCase()),
@@ -617,6 +618,7 @@ export default function AppShellClient({
 
   useEffect(() => {
     setMobileOpen(false);
+    if (currentRole === "Dispatcher") setDispatcherMobileMoreOpen(false);
     setFilterFrom(queryFilterFrom);
     setFilterTo(queryFilterTo);
     const activeGroups = navGroups
@@ -885,6 +887,121 @@ export default function AppShellClient({
         </header>
         <section className="page-content">{children}</section>
       </main>
+
+      {currentRole === "Dispatcher" ? (
+        <>
+          {dispatcherMobileMoreOpen ? (
+            <div
+              className="dispatcher-mobile-more-backdrop"
+              onClick={() => setDispatcherMobileMoreOpen(false)}
+            />
+          ) : null}
+          <div
+            className={
+              "dispatcher-mobile-more-menu " +
+              (dispatcherMobileMoreOpen ? "is-open" : "")
+            }
+            aria-hidden={!dispatcherMobileMoreOpen}
+          >
+            <div className="dispatcher-mobile-more-head">
+              <strong>Lainnya</strong>
+              <button
+                type="button"
+                onClick={() => setDispatcherMobileMoreOpen(false)}
+                aria-label="Tutup menu lainnya"
+              >
+                ×
+              </button>
+            </div>
+            <Link
+              href="/dispatcher/maintenance-armada"
+              className={pathname.startsWith("/dispatcher/maintenance-armada") ? "active" : ""}
+              onClick={() => setDispatcherMobileMoreOpen(false)}
+            >
+              <span className="nav-icon"><Icon name="wrench" /></span>
+              <span>Perbaikan</span>
+            </Link>
+            <Link
+              href="/dispatcher/riwayat-penugasan"
+              className={pathname.startsWith("/dispatcher/riwayat-penugasan") ? "active" : ""}
+              onClick={() => setDispatcherMobileMoreOpen(false)}
+            >
+              <span className="nav-icon"><Icon name="clipboard" /></span>
+              <span>Penugasan</span>
+            </Link>
+            <Link
+              href="/dispatcher/profil"
+              className={pathname.startsWith("/dispatcher/profil") ? "active" : ""}
+              onClick={() => setDispatcherMobileMoreOpen(false)}
+            >
+              <span className="nav-icon"><Icon name="user" /></span>
+              <span>Atur akun</span>
+            </Link>
+            <button
+              type="button"
+              className="dispatcher-mobile-more-logout"
+              onClick={logout}
+            >
+              <span className="nav-icon"><Icon name="logout" /></span>
+              <span>Keluar dulu</span>
+            </button>
+          </div>
+
+          <nav className="dispatcher-mobile-navbar" aria-label="Navigasi mobile Dispatcher">
+            <Link
+              href="/dispatcher/beranda"
+              className={pathname === "/dispatcher/beranda" ? "active" : ""}
+            >
+              <span className="nav-icon"><Icon name="home" /></span>
+              <span>Beranda</span>
+            </Link>
+            <Link
+              href="/dispatcher/alert/penugasan"
+              className={
+                pathname.startsWith("/dispatcher/alert") ? "active dispatcher-mobile-nav-alert" : "dispatcher-mobile-nav-alert"
+              }
+            >
+              <span className="nav-icon nav-icon-with-badge">
+                <Icon name="bell" />
+                {alertCounts.task > 0 ? (
+                  <span className="dispatcher-mobile-nav-dot" aria-label="Ada notifikasi penugasan" />
+                ) : null}
+              </span>
+              <span>Info</span>
+            </Link>
+            <Link
+              href="/dispatcher/extra-schedule"
+              className={pathname.startsWith("/dispatcher/extra-schedule") ? "active" : ""}
+            >
+              <span className="nav-icon"><Icon name="calendar" /></span>
+              <span>Jadwal</span>
+            </Link>
+            <Link
+              href="/dispatcher/armada-non-tgr"
+              className={pathname.startsWith("/dispatcher/armada-non-tgr") ? "active" : ""}
+            >
+              <span className="nav-icon"><Icon name="truck" /></span>
+              <span>Armada</span>
+            </Link>
+            <button
+              type="button"
+              className={
+                dispatcherMobileMoreOpen ||
+                pathname.startsWith("/dispatcher/maintenance-armada") ||
+                pathname.startsWith("/dispatcher/riwayat-penugasan") ||
+                pathname.startsWith("/dispatcher/profil")
+                  ? "active"
+                  : ""
+              }
+              onClick={() => setDispatcherMobileMoreOpen((current) => !current)}
+              aria-expanded={dispatcherMobileMoreOpen}
+            >
+              <span className="nav-icon"><Icon name="settings" /></span>
+              <span>Lainnya</span>
+            </button>
+          </nav>
+        </>
+      ) : null
     </div>
   );
 }
