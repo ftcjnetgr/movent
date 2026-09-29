@@ -1,6 +1,7 @@
 import DispatcherCreationHub from "@/components/dispatcher/creation-hub";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
+import { getDashboardData } from "@/lib/server/dashboard";
 
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile();
@@ -55,15 +56,10 @@ export default async function DispatcherBerandaPage() {
       .eq("created_by", profile.id)
       .order("created_at", { ascending: false }),
   ]);
+  const data = await getDashboardData(profile);
+
   return (
     <div className="role-page">
-      <div className="page-heading">
-        <div>
-          <h1>Halo, Dispatcher!</h1>
-          <p>Yuk, atur penugasan dan pastiin semua perjalanan jalan sesuai rencana.</p>
-        </div>
-      </div>
-
       <DispatcherCreationHub
         locations={(locations ?? []).map((i) => i.location)}
         schedules={schedules ?? []}
@@ -76,6 +72,36 @@ export default async function DispatcherBerandaPage() {
         tickets={tickets ?? []}
       />
 
+      <section className="data-table-card dispatcher-ringkasan-card">
+        <div className="section-heading">
+          <div>
+            <h2>Ringkasan</h2>
+            <p>Biar gampang lihat prosesnya.</p>
+          </div>
+        </div>
+        {[
+          ["Supply (TGR)", data.taskCounts.Assigned ?? 0],
+          ["Supply (Non TGR)", data.taskCounts.Confirmed ?? 0],
+          ["Distribusi", data.taskCounts.Driving ?? 0],
+          [
+            "Perbaikan",
+            Object.values(data.ticketCounts).reduce((a, b) => a + b, 0),
+          ],
+          ["Jadwal Tambahan", 0],
+        ].map(([label, count]) => (
+          <div className="summary-bar-row" key={String(label)}>
+            <span>{label}</span>
+            <strong>{count}</strong>
+            <i>
+              <b
+                style={{
+                  width: String(Math.min(100, Number(count) * 8)) + "%",
+                }}
+              />
+            </i>
+          </div>
+        ))}
+      </section>
     </div>
   );
 }
