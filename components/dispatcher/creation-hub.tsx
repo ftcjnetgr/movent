@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DispatcherCreateTask from "@/components/dispatcher/create-task";
 import DispatcherMaintenanceForm from "@/components/dispatcher/maintenance-form";
 
 type Props = {
   locations: string[];
-  locationGroups: Array<{ location: string; grouping: string | null }>;
   schedules: Array<{
     schedule_id: string;
     route: string;
@@ -37,19 +36,32 @@ export default function DispatcherCreationHub(props: Props) {
   const [choice, setChoice] = useState<"task" | "ticket" | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
 
+  useEffect(() => {
+    function handleBack() {
+      setChoice(null);
+      setCreateOpen(false);
+    }
+
+    window.addEventListener("movent:dispatcher-back", handleBack);
+    window.dispatchEvent(
+      new CustomEvent("movent:dispatcher-create", {
+        detail: { active: Boolean(choice) },
+      }),
+    );
+
+    return () => {
+      window.removeEventListener("movent:dispatcher-back", handleBack);
+      window.dispatchEvent(
+        new CustomEvent("movent:dispatcher-create", {
+          detail: { active: false },
+        }),
+      );
+    };
+  }, [choice]);
+
   if (choice) {
     return (
       <section className="section-block dispatcher-create-flow">
-        <button
-          type="button"
-          className="dispatcher-back-button"
-          onClick={() => setChoice(null)}
-          aria-label="Kembali"
-          title="Kembali"
-        >
-          <span aria-hidden="true">←</span>
-        </button>
-
         {choice === "task" ? (
           <DispatcherCreateTask
             locationGroups={props.locationGroups}
