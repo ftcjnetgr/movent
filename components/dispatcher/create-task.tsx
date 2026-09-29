@@ -169,7 +169,13 @@ export default function DispatcherCreateTask({
 
     document.addEventListener("keydown", handleKeyDown);
 
-    return (
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [chosenSchedule, assignmentStep]);
+
+  return (
     <section className="dispatcher-task-screen">
       <div className="section-heading dispatcher-task-screen-heading">
         <div>
