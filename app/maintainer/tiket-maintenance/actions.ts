@@ -31,7 +31,7 @@ export async function acceptMaintenanceTicketAction(
 
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const { admin, ticket } = await findTicket(transactionId, ["Requested"]);
-  if (!ticket) return { error: "Tiket tidak ditemukan atau sudah diproses." };
+  if (!ticket) return { error: "Maintenance nggak ditemukan atau sudah diproses." };
 
   const { error } = await admin
     .from("ticketings")
@@ -43,11 +43,11 @@ export async function acceptMaintenanceTicketAction(
     .eq("id", ticket.id)
     .eq("status", "Requested");
 
-  if (error) return { error: "Konfirmasi menerima tiket belum berhasil." };
+  if (error) return { error: "Penerimaan maintenance belum berhasil. Coba lagi, ya." };
   revalidatePath("/maintainer/tiket-maintenance");
   revalidatePath("/dispatcher/maintenance-armada");
   revalidatePath("/controller/beranda");
-  return { success: "Tiket sudah diterima." };
+  return { success: "Maintenance udah diterima." };
 }
 
 export async function startMaintenanceAction(
@@ -58,9 +58,9 @@ export async function startMaintenanceAction(
     return { error: "Kamu belum punya akses ke bagian ini." };
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const { admin, ticket } = await findTicket(transactionId, ["Confirmed"]);
-  if (!ticket) return { error: "Tiket nggak ditemukan." };
+  if (!ticket) return { error: "Maintenance-nya nggak ditemukan." };
   if (profile.role !== "Super User" && ticket.maintainer_user_id !== profile.id)
-    return { error: "Tiket ini bukan tanggung jawab kamu." };
+    return { error: "Maintenance ini bukan tanggung jawab kamu." };
 
   const { error } = await admin
     .from("ticketings")
@@ -71,10 +71,10 @@ export async function startMaintenanceAction(
     .eq("id", ticket.id)
     .eq("status", "Confirmed");
 
-  if (error) return { error: "Pengerjaan maintenance belum berhasil dimulai." };
+  if (error) return { error: "Maintenance belum berhasil dimulai. Coba lagi, ya." };
   revalidatePath("/maintainer/tiket-maintenance");
   revalidatePath("/controller/beranda");
-  return { success: "Pengerjaan maintenance dimulai." };
+  return { success: "Maintenance mulai dikerjain." };
 }
 
 export async function completeMaintenanceAction(
@@ -85,11 +85,11 @@ export async function completeMaintenanceAction(
     return { error: "Kamu belum punya akses ke bagian ini." };
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const pic = String(formData.get("picMaintenance") ?? "").trim();
-  if (!pic) return { error: "Nama PIC Maintenance wajib dipilih." };
+  if (!pic) return { error: "Nama PIC maintenance perlu diisi dulu, ya." };
   const { admin, ticket } = await findTicket(transactionId, ["In Progress"]);
-  if (!ticket) return { error: "Tiket nggak ditemukan." };
+  if (!ticket) return { error: "Maintenance-nya nggak ditemukan." };
   if (profile.role !== "Super User" && ticket.maintainer_user_id !== profile.id)
-    return { error: "Tiket ini bukan tanggung jawab kamu." };
+    return { error: "Maintenance ini bukan tanggung jawab kamu." };
 
   const { error } = await admin
     .from("ticketings")
@@ -101,9 +101,9 @@ export async function completeMaintenanceAction(
     .eq("id", ticket.id)
     .eq("status", "In Progress");
 
-  if (error) return { error: "Maintenance belum berhasil diselesaikan." };
+  if (error) return { error: "Maintenance belum berhasil diselesaikan. Coba lagi, ya." };
   revalidatePath("/maintainer/tiket-maintenance");
   revalidatePath("/controller/beranda");
   revalidatePath("/dispatcher/beranda");
-  return { success: "Maintenance selesai." };
+  return { success: "Maintenance udah selesai." };
 }
