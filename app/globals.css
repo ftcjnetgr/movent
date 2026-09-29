@@ -11212,23 +11212,27 @@ td select:focus,
 }
 
 
-/* FINAL TIMETABLE FILTER LAYOUT — balanced controls, no cramped labels */
+/* FINAL TIMETABLE FILTER LAYOUT — top controls + full-width point detail */
 .schedule-filter-top {
-  grid-template-columns: minmax(240px, 1.6fr) minmax(360px, 3fr) minmax(260px, 1.8fr) !important;
+  grid-template-columns: minmax(220px, 1.25fr) minmax(180px, 1fr) minmax(420px, 3.7fr) !important;
   align-items: stretch;
 }
 
 .schedule-page .schedule-point-card,
-.schedule-page .schedule-control-field {
+.schedule-page .schedule-control-field,
+.schedule-page .schedule-point-detail-card {
   min-width: 0;
   padding: 12px !important;
+  border: 1px solid #dfe5ed;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: none;
 }
 
 .schedule-page .schedule-direction {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px !important;
-  margin-bottom: 8px;
 }
 
 .schedule-page .schedule-direction button {
@@ -11236,22 +11240,6 @@ td select:focus,
   width: 100%;
   min-height: 34px;
   padding: 7px 10px;
-}
-
-.schedule-page .schedule-point-tabs {
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  gap: 6px !important;
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 2px;
-  scrollbar-width: thin;
-}
-
-.schedule-page .schedule-point-tabs button {
-  flex: 0 0 auto !important;
-  min-width: 72px;
 }
 
 .schedule-page .schedule-category-buttons {
@@ -11266,7 +11254,7 @@ td select:focus,
 
 .schedule-page .schedule-day-row {
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px !important;
 }
 
@@ -11274,9 +11262,34 @@ td select:focus,
   width: 100%;
 }
 
+.schedule-page .schedule-point-detail-card {
+  width: 100%;
+}
+
+.schedule-page .schedule-point-detail-card .schedule-control-label {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.schedule-page .schedule-point-detail-card .schedule-point-tabs {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button {
+  flex: 0 0 auto !important;
+  min-width: 72px;
+}
+
 @media (max-width: 1100px) {
   .schedule-filter-top {
-    grid-template-columns: minmax(220px, 1.4fr) minmax(300px, 2fr) !important;
+    grid-template-columns: minmax(210px, 1.2fr) minmax(180px, 1fr) !important;
   }
 
   .schedule-day-field {
