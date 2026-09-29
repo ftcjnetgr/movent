@@ -12936,3 +12936,14 @@ td select:focus,
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Dispatcher app-like create flow: focus only on the active next section */
+.role-dispatcher .role-page:has(.dispatcher-create-flow) .dispatcher-status-card,
+.role-dispatcher .role-page:has(.dispatcher-create-flow) .dispatcher-ringkasan-card {
+  display: none !important;
+}
+
+.role-dispatcher .dispatcher-create-flow {
+  margin-top: 10px !important;
+}
