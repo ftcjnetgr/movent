@@ -56,7 +56,7 @@ export default function MaintainerMaintenanceTable({
     next.set("transactionId", transactionId);
     setMessage((current) => ({
       ...current,
-      [transactionId]: "Sedang diproses...",
+      [transactionId]: "Lagi diproses...",
     }));
     startTransition(async () => {
       const result = await action(next);
@@ -132,7 +132,7 @@ export default function MaintainerMaintenanceTable({
                         )
                       }
                     >
-                      Konfirmasi Pengajuan
+                      Terima maintenance
                     </button>
                   ) : null}
 
@@ -144,7 +144,7 @@ export default function MaintainerMaintenanceTable({
                         runAction(ticket.transaction_id, startMaintenanceAction)
                       }
                     >
-                      Mulai Pengerjaan
+                      Mulai kerjain
                     </button>
                   ) : null}
 
@@ -184,7 +184,7 @@ export default function MaintainerMaintenanceTable({
                         disabled={pending}
                         onClick={() => setPicFor(ticket.transaction_id)}
                       >
-                        Selesaikan Maintenance
+                        Selesaikan maintenance
                       </button>
                     )
                   ) : null}
