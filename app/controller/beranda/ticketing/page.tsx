@@ -55,7 +55,7 @@ export default async function ControllerTicketingDashboardPage({
     admin
       .from("ticketings")
       .select(
-        "transaction_id, status, perbaikan_list, fleet_plat_number, fleet_location, created_at",
+        "transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at",
       )
       .order("created_at", { ascending: false })
       .gte("created_at", rangeStart)
@@ -64,7 +64,7 @@ export default async function ControllerTicketingDashboardPage({
   ]);
 
   const tickets = [...(ticketResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
-  const totalPerbaikan = Object.values(data.ticketCounts).reduce(
+  const totalMaintenance = Object.values(data.ticketCounts).reduce(
     (total, count) => total + (count ?? 0),
     0,
   );
@@ -132,7 +132,7 @@ export default async function ControllerTicketingDashboardPage({
         </nav>
       </div>
 
-      <section className="super-kpi-grid perbaikan-kpi-grid">
+      <section className="super-kpi-grid maintenance-kpi-grid">
         <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-requested">
           <div className="super-kpi-icon">
             <StatusIcon status="Requested" size={20} />
@@ -178,7 +178,7 @@ export default async function ControllerTicketingDashboardPage({
         </div>
       </section>
 
-      <section className="super-dashboard-main-grid perbaikan-dashboard-main-grid">
+      <section className="super-dashboard-main-grid maintenance-dashboard-main-grid">
         <div className="super-panel super-chart-panel">
           <div className="super-panel-heading">
             <div>
@@ -303,7 +303,7 @@ export default async function ControllerTicketingDashboardPage({
                     <td>
                       <strong>{ticket.transaction_id}</strong>
                     </td>
-                    <td>{ticket.perbaikan_list ?? "-"}</td>
+                    <td>{ticket.maintenance_list ?? "-"}</td>
                     <td>{ticket.fleet_plat_number ?? "-"}</td>
                     <td>{ticket.fleet_location ?? "-"}</td>
                     <td>
