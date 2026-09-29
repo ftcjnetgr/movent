@@ -34,56 +34,82 @@ type Props = {
 
 export default function DispatcherCreationHub(props: Props) {
   const [choice, setChoice] = useState<"task" | "ticket" | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
+
+  if (choice) {
+    return (
+      <section className="section-block dispatcher-create-flow">
+        <div className="creation-flow-toolbar">
+          <div>
+            <strong>{choice === "task" ? "Penugasan" : "Perbaikan"}</strong>
+          </div>
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={() => setChoice(null)}
+          >
+            Kembali
+          </button>
+        </div>
+
+        {choice === "task" ? (
+          <DispatcherCreateTask
+            locations={props.locations}
+            schedules={props.schedules}
+            executors={props.executors}
+            fleets={props.fleets}
+            products={props.products}
+          />
+        ) : (
+          <DispatcherMaintenanceForm
+            maintenanceLists={props.maintenanceLists}
+            locations={props.locations}
+            fleets={props.fleets}
+            tickets={props.tickets}
+          />
+        )}
+      </section>
+    );
+  }
 
   return (
     <>
-      {choice ? (
-        <section className="section-block dispatcher-create-flow">
-          <div className="creation-flow-toolbar">
-            <div>
-              <strong>{choice === "task" ? "Penugasan" : "Perbaikan"}</strong>
-            </div>
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={() => setChoice(null)}
-            >
-              Kembali
-            </button>
-          </div>
-
-          {choice === "task" ? (
-            <DispatcherCreateTask
-              locations={props.locations}
-              schedules={props.schedules}
-              executors={props.executors}
-              fleets={props.fleets}
-              products={props.products}
-            />
-          ) : (
-            <DispatcherMaintenanceForm
-              maintenanceLists={props.maintenanceLists}
-              locations={props.locations}
-              fleets={props.fleets}
-              tickets={props.tickets}
-            />
-          )}
-        </section>
-      ) : (
-        <>
+      {createOpen ? (
+        <div className="dispatcher-create-menu" role="menu">
           <button
             type="button"
-            className="dispatcher-fab"
-            aria-label="Buat baru"
-            onClick={() =>
-              window.dispatchEvent(new CustomEvent("dispatcher:create-open"))
-            }
+            className="dispatcher-create-menu-item"
+            role="menuitem"
+            onClick={() => {
+              setCreateOpen(false);
+              setChoice("ticket");
+            }}
           >
-            <span aria-hidden="true">+</span>
+            Ajuin perbaikan
           </button>
-          <DispatcherCreateMenu onSelect={setChoice} />
-        </>
-      )}
+          <button
+            type="button"
+            className="dispatcher-create-menu-item"
+            role="menuitem"
+            onClick={() => {
+              setCreateOpen(false);
+              setChoice("task");
+            }}
+          >
+            Buat tugas baru
+          </button>
+        </div>
+      ) : null}
+
+      <button
+        type="button"
+        className={"dispatcher-fab" + (createOpen ? " is-open" : "")}
+        aria-label={createOpen ? "Tutup menu buat baru" : "Buat baru"}
+        aria-expanded={createOpen}
+        onClick={() => setCreateOpen((current) => !current)}
+      >
+        <span aria-hidden="true">+</span>
+      </button>
     </>
   );
 }
