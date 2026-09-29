@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { STATUS_LABELS } from "@/components/shared/status-config";
 
 type Option = { value: string; label: string };
@@ -165,6 +165,121 @@ function displayCellValue(key: string, value: string | null) {
     "In Progress": "Lagi Dikerjain",
   };
   return labels[value] ?? value;
+}
+
+function SearchableReportSelect({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: Option[];
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handleOutsideClick(event: MouseEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) setQuery("");
+  }, [open]);
+
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const filteredOptions = options.filter((item) =>
+    item.label.toLocaleLowerCase().includes(normalizedQuery),
+  );
+  const selectedLabel =
+    value === ""
+      ? "Semua"
+      : options.find((item) => item.value === value)?.label ?? "Semua";
+
+  return (
+    <label className="report-search-select-field">
+      {label}
+      <div className="report-search-select" ref={rootRef}>
+        <button
+          type="button"
+          className="report-search-select-trigger"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => setOpen((current) => !current)}
+        >
+          <span>{selectedLabel}</span>
+          <span className="report-search-select-chevron" aria-hidden="true">
+           ⌄
+          </span>
+        </button>
+        {open ? (
+          <div className="report-search-select-menu" role="listbox">
+            <div className="report-search-select-search-wrap">
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                onClick={(event) => event.stopPropagation()}
+                placeholder="Cari..."
+                aria-label={`Cari ${label.toLocaleLowerCase()}`}
+                autoFocus
+              />
+            </div>
+            <div className="report-search-select-options">
+              <button
+                type="button"
+                role="option"
+                aria-selected={value === ""}
+                className={
+                  "report-search-select-option " +
+                  (value === "" ? "is-selected" : "")
+                }
+                onClick={() => {
+                  onChange("");
+                  setOpen(false);
+                }}
+              >
+                Semua
+              </button>
+              {filteredOptions.map((item) => (
+                <button
+                  key={item.value}
+                  type="button"
+                  role="option"
+                  aria-selected={value === item.value}
+                  className={
+                    "report-search-select-option " +
+                    (value === item.value ? "is-selected" : "")
+                  }
+                  onClick={() => {
+                    onChange(item.value);
+                    setOpen(false);
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+              {!filteredOptions.length ? (
+                <div className="report-search-select-empty">Nggak ketemu.</div>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </label>
+  );
 }
 
 export default function ReportForm({
@@ -385,61 +500,37 @@ export default function ReportForm({
             />
           </label>
           {!maintenanceOnly ? (
-            <label>
-              Titik mulai
-              <select
-                value={startPoint}
-                onChange={(event) => {
-                  setStartPoint(event.target.value);
-                  invalidatePulledReport();
-                }}
-              >
-                <option value="">Semua</option>
-                {startPoints.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <SearchableReportSelect
+              label="Titik mulai"
+              value={startPoint}
+              options={startPoints}
+              onChange={(value) => {
+                setStartPoint(value);
+                invalidatePulledReport();
+              }}
+            />
           ) : null}
           {!maintenanceOnly ? (
-            <label>
-              Destinasi
-              <select
-                value={destination}
-                onChange={(event) => {
-                  setDestination(event.target.value);
-                  invalidatePulledReport();
-                }}
-              >
-                <option value="">Semua</option>
-                {destinations.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <SearchableReportSelect
+              label="Destinasi"
+              value={destination}
+              options={destinations}
+              onChange={(value) => {
+                setDestination(value);
+                invalidatePulledReport();
+              }}
+            />
           ) : null}
           {!maintenanceOnly ? (
-            <label>
-              Executor
-              <select
-                value={executorNik}
-                onChange={(event) => {
-                  setExecutorNik(event.target.value);
-                  invalidatePulledReport();
-                }}
-              >
-                <option value="">Semua</option>
-                {executors.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <SearchableReportSelect
+              label="Executor"
+              value={executorNik}
+              options={executors}
+              onChange={(value) => {
+                setExecutorNik(value);
+                invalidatePulledReport();
+              }}
+            />
           ) : null}
           <div className="report-filter-actions">
             <button
