@@ -328,6 +328,8 @@ export async function getDashboardData(
       ).length,
       Completed: ticketRows.filter((ticket) => ticket.status === "Completed")
         .length,
+      Canceled: ticketRows.filter((ticket) => ticket.status === "Canceled")
+        .length,
     },
     taskAlerts,
     ticketAlerts,
