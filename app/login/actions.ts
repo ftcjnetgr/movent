@@ -1,9 +1,14 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import {
+  SESSION_ACTIVITY_COOKIE,
+  SESSION_ACTIVITY_MAX_AGE_SECONDS,
+} from "@/lib/auth/session-activity";
 
 type LoginState = {
   error?: string;
@@ -136,6 +141,15 @@ export async function loginAction(
       failed_login_attempts: 0,
     })
     .eq("id", profile.id);
+
+  const cookieStore = await cookies();
+  cookieStore.set(SESSION_ACTIVITY_COOKIE, String(Date.now()), {
+    httpOnly: false,
+    maxAge: SESSION_ACTIVITY_MAX_AGE_SECONDS,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+  });
 
   if (profile.must_change_password) {
     redirect("/ganti-password?first=1");
