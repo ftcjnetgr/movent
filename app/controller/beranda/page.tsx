@@ -16,8 +16,13 @@ function isReadyToGo(task: {
   fleet_ownership: string | null;
   sj_number: string | null;
   odometer_start: number | null;
+  accepted_at: string | null;
 }) {
-  if (task.status !== "Confirmed" || task.odometer_start === null) return false;
+  if (
+    task.status !== "Confirmed" ||
+    !task.accepted_at ||
+    task.odometer_start === null
+  ) return false;
 
   if (task.task_type === "Supply" && task.fleet_ownership === "TGR") {
     return Boolean(task.sj_number);
@@ -32,6 +37,7 @@ function displayTaskStatus(task: {
   fleet_ownership: string | null;
   sj_number: string | null;
   odometer_start: number | null;
+  accepted_at: string | null;
 }) {
   return isReadyToGo(task) ? "Ready" : task.status;
 }
@@ -42,6 +48,7 @@ function sortByStatusAndTime<T extends {
   fleet_ownership: string | null;
   sj_number: string | null;
   odometer_start: number | null;
+  accepted_at: string | null;
   std: string | null;
   created_at: string;
 }>(rows: T[]) {
@@ -126,7 +133,7 @@ export default async function ControllerPenugasanDashboardPage({
         .limit(8),
       admin
         .from("tasks")
-        .select("status, task_type, fleet_ownership, sj_number, odometer_start, std, created_at")
+        .select("status, task_type, fleet_ownership, sj_number, odometer_start, accepted_at, std, created_at")
         .gte("created_at", rangeStart)
         .lt("created_at", rangeEnd),
     ]);
@@ -140,8 +147,9 @@ export default async function ControllerPenugasanDashboardPage({
   const taskStatusCounts = {
     Assigned: activities.filter((task) => displayTaskStatus(task) === "Assigned")
       .length,
-    Confirmed: activities.filter((task) => displayTaskStatus(task) === "Confirmed")
-      .length,
+    Confirmed: activities.filter(
+      (task) => task.status === "Confirmed" && Boolean(task.accepted_at),
+    ).length,
     Ready: activities.filter((task) => displayTaskStatus(task) === "Ready")
       .length,
     Driving: activities.filter((task) => displayTaskStatus(task) === "Driving")
