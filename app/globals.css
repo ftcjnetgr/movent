@@ -10883,7 +10883,8 @@ td select:focus,
 .schedule-direction button:not(.active),
 .schedule-category-buttons button:not(.active),
 .schedule-point-tabs button:not(.active),
-.schedule-summary-inline button:not(.active) {
+.schedule-summary-inline button:not(.active),
+.profile-settings-nav button:not(.active) {
   color: #718095 !important;
 }
 
