@@ -668,9 +668,29 @@ export default function TimetableView({
       <div className="schedule-control-compact">
         <div className="schedule-filter-top">
           <div className="schedule-point-card">
-            <span className="schedule-control-label">
-              {direction === "start-point" ? "Start Point" : "Destination"}
-            </span>
+            <span className="schedule-control-label">Titik Filter</span>
+            <div className="schedule-direction" aria-label="Pilih titik filter">
+              <button
+                type="button"
+                className={direction === "start-point" ? "active" : ""}
+                onClick={() => {
+                  setDirection("start-point");
+                  setPoint("");
+                }}
+              >
+                Start Point
+              </button>
+              <button
+                type="button"
+                className={direction === "destination" ? "active" : ""}
+                onClick={() => {
+                  setDirection("destination");
+                  setPoint("");
+                }}
+              >
+                Destination
+              </button>
+            </div>
             <div
               className="schedule-point-tabs"
               aria-label={
