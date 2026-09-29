@@ -391,7 +391,7 @@ export default function DashboardAlertList({
                   <tbody>
                     <tr className="alert-empty-row">
                       <td colSpan={9}>
-                        Tidak ada notifikasi penugasan saat ini.
+                        Belum ada notifikasi penugasan di sini.
                       </td>
                     </tr>
                   </tbody>
