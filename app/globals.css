@@ -13618,3 +13618,74 @@ td select:focus,
     right: max(24px, calc((100vw - 430px) / 2 + 18px)) !important;
   }
 }
+
+
+/* Dispatcher schedule cards — one horizontal row */
+.role-dispatcher .dispatcher-schedule-card {
+  grid-template-columns: 1.05fr 1.2fr 1.2fr .7fr .7fr !important;
+  align-items: center;
+  gap: 0 !important;
+  padding: 12px 10px !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card-cell {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+  padding: 0 8px;
+  border-right: 1px solid #edf1f5;
+}
+
+.role-dispatcher .dispatcher-schedule-card-cell:first-child {
+  padding-left: 0;
+}
+
+.role-dispatcher .dispatcher-schedule-card-cell:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.role-dispatcher .dispatcher-schedule-card-cell small {
+  color: #8d97a7;
+  font-size: 7px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.role-dispatcher .dispatcher-schedule-card-cell strong {
+  min-width: 0;
+  color: var(--text);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role-dispatcher .dispatcher-schedule-card-cell.time {
+  text-align: center;
+}
+
+.role-dispatcher .dispatcher-schedule-card.selected .dispatcher-schedule-card-cell strong {
+  color: var(--theme-color-dark);
+}
+
+@media (max-width: 430px) {
+  .role-dispatcher .dispatcher-schedule-card {
+    min-width: 100%;
+    grid-template-columns: 1.05fr 1.2fr 1.2fr .72fr .72fr !important;
+  }
+
+  .role-dispatcher .dispatcher-schedule-card-cell {
+    padding: 0 6px;
+  }
+
+  .role-dispatcher .dispatcher-schedule-card-cell small {
+    font-size: 6.5px;
+  }
+
+  .role-dispatcher .dispatcher-schedule-card-cell strong {
+    font-size: 8px;
+  }
+}
