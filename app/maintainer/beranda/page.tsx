@@ -152,7 +152,18 @@ export default async function MaintainerBerandaPage() {
             <strong>{data.ticketCounts.Completed ?? 0}</strong>
             <small>{STATUS_SUBCOPY.Completed}</small>
           </div>
-        </div>
+
+
+        <div className="super-kpi-card kpi-red status-kpi-card status-kpi-canceled">
+          <div className="super-kpi-icon">
+            <StatusIcon status="Canceled" size={20} />
+          </div>
+          <div className="super-kpi-content">
+            <span>Dibatalin</span>
+            <strong>{data.ticketCounts.Canceled ?? 0}</strong>
+            <small>{STATUS_SUBCOPY.Canceled}</small>
+          </div>
+        </div>        </div>
       </section>
 
       <section className="super-dashboard-main-grid maintenance-dashboard-main-grid">
