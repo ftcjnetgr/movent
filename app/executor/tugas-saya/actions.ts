@@ -136,7 +136,7 @@ export async function submitExtraScheduleSjAction(
       .delete()
       .eq("id", insertedSj.id)
       .eq("task_id", task.id);
-    return { error: "SJ belum berhasil disimpan. Coba lagi, ya. Silakan coba lagi." };
+    return { error: "SJ belum berhasil disimpan. Coba lagi, ya." };
   }
 
   revalidateExecutorPaths();
