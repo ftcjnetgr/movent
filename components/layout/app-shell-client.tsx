@@ -974,14 +974,14 @@ export default function AppShellClient({
               className={pathname.startsWith("/dispatcher/extra-schedule") ? "active" : ""}
             >
               <span className="nav-icon"><Icon name="calendar" /></span>
-              <span>Jadwal</span>
+              <span>Extra</span>
             </Link>
             <Link
               href="/dispatcher/armada-non-tgr"
               className={pathname.startsWith("/dispatcher/armada-non-tgr") ? "active" : ""}
             >
               <span className="nav-icon"><Icon name="truck" /></span>
-              <span>Armada</span>
+              <span>Non TGR</span>
             </Link>
             <button
               type="button"
