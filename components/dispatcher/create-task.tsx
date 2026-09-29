@@ -35,7 +35,6 @@ function timeLabel(value: string) {
 }
 
 export default function DispatcherCreateTask({
-  locationGroups,
   schedules,
   executors,
   fleets,
