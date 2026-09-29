@@ -12687,3 +12687,10 @@ td select:focus,
     right: 14px !important;
   }
 }
+
+
+.role-dispatcher .dispatcher-fab:has(+ .dispatcher-create-menu.is-open) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.9) !important;
+}
