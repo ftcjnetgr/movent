@@ -538,6 +538,7 @@ export default function AppShellClient({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openGroups, setOpenGroups] = useState<string[]>([]);
   const [dispatcherMobileMoreOpen, setDispatcherMobileMoreOpen] = useState(false);
+  const [dispatcherCreateActive, setDispatcherCreateActive] = useState(false);
   const currentRole =
     Object.keys(modeRoutes).find((role) =>
       pathname.startsWith("/" + role.toLowerCase()),
@@ -615,6 +616,20 @@ export default function AppShellClient({
   const isItemActive = (item: NavItem) => activeItem?.href === item.href;
   const searchKey = searchParams.toString();
   const currentUrl = searchKey ? `${pathname}?${searchKey}` : pathname;
+
+  useEffect(() => {
+    if (currentRole !== "Dispatcher") return;
+
+    function onCreateState(event: Event) {
+      const customEvent = event as CustomEvent<{ active?: boolean }>;
+      setDispatcherCreateActive(Boolean(customEvent.detail?.active));
+    }
+
+    window.addEventListener("movent:dispatcher-create", onCreateState);
+    return () => {
+      window.removeEventListener("movent:dispatcher-create", onCreateState);
+    };
+  }, [currentRole]);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -847,10 +862,25 @@ export default function AppShellClient({
             ☰
           </button>
           {currentRole === "Dispatcher" ? (
-            <div className="dispatcher-topbar-copy">
-              <strong>Halo, Dispatcher!</strong>
-              <span>Yuk, atur penugasan dan pastiin semua perjalanan jalan sesuai rencana.</span>
-            </div>
+            <>
+              <div className="dispatcher-topbar-copy">
+                <strong>Halo, Dispatcher!</strong>
+                <span>Yuk, atur penugasan dan pastiin semua perjalanan jalan sesuai rencana.</span>
+              </div>
+              {dispatcherCreateActive ? (
+                <button
+                  type="button"
+                  className="dispatcher-header-back-button"
+                  aria-label="Kembali"
+                  title="Kembali"
+                  onClick={() =>
+                    window.dispatchEvent(new CustomEvent("movent:dispatcher-back"))
+                  }
+                >
+                  <span aria-hidden="true">←</span>
+                </button>
+              ) : null}
+            </>
           ) : (
             <div className="topbar-search">
               <span className="search-icon">⌕</span>
