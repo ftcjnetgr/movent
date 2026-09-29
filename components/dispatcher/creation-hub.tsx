@@ -6,6 +6,7 @@ import DispatcherMaintenanceForm from "@/components/dispatcher/maintenance-form"
 
 type Props = {
   locations: string[];
+  locationGroups: Array<{ location: string; grouping: string | null }>;
   schedules: Array<{
     schedule_id: string;
     route: string;
@@ -40,20 +41,21 @@ export default function DispatcherCreationHub(props: Props) {
     return (
       <section className="section-block dispatcher-create-flow">
         <div className="creation-flow-toolbar">
-          <div>
-            <strong>{choice === "task" ? "Penugasan" : "Perbaikan"}</strong>
-          </div>
+          <strong>Dispatcher</strong>
           <button
             type="button"
-            className="secondary-button"
+            className="dispatcher-back-button"
             onClick={() => setChoice(null)}
+            aria-label="Kembali"
+            title="Kembali"
           >
-            Kembali
+            <span aria-hidden="true">←</span>
           </button>
         </div>
 
         {choice === "task" ? (
           <DispatcherCreateTask
+            locationGroups={props.locationGroups}
             schedules={props.schedules}
             executors={props.executors}
             fleets={props.fleets}
