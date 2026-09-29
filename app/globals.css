@@ -11098,3 +11098,115 @@ td select:focus,
 .legend-completed { background: #7c3aed !important; }
 .bar-canceled,
 .legend-canceled { background: #dc2626 !important; }
+
+
+/* FINAL STATUS STANDARD — shared across Penugasan & Perbaikan */
+.status-kpi-total-tasks .super-kpi-icon,
+.status-kpi-total-maintenance .super-kpi-icon {
+  background: #f1eaff !important;
+  color: #7c3aed !important;
+}
+.super-dashboard .status-kpi-total-tasks,
+.super-dashboard .status-kpi-total-maintenance {
+  border-top-color: #7c3aed !important;
+}
+
+.status-kpi-assigned .super-kpi-icon {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+}
+.status-badge.status-assigned {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+}
+.super-dashboard .status-kpi-assigned {
+  border-top-color: #64748b !important;
+}
+
+.status-kpi-confirmed .super-kpi-icon {
+  background: #fff7ed !important;
+  color: #f97316 !important;
+}
+.status-badge.status-confirmed {
+  background: #fff7ed !important;
+  color: #f97316 !important;
+}
+.super-dashboard .status-kpi-confirmed {
+  border-top-color: #f97316 !important;
+}
+
+.status-kpi-driving .super-kpi-icon {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.status-badge.status-driving {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.super-dashboard .status-kpi-driving {
+  border-top-color: #2563eb !important;
+}
+
+.status-kpi-in-progress .super-kpi-icon {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.status-badge.status-in-progress {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.super-dashboard .status-kpi-in-progress {
+  border-top-color: #2563eb !important;
+}
+
+.status-kpi-completed .super-kpi-icon {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+}
+.status-badge.status-completed {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+}
+.super-dashboard .status-kpi-completed {
+  border-top-color: #16a34a !important;
+}
+
+.status-kpi-canceled .super-kpi-icon {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+.status-badge.status-canceled {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+.super-dashboard .status-kpi-canceled {
+  border-top-color: #dc2626 !important;
+}
+
+/* Charts + legends use exactly the same status palette */
+.bar-assigned,
+.legend-assigned {
+  background: #64748b !important;
+}
+.bar-confirmed,
+.legend-confirmed {
+  background: #f97316 !important;
+}
+.bar-driving,
+.legend-driving,
+.bar-in-progress,
+.legend-in-progress {
+  background: #2563eb !important;
+}
+.bar-completed,
+.legend-completed {
+  background: #16a34a !important;
+}
+.bar-canceled,
+.legend-canceled {
+  background: #dc2626 !important;
+}
+.bar-requested,
+.legend-requested {
+  background: #2563eb !important;
+}
