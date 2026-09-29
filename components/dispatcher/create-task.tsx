@@ -188,7 +188,7 @@ export default function DispatcherCreateTask({
                   className="dispatcher-schedule-change-button"
                   onClick={chooseAnotherSchedule}
                 >
-                  Pilih jadwal lain
+                  Cari jadwal lain
                 </button>
               </div>
 
@@ -391,7 +391,7 @@ export default function DispatcherCreateTask({
 
                   <div className="dispatcher-schedule-preview-actions">
                     <button type="button" onClick={useChosenSchedule}>
-                      Pakai jadwal ini
+                      Pilih jadwal ini
                     </button>
                     <button
                       type="button"
