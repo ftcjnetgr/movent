@@ -8,7 +8,7 @@ type Result = { error?: string; success?: string };
 
 async function requireSuperUser() {
   const profile = await getCurrentProfile();
-  if (profile.role !== "Super User") throw new Error("Akses tidak tersedia.");
+  if (profile.role !== "Super User") throw new Error("Kamu belum punya akses ke bagian ini.");
   return profile;
 }
 
@@ -31,11 +31,11 @@ export async function updateTaskTransactionAction(
   try {
     await requireSuperUser();
   } catch {
-    return { error: "Akses tidak tersedia." };
+    return { error: "Kamu belum punya akses ke bagian ini." };
   }
 
   const transactionId = String(formData.get("transactionId") ?? "").trim();
-  if (!transactionId) return { error: "Transaction ID wajib diisi." };
+  if (!transactionId) return { error: "ID transaksi perlu diisi dulu, ya." };
 
   const admin = createAdminClient();
   const { data: task } = await admin
@@ -43,20 +43,20 @@ export async function updateTaskTransactionAction(
     .select("*")
     .eq("transaction_id", transactionId)
     .maybeSingle();
-  if (!task) return { error: "Tugas tidak ditemukan." };
+  if (!task) return { error: "Tugasnya nggak ditemukan." };
 
   const update: Record<string, unknown> = {};
 
   if (task.schedule_id) {
     const scheduleId = String(formData.get("scheduleId") ?? "").trim();
-    if (!scheduleId) return { error: "Schedule wajib diisi." };
+    if (!scheduleId) return { error: "Schedule perlu dipilih dulu, ya." };
     const { data: schedule } = await admin
       .from("schedules")
       .select("*")
       .eq("schedule_id", scheduleId)
       .eq("status", "Active")
       .maybeSingle();
-    if (!schedule) return { error: "Schedule tidak tersedia." };
+    if (!schedule) return { error: "Schedule-nya nggak tersedia." };
     const date = new Intl.DateTimeFormat("en-CA", {
       timeZone: "Asia/Jakarta",
       year: "numeric",
@@ -77,10 +77,10 @@ export async function updateTaskTransactionAction(
     const std = text(formData, "std");
     const sta = text(formData, "sta");
     if (!update.start_point || !update.destination || !std || !sta)
-      return { error: "Titik Mulai, Destinasi, STD, dan STA wajib diisi." };
+      return { error: "Titik mulai, destinasi, STD, dan STA perlu diisi dulu, ya." };
     if (!/^\d{2}:\d{2}$/.test(std) || !/^\d{2}:\d{2}$/.test(sta))
-      return { error: "STD atau STA belum benar." };
-    if (sta <= std) return { error: "STA harus lebih besar dari STD." };
+      return { error: "STD atau STA belum benar. Cek lagi, ya." };
+    if (sta <= std) return { error: "STA harus setelah STD, ya." };
   }
 
   if (task.fleet_ownership === "Non-TGR") {
@@ -90,7 +90,7 @@ export async function updateTaskTransactionAction(
     const executorNik = text(formData, "executorNik");
     const platNumber = text(formData, "platNumber");
     if (!executorNik || !platNumber)
-      return { error: "Executor dan Armada wajib diisi." };
+      return { error: "Executor dan armada perlu diisi dulu, ya." };
     const [{ data: executor }, { data: fleet }] = await Promise.all([
       admin
         .from("executors")
@@ -105,8 +105,8 @@ export async function updateTaskTransactionAction(
         .eq("status", "Active")
         .maybeSingle(),
     ]);
-    if (!executor) return { error: "Executor tidak tersedia." };
-    if (!fleet) return { error: "Armada tidak tersedia." };
+    if (!executor) return { error: "Executor-nya nggak tersedia." };
+    if (!fleet) return { error: "Armadanya nggak tersedia." };
     update.executor_nik = executor.executor_nik;
     update.executor_snapshot = executor;
     update.fleet_snapshot = fleet;
@@ -143,9 +143,9 @@ export async function updateTaskTransactionAction(
     try {
       sjItems = JSON.parse(sjItemsRaw);
     } catch {
-      return { error: "Data SJ tidak valid." };
+      return { error: "Data SJ-nya nggak valid." };
     }
-    if (!Array.isArray(sjItems)) return { error: "Data SJ tidak valid." };
+    if (!Array.isArray(sjItems)) return { error: "Data SJ-nya nggak valid." };
 
     const validatedSjItems: NonNullable<typeof sjItems> = [];
     for (const item of sjItems) {
@@ -157,7 +157,7 @@ export async function updateTaskTransactionAction(
         Number(item.sj_weight) < 0 ||
         !item.product
       ) {
-        return { error: "Data SJ belum lengkap." };
+        return { error: "Data SJ-nya belum lengkap. Cek lagi, ya." };
       }
       const { data: productData } = await admin
         .from("products")
@@ -165,7 +165,7 @@ export async function updateTaskTransactionAction(
         .eq("product", item.product)
         .eq("status", "Active")
         .maybeSingle();
-      if (!productData) return { error: "Produk SJ tidak tersedia." };
+      if (!productData) return { error: "Produk SJ-nya nggak tersedia." };
       validatedSjItems.push({
         ...(item.id ? { id: item.id } : {}),
         sj_number: item.sj_number.trim(),
@@ -201,7 +201,7 @@ export async function updateTaskTransactionAction(
       .eq("product", product)
       .eq("status", "Active")
       .maybeSingle();
-    if (!productData) return { error: "Produk tidak tersedia." };
+    if (!productData) return { error: "Produknya nggak tersedia." };
     update.product = product;
     update.product_snapshot = productData;
   } else if (!sjItemsRaw) {
@@ -217,7 +217,7 @@ export async function updateTaskTransactionAction(
     odometerEnd < odometerStart
   )
     return {
-      error: "Odometer Akhir tidak boleh lebih kecil dari Odometer Awal.",
+      error: "Odometer akhir nggak boleh lebih kecil dari odometer awal, ya.",
     };
 
   const { error } = await admin.rpc("movent_update_task_transaction", {
@@ -226,10 +226,10 @@ export async function updateTaskTransactionAction(
     p_sj_items: sjItems,
   });
   if (error)
-    return { error: error.message || "Data tugas belum berhasil diperbarui." };
+    return { error: error.message || "Data tugas belum berhasil diperbarui. Coba lagi, ya." };
 
   revalidateTaskPaths();
-  return { success: "Data tugas berhasil diperbarui." };
+  return { success: "Data tugas sudah diperbarui." };
 }
 
 export async function updateTicketTransactionAction(
@@ -239,7 +239,7 @@ export async function updateTicketTransactionAction(
   try {
     await requireSuperUser();
   } catch {
-    return { error: "Akses tidak tersedia." };
+    return { error: "Kamu belum punya akses ke bagian ini." };
   }
 
   const transactionId = String(formData.get("transactionId") ?? "").trim();
@@ -247,7 +247,7 @@ export async function updateTicketTransactionAction(
   const location = text(formData, "location");
   const platNumber = text(formData, "platNumber");
   if (!transactionId || !maintenanceList || !location || !platNumber)
-    return { error: "Data ticketing wajib lengkap." };
+    return { error: "Data maintenance perlu dilengkapi dulu, ya." };
 
   const admin = createAdminClient();
   const { data: ticket } = await admin
@@ -255,7 +255,7 @@ export async function updateTicketTransactionAction(
     .select("id, status")
     .eq("transaction_id", transactionId)
     .maybeSingle();
-  if (!ticket) return { error: "Ticketing tidak ditemukan." };
+  if (!ticket) return { error: "Maintenance-nya nggak ditemukan." };
 
   const [{ data: maintenance }, { data: locationData }, { data: fleet }] =
     await Promise.all([
@@ -279,7 +279,7 @@ export async function updateTicketTransactionAction(
         .maybeSingle(),
     ]);
   if (!maintenance || !locationData || !fleet)
-    return { error: "Master data ticketing tidak tersedia." };
+    return { error: "Master data maintenance-nya nggak tersedia." };
 
   const { error } = await admin.rpc("movent_update_ticket_transaction", {
     p_ticket_id: ticket.id,
@@ -292,14 +292,14 @@ export async function updateTicketTransactionAction(
   });
   if (error)
     return {
-      error: error.message || "Data ticketing belum berhasil diperbarui.",
+      error: error.message || "Data maintenance belum berhasil diperbarui. Coba lagi, ya.",
     };
 
   revalidatePath("/super-user/pengelolaan-transaksi");
   revalidatePath("/dispatcher/maintenance-armada");
   revalidatePath("/maintainer/tiket-maintenance");
   revalidatePath("/controller/beranda");
-  return { success: "Data ticketing berhasil diperbarui." };
+  return { success: "Data maintenance sudah diperbarui." };
 }
 
 function revalidateTaskPaths() {
