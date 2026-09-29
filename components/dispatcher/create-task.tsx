@@ -113,23 +113,6 @@ export default function DispatcherCreateTask({
     setOpenGroups(new Set(groupedSchedules.map(([group]) => group)));
   }, [groupedSchedules, query]);
 
-  const scheduleOptions = schedules.map((schedule) => ({
-    value: schedule.schedule_id,
-    label:
-      schedule.schedule_id +
-      " • " +
-      schedule.start_point +
-      " → " +
-      schedule.destination,
-    searchText: [
-      schedule.schedule_id,
-      schedule.start_point,
-      schedule.destination,
-      schedule.std,
-      schedule.sta,
-    ].join(" "),
-  }));
-
   const executorOptions = executors.map((executor) => ({
     value: executor.executor_nik,
     label: executor.executor_nik + " - " + executor.full_name,
