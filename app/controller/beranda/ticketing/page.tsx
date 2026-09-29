@@ -232,7 +232,7 @@ export default async function ControllerTicketingDashboardPage({
               <span><i className="legend-confirmed" /> Udah Diterima</span>
               <span><i className="legend-in-progress" /> Lagi Dikerjain</span>
               <span><i className="legend-completed" /> Udah Selesai</span>
-
+              <span><i className="legend-canceled" /> Dibatalin</span>
             </div>
           </div>
           <div className="super-chart">
@@ -275,6 +275,14 @@ export default async function ControllerTicketingDashboardPage({
                         className="bar-completed"
                         style={{
                           height: String((item.completed / maxHour) * 100) + "%",
+                        }}
+                      />
+                    ) : null}
+                    {item.canceled > 0 ? (
+                      <span
+                        className="bar-canceled"
+                        style={{
+                          height: String((item.canceled / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
