@@ -76,7 +76,7 @@ export default async function UserManagementPage() {
       </div>
 
       <section className="user-management-actions section-block">
-        <DatabaseActionPreview title="Tambah dari file">
+        <DatabaseActionPreview title="Mau tambah dari file?">
           <p className="muted">
             Isi file dengan kolom wajib: username, email, NIK, nama lengkap, dan
             role. Nomor telepon serta status boleh diisi kalau ada.
