@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DispatcherCreateTask from "@/components/dispatcher/create-task";
 import DispatcherMaintenanceForm from "@/components/dispatcher/maintenance-form";
 
@@ -32,62 +32,148 @@ type Props = {
   }>;
 };
 
+function DispatcherCreateMenu({
+  onSelect,
+}: {
+  onSelect: (choice: "task" | "ticket") => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    function handleOpen() {
+      setOpen(true);
+    }
+
+    window.addEventListener("dispatcher:create-open", handleOpen);
+    return () =>
+      window.removeEventListener("dispatcher:create-open", handleOpen);
+  }, []);
+
+  useEffect(() => {
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+
+    if (open) {
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }
+  }, [open]);
+
+  return (
+    <>
+      {open ? (
+        <button
+          type="button"
+          className="dispatcher-create-backdrop"
+          aria-label="Tutup menu buat baru"
+          onClick={() => setOpen(false)}
+        />
+      ) : null}
+
+      <aside
+        className={
+          "dispatcher-create-menu " + (open ? "is-open" : "")
+        }
+        aria-hidden={!open}
+      >
+        <div className="dispatcher-create-menu-head">
+          <strong>Buat baru</strong>
+          <button
+            type="button"
+            aria-label="Tutup"
+            onClick={() => setOpen(false)}
+          >
+            ×
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className="dispatcher-create-menu-item"
+          onClick={() => {
+            setOpen(false);
+            onSelect("task");
+          }}
+        >
+          <span className="dispatcher-create-menu-plus">+</span>
+          <span>
+            <strong>Penugasan</strong>
+            <small>Buat penugasan baru</small>
+          </span>
+        </button>
+
+        <button
+          type="button"
+          className="dispatcher-create-menu-item"
+          onClick={() => {
+            setOpen(false);
+            onSelect("ticket");
+          }}
+        >
+          <span className="dispatcher-create-menu-plus">+</span>
+          <span>
+            <strong>Perbaikan</strong>
+            <small>Buat perbaikan baru</small>
+          </span>
+        </button>
+      </aside>
+    </>
+  );
+}
+
 export default function DispatcherCreationHub(props: Props) {
   const [choice, setChoice] = useState<"task" | "ticket" | null>(null);
 
-  if (!choice) {
-    return (
-      <section className="dispatcher-create-actions" aria-label="Buat proses">
-        <button
-          type="button"
-          className="dispatcher-create-button"
-          onClick={() => setChoice("task")}
-        >
-          <span className="dispatcher-create-plus" aria-hidden="true">＋</span>
-          <span>Buat Penugasan</span>
-        </button>
-        <button
-          type="button"
-          className="dispatcher-create-button"
-          onClick={() => setChoice("ticket")}
-        >
-          <span className="dispatcher-create-plus" aria-hidden="true">＋</span>
-          <span>Buat Perbaikan</span>
-        </button>
-      </section>
-    );
-  }
-
   return (
-    <section className="section-block">
-      <div className="creation-flow-toolbar">
-        <div>
-          <strong>{choice === "task" ? "Penugasan" : "Perbaikan"}</strong>
-        </div>
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => setChoice(null)}
-        >
-          Ganti proses
-        </button>
-      </div>
-      {choice === "task" ? (
-        <DispatcherCreateTask
-          locations={props.locations}
-          schedules={props.schedules}
-          executors={props.executors}
-          fleets={props.fleets}
-          products={props.products}
-        />
+    <>
+      {choice ? (
+        <section className="section-block dispatcher-create-flow">
+          <div className="creation-flow-toolbar">
+            <div>
+              <strong>{choice === "task" ? "Penugasan" : "Perbaikan"}</strong>
+            </div>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setChoice(null)}
+            >
+              Kembali
+            </button>
+          </div>
+
+          {choice === "task" ? (
+            <DispatcherCreateTask
+              locations={props.locations}
+              schedules={props.schedules}
+              executors={props.executors}
+              fleets={props.fleets}
+              products={props.products}
+            />
+          ) : (
+            <DispatcherMaintenanceForm
+              maintenanceLists={props.maintenanceLists}
+              locations={props.locations}
+              fleets={props.fleets}
+              tickets={props.tickets}
+            />
+          )}
+        </section>
       ) : (
-        <DispatcherMaintenanceForm
-          maintenanceLists={props.maintenanceLists}
-          locations={props.locations}
-          fleets={props.fleets}
-          tickets={props.tickets}
-        />
+        <>
+          <button
+            type="button"
+            className="dispatcher-fab"
+            aria-label="Buat baru"
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("dispatcher:create-open"))
+            }
+          >
+            <span aria-hidden="true">+</span>
+          </button>
+          <DispatcherCreateMenu onSelect={setChoice} />
+        </>
       )}
-    </section>
+    </>
   );
 }
