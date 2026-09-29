@@ -50,7 +50,7 @@ export default async function OperasionalHistoryPage() {
       <div className="page-heading">
         <div>
           <h1>Permintaan kamu</h1>
-          <p>Semua jadwal tambahan yang pernah kamu ajukan ada di sini.</p>
+          <p>Semua jadwal tambahan yang pernah kamu ajukan ada di sini, ya.</p>
         </div>
       </div>
 
@@ -169,7 +169,7 @@ export default async function OperasionalHistoryPage() {
                             placeholder="Tulis alasannya, ya"
                             required
                           />
-                          <button type="submit">Ya, batalin</button>
+                          <button type="submit">Iya, batalin</button>
                         </form>
                       </details>
                     ) : null}
