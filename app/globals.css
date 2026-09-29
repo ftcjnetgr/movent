@@ -10933,3 +10933,19 @@ td select:focus,
   box-shadow: inset 2px 0 0 var(--theme-color) !important;
   font-weight: 400 !important;
 }
+
+/* FINAL OVERRIDE — active sidebar parent (Kelola and other collapsible menus) */
+.sidebar .nav-group-title.is-active,
+.sidebar .nav-group-title.is-active > span,
+.sidebar .nav-group-title.is-active > .nav-icon,
+.sidebar .nav-group-title.is-active > .nav-icon svg,
+.sidebar .nav-group-title.is-active > .nav-icon svg *,
+.sidebar .nav-group-title.is-active > .nav-group-chevron {
+  color: var(--theme-color) !important;
+  -webkit-text-fill-color: var(--theme-color) !important;
+  stroke: var(--theme-color) !important;
+}
+
+.sidebar .nav-group-title.is-active {
+  background: var(--theme-color-soft) !important;
+}
