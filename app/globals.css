@@ -11404,8 +11404,8 @@ td select:focus,
 /* FINAL REQUESTED COLOR — queued/assigned status uses Xhantic yellow */
 .super-dashboard .status-kpi-assigned .super-kpi-icon,
 .super-dashboard .status-kpi-requested .super-kpi-icon {
-  background: #EEED09 !important;
-  color: #000 !important;
+  background: #fffde6 !important;
+  color: #EEED09 !important;
   border-color: #EEED09 !important;
 }
 
@@ -11416,6 +11416,6 @@ td select:focus,
 
 .status-badge.status-assigned,
 .status-badge.status-requested {
-  background: #EEED09 !important;
-  color: #000 !important;
+  background: #fffde6 !important;
+  color: #EEED09 !important;
 }
