@@ -6,6 +6,8 @@ export default async function OperationBerandaPage() {
   const [
     { data: locations },
     { data: products },
+    { data: executors },
+    { data: fleets },
     { data: tasks },
     { count: requested },
     { count: completed },
@@ -21,12 +23,22 @@ export default async function OperationBerandaPage() {
       .eq("status", "Active")
       .order("product"),
     admin
+      .from("executors")
+      .select("executor_nik, full_name")
+      .eq("status", "Active")
+      .order("full_name"),
+    admin
+      .from("fleets")
+      .select("plat_number, fleet_type")
+      .eq("status", "Active")
+      .order("plat_number"),
+    admin
       .from("tasks")
       .select(
         "transaction_id, status, start_point, destination, std, sta, external_executor, external_fleet, sj_number, sj_qty, sj_weight, product, sj_note",
       )
       .eq("task_type", "Supply")
-      .eq("fleet_ownership", "Non-TGR")
+      .eq("fleet_ownership", "TGR")
       .eq("status", "Assigned")
       .order("created_at", { ascending: false }),
     admin
@@ -47,7 +59,7 @@ export default async function OperationBerandaPage() {
         <div>
           <h1>Operasional hari ini</h1>
           <p>
-            Buat Supply Non-TGR dan ajukan Jadwal Tambahan tanpa pindah-pindah
+            Buat Supply TGR dan ajukan Jadwal Tambahan tanpa pindah-pindah
             halaman.
           </p>
         </div>
@@ -56,13 +68,15 @@ export default async function OperationBerandaPage() {
       <OperationCreationHub
         locations={(locations ?? []).map((item) => item.location)}
         products={(products ?? []).map((item) => item.product)}
+        executors={executors ?? []}
+        fleets={fleets ?? []}
         tasks={tasks ?? []}
       />
 
       <section className="section-block">
         <div className="metric-grid">
           <div className="metric-card">
-            <span>Non-TGR masih nunggu</span>
+            <span>TGR masih nunggu</span>
             <strong>{tasks?.length ?? 0}</strong>
           </div>
           <div className="metric-card">
