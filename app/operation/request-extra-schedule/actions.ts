@@ -50,11 +50,11 @@ async function validate(formData: FormData) {
   const staTimestamp = sta.includes("T") ? sta : jakartaTimestamp(sta);
 
   if (!stdTimestamp || !staTimestamp) {
-    return { error: "Format STD atau STA belum benar." } as const;
+    return { error: "Format STD atau STA belum benar. Cek lagi, ya." } as const;
   }
 
   if (new Date(staTimestamp).getTime() <= new Date(stdTimestamp).getTime()) {
-    return { error: "STA harus lebih besar dari STD." } as const;
+    return { error: "STA harus setelah STD, ya." } as const;
   }
 
   const admin = createAdminClient();
@@ -63,7 +63,7 @@ async function validate(formData: FormData) {
   );
 
   if (transactionError || !transactionId) {
-    return { error: "ID transaksi belum berhasil dibuat." } as const;
+    return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." } as const;
   }
 
   const { data: locations } = await admin
@@ -147,11 +147,11 @@ export async function confirmExtraScheduleAction(
   const staTimestamp = sta.includes("T") ? sta : jakartaTimestamp(sta);
 
   if (!stdTimestamp || !staTimestamp) {
-    return { error: "Format STD atau STA belum benar." };
+    return { error: "Format STD atau STA belum benar. Cek lagi, ya." };
   }
 
   if (new Date(staTimestamp).getTime() <= new Date(stdTimestamp).getTime()) {
-    return { error: "STA harus lebih besar dari STD." };
+    return { error: "STA harus setelah STD, ya." };
   }
 
   const admin = createAdminClient();
