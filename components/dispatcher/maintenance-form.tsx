@@ -301,7 +301,7 @@ export default function DispatcherMaintenanceForm({
                             required
                           />
                           <button type="submit" disabled={isCancelPending}>
-                            Ya, batalkan
+                            Iya, batalin
                           </button>
                         </form>
                       </details>
