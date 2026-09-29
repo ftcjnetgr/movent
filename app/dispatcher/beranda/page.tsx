@@ -1,9 +1,6 @@
 import DispatcherCreationHub from "@/components/dispatcher/creation-hub";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getDashboardData } from "@/lib/server/dashboard";
 import { getCurrentProfile } from "@/lib/server/profile";
-import StatusBadge from "@/components/shared/status-badge";
-import { STATUS_LABELS, STATUS_SUBCOPY } from "@/components/shared/status-config";
 
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile();
@@ -16,8 +13,6 @@ export default async function DispatcherBerandaPage() {
     { data: products },
     { data: maintenanceLists },
     { data: tickets },
-    { data: tasks },
-    { count: canceledCount },
   ] = await Promise.all([
     admin
       .from("locations")
@@ -59,27 +54,7 @@ export default async function DispatcherBerandaPage() {
       )
       .eq("created_by", profile.id)
       .order("created_at", { ascending: false }),
-    admin
-      .from("tasks")
-      .select(
-        "transaction_id, task_type, status, start_point, destination, executor_snapshot, fleet_snapshot",
-      )
-      .eq("created_by", profile.id)
-      .order("created_at", { ascending: false })
-      .limit(6),
-    admin
-      .from("tasks")
-      .select("*", { count: "exact", head: true })
-      .eq("created_by", profile.id)
-      .eq("status", "Dibatalkan"),
-  ]);
-  const data = await getDashboardData(profile);
-  const active =
-    (data.taskCounts.Requested ?? 0) +
-    (data.taskCounts.Assigned ?? 0) +
-    (data.taskCounts.Confirmed ?? 0) +
-    (data.taskCounts.Driving ?? 0);
-
+undefined  ]);
   return (
     <div className="role-page">
       <div className="page-heading">
@@ -101,115 +76,6 @@ export default async function DispatcherBerandaPage() {
         tickets={tickets ?? []}
       />
 
-      <section className="metric-grid dispatcher-summary-grid">
-        <div className="metric-card dispatcher-summary-card dispatcher-summary-blue">
-          <span>Udah Ditugasin</span>
-          <strong>{active}</strong>
-          <small>{STATUS_SUBCOPY.Assigned}</small>
-        </div>
-        <div className="metric-card dispatcher-summary-card dispatcher-summary-orange">
-          <span>Lagi Jalan</span>
-          <strong>
-            {(data.taskCounts.Confirmed ?? 0) + (data.taskCounts.Driving ?? 0)}
-          </strong>
-          <small>{STATUS_SUBCOPY.Driving}</small>
-        </div>
-        <div className="metric-card dispatcher-summary-card dispatcher-summary-green">
-          <span>Udah Selesai</span>
-          <strong>{data.taskCounts.Completed ?? 0}</strong>
-          <small>{STATUS_SUBCOPY.Completed}</small>
-        </div>
-        <div className="metric-card dispatcher-summary-card dispatcher-summary-red">
-          <span>Dibatalin</span>
-          <strong>{canceledCount ?? 0}</strong>
-          <small>{STATUS_SUBCOPY.Canceled}</small>
-        </div>
-      </section>
-
-      <section className="section-block dashboard-main-grid">
-        <div className="data-table-card">
-          <div className="section-heading">
-            <div>
-              <h2>Tugas Terbaru</h2>
-              <p>Penugasan yang kamu buat ada di sini.</p>
-            </div>
-          </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Jenis</th>
-                  <th>Rute</th>
-                  <th>Armada</th>
-                  <th>Executor</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(tasks ?? []).map((task) => (
-                  <tr key={task.transaction_id}>
-                    <td>
-                      <strong>{task.transaction_id}</strong>
-                    </td>
-                    <td>{task.task_type}</td>
-                    <td>
-                      {task.start_point ?? "-"} → {task.destination ?? "-"}
-                    </td>
-                    <td>{task.fleet_snapshot?.plat_number ?? "-"}</td>
-                    <td>{task.executor_snapshot?.full_name ?? "-"}</td>
-                    <td>
-                      <StatusBadge
-                        status={task.status}
-                        label={STATUS_LABELS[task.status] ?? task.status}
-                      />
-                    </td>
-                  </tr>
-                ))}
-                {!(tasks ?? []).length ? (
-                  <tr>
-                    <td colSpan={6}>
-                      <div className="empty-state">
-                        Belum ada penugasan yang kamu buat.
-                      </div>
-                    </td>
-                  </tr>
-                ) : null}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="data-table-card">
-          <div className="section-heading">
-            <div>
-              <h2>Ringkasan</h2>
-              <p>Biar gampang lihat prosesnya.</p>
-            </div>
-          </div>
-          {[
-            ["Supply (TGR)", data.taskCounts.Assigned ?? 0],
-            ["Supply (Non TGR)", data.taskCounts.Confirmed ?? 0],
-            ["Distribusi", data.taskCounts.Driving ?? 0],
-            [
-              "Perbaikan",
-              Object.values(data.ticketCounts).reduce((a, b) => a + b, 0),
-            ],
-            ["Jadwal Tambahan", 0],
-          ].map(([label, count]) => (
-            <div className="summary-bar-row" key={String(label)}>
-              <span>{label}</span>
-              <strong>{count}</strong>
-              <i>
-                <b
-                  style={{
-                    width: String(Math.min(100, Number(count) * 8)) + "%",
-                  }}
-                />
-              </i>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
