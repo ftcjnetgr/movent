@@ -12776,3 +12776,18 @@ td select:focus,
     right: 14px !important;
   }
 }
+
+
+/* Dispatcher create actions — dark purple + white text */
+.role-dispatcher .dispatcher-create-menu-item {
+  background: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-dark) !important;
+  color: #fff !important;
+}
+
+.role-dispatcher .dispatcher-create-menu-item:hover,
+.role-dispatcher .dispatcher-create-menu-item:active {
+  background: #3127a4 !important;
+  border-color: #3127a4 !important;
+  color: #fff !important;
+}
