@@ -19,7 +19,7 @@ export default async function DispatcherBerandaPage() {
   ] = await Promise.all([
     admin
       .from("locations")
-      .select("location")
+      .select("location, grouping")
       .eq("status", "Active")
       .order("location"),
     admin
@@ -89,6 +89,10 @@ export default async function DispatcherBerandaPage() {
     <div className="role-page">
       <DispatcherCreationHub
         locations={(locations ?? []).map((i) => i.location)}
+        locationGroups={(locations ?? []).map((i) => ({
+          location: i.location,
+          grouping: i.grouping,
+        }))}
         schedules={schedules ?? []}
         executors={executors ?? []}
         fleets={fleets ?? []}
