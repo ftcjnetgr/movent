@@ -158,6 +158,22 @@ export default function DispatcherCreateTask({
   }, [confirmState.success]);
 
   useEffect(() => {
+    function handleDispatcherBack(event: Event) {
+      if (!assignmentStep) return;
+      const customEvent = event as CustomEvent<{ handled?: boolean }>;
+      if (!customEvent.detail) customEvent.detail = {};
+      customEvent.detail.handled = true;
+      setChosenSchedule(null);
+      setScheduleId("");
+      setAssignmentStep(false);
+    }
+
+    window.addEventListener("movent:dispatcher-back", handleDispatcherBack);
+    return () =>
+      window.removeEventListener("movent:dispatcher-back", handleDispatcherBack);
+  }, [assignmentStep]);
+
+  useEffect(() => {
     if (!chosenSchedule || assignmentStep) return;
 
     const previousOverflow = document.body.style.overflow;
@@ -231,7 +247,6 @@ export default function DispatcherCreateTask({
             </div>
 
             <div className="form-section">
-              <div className="form-section-title">Penugasan</div>
               <div className="form-row">
                 <SearchableMasterSelect
                   label="Executor"
