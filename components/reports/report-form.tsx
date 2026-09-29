@@ -158,10 +158,10 @@ function displayCellValue(key: string, value: string | null) {
   const labels: Record<string, string> = {
     Requested: "Udah Diajuin",
     Assigned: "Udah Ditugasin",
-    Confirmed: "Dikonfirmasi",
+    Confirmed: STATUS_LABELS.Confirmed,
     Driving: "Berangkat",
     Completed: "Selesai",
-    Canceled: "Dibatalkan",
+    Canceled: STATUS_LABELS.Canceled,
     "In Progress": "Lagi Dikerjain",
   };
   return labels[value] ?? value;
