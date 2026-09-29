@@ -77,16 +77,16 @@ function DispatcherCreateMenu({
         }
         aria-hidden={!open}
       >
-        <div className="dispatcher-create-menu-head">
-          <strong>Buat baru</strong>
-          <button
-            type="button"
-            aria-label="Tutup"
-            onClick={() => setOpen(false)}
-          >
-            ×
-          </button>
-        </div>
+        <button
+          type="button"
+          className="dispatcher-create-menu-item"
+          onClick={() => {
+            setOpen(false);
+            onSelect("ticket");
+          }}
+        >
+          Ajuin perbaikan
+        </button>
 
         <button
           type="button"
@@ -96,26 +96,16 @@ function DispatcherCreateMenu({
             onSelect("task");
           }}
         >
-          <span className="dispatcher-create-menu-plus">+</span>
-          <span>
-            <strong>Penugasan</strong>
-            <small>Buat penugasan baru</small>
-          </span>
+          Buat tugas baru
         </button>
 
         <button
           type="button"
-          className="dispatcher-create-menu-item"
-          onClick={() => {
-            setOpen(false);
-            onSelect("ticket");
-          }}
+          className="dispatcher-create-menu-close"
+          aria-label="Tutup menu buat baru"
+          onClick={() => setOpen(false)}
         >
-          <span className="dispatcher-create-menu-plus">+</span>
-          <span>
-            <strong>Perbaikan</strong>
-            <small>Buat perbaikan baru</small>
-          </span>
+          +
         </button>
       </aside>
     </>
