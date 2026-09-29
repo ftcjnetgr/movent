@@ -269,7 +269,7 @@ export async function confirmDispatcherTaskAction(
   if (!transactionId) {
     return {
       error:
-        "ID transaksi preview belum tersedia. Silakan buat preview tugas terlebih dahulu.",
+        "ID transaksi preview belum ada. Buat preview tugas dulu, ya.",
     };
   }
 
@@ -349,12 +349,12 @@ export async function confirmDispatcherTaskAction(
 
       if (existing) {
         return {
-          success: `Tugas ${existing.transaction_id} sudah dikonfirmasi.`,
+          success: `Tugas ${existing.transaction_id} udah dibuat dan ditugasin.`,
           transactionId: existing.transaction_id,
         };
       }
 
-      return { error: "Tugasnya belum berhasil dikonfirmasi. Coba lagi, ya." };
+      return { error: "Tugasnya belum berhasil dibuat. Coba lagi, ya." };
     }
   } else if (flow === "distribusi") {
     const startPoint = String(formData.get("startPoint") ?? "").trim();
@@ -422,12 +422,12 @@ export async function confirmDispatcherTaskAction(
 
       if (existing) {
         return {
-          success: `Tugas ${existing.transaction_id} sudah dikonfirmasi.`,
+          success: `Tugas ${existing.transaction_id} udah dibuat dan ditugasin.`,
           transactionId: existing.transaction_id,
         };
       }
 
-      return { error: "Tugasnya belum berhasil dikonfirmasi. Coba lagi, ya." };
+      return { error: "Tugasnya belum berhasil dibuat. Coba lagi, ya." };
     }
   } else {
     return { error: "Preview tugasnya sudah nggak valid. Buat ulang, ya." };
@@ -435,7 +435,7 @@ export async function confirmDispatcherTaskAction(
 
   revalidateTaskPaths();
   return {
-    success: `Tugas ${transactionId} berhasil dikonfirmasi.`,
+    success: `Tugas ${transactionId} udah dibuat dan ditugasin.`,
     transactionId,
   };
 }
@@ -459,7 +459,7 @@ export async function cancelDispatcherTaskAction(formData: FormData) {
   if (task.fleet_ownership === "Non-TGR") {
     if (profile.role !== "Super User")
       return {
-        error: "Tugas Armada Non-TGR hanya dapat dibatalkan oleh Super User.",
+        error: "Tugas Armada Non-TGR cuma bisa dibatalin oleh Super User.",
       };
     if (!["Assigned", "Driving"].includes(task.status))
       return { error: "Tugasnya sudah selesai atau memang nggak bisa dibatalin." };
