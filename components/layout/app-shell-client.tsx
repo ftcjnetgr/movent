@@ -1001,7 +1001,7 @@ export default function AppShellClient({
             </button>
           </nav>
         </>
-      ) : null
+      ) : null}
     </div>
   );
 }
