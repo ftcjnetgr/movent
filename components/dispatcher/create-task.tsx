@@ -311,7 +311,7 @@ export default function DispatcherCreateTask({
                 className="secondary-button"
                 onClick={resetCreateFlow}
               >
-                Batal
+                Batalin
               </button>
             </div>
           </form>
@@ -343,7 +343,7 @@ export default function DispatcherCreateTask({
               <span className="task-create-choice-icon">TGR</span>
               <span>
                 <strong>Armada TGR</strong>
-                <small>Gunakan schedule dari database master.</small>
+                <small>Schedule-nya diambil dari database master.</small>
               </span>
               <b>→</b>
             </button>
@@ -351,7 +351,7 @@ export default function DispatcherCreateTask({
               <span className="task-create-choice-icon">NT</span>
               <span>
                 <strong>Armada Non-TGR</strong>
-                <small>Tugas Supply Non-TGR dibuat oleh Operation.</small>
+                <small>Tugas Supply Non-TGR dibuat dari Operation.</small>
               </span>
               <b>—</b>
             </div>
@@ -576,7 +576,7 @@ export default function DispatcherCreateTask({
                 className="secondary-button"
                 onClick={resetCreateFlow}
               >
-                Batal
+                Batalin
               </button>
             </div>
           </form>
