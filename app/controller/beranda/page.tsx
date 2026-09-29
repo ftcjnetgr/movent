@@ -8,6 +8,9 @@ function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
 }
 
+function percentage(value: number, total: number) {
+  return total > 0 ? Math.round((value / total) * 100) : 0;
+}
 
 function displayTaskStatus(task: {
   status: string;
@@ -134,6 +137,12 @@ export default async function ControllerPenugasanDashboardPage({
   const tasks = sortByStatusAndTime(rawTasks);
 
   const totalTasks = activities.length;
+  const { count: totalMaintenance } = await admin
+    .from("ticketings")
+    .select("transaction_id", { count: "exact", head: true })
+    .gte("created_at", rangeStart)
+    .lt("created_at", rangeEnd);
+  const totalAllActivities = totalTasks + (totalMaintenance ?? 0);
 
   const taskStatusCounts = {
     Assigned: activities.filter((task) => displayTaskStatus(task) === "Assigned")
@@ -225,7 +234,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Semua Penugasan</span>
             <strong>{totalTasks}</strong>
-            <small>Total penugasan</small>
+            <small>{percentage(totalTasks, totalAllActivities)}% dari semua aktivitas</small>
           </div>
         </div>
 
@@ -236,7 +245,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Ditugasin</span>
             <strong>{taskStatusCounts.Assigned}</strong>
-            <small>{STATUS_SUBCOPY.Assigned}</small>
+            <small>{percentage(taskStatusCounts.Assigned, totalAllActivities)}% dari semua aktivitas</small>
           </div>
         </div>
 
@@ -247,7 +256,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{taskStatusCounts.Confirmed}</strong>
-            <small>{STATUS_SUBCOPY.Confirmed}</small>
+            <small>{percentage(taskStatusCounts.Confirmed, totalAllActivities)}% dari semua aktivitas</small>
           </div>
         </div>
 
@@ -258,7 +267,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{taskStatusCounts.Driving}</strong>
-            <small>{STATUS_SUBCOPY.Driving}</small>
+            <small>{percentage(taskStatusCounts.Driving, totalAllActivities)}% dari semua aktivitas</small>
           </div>
         </div>
 
@@ -269,7 +278,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{taskStatusCounts.Completed}</strong>
-            <small>{STATUS_SUBCOPY.Completed}</small>
+            <small>{percentage(taskStatusCounts.Completed, totalAllActivities)}% dari semua aktivitas</small>
           </div>
         </div>
 
@@ -280,7 +289,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Dibatalin</span>
             <strong>{taskStatusCounts.Canceled}</strong>
-            <small>{STATUS_SUBCOPY.Canceled}</small>
+            <small>{percentage(taskStatusCounts.Canceled, totalAllActivities)}% dari semua aktivitas</small>
           </div>
         </div>
       </section>
