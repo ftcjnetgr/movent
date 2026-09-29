@@ -99,13 +99,11 @@ export async function createDispatcherTaskAction(
 
   const taskType = String(formData.get("taskType") ?? "");
   const ownership = String(formData.get("fleetOwnership") ?? "");
-  if (
-    profile.role === "Dispatcher" &&
-    taskType === "Supply" &&
-    ownership === "Non-TGR"
-  ) {
-    return { error: "Tugas Supply Non-TGR dibuat dari Operation, ya." };
+
+  if (taskType !== "Supply" || ownership !== "TGR") {
+    return { error: "Tugas baru dari Dispatcher sekarang khusus Armada TGR, ya." };
   }
+
   const admin = createAdminClient();
 
   if (taskType === "Supply" && ownership === "TGR") {
@@ -159,88 +157,6 @@ export async function createDispatcherTaskAction(
         sta: todayTimestamp(schedule.sta) ?? "",
       },
     };
-  }
-
-  if (taskType === "Distribusi Mobil") {
-    const startPoint = String(formData.get("startPoint") ?? "").trim();
-    const destination = String(formData.get("destination") ?? "").trim();
-    const std = String(formData.get("std") ?? "").trim();
-    const sta = String(formData.get("sta") ?? "").trim();
-    const executorNik = String(formData.get("executorNik") ?? "").trim();
-    const platNumber = String(formData.get("platNumber") ?? "").trim();
-    if (
-      !startPoint ||
-      !destination ||
-      !std ||
-      !sta ||
-      !executorNik ||
-      !platNumber
-    )
-      return {
-        error:
-          "Start Point, Destinasi, STD, STA, Executor, dan Armada perlu diisi dulu, ya.",
-      };
-
-    const [startLocation, destinationLocation] = await Promise.all([
-      admin
-        .from("locations")
-        .select("location, grouping, status")
-        .eq("location", startPoint)
-        .eq("status", "Active")
-        .maybeSingle(),
-      admin
-        .from("locations")
-        .select("location, grouping, status")
-        .eq("location", destination)
-        .eq("status", "Active")
-        .maybeSingle(),
-    ]);
-    if (!startLocation.data || !destinationLocation.data)
-      return {
-        error:
-          "Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.",
-      };
-    const timestamps = [todayTimestamp(std), todayTimestamp(sta)];
-    if (!timestamps[0] || !timestamps[1])
-      return { error: "STD atau STA belum benar. Cek lagi, ya." };
-    if (
-      new Date(timestamps[1]!).getTime() <= new Date(timestamps[0]!).getTime()
-    )
-      return { error: "STA harus setelah STD, ya." };
-    const { executor, fleet } = await activeExecutorAndFleet(
-      admin,
-      executorNik,
-      platNumber,
-    );
-    if (!executor || !fleet)
-      return { error: "Executor atau armadanya belum tersedia, ya." };
-    const transactionId = await nextTransaction(admin);
-    if (!transactionId)
-      return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." };
-    return {
-      success: "Preview tugasnya sudah siap. Cek dulu sebelum lanjut, ya.",
-      preview: {
-        transactionId,
-        flow: "distribusi",
-        startPoint,
-        destination,
-        externalExecutor: executor.full_name,
-        externalFleet: fleet.plat_number,
-        sjNumber: "",
-        sjQty: 0,
-        sjWeight: 0,
-        product: "",
-        sjNote: null,
-        executorNik: executor.executor_nik,
-        platNumber: fleet.plat_number,
-        std: timestamps[0]!,
-        sta: timestamps[1]!,
-      },
-    };
-  }
-
-  if (taskType === "Supply" && ownership === "Non-TGR") {
-    return { error: "Tugas Supply Non-TGR dibuat dari Operation, ya." };
   }
 
   return { error: "Jenis tugasnya belum lengkap. Coba cek lagi, ya." };
@@ -337,79 +253,6 @@ export async function confirmDispatcherTaskAction(
       destination_snapshot: schedule,
       std,
       sta,
-      assigned_at: new Date().toISOString(),
-    });
-
-    if (error) {
-      const { data: existing } = await admin
-        .from("tasks")
-        .select("transaction_id")
-        .eq("transaction_id", transactionId)
-        .maybeSingle();
-
-      if (existing) {
-        return {
-          success: `Tugas ${existing.transaction_id} udah dibuat dan ditugasin.`,
-          transactionId: existing.transaction_id,
-        };
-      }
-
-      return { error: "Tugasnya belum berhasil dibuat. Coba lagi, ya." };
-    }
-  } else if (flow === "distribusi") {
-    const startPoint = String(formData.get("startPoint") ?? "").trim();
-    const destination = String(formData.get("destination") ?? "").trim();
-    const std = String(formData.get("std") ?? "").trim();
-    const sta = String(formData.get("sta") ?? "").trim();
-
-    const ts1 = std.includes("T") ? std : todayTimestamp(std);
-    const ts2 = sta.includes("T") ? sta : todayTimestamp(sta);
-
-    if (!startPoint || !destination || !ts1 || !ts2) {
-      return { error: "Data tugasnya belum lengkap. Cek lagi, ya." };
-    }
-
-    if (new Date(ts2).getTime() <= new Date(ts1).getTime()) {
-      return { error: "STA harus setelah STD, ya." };
-    }
-
-    const [{ data: startLocation }, { data: destinationLocation }] =
-      await Promise.all([
-        admin
-          .from("locations")
-          .select("location,grouping,status")
-          .eq("location", startPoint)
-          .eq("status", "Active")
-          .maybeSingle(),
-        admin
-          .from("locations")
-          .select("location,grouping,status")
-          .eq("location", destination)
-          .eq("status", "Active")
-          .maybeSingle(),
-      ]);
-
-    if (!startLocation || !destinationLocation) {
-      return { error: "Lokasinya belum tersedia, ya." };
-    }
-
-    const { error } = await admin.from("tasks").insert({
-      transaction_id: transactionId,
-      source_type: "Manual",
-      task_type: "Distribusi Mobil",
-      fleet_ownership: "Non-TGR",
-      status: "Assigned",
-      created_by: profile.id,
-      assigned_by: profile.id,
-      executor_nik: executor.executor_nik,
-      executor_snapshot: executor,
-      fleet_snapshot: fleet,
-      start_point: startPoint,
-      start_point_snapshot: startLocation,
-      destination,
-      destination_snapshot: destinationLocation,
-      std: ts1,
-      sta: ts2,
       assigned_at: new Date().toISOString(),
     });
 
