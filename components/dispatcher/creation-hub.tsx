@@ -68,7 +68,7 @@ export default function DispatcherCreationHub(props: Props) {
           >
             <span className="creation-choice-icon">⌁</span>
             <span>
-              <strong>Buat Maintenance</strong>
+              <strong>Buat Perbaikan</strong>
               <small>Pilih kebutuhan maintenance, lokasi, dan armadanya, ya.</small>
             </span>
             <b>→</b>
@@ -82,7 +82,7 @@ export default function DispatcherCreationHub(props: Props) {
     <section className="section-block">
       <div className="creation-flow-toolbar">
         <div>
-          <strong>{choice === "task" ? "Penugasan" : "Maintenance"}</strong>
+          <strong>{choice === "task" ? "Penugasan" : "Perbaikan"}</strong>
         </div>
         <button
           type="button"
