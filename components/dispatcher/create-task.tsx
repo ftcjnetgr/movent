@@ -1,30 +1,14 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import type { State as DispatcherTaskState } from "@/app/dispatcher/beranda/actions";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 import {
   createDispatcherTaskAction,
   confirmDispatcherTaskAction,
 } from "@/app/dispatcher/beranda/actions";
 
-const initialState: {
-  error?: string;
-  success?: string;
-  transactionId?: string;
-  preview?: {
-    transactionId: string;
-    flow: "tgr";
-    startPoint: string;
-    destination: string;
-    externalExecutor: string;
-    externalFleet: string;
-    scheduleId?: string;
-    executorNik?: string;
-    platNumber?: string;
-    std?: string;
-    sta?: string;
-  };
-} = {};
+const initialState: DispatcherTaskState = {};
 
 type Props = {
   schedules: Array<{
