@@ -22,13 +22,11 @@ type Schedule = {
 };
 
 type Props = {
-  locationGroups: Array<{ location: string; grouping: string | null }>;
+
   schedules: Schedule[];
   executors: Array<{ executor_nik: string; full_name: string }>;
   fleets: Array<{ plat_number: string; fleet_type: string }>;
 };
-
-type ViewMode = "start" | "destination";
 
 function timeLabel(value: string) {
   const raw = value?.slice(0, 5);
@@ -53,19 +51,7 @@ export default function DispatcherCreateTask({
   const [chosenSchedule, setChosenSchedule] = useState<Schedule | null>(null);
   const [assignmentStep, setAssignmentStep] = useState(false);
   const [query, setQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("start");
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
-
-  const locationGrouping = useMemo(
-    () =>
-      new Map(
-        locationGroups.map((item) => [
-          item.location,
-          item.grouping?.trim() || "Lainnya",
-        ]),
-      ),
-    [locationGroups],
-  );
 
   const filteredSchedules = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -89,9 +75,7 @@ export default function DispatcherCreateTask({
     const groups = new Map<string, Schedule[]>();
 
     for (const schedule of filteredSchedules) {
-      const location =
-        viewMode === "start" ? schedule.start_point : schedule.destination;
-      const group = locationGrouping.get(location) ?? "Lainnya";
+      const group = schedule.schedule_hub_id?.trim() || "Lainnya";
       const rows = groups.get(group) ?? [];
       rows.push(schedule);
       groups.set(group, rows);
@@ -100,7 +84,7 @@ export default function DispatcherCreateTask({
     return Array.from(groups.entries()).sort((a, b) =>
       a[0].localeCompare(b[0], "id"),
     );
-  }, [filteredSchedules, locationGrouping, viewMode]);
+  }, [filteredSchedules]);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -159,8 +143,12 @@ export default function DispatcherCreateTask({
     <section className="dispatcher-task-screen">
       <div className="section-heading dispatcher-task-screen-heading">
         <div>
-          <h2>Buat tugas baru</h2>
-          <p>Pilih schedule, lalu tentuin executor dan armada TGR.</p>
+          <h2>{assignmentStep ? "Pilih Executor & Armada" : "Buat tugas baru"}</h2>
+          <p>
+            {assignmentStep
+              ? "Jadwalnya udah aman, sekarang tinggal tentuin yang jalan."
+              : "Pilih jadwal dulu, baru lanjut tentuin Executor dan Armada TGR."}
+          </p>
         </div>
       </div>
 
@@ -206,11 +194,6 @@ export default function DispatcherCreateTask({
               </div>
             </div>
 
-            <div className="dispatcher-assignment-step-head">
-              <h2>Pilih Executor & Armada</h2>
-              <p>Jadwalnya udah aman, sekarang tinggal tentuin yang jalan.</p>
-            </div>
-
             <div className="form-section">
               <div className="form-section-title">Penugasan</div>
               <div className="form-row">
@@ -251,11 +234,6 @@ export default function DispatcherCreateTask({
           </form>
         ) : (
           <div className="dispatcher-schedule-step">
-            <div className="dispatcher-task-screen-heading">
-              <h2>Buat tugas baru</h2>
-              <p>Pilih jadwal dulu, baru lanjut tentuin Executor dan Armada TGR.</p>
-            </div>
-
             <div className="dispatcher-schedule-picker">
               <div className="dispatcher-schedule-toolbar">
                 <div className="dispatcher-schedule-search">
@@ -268,26 +246,7 @@ export default function DispatcherCreateTask({
                   />
                 </div>
 
-                <div className="dispatcher-schedule-view-switch" role="tablist">
-                  <button
-                    type="button"
-                    className={viewMode === "start" ? "active" : ""}
-                    onClick={() => setViewMode("start")}
-                    role="tab"
-                    aria-selected={viewMode === "start"}
-                  >
-                    Start Point
-                  </button>
-                  <button
-                    type="button"
-                    className={viewMode === "destination" ? "active" : ""}
-                    onClick={() => setViewMode("destination")}
-                    role="tab"
-                    aria-selected={viewMode === "destination"}
-                  >
-                    Destination
-                  </button>
-                </div>
+
               </div>
 
               <div className="dispatcher-schedule-card-groups">
