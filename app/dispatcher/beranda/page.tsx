@@ -54,7 +54,7 @@ export default async function DispatcherBerandaPage() {
       )
       .eq("created_by", profile.id)
       .order("created_at", { ascending: false }),
-undefined  ]);
+  ]);
   return (
     <div className="role-page">
       <div className="page-heading">
