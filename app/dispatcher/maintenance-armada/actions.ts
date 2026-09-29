@@ -182,7 +182,7 @@ export async function confirmMaintenanceTicketAction(
 
     if (existing) {
       return {
-        success: `Maintenance ${existing.transaction_id} sudah dikonfirmasi.`,
+        success: `Maintenance ${existing.transaction_id} udah dibuat.`,
         transactionId: existing.transaction_id,
       };
     }
@@ -195,7 +195,7 @@ export async function confirmMaintenanceTicketAction(
   revalidatePath("/controller/beranda");
 
   return {
-    success: `Maintenance ${transactionId} berhasil dikonfirmasi.`,
+    success: `Maintenance ${transactionId} udah dibuat.`,
     transactionId,
   };
 }
