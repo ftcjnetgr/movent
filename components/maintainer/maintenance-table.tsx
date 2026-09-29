@@ -4,15 +4,15 @@ import { useMemo, useState, useTransition } from "react";
 import StatusBadge from "@/components/shared/status-badge";
 import { STATUS_LABELS } from "@/components/shared/status-config";
 import {
-  acceptMaintenanceTicketAction,
-  completeMaintenanceAction,
-  startMaintenanceAction,
-} from "@/app/maintainer/tiket-maintenance/actions";
+  acceptPerbaikanTicketAction,
+  completePerbaikanAction,
+  startPerbaikanAction,
+} from "@/app/maintainer/tiket-perbaikan/actions";
 
 type Ticket = {
   transaction_id: string;
   status: string;
-  maintenance_list: string | null;
+  perbaikan_list: string | null;
   location: string | null;
   fleet_plat_number: string | null;
   created_at: string;
@@ -27,7 +27,7 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-export default function MaintainerMaintenanceTable({
+export default function MaintainerPerbaikanTable({
   tickets,
 }: {
   tickets: Ticket[];
@@ -69,10 +69,10 @@ export default function MaintainerMaintenanceTable({
   }
 
   return (
-    <section className="data-table-card maintainer-maintenance-table-card">
-      <div className="section-heading maintainer-maintenance-toolbar">
+    <section className="data-table-card maintainer-perbaikan-table-card">
+      <div className="section-heading maintainer-perbaikan-toolbar">
         <div>
-          <h2>Maintenance</h2>
+          <h2>Perbaikan</h2>
           <p>Tinggal lanjutin sesuai statusnya, ya.</p>
         </div>
         <label className="maintainer-status-filter">
@@ -92,11 +92,11 @@ export default function MaintainerMaintenanceTable({
       </div>
 
       <div className="table-wrap">
-        <table className="maintainer-maintenance-table">
+        <table className="maintainer-perbaikan-table">
           <thead>
             <tr>
               <th>ID transaksi</th>
-              <th>Maintenance</th>
+              <th>Perbaikan</th>
               <th>Lokasi</th>
               <th>Armada</th>
               <th>Status</th>
@@ -110,7 +110,7 @@ export default function MaintainerMaintenanceTable({
                 <td>
                   <strong>{ticket.transaction_id}</strong>
                 </td>
-                <td>{ticket.maintenance_list ?? "-"}</td>
+                <td>{ticket.perbaikan_list ?? "-"}</td>
                 <td>{ticket.location ?? "-"}</td>
                 <td>{ticket.fleet_plat_number ?? "-"}</td>
                 <td>
@@ -128,11 +128,11 @@ export default function MaintainerMaintenanceTable({
                       onClick={() =>
                         runAction(
                           ticket.transaction_id,
-                          acceptMaintenanceTicketAction,
+                          acceptPerbaikanTicketAction,
                         )
                       }
                     >
-                      Terima maintenance
+                      Terima perbaikan
                     </button>
                   ) : null}
 
@@ -141,7 +141,7 @@ export default function MaintainerMaintenanceTable({
                       type="button"
                       disabled={pending}
                       onClick={() =>
-                        runAction(ticket.transaction_id, startMaintenanceAction)
+                        runAction(ticket.transaction_id, startPerbaikanAction)
                       }
                     >
                       Mulai kerjain
@@ -157,13 +157,13 @@ export default function MaintainerMaintenanceTable({
                           const formData = new FormData(event.currentTarget);
                           runAction(
                             ticket.transaction_id,
-                            completeMaintenanceAction,
+                            completePerbaikanAction,
                             formData,
                           );
                         }}
                       >
                         <input
-                          name="picMaintenance"
+                          name="picPerbaikan"
                           required
                           placeholder="Nama PIC"
                         />
@@ -184,7 +184,7 @@ export default function MaintainerMaintenanceTable({
                         disabled={pending}
                         onClick={() => setPicFor(ticket.transaction_id)}
                       >
-                        Selesaikan maintenance
+                        Selesaikan perbaikan
                       </button>
                     )
                   ) : null}
@@ -207,7 +207,7 @@ export default function MaintainerMaintenanceTable({
               <tr>
                 <td colSpan={7}>
                   <div className="empty-state">
-                    Nggak ada maintenance untuk pilihan ini.
+                    Nggak ada perbaikan untuk pilihan ini.
                   </div>
                 </td>
               </tr>
