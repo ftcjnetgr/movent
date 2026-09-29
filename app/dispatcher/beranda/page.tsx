@@ -191,7 +191,7 @@ export default async function DispatcherBerandaPage() {
             ["Supply (Non TGR)", data.taskCounts.Confirmed ?? 0],
             ["Distribusi", data.taskCounts.Driving ?? 0],
             [
-              "Maintenance",
+              "Perbaikan",
               Object.values(data.ticketCounts).reduce((a, b) => a + b, 0),
             ],
             ["Jadwal Tambahan", 0],
