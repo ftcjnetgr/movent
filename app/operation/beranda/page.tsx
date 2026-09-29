@@ -1,7 +1,9 @@
 import OperationCreationHub from "@/components/operation/creation-hub";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentProfile } from "@/lib/server/profile";
 
 export default async function OperationBerandaPage() {
+  const profile = await getCurrentProfile();
   const admin = createAdminClient();
   const [
     { data: locations },
@@ -39,6 +41,7 @@ export default async function OperationBerandaPage() {
       )
       .eq("task_type", "Supply")
       .eq("fleet_ownership", "TGR")
+      .eq("created_by", profile.id)
       .eq("status", "Assigned")
       .order("created_at", { ascending: false }),
     admin
