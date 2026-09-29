@@ -1,14 +1,14 @@
-import MaintainerPerbaikanTable from "@/components/maintainer/perbaikan-table";
+import MaintainerMaintenanceTable from "@/components/maintainer/maintenance-table";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 
-export default async function MaintainerTicketPerbaikanPage() {
+export default async function MaintainerTicketMaintenancePage() {
   const profile = await getCurrentProfile();
   const admin = createAdminClient();
   const { data: tickets } = await admin
     .from("ticketings")
     .select(
-      "transaction_id, status, perbaikan_list, location, fleet_plat_number, created_at, maintainer_user_id",
+      "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, maintainer_user_id",
     )
     .order("created_at", { ascending: true });
 
@@ -30,7 +30,7 @@ export default async function MaintainerTicketPerbaikanPage() {
         </div>
       </div>
 
-      <MaintainerPerbaikanTable tickets={visible} />
+      <MaintainerMaintenanceTable tickets={visible} />
     </div>
   );
 }
