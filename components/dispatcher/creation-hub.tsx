@@ -38,9 +38,13 @@ export default function DispatcherCreationHub(props: Props) {
   const [createOpen, setCreateOpen] = useState(false);
 
   useEffect(() => {
-    function handleBack() {
-      setChoice(null);
-      setCreateOpen(false);
+    function handleBack(event: Event) {
+      const customEvent = event as CustomEvent<{ handled?: boolean }>;
+      queueMicrotask(() => {
+        if (customEvent.detail?.handled) return;
+        setChoice(null);
+        setCreateOpen(false);
+      });
     }
 
     window.addEventListener("movent:dispatcher-back", handleBack);
