@@ -78,7 +78,7 @@ async function saveMasterRow(
 
   const db = String(formData.get("database") ?? "").trim();
   const config = getConfig(db);
-  if (!config) return { error: "Database tidak tersedia." };
+  if (!config) return { error: "Database-nya nggak tersedia." };
 
   const payload: Record<string, unknown> = {};
   for (const column of config.columns) {
@@ -86,22 +86,22 @@ async function saveMasterRow(
     if (value !== undefined) payload[column] = value;
   }
 
-  if (!payload[config.identifier]) return { error: "Identifier wajib diisi." };
+  if (!payload[config.identifier]) return { error: "Identifier perlu diisi dulu, ya." };
 
   const admin = createAdminClient();
   if (mode === "insert") {
     payload.status = "Active";
     const { error } = await admin.from(db).insert(payload);
-    if (error) return { error: "Data belum berhasil ditambahkan." };
+    if (error) return { error: "Data belum berhasil ditambahkan. Coba lagi, ya." };
   } else {
     const identifier = String(formData.get("identifier") ?? "").trim();
-    if (!identifier) return { error: "Identifier tidak ditemukan." };
+    if (!identifier) return { error: "Identifier-nya nggak ditemukan." };
     delete payload[config.identifier];
     const { error } = await admin
       .from(db)
       .update(payload)
       .eq(config.identifier, identifier);
-    if (error) return { error: "Data belum berhasil diperbarui." };
+    if (error) return { error: "Data belum berhasil diperbarui. Coba lagi, ya." };
   }
 
   revalidatePath("/super-user/pengelolaan-database");
@@ -132,20 +132,20 @@ export async function deleteMasterRowAction(
 
   const db = String(formData.get("database") ?? "").trim();
   const config = getConfig(db);
-  if (!config) return { error: "Database tidak tersedia." };
+  if (!config) return { error: "Database-nya nggak tersedia." };
 
   const identifier = String(formData.get("identifier") ?? "").trim();
-  if (!identifier) return { error: "Identifier tidak ditemukan." };
+  if (!identifier) return { error: "Identifier-nya nggak ditemukan." };
 
   const admin = createAdminClient();
   const { error } = await admin
     .from(db)
     .delete()
     .eq(config.identifier, identifier);
-  if (error) return { error: "Data belum berhasil dihapus." };
+  if (error) return { error: "Data belum berhasil dihapus. Coba lagi, ya." };
 
   revalidatePath("/super-user/pengelolaan-database");
-  return { success: "Data berhasil dihapus." };
+  return { success: "Data sudah dihapus." };
 }
 
 function normalizeImportedRows(
@@ -178,11 +178,11 @@ export async function importMasterDatabaseAction(
 
   const db = String(formData.get("database") ?? "").trim();
   const config = getConfig(db);
-  if (!config) return { error: "Database tidak tersedia." };
+  if (!config) return { error: "Database-nya nggak tersedia." };
 
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0)
-    return { error: "File CSV atau XLSX wajib dipilih." };
+    return { error: "Pilih file CSV atau XLSX dulu, ya." };
 
   const buffer = Buffer.from(await file.arrayBuffer());
   let rows: unknown[] = [];
@@ -192,22 +192,22 @@ export async function importMasterDatabaseAction(
     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
     rows = XLSX.utils.sheet_to_json(firstSheet, { defval: null });
   } catch {
-    return { error: "File belum berhasil dibaca. Gunakan CSV atau XLSX." };
+    return { error: "File-nya belum bisa dibaca. Pastikan formatnya CSV atau XLSX, ya." };
   }
 
   const normalized = normalizeImportedRows(rows, config);
   if (!normalized.length)
-    return { error: "File tidak memiliki data yang bisa diimpor." };
+    return { error: "File-nya belum punya data yang bisa diimpor." };
 
   if (!normalized.every((row) => row[config.identifier])) {
-    return { error: "Setiap baris wajib memiliki identifier." };
+    return { error: "Setiap baris perlu punya identifier, ya." };
   }
 
   const admin = createAdminClient();
   const { error } = await admin
     .from(db)
     .upsert(normalized, { onConflict: config.identifier });
-  if (error) return { error: "Import belum berhasil diproses." };
+  if (error) return { error: "Import belum berhasil diproses. Coba lagi, ya." };
 
   revalidatePath("/super-user/pengelolaan-database");
   return { success: normalized.length + " data berhasil diimpor." };
