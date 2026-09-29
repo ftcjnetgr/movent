@@ -88,7 +88,7 @@ export async function submitExtraScheduleSjAction(
     !requiresSj(task) ||
     !allowedExecutor(profile.role, task.executor_nik, profile.nik)
   ) {
-    return { error: "Tugas ini belum tersedia untuk isi SJ." };
+    return { error: "Tugas ini belum siap buat isi SJ." };
   }
 
   const { data: productData } = await admin
@@ -160,7 +160,7 @@ export async function saveOdometerStartAction(
       .from("task_sj_items")
       .select("id", { count: "exact", head: true })
       .eq("task_id", task.id);
-    if (!count) return { error: "Submit SJ terlebih dahulu." };
+    if (!count) return { error: "Isi SJ dulu, ya." };
   }
 
   const { error } = await admin
@@ -190,10 +190,10 @@ export async function confirmDrivingAction(
       .from("task_sj_items")
       .select("id", { count: "exact", head: true })
       .eq("task_id", task.id);
-    if (!count) return { error: "Submit SJ terlebih dahulu." };
+    if (!count) return { error: "Isi SJ dulu, ya." };
   }
   if (task.odometer_start === null)
-    return { error: "Isi Odometer Awal terlebih dahulu." };
+    return { error: "Isi odometer awal dulu, ya." };
 
   const { error } = await admin
     .from("tasks")
@@ -202,7 +202,7 @@ export async function confirmDrivingAction(
     .eq("status", "Confirmed");
   if (error) return { error: "Konfirmasi berangkat belum berhasil. Coba lagi, ya." };
   revalidateExecutorPaths();
-  return { success: "Berangkat sudah dikonfirmasi." };
+  return { success: "Berangkat sudah dicatat." };
 }
 
 export async function confirmArrivalAction(
@@ -223,7 +223,7 @@ export async function confirmArrivalAction(
 
   if (error) return { error: "Konfirmasi datang belum berhasil. Coba lagi, ya." };
   revalidateExecutorPaths();
-  return { success: "Kedatangan sudah dikonfirmasi." };
+  return { success: "Kedatangan sudah dicatat." };
 }
 
 export async function saveOdometerEndAction(
@@ -264,7 +264,7 @@ export async function confirmCompletedAction(
     return { error: "Tugas ini belum tersedia buat kamu." };
   if (!task.arrived_at) return { error: "Konfirmasi kedatangan dulu, ya." };
   if (task.odometer_end === null)
-    return { error: "Isi Odometer Akhir terlebih dahulu." };
+    return { error: "Isi odometer akhir dulu, ya." };
 
   const { error } = await admin
     .from("tasks")
