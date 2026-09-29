@@ -256,7 +256,7 @@ export default function OperationCreateTask({
             className="secondary-button"
             onClick={() => setSjRows((rows) => [...rows, rows.length])}
           >
-            Tambah SJ
+            Tambah SJ lagi
           </button>
           {state.error ? (
             <p className="form-error" role="alert">
@@ -305,7 +305,7 @@ export default function OperationCreateTask({
               </div>
             </div>
             <p className="muted">
-              Periksa data penugasan dan hasil SJ sebelum dilanjutkan.
+              Cek data penugasan dan hasil SJ sebelum lanjut, ya.
             </p>
             <form action={confirmAction} className="compact-form">
               <input
@@ -398,7 +398,7 @@ export default function OperationCreateTask({
       <section className="metric-card">
         <div className="card-title">Tugas siap jalan</div>
         <p className="muted">
-          Pilih tugas yang siap berangkat, lalu masukkan ATD secara manual.
+          Pilih tugas yang siap jalan, lalu isi ATD-nya, ya.
         </p>
         {departureState.error ? (
           <p className="form-error" role="alert">
@@ -461,14 +461,14 @@ export default function OperationCreateTask({
                   <input type="time" name="departure" required />
                 </label>
                 <button type="submit" disabled={departurePending}>
-                  {departurePending ? "Menyimpan..." : "Siap berangkat"}
+                  {departurePending ? "Lagi nyimpen..." : "Siap berangkat"}
                 </button>
               </form>
             </div>
           ))}
           {tasks.length === 0 ? (
             <div className="empty-state">
-              Belum ada Supply Non TGR yang menunggu konfirmasi berangkat.
+              Belum ada Supply Non-TGR yang nunggu berangkat.
             </div>
           ) : null}
         </div>
