@@ -157,7 +157,19 @@ export default function DispatcherCreateTask({
     }
   }, [confirmState.success]);
 
-  return (
+  useEffect(() => {
+    if (!chosenSchedule || assignmentStep) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") chooseAnotherSchedule();
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return (
     <section className="dispatcher-task-screen">
       <div className="section-heading dispatcher-task-screen-heading">
         <div>
@@ -254,26 +266,26 @@ export default function DispatcherCreateTask({
           <div className="dispatcher-schedule-step">
             <div className="dispatcher-schedule-picker">
               <div className="dispatcher-route-tabs" role="tablist" aria-label="Rute">
-              {routes.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={route === item ? "active" : ""}
-                  onClick={() => {
-                    setRoute(item);
-                    setChosenSchedule(null);
-                    setScheduleId("");
-                    setAssignmentStep(false);
-                  }}
-                  role="tab"
-                  aria-selected={route === item}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
+                {routes.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className={route === item ? "active" : ""}
+                    onClick={() => {
+                      setRoute(item);
+                      setChosenSchedule(null);
+                      setScheduleId("");
+                      setAssignmentStep(false);
+                    }}
+                    role="tab"
+                    aria-selected={route === item}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
 
-            <div className="dispatcher-schedule-toolbar">
+              <div className="dispatcher-schedule-toolbar">
                 <div className="dispatcher-schedule-search">
                   <input
                     type="search"
@@ -283,8 +295,6 @@ export default function DispatcherCreateTask({
                     aria-label="Cari schedule"
                   />
                 </div>
-
-
               </div>
 
               <div className="dispatcher-schedule-card-groups">
@@ -360,76 +370,10 @@ export default function DispatcherCreateTask({
                   );
                 })}
               </div>
-
             </div>
           </div>
         )
-      ) : (        {chosenSchedule ? (
-          <div
-            className="dispatcher-schedule-preview-backdrop"
-            role="presentation"
-            onMouseDown={(event) => {
-              if (event.currentTarget === event.target) chooseAnotherSchedule();
-            }}
-          >
-            <section
-              className="dispatcher-schedule-preview-modal"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="dispatcher-schedule-preview-title"
-            >
-              <div className="dispatcher-schedule-preview-head">
-                <div>
-                  <small>Preview jadwal</small>
-                  <strong id="dispatcher-schedule-preview-title">
-                    {chosenSchedule.schedule_id}
-                  </strong>
-                </div>
-                <button
-                  type="button"
-                  className="dispatcher-schedule-preview-close"
-                  onClick={chooseAnotherSchedule}
-                  aria-label="Tutup preview jadwal"
-                >
-                  ×
-                </button>
-              </div>
-
-              <div className="dispatcher-schedule-preview-grid">
-                <div>
-                  <small>Start Point</small>
-                  <strong>{chosenSchedule.start_point}</strong>
-                </div>
-                <div>
-                  <small>Destination</small>
-                  <strong>{chosenSchedule.destination}</strong>
-                </div>
-                <div>
-                  <small>STD</small>
-                  <strong>{timeLabel(chosenSchedule.std)}</strong>
-                </div>
-                <div>
-                  <small>STA</small>
-                  <strong>{timeLabel(chosenSchedule.sta)}</strong>
-                </div>
-              </div>
-
-              <div className="dispatcher-schedule-preview-actions">
-                <button type="button" onClick={useChosenSchedule}>
-                  Pilih jadwal ini
-                </button>
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={chooseAnotherSchedule}
-                >
-                  Cari jadwal lain
-                </button>
-              </div>
-            </section>
-          </div>
-        ) : null}
-
+      ) : (
         <div className="metric-card dispatcher-task-preview">
           <div className="card-title">Cek tugas dulu</div>
           <div className="task-summary-grid">
@@ -521,6 +465,72 @@ export default function DispatcherCreateTask({
           </form>
         </div>
       )}
+
+      {!state.preview && chosenSchedule && !assignmentStep ? (
+        <div
+          className="dispatcher-schedule-preview-backdrop"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) chooseAnotherSchedule();
+          }}
+        >
+          <section
+            className="dispatcher-schedule-preview-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="dispatcher-schedule-preview-title"
+          >
+            <div className="dispatcher-schedule-preview-head">
+              <div>
+                <small>Preview jadwal</small>
+                <strong id="dispatcher-schedule-preview-title">
+                  {chosenSchedule.schedule_id}
+                </strong>
+              </div>
+              <button
+                type="button"
+                className="dispatcher-schedule-preview-close"
+                onClick={chooseAnotherSchedule}
+                aria-label="Tutup preview jadwal"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="dispatcher-schedule-preview-grid">
+              <div>
+                <small>Start Point</small>
+                <strong>{chosenSchedule.start_point}</strong>
+              </div>
+              <div>
+                <small>Destination</small>
+                <strong>{chosenSchedule.destination}</strong>
+              </div>
+              <div>
+                <small>STD</small>
+                <strong>{timeLabel(chosenSchedule.std)}</strong>
+              </div>
+              <div>
+                <small>STA</small>
+                <strong>{timeLabel(chosenSchedule.sta)}</strong>
+              </div>
+            </div>
+
+            <div className="dispatcher-schedule-preview-actions">
+              <button type="button" onClick={useChosenSchedule}>
+                Pilih jadwal ini
+              </button>
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={chooseAnotherSchedule}
+              >
+                Cari jadwal lain
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : null}
     </section>
   );
 }
