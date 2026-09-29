@@ -26,7 +26,7 @@ type TicketAlert = {
   accepted_at: string | null;
   in_progress_at: string | null;
   location: string | null;
-  maintenance_list: string | null;
+  perbaikan_list: string | null;
 };
 
 function formatDuration(totalSeconds: number) {
@@ -49,25 +49,25 @@ function formatScheduleTime(value: string | null) {
   }).format(date);
 }
 
-function maintenanceBaseAt(maintenance: TicketAlert) {
-  if (maintenance.status === "Confirmed")
-    return maintenance.accepted_at
-      ? new Date(maintenance.accepted_at).getTime()
+function perbaikanBaseAt(perbaikan: TicketAlert) {
+  if (perbaikan.status === "Confirmed")
+    return perbaikan.accepted_at
+      ? new Date(perbaikan.accepted_at).getTime()
       : null;
-  if (maintenance.status === "In Progress")
-    return maintenance.in_progress_at
-      ? new Date(maintenance.in_progress_at).getTime()
+  if (perbaikan.status === "In Progress")
+    return perbaikan.in_progress_at
+      ? new Date(perbaikan.in_progress_at).getTime()
       : null;
-  return new Date(maintenance.created_at).getTime();
+  return new Date(perbaikan.created_at).getTime();
 }
 
-function maintenanceThresholdSeconds(status: string) {
+function perbaikanThresholdSeconds(status: string) {
   if (status === "Confirmed") return 24 * 60 * 60;
   if (status === "In Progress") return 3 * 24 * 60 * 60;
   return 3 * 60 * 60;
 }
 
-function maintenanceStatusLabel(status: string) {
+function perbaikanStatusLabel(status: string) {
   const labels: Record<string, string> = {
     Requested: STATUS_LABELS.Requested,
     Confirmed: STATUS_LABELS.Confirmed,
@@ -128,13 +128,13 @@ export default function DashboardAlertList({
     () =>
       ticketAlertRows
         .map((ticket) => {
-          const base = maintenanceBaseAt(ticket);
+          const base = perbaikanBaseAt(ticket);
           if (base === null) return null;
-          const thresholdSeconds = maintenanceThresholdSeconds(ticket.status);
+          const thresholdSeconds = perbaikanThresholdSeconds(ticket.status);
           const elapsed = (now - base) / 1000;
           return {
             transactionId: ticket.transaction_id,
-            status: maintenanceStatusLabel(ticket.status),
+            status: perbaikanStatusLabel(ticket.status),
             label: elapsed < thresholdSeconds ? "Sisa waktu" : "Lewat",
             indicator: formatDuration(Math.abs(thresholdSeconds - elapsed)),
             late: elapsed >= thresholdSeconds,
@@ -145,8 +145,8 @@ export default function DashboardAlertList({
                   ? "1 hari"
                   : "3 hari",
             location: ticket.location ?? "Lokasi tidak tersedia",
-            maintenance:
-              ticket.maintenance_list ?? "Maintenance tidak tersedia",
+            perbaikan:
+              ticket.perbaikan_list ?? "Perbaikan tidak tersedia",
           };
         })
         .filter((item): item is NonNullable<typeof item> => item !== null),
@@ -165,13 +165,13 @@ export default function DashboardAlertList({
     mode === "task"
       ? "Ada yang perlu dicek"
       : mode === "ticket"
-        ? "Ada maintenance yang perlu dicek"
+        ? "Ada perbaikan yang perlu dicek"
         : "Ada yang perlu dicek";
   const heroDescription =
     mode === "task"
       ? "Ada schedule yang waktunya mulai mepet atau udah lewat."
       : mode === "ticket"
-        ? "Ada maintenance yang masih perlu dicek."
+        ? "Ada perbaikan yang masih perlu dicek."
         : "Ada beberapa hal yang perlu kamu cek di sini.";
 
   const taskGroups = useMemo(() => {
@@ -403,7 +403,7 @@ export default function DashboardAlertList({
       ) : null}
 
       {showTickets ? (
-        <section className="alert-content-section maintenance-alert-section">
+        <section className="alert-content-section perbaikan-alert-section">
           {(() => {
             const hasGroups = ticketGroups.length > 0;
             const activeLocation = hasGroups
@@ -424,17 +424,17 @@ export default function DashboardAlertList({
               <div
                 className={
                   "alert-hub-tabs" +
-                  (!hasGroups ? " maintenance-alert-empty" : "")
+                  (!hasGroups ? " perbaikan-alert-empty" : "")
                 }
               >
                 <div
                   className="alert-hub-tabs-list"
                   role="tablist"
-                  aria-label="Lokasi Maintenance"
+                  aria-label="Lokasi Perbaikan"
                 >
                   {hasGroups ? (
                     ticketGroups.map(([location, items]) => {
-                      const tabId = `maintenance-location-${location.replace(/[^a-zA-Z0-9_-]/g, "-").toLowerCase()}`;
+                      const tabId = `perbaikan-location-${location.replace(/[^a-zA-Z0-9_-]/g, "-").toLowerCase()}`;
                       const active = location === activeLocation;
                       return (
                         <button
@@ -447,7 +447,7 @@ export default function DashboardAlertList({
                           onClick={() => setActiveTicketLocation(location)}
                         >
                           <span>{location}</span>
-                          <small>{items.length} maintenance</small>
+                          <small>{items.length} perbaikan</small>
                         </button>
                       );
                     })
@@ -460,7 +460,7 @@ export default function DashboardAlertList({
                       disabled
                     >
                       <span>Belum ada lokasi</span>
-                      <small>0 maintenance</small>
+                      <small>0 perbaikan</small>
                     </button>
                   )}
                 </div>
@@ -472,7 +472,7 @@ export default function DashboardAlertList({
                   </div>
                   <div className="alert-hub-summary-stat">
                     <strong>{activeItems.length}</strong>
-                    <span>maintenance</span>
+                    <span>perbaikan</span>
                   </div>
                   <div className="alert-hub-summary-stat">
                     <strong>{approaching}</strong>
@@ -485,15 +485,15 @@ export default function DashboardAlertList({
                 </div>
 
                 <div
-                  id={`maintenance-location-${activeLocation.replace(/[^a-zA-Z0-9_-]/g, "-").toLowerCase()}`}
+                  id={`perbaikan-location-${activeLocation.replace(/[^a-zA-Z0-9_-]/g, "-").toLowerCase()}`}
                   role="tabpanel"
                   className="alert-table-scroll"
                 >
-                  <table className="alert-table alert-group-table maintenance-alert-group-table">
+                  <table className="alert-table alert-group-table perbaikan-alert-group-table">
                     <thead>
                       <tr>
                         <th>ID transaksi</th>
-                        <th>Maintenance</th>
+                        <th>Perbaikan</th>
                         <th>Status</th>
                         <th>Keterangan</th>
                         <th>Waktu</th>
@@ -509,7 +509,7 @@ export default function DashboardAlertList({
                             <td>
                               <strong>{item.transactionId}</strong>
                             </td>
-                            <td>{item.maintenance}</td>
+                            <td>{item.perbaikan}</td>
                             <td>
                               <StatusBadge
                                 status={
@@ -539,7 +539,7 @@ export default function DashboardAlertList({
                       ) : (
                         <tr className="alert-empty-row">
                           <td colSpan={5}>
-                            Belum ada maintenance yang masuk notifikasi.
+                            Belum ada perbaikan yang masuk notifikasi.
                           </td>
                         </tr>
                       )}
