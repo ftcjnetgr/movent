@@ -53,7 +53,6 @@ export default function DispatcherMaintenanceForm({
   const [state, setState] = useState<MaintenanceFormState>(initialState);
   const [isCreatePending, startCreateTransition] = useTransition();
   const [cancelMessage, setCancelMessage] = useState("");
-  const [showCreate, setShowCreate] = useState(false);
   const [isCancelPending, startCancelTransition] = useTransition();
   const [isConfirmPending, startConfirmTransition] = useTransition();
   const maintenanceOptions = maintenanceLists.map((item) => ({
@@ -99,12 +98,7 @@ export default function DispatcherMaintenanceForm({
             Pilih kebutuhan perbaikan, lokasi armada, dan armada yang akan
             ditangani.
           </p>
-          {!showCreate ? (
-            <button type="button" onClick={() => setShowCreate(true)}>
-              Yuk, buat perbaikan
-            </button>
-          ) : (
-            <form onSubmit={handleCreate} className="data-form">
+          <form onSubmit={handleCreate} className="data-form">
               <SearchableMasterSelect
                 label="Daftar Perbaikan"
                 name="maintenanceList"
@@ -138,20 +132,10 @@ export default function DispatcherMaintenanceForm({
               ) : null}
               <div className="form-actions">
                 <button type="submit" disabled={isCreatePending}>
-                  {isCreatePending
-                    ? "Lagi nyimpen..."
-                    : "Buat perbaikan"}
-                </button>
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={() => setShowCreate(false)}
-                >
-                  Batal
+                  {isCreatePending ? "Lagi nyimpen..." : "Ajuin perbaikan"}
                 </button>
               </div>
             </form>
-          )}
         </div>
 
         <div className="metric-card">
