@@ -69,7 +69,7 @@ export default function DispatcherCreationHub(props: Props) {
             <span className="creation-choice-icon">⌁</span>
             <span>
               <strong>Buat Perbaikan</strong>
-              <small>Pilih kebutuhan maintenance, lokasi, dan armadanya, ya.</small>
+              <small>Pilih kebutuhan perbaikan, lokasi, dan armadanya, ya.</small>
             </span>
             <b>→</b>
           </button>
