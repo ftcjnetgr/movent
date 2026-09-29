@@ -361,52 +361,76 @@ export default function DispatcherCreateTask({
                 })}
               </div>
 
-              {chosenSchedule ? (
-                <div className="dispatcher-schedule-preview">
-                  <div className="dispatcher-schedule-preview-head">
-                    <div>
-                      <small>Preview jadwal</small>
-                      <strong>{chosenSchedule.schedule_id}</strong>
-                    </div>
-                  </div>
-
-                  <div className="dispatcher-schedule-preview-grid">
-                    <div>
-                      <small>Start Point</small>
-                      <strong>{chosenSchedule.start_point}</strong>
-                    </div>
-                    <div>
-                      <small>Destination</small>
-                      <strong>{chosenSchedule.destination}</strong>
-                    </div>
-                    <div>
-                      <small>STD</small>
-                      <strong>{timeLabel(chosenSchedule.std)}</strong>
-                    </div>
-                    <div>
-                      <small>STA</small>
-                      <strong>{timeLabel(chosenSchedule.sta)}</strong>
-                    </div>
-                  </div>
-
-                  <div className="dispatcher-schedule-preview-actions">
-                    <button type="button" onClick={useChosenSchedule}>
-                      Pilih jadwal ini
-                    </button>
-                    <button
-                      type="button"
-                      className="secondary-button"
-                      onClick={chooseAnotherSchedule}
-                    >
-                      Pilih jadwal lain
-                    </button>
-                  </div>
-                </div>
-              ) : null}
             </div>
           </div>
         )
-      ) : (        <div className="metric-card dispatcher-task-preview">
+      ) : (        {chosenSchedule ? (
+          <div
+            className="dispatcher-schedule-preview-backdrop"
+            role="presentation"
+            onMouseDown={(event) => {
+              if (event.currentTarget === event.target) chooseAnotherSchedule();
+            }}
+          >
+            <section
+              className="dispatcher-schedule-preview-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="dispatcher-schedule-preview-title"
+            >
+              <div className="dispatcher-schedule-preview-head">
+                <div>
+                  <small>Preview jadwal</small>
+                  <strong id="dispatcher-schedule-preview-title">
+                    {chosenSchedule.schedule_id}
+                  </strong>
+                </div>
+                <button
+                  type="button"
+                  className="dispatcher-schedule-preview-close"
+                  onClick={chooseAnotherSchedule}
+                  aria-label="Tutup preview jadwal"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="dispatcher-schedule-preview-grid">
+                <div>
+                  <small>Start Point</small>
+                  <strong>{chosenSchedule.start_point}</strong>
+                </div>
+                <div>
+                  <small>Destination</small>
+                  <strong>{chosenSchedule.destination}</strong>
+                </div>
+                <div>
+                  <small>STD</small>
+                  <strong>{timeLabel(chosenSchedule.std)}</strong>
+                </div>
+                <div>
+                  <small>STA</small>
+                  <strong>{timeLabel(chosenSchedule.sta)}</strong>
+                </div>
+              </div>
+
+              <div className="dispatcher-schedule-preview-actions">
+                <button type="button" onClick={useChosenSchedule}>
+                  Pilih jadwal ini
+                </button>
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={chooseAnotherSchedule}
+                >
+                  Cari jadwal lain
+                </button>
+              </div>
+            </section>
+          </div>
+        ) : null}
+
+        <div className="metric-card dispatcher-task-preview">
           <div className="card-title">Cek tugas dulu</div>
           <div className="task-summary-grid">
             <div>
