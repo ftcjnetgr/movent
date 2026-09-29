@@ -13952,3 +13952,70 @@ td select:focus,
     margin-left: 8px !important;
   }
 }
+
+
+/* Dispatcher mobile flow spacing + route tabs */
+.role-dispatcher .role-page:has(.dispatcher-create-flow) .dispatcher-create-flow {
+  margin-top: 14px !important;
+}
+
+.role-dispatcher .role-page:has(.dispatcher-create-flow) .dispatcher-task-screen {
+  padding-top: 2px;
+}
+
+.role-dispatcher .dispatcher-route-tabs {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: 9px;
+  padding: 3px;
+  border-radius: 13px;
+  background: #f3f4f7;
+}
+
+.role-dispatcher .dispatcher-route-tabs button {
+  min-height: 38px !important;
+  padding: 7px 8px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  color: #737d8c !important;
+  box-shadow: none !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-route-tabs button.active {
+  background: #fff !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.07) !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card-action button {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-actions button,
+.role-dispatcher .dispatcher-schedule-change-button {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.role-dispatcher .dispatcher-task-screen-heading h2 {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+}
+
+.role-dispatcher .dispatcher-task-screen-heading p,
+.role-dispatcher .dispatcher-schedule-preview-grid strong,
+.role-dispatcher .dispatcher-selected-schedule-preview-grid strong {
+  text-transform: none !important;
+}
