@@ -32,7 +32,7 @@ export default async function MaintainerReportPage() {
       <div className="page-heading">
         <div>
           <h1>Tarik laporan</h1>
-          <p>Pilih periodenya, terus ambil laporannya.</p>
+          <p>Pilih periodenya, terus ambil laporannya, ya.</p>
         </div>
       </div>
       <section className="section-block">
