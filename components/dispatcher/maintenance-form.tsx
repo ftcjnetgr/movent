@@ -3,33 +3,33 @@
 import { STATUS_LABELS } from "@/components/shared/status-config";
 import { FormEvent, useState, useTransition } from "react";
 import {
-  cancelMaintenanceTicketAction,
-  createMaintenanceTicketAction,
-  confirmMaintenanceTicketAction,
-} from "@/app/dispatcher/maintenance-armada/actions";
+  cancelPerbaikanTicketAction,
+  createPerbaikanTicketAction,
+  confirmPerbaikanTicketAction,
+} from "@/app/dispatcher/perbaikan-armada/actions";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 function ticketStatusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
 }
 
-type MaintenanceFormState = {
+type PerbaikanFormState = {
   error?: string;
   success?: string;
   transactionId?: string;
   preview?: {
     transactionId: string;
-    maintenanceList: string;
+    perbaikanList: string;
     location: string;
     platNumber: string;
   };
 };
 
-const initialState: MaintenanceFormState = {};
+const initialState: PerbaikanFormState = {};
 
 type Ticket = {
   transaction_id: string;
   status: string;
-  maintenance_list: string | null;
+  perbaikan_list: string | null;
   location: string | null;
   fleet_plat_number: string | null;
   created_at: string;
@@ -38,25 +38,25 @@ type Ticket = {
 };
 
 type Props = {
-  maintenanceLists: string[];
+  perbaikanLists: string[];
   locations: string[];
   fleets: Array<{ plat_number: string; fleet_type: string }>;
   tickets: Ticket[];
 };
 
-export default function DispatcherMaintenanceForm({
-  maintenanceLists,
+export default function DispatcherPerbaikanForm({
+  perbaikanLists,
   locations,
   fleets,
   tickets,
 }: Props) {
-  const [state, setState] = useState<MaintenanceFormState>(initialState);
+  const [state, setState] = useState<PerbaikanFormState>(initialState);
   const [isCreatePending, startCreateTransition] = useTransition();
   const [cancelMessage, setCancelMessage] = useState("");
   const [showCreate, setShowCreate] = useState(false);
   const [isCancelPending, startCancelTransition] = useTransition();
   const [isConfirmPending, startConfirmTransition] = useTransition();
-  const maintenanceOptions = maintenanceLists.map((item) => ({
+  const perbaikanOptions = perbaikanLists.map((item) => ({
     value: item,
     label: item,
     searchText: item,
@@ -76,7 +76,7 @@ export default function DispatcherMaintenanceForm({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     startCreateTransition(async () => {
-      const result = await createMaintenanceTicketAction({}, formData);
+      const result = await createPerbaikanTicketAction({}, formData);
       setState(result);
     });
   }
@@ -85,7 +85,7 @@ export default function DispatcherMaintenanceForm({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     startCancelTransition(async () => {
-      const result = await cancelMaintenanceTicketAction(formData);
+      const result = await cancelPerbaikanTicketAction(formData);
       setCancelMessage(result.error ?? "");
     });
   }
@@ -94,22 +94,22 @@ export default function DispatcherMaintenanceForm({
     <section>
       <section className="section-grid two-column">
         <div className="metric-card">
-          <div className="card-title">Yuk, buat maintenance</div>
+          <div className="card-title">Yuk, buat perbaikan</div>
           <p className="muted">
-            Pilih kebutuhan maintenance, lokasi armada, dan armada yang akan
+            Pilih kebutuhan perbaikan, lokasi armada, dan armada yang akan
             ditangani.
           </p>
           {!showCreate ? (
             <button type="button" onClick={() => setShowCreate(true)}>
-              Yuk, buat maintenance
+              Yuk, buat perbaikan
             </button>
           ) : (
             <form onSubmit={handleCreate} className="data-form">
               <SearchableMasterSelect
-                label="Daftar Maintenance"
-                name="maintenanceList"
-                options={maintenanceOptions}
-                placeholder="Pilih jenis maintenance"
+                label="Daftar Perbaikan"
+                name="perbaikanList"
+                options={perbaikanOptions}
+                placeholder="Pilih jenis perbaikan"
                 required
               />
               <SearchableMasterSelect
@@ -140,7 +140,7 @@ export default function DispatcherMaintenanceForm({
                 <button type="submit" disabled={isCreatePending}>
                   {isCreatePending
                     ? "Lagi nyimpen..."
-                    : "Buat maintenance"}
+                    : "Buat perbaikan"}
                 </button>
                 <button
                   type="button"
@@ -155,14 +155,14 @@ export default function DispatcherMaintenanceForm({
         </div>
 
         <div className="metric-card">
-          <div className="card-title">Cek maintenance</div>
+          <div className="card-title">Cek perbaikan</div>
           {state.preview ? (
             <>
               <h2>{state.preview.transactionId}</h2>
               <div className="compact-form">
                 <div>
-                  <span className="muted">Daftar Maintenance</span>
-                  <strong>{state.preview.maintenanceList}</strong>
+                  <span className="muted">Daftar Perbaikan</span>
+                  <strong>{state.preview.perbaikanList}</strong>
                 </div>
                 <div>
                   <span className="muted">Lokasi</span>
@@ -179,7 +179,7 @@ export default function DispatcherMaintenanceForm({
               <form
                 action={(formData) => {
                   startConfirmTransition(async () => {
-                    const result = await confirmMaintenanceTicketAction(
+                    const result = await confirmPerbaikanTicketAction(
                       {},
                       formData,
                     );
@@ -195,8 +195,8 @@ export default function DispatcherMaintenanceForm({
                 />
                 <input
                   type="hidden"
-                  name="maintenanceList"
-                  value={state.preview.maintenanceList}
+                  name="perbaikanList"
+                  value={state.preview.perbaikanList}
                 />
                 <input
                   type="hidden"
@@ -222,21 +222,21 @@ export default function DispatcherMaintenanceForm({
                   <button type="submit" disabled={isConfirmPending}>
                     {isConfirmPending
                       ? "Mengonfirmasi..."
-                      : "Terima maintenance"}
+                      : "Terima perbaikan"}
                   </button>
                   <button
                     type="button"
                     className="secondary-button"
                     onClick={() => setState({})}
                   >
-                    Ubah Maintenance
+                    Ubah Perbaikan
                   </button>
                 </div>
               </form>
             </>
           ) : (
             <p className="muted">
-              Preview maintenance akan muncul setelah data berhasil disimpan.
+              Preview perbaikan akan muncul setelah data berhasil disimpan.
             </p>
           )}
         </div>
@@ -245,7 +245,7 @@ export default function DispatcherMaintenanceForm({
       <section className="data-table-card section-block">
         <div className="section-heading">
           <div>
-            <h2>Maintenance yang udah dibuat</h2>
+            <h2>Perbaikan yang udah dibuat</h2>
             <p>Yang masih tersimpan di riwayat pembuatan.</p>
           </div>
         </div>
@@ -255,7 +255,7 @@ export default function DispatcherMaintenanceForm({
             <thead>
               <tr>
                 <th>ID Transaksi</th>
-                <th>Maintenance</th>
+                <th>Perbaikan</th>
                 <th>Lokasi</th>
                 <th>Armada</th>
                 <th>Status</th>
@@ -268,7 +268,7 @@ export default function DispatcherMaintenanceForm({
                   <td>
                     <strong>{ticket.transaction_id}</strong>
                   </td>
-                  <td>{ticket.maintenance_list ?? "-"}</td>
+                  <td>{ticket.perbaikan_list ?? "-"}</td>
                   <td>{ticket.location ?? "-"}</td>
                   <td>{ticket.fleet_plat_number ?? "-"}</td>
                   <td>
@@ -319,7 +319,7 @@ export default function DispatcherMaintenanceForm({
                 <tr>
                   <td colSpan={6}>
                     <div className="empty-state">
-                      Belum ada maintenance yang dibuat untuk sekarang.
+                      Belum ada perbaikan yang dibuat untuk sekarang.
                     </div>
                   </td>
                 </tr>
