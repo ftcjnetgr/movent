@@ -12,6 +12,8 @@ type Preview = {
   sta: string;
   externalExecutor: string;
   externalFleet: string;
+  executorNik: string;
+  platNumber: string;
   sjs: {
     sjNumber: string;
     sjQty: number;
@@ -41,15 +43,35 @@ function jakartaTimestamp(value: string) {
   return `${date}T${value}:00+07:00`;
 }
 
-async function validateNonTgrInput(formData: FormData, transactionId?: string) {
+async function activeExecutorAndFleet(
+  admin: ReturnType<typeof createAdminClient>,
+  executorNik: string,
+  platNumber: string,
+) {
+  const [{ data: executor }, { data: fleet }] = await Promise.all([
+    admin
+      .from("executors")
+      .select("executor_nik, full_name, status")
+      .eq("executor_nik", executorNik)
+      .eq("status", "Active")
+      .maybeSingle(),
+    admin
+      .from("fleets")
+      .select("plat_number, fleet_type, status")
+      .eq("plat_number", platNumber)
+      .eq("status", "Active")
+      .maybeSingle(),
+  ]);
+  return { executor, fleet };
+}
+
+async function validateTgrInput(formData: FormData, transactionId?: string) {
   const startPoint = String(formData.get("startPoint") ?? "").trim();
   const destination = String(formData.get("destination") ?? "").trim();
   const std = String(formData.get("std") ?? "").trim();
   const sta = String(formData.get("sta") ?? "").trim();
-  const executorName = String(formData.get("executorName") ?? "").trim();
-  const executorPhone = String(formData.get("executorPhone") ?? "").trim();
-  const fleetPlate = String(formData.get("fleetPlate") ?? "").trim();
-  const fleetType = String(formData.get("fleetType") ?? "").trim();
+  const executorNik = String(formData.get("executorNik") ?? "").trim();
+  const platNumber = String(formData.get("platNumber") ?? "").trim();
   const sjNumbers = formData
     .getAll("sjNumber")
     .map(String)
@@ -70,17 +92,16 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
     !destination ||
     !std ||
     !sta ||
-    !executorName ||
-    !executorPhone ||
-    !fleetPlate ||
-    !fleetType ||
+    !executorNik ||
+    !platNumber ||
     !sjNumbers.length
   ) {
     return {
       error:
-        "Data perjalanan, executor, armada, dan minimal satu SJ perlu diisi lengkap dulu, ya.",
+        "Data perjalanan, Executor, Armada TGR, dan minimal satu SJ perlu diisi lengkap dulu, ya.",
     } as const;
   }
+
   if (
     sjNumbers.length !== sjQtys.length ||
     sjNumbers.length !== sjWeights.length ||
@@ -97,21 +118,26 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
     return { error: "STA harus lebih besar dari STD." } as const;
 
   const admin = createAdminClient();
-  const [{ data: startLocation }, { data: destinationLocation }] =
-    await Promise.all([
-      admin
-        .from("locations")
-        .select("location, grouping, status")
-        .eq("location", startPoint)
-        .eq("status", "Active")
-        .maybeSingle(),
-      admin
-        .from("locations")
-        .select("location, grouping, status")
-        .eq("location", destination)
-        .eq("status", "Active")
-        .maybeSingle(),
-    ]);
+  const [
+    { data: startLocation },
+    { data: destinationLocation },
+    { executor, fleet },
+  ] = await Promise.all([
+    admin
+      .from("locations")
+      .select("location, grouping, status")
+      .eq("location", startPoint)
+      .eq("status", "Active")
+      .maybeSingle(),
+    admin
+      .from("locations")
+      .select("location, grouping, status")
+      .eq("location", destination)
+      .eq("status", "Active")
+      .maybeSingle(),
+    activeExecutorAndFleet(admin, executorNik, platNumber),
+  ]);
+
   if (!startLocation || !destinationLocation) {
     return {
       error:
@@ -119,14 +145,11 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
     } as const;
   }
 
-  const sjs: {
-    sjNumber: string;
-    sjQty: number;
-    sjWeight: number;
-    product: string;
-    productSnapshot: { product: string; status: string };
-    sjNote: string | null;
-  }[] = [];
+  if (!executor || !fleet) {
+    return { error: "Executor atau Armada TGR yang dipilih belum aktif, ya." } as const;
+  }
+
+  const sjs: Preview["sjs"] = [];
   for (let i = 0; i < sjNumbers.length; i++) {
     if (
       !sjNumbers[i] ||
@@ -140,14 +163,17 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
         error: "Nomor SJ, Qty, berat, dan produk perlu diisi di setiap SJ, ya.",
       } as const;
     }
+
     const { data: productData } = await admin
       .from("products")
       .select("product, status")
       .eq("product", products[i])
       .eq("status", "Active")
       .maybeSingle();
+
     if (!productData)
       return { error: `Produk pada SJ ke-${i + 1} belum tersedia.` } as const;
+
     sjs.push({
       sjNumber: sjNumbers[i],
       sjQty: sjQtys[i],
@@ -168,15 +194,17 @@ async function validateNonTgrInput(formData: FormData, transactionId?: string) {
       destination,
       std: stdTimestamp,
       sta: staTimestamp,
-      externalExecutor: `${executorName} · ${executorPhone}`,
-      externalFleet: `${fleetPlate} · ${fleetType}`,
+      externalExecutor: executor.full_name,
+      externalFleet: `${fleet.plat_number} · ${fleet.fleet_type}`,
+      executorNik: executor.executor_nik,
+      platNumber: fleet.plat_number,
       sjs,
     } satisfies Preview,
-    snapshots: { startLocation, destinationLocation },
+    snapshots: { startLocation, destinationLocation, executor, fleet },
   };
 }
 
-export async function createNonTgrSupplyAction(
+export async function createTgrSupplyAction(
   _state: State,
   formData: FormData,
 ): Promise<State> {
@@ -184,7 +212,7 @@ export async function createNonTgrSupplyAction(
   if (!["Operation", "Super User"].includes(profile.role))
     return { error: "Kamu belum punya akses ke bagian ini." };
 
-  const validated = await validateNonTgrInput(formData);
+  const validated = await validateTgrInput(formData);
   if ("error" in validated) return validated;
 
   return {
@@ -194,7 +222,7 @@ export async function createNonTgrSupplyAction(
   };
 }
 
-export async function confirmNonTgrSupplyAction(
+export async function confirmTgrSupplyAction(
   _state: State,
   formData: FormData,
 ): Promise<State> {
@@ -202,27 +230,30 @@ export async function confirmNonTgrSupplyAction(
   if (!["Operation", "Super User"].includes(profile.role))
     return { error: "Kamu belum punya akses ke bagian ini." };
 
-  const validated = await validateNonTgrInput(formData);
+  const validated = await validateTgrInput(
+    formData,
+    String(formData.get("transactionId") ?? "").trim(),
+  );
   if ("error" in validated) return validated;
 
-  const admin = createAdminClient();
   const transactionId = String(formData.get("transactionId") ?? "").trim();
-  if (!transactionId)
-    return {
-      error:
-        "ID transaksi preview belum ada. Buat preview tugas dulu, ya.",
-    };
+  if (!transactionId) {
+    return { error: "ID transaksi preview belum ada. Buat preview tugas dulu, ya." };
+  }
 
-  const { snapshots } = validated;
-  const { value } = validated;
+  const { snapshots, value } = validated;
+  const admin = createAdminClient();
   const { error } = await admin.from("tasks").insert({
     transaction_id: transactionId,
     source_type: "Manual",
     task_type: "Supply",
-    fleet_ownership: "Non-TGR",
+    fleet_ownership: "TGR",
     status: "Assigned",
     created_by: profile.id,
     assigned_by: profile.id,
+    executor_nik: value.executorNik,
+    executor_snapshot: snapshots.executor,
+    fleet_snapshot: snapshots.fleet,
     external_executor: value.externalExecutor,
     external_fleet: value.externalFleet,
     start_point: value.startPoint,
@@ -255,7 +286,7 @@ export async function confirmNonTgrSupplyAction(
     }
 
     return {
-      error: "Tugas Supply Non-TGR belum berhasil dibuat. Coba lagi, ya.",
+      error: "Tugas Supply TGR belum berhasil dibuat. Coba lagi, ya.",
     };
   }
 
@@ -264,8 +295,10 @@ export async function confirmNonTgrSupplyAction(
     .select("id")
     .eq("transaction_id", transactionId)
     .maybeSingle();
+
   if (!taskRow)
     return { error: "Tugasnya sudah dibuat, tapi detail SJ belum ketemu." };
+
   const sjRows = value.sjs.map((sj) => ({
     task_id: taskRow.id,
     sj_number: sj.sjNumber,
@@ -275,6 +308,7 @@ export async function confirmNonTgrSupplyAction(
     product_snapshot: sj.productSnapshot,
     note: sj.sjNote,
   }));
+
   const { error: sjError } = await admin.from("task_sj_items").insert(sjRows);
   if (sjError) {
     await admin
@@ -295,7 +329,7 @@ export async function confirmNonTgrSupplyAction(
   };
 }
 
-export async function confirmNonTgrDepartureByOperationAction(
+export async function confirmTgrDepartureByOperationAction(
   _state: State,
   formData: FormData,
 ): Promise<State> {
@@ -315,27 +349,30 @@ export async function confirmNonTgrDepartureByOperationAction(
     .select("id, status, created_by")
     .eq("transaction_id", transactionId)
     .eq("task_type", "Supply")
-    .eq("fleet_ownership", "Non-TGR")
+    .eq("fleet_ownership", "TGR")
     .eq("status", "Assigned");
+
   const { data: task } =
     profile.role === "Super User"
       ? await query.maybeSingle()
       : await query.eq("created_by", profile.id).maybeSingle();
 
   if (!task) {
-    return { error: "Tugas Non-TGR tidak ditemukan atau sudah diproses." };
+    return { error: "Tugas TGR tidak ditemukan atau sudah diproses." };
   }
 
   const { error } = await admin
     .from("tasks")
     .update({
       status: "Driving",
-      external_departure_at: timestamp,
+      driving_at: timestamp,
     })
     .eq("id", task.id)
     .eq("status", "Assigned");
 
-  if (error) return { error: "Konfirmasi berangkat belum berhasil. Coba lagi, ya." };
+  if (error) {
+    return { error: "Konfirmasi berangkat belum berhasil. Coba lagi, ya." };
+  }
 
   revalidateOperationPaths();
   return { success: `ATD ${transactionId} sudah dicatat.` };
