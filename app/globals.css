@@ -13449,3 +13449,172 @@ td select:focus,
     margin-right: -12px !important;
   }
 }
+
+
+/* Dispatcher — centered phone canvas + app-header back */
+.role-dispatcher .app-content {
+  width: min(100vw, 430px) !important;
+  max-width: 430px !important;
+  margin: 0 auto !important;
+  min-height: 100vh;
+  background: #fff;
+  box-shadow: 0 0 40px rgba(15, 23, 42, 0.06);
+}
+
+.role-dispatcher .topbar {
+  width: 100% !important;
+  min-height: 64px !important;
+  padding: 0 14px !important;
+}
+
+.role-dispatcher .dispatcher-create-flow > .dispatcher-back-button {
+  position: fixed !important;
+  top: 15px !important;
+  right: max(12px, calc((100vw - 430px) / 2 + 12px)) !important;
+  z-index: 1200 !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 11px !important;
+  background: var(--theme-color-soft) !important;
+  color: var(--theme-color-dark) !important;
+  font-size: 20px !important;
+  box-shadow: none !important;
+}
+
+.role-dispatcher .dispatcher-create-flow > .dispatcher-back-button:hover,
+.role-dispatcher .dispatcher-create-flow > .dispatcher-back-button:active {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-create-flow {
+  padding-top: 0 !important;
+}
+
+.role-dispatcher .role-page:has(.dispatcher-create-flow) .creation-flow-toolbar {
+  display: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card-groups {
+  display: grid;
+  gap: 8px;
+}
+
+.role-dispatcher .dispatcher-schedule-card-list {
+  display: grid;
+  gap: 8px;
+  padding: 9px;
+  background: #fafbfc;
+  border-top: 1px solid #edf1f5;
+}
+
+.role-dispatcher .dispatcher-schedule-card {
+  width: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  gap: 10px;
+  padding: 12px !important;
+  border: 1px solid #e7ebf0 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  color: var(--text) !important;
+  text-align: left !important;
+  box-shadow: 0 2px 8px rgba(15,23,42,.035) !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card:hover,
+.role-dispatcher .dispatcher-schedule-card:active {
+  background: #fff !important;
+  color: var(--text) !important;
+  border-color: #d7ddef !important;
+  box-shadow: 0 4px 12px rgba(15,23,42,.06) !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card.selected {
+  border-color: var(--theme-color-light) !important;
+  background: var(--theme-color-soft) !important;
+  box-shadow: 0 0 0 1px var(--theme-color-light) inset !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.role-dispatcher .dispatcher-schedule-card-top strong {
+  color: var(--text) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.01em;
+}
+
+.role-dispatcher .dispatcher-schedule-card-top span {
+  flex: 0 0 auto;
+  color: var(--theme-color-dark);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.role-dispatcher .dispatcher-schedule-card-route {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 18px minmax(0,1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.role-dispatcher .dispatcher-schedule-card-route > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.role-dispatcher .dispatcher-schedule-card-route small {
+  color: #98a2b3;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.role-dispatcher .dispatcher-schedule-card-route strong {
+  min-width: 0;
+  color: var(--text);
+  font-size: 10px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.role-dispatcher .dispatcher-schedule-card-route > span {
+  color: #a3adbb;
+  font-size: 14px;
+  text-align: center;
+}
+
+.role-dispatcher .dispatcher-schedule-group {
+  border: 1px solid #e8edf2 !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+@media (min-width: 431px) {
+  .role-dispatcher .dispatcher-mobile-navbar {
+    width: 414px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .role-dispatcher .dispatcher-fab {
+    right: max(24px, calc((100vw - 430px) / 2 + 18px)) !important;
+  }
+}
