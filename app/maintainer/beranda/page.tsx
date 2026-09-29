@@ -30,7 +30,7 @@ export default async function MaintainerBerandaPage() {
     admin
       .from("ticketings")
       .select(
-        "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at",
+        "transaction_id, status, perbaikan_list, location, fleet_plat_number, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(12),
@@ -44,7 +44,7 @@ export default async function MaintainerBerandaPage() {
   const tickets = [...(ticketResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
   const activities = activityResult.data ?? [];
 
-  const totalMaintenance = Object.values(data.ticketCounts).reduce(
+  const totalPerbaikan = Object.values(data.ticketCounts).reduce(
     (total, count) => total + (count ?? 0),
     0,
   );
@@ -93,12 +93,12 @@ export default async function MaintainerBerandaPage() {
         <div>
           <h1>Beranda</h1>
           <p>
-            Biar gampang, semua maintenance yang perlu kamu kerjain ada di sini.
+            Biar gampang, semua perbaikan yang perlu kamu kerjain ada di sini.
           </p>
         </div>
       </div>
 
-      <section className="super-kpi-grid maintenance-kpi-grid">
+      <section className="super-kpi-grid perbaikan-kpi-grid">
         <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-requested">
           <div className="super-kpi-icon">
             <StatusIcon status="Requested" size={20} />
@@ -144,12 +144,12 @@ export default async function MaintainerBerandaPage() {
         </div>
       </section>
 
-      <section className="super-dashboard-main-grid maintenance-dashboard-main-grid">
+      <section className="super-dashboard-main-grid perbaikan-dashboard-main-grid">
         <div className="super-panel super-chart-panel">
           <div className="super-panel-heading">
             <div>
-              <h2>Aktivitas Maintenance</h2>
-              <p>Biar gampang dipantau, maintenance terbaru ada di sini.</p>
+              <h2>Aktivitas Perbaikan</h2>
+              <p>Biar gampang dipantau, perbaikan terbaru ada di sini.</p>
             </div>
 
             <div className="super-chart-legend">
@@ -217,14 +217,14 @@ export default async function MaintainerBerandaPage() {
           <div className="super-panel-heading">
             <div>
               <h2>Aktivitas Sistem</h2>
-              <p>Aktivitas terbaru maintenance.</p>
+              <p>Aktivitas terbaru perbaikan.</p>
             </div>
           </div>
 
           <div className="super-activity-list">
             <div>
               <span className="activity-dot blue" />
-              <span>{tickets.length} maintenance terbaru</span>
+              <span>{tickets.length} perbaikan terbaru</span>
               <time>{shortTime(new Date().toISOString())}</time>
             </div>
 
@@ -233,7 +233,7 @@ export default async function MaintainerBerandaPage() {
               <span>
                 {(data.ticketCounts.Confirmed ?? 0) +
                   (data.ticketCounts["In Progress"] ?? 0)}{" "}
-                maintenance sedang berjalan
+                perbaikan sedang berjalan
               </span>
               <time>{shortTime(new Date().toISOString())}</time>
             </div>
@@ -241,7 +241,7 @@ export default async function MaintainerBerandaPage() {
             <div>
               <span className="activity-dot purple" />
               <span>
-                {data.ticketCounts.Completed ?? 0} maintenance selesai
+                {data.ticketCounts.Completed ?? 0} perbaikan selesai
               </span>
               <time>{shortTime(new Date().toISOString())}</time>
             </div>
@@ -253,7 +253,7 @@ export default async function MaintainerBerandaPage() {
         <div className="super-panel super-table-panel">
           <div className="super-panel-heading">
             <div>
-              <h2>Maintenance Terbaru</h2>
+              <h2>Perbaikan Terbaru</h2>
               <p>Biar nggak perlu buka-buka lagi, detail singkatnya ada di sini.</p>
             </div>
           </div>
@@ -263,7 +263,7 @@ export default async function MaintainerBerandaPage() {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Maintenance</th>
+                  <th>Perbaikan</th>
                   <th>Armada</th>
                   <th>Lokasi</th>
                   <th>Status</th>
@@ -276,7 +276,7 @@ export default async function MaintainerBerandaPage() {
                     <td>
                       <strong>{ticket.transaction_id}</strong>
                     </td>
-                    <td>{ticket.maintenance_list ?? "-"}</td>
+                    <td>{ticket.perbaikan_list ?? "-"}</td>
                     <td>{ticket.fleet_plat_number ?? "-"}</td>
                     <td>{ticket.location ?? "-"}</td>
                     <td>
@@ -295,7 +295,7 @@ export default async function MaintainerBerandaPage() {
                 {!tickets.length ? (
                   <tr>
                     <td colSpan={6} className="super-empty-cell">
-                      Belum ada maintenance di sini.
+                      Belum ada perbaikan di sini.
                     </td>
                   </tr>
                 ) : null}
