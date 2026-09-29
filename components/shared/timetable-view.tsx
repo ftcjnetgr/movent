@@ -691,32 +691,6 @@ export default function TimetableView({
                 Destination
               </button>
             </div>
-            <div
-              className="schedule-point-tabs"
-              aria-label={
-                direction === "start-point"
-                  ? "Filter Start Point"
-                  : "Filter Destination"
-              }
-            >
-              <button
-                type="button"
-                className={!point ? "active" : ""}
-                onClick={() => setPoint("")}
-              >
-                Semua
-              </button>
-              {pointOptions.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={point === item ? "active" : ""}
-                  onClick={() => setPoint(item)}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
           </div>
 
           <div className="schedule-control-field schedule-category-field">
@@ -754,6 +728,38 @@ export default function TimetableView({
                 </button>
               ))}
             </div>
+          </div>
+        </div>
+
+        <div className="schedule-point-detail-card">
+          <span className="schedule-control-label">
+            Detail {direction === "start-point" ? "Start Point" : "Destination"}
+          </span>
+          <div
+            className="schedule-point-tabs"
+            aria-label={
+              direction === "start-point"
+                ? "Filter Start Point"
+                : "Filter Destination"
+            }
+          >
+            <button
+              type="button"
+              className={!point ? "active" : ""}
+              onClick={() => setPoint("")}
+            >
+              Semua
+            </button>
+            {pointOptions.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={point === item ? "active" : ""}
+                onClick={() => setPoint(item)}
+              >
+                {item}
+              </button>
+            ))}
           </div>
         </div>
 
