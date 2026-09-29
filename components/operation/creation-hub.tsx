@@ -96,7 +96,7 @@ export default function OperationCreationHub({
       ) : (
         <div className="metric-card operation-request-card">
           <p className="muted">
-            Isi titik mulai, destinasi, STD, dan STA. Setelah dikonfirmasi,
+            Isi titik mulai, destinasi, STD, dan STA. Setelah dicek,
             request masuk ke Dispatcher.
           </p>
           <OperationRequestExtraScheduleForm locations={locations} />
