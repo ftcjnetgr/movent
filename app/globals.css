@@ -12694,3 +12694,85 @@ td select:focus,
   pointer-events: none !important;
   transform: scale(0.9) !important;
 }
+
+
+/* FINAL DISPATCHER QUICK CREATE — exactly two one-line actions */
+.role-dispatcher .dispatcher-create-menu {
+  right: 16px !important;
+  bottom: calc(145px + env(safe-area-inset-bottom)) !important;
+  width: min(210px, calc(100vw - 86px)) !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: repeat(2, 42px) !important;
+  gap: 7px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.role-dispatcher .dispatcher-create-menu-item {
+  width: 100% !important;
+  min-height: 42px !important;
+  height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 9px !important;
+  background: #f1f1f1 !important;
+  color: #202020 !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-create-menu-item:hover,
+.role-dispatcher .dispatcher-create-menu-item:active {
+  background: #e9e9e9 !important;
+  color: #202020 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-fab {
+  right: 16px !important;
+  bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  z-index: 1004 !important;
+}
+
+.role-dispatcher .dispatcher-fab.is-open {
+  background: var(--theme-color-dark) !important;
+}
+
+.role-dispatcher .dispatcher-status-card {
+  margin-top: 12px !important;
+  width: 100% !important;
+}
+
+.role-dispatcher .dispatcher-status-card,
+.role-dispatcher .dispatcher-ringkasan-card {
+  padding: 14px !important;
+}
+
+.role-dispatcher .dispatcher-status-card .summary-bar-row,
+.role-dispatcher .dispatcher-ringkasan-card .summary-bar-row {
+  min-height: 42px;
+}
+
+@media (max-width: 480px) {
+  .role-dispatcher .dispatcher-create-menu {
+    right: 14px !important;
+    bottom: calc(140px + env(safe-area-inset-bottom)) !important;
+    width: min(210px, calc(100vw - 80px)) !important;
+  }
+
+  .role-dispatcher .dispatcher-fab {
+    right: 14px !important;
+  }
+}
