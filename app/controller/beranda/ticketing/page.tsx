@@ -206,7 +206,7 @@ export default async function ControllerTicketingDashboardPage({
             <strong>{data.ticketCounts.Completed ?? 0}</strong>
             <small>{percentage(data.ticketCounts.Completed ?? 0, totalAllActivities)}% dari semua aktivitas</small>
           </div>
-
+        </div>
 
         <div className="super-kpi-card kpi-red status-kpi-card status-kpi-canceled">
           <div className="super-kpi-icon">
@@ -217,7 +217,7 @@ export default async function ControllerTicketingDashboardPage({
             <strong>{data.ticketCounts.Canceled ?? 0}</strong>
             <small>{percentage(data.ticketCounts.Canceled ?? 0, totalAllActivities)}% dari semua aktivitas</small>
           </div>
-        </div>        </div>
+        </div>
       </section>
 
       <section className="super-dashboard-main-grid maintenance-dashboard-main-grid">
