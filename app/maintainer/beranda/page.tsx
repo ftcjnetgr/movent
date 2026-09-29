@@ -99,6 +99,17 @@ export default async function MaintainerBerandaPage() {
       </div>
 
       <section className="super-kpi-grid maintenance-kpi-grid">
+        <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-total-maintenance">
+          <div className="super-kpi-icon">
+            <StatusIcon status="" size={20} />
+          </div>
+          <div className="super-kpi-content">
+            <span>Semua Perbaikan</span>
+            <strong>{totalMaintenance}</strong>
+            <small>Total perbaikan</small>
+          </div>
+        </div>
+
         <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-requested">
           <div className="super-kpi-icon">
             <StatusIcon status="Requested" size={20} />
