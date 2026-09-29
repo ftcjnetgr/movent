@@ -37,7 +37,7 @@ export default function OperationRequestExtraScheduleForm({
         <label>
           Titik Mulai
           <select name="startPoint" defaultValue="" required>
-            <option value="">Pilih Titik Mulai</option>
+            <option value="">Pilih titik mulai</option>
             {locations.map((x) => (
               <option key={x}>{x}</option>
             ))}
@@ -126,7 +126,7 @@ export default function OperationRequestExtraScheduleForm({
                 className="secondary-button"
                 onClick={() => window.location.reload()}
               >
-                Ubah Permintaan
+                Mau ubah permintaan?
               </button>
             </div>
           </form>
