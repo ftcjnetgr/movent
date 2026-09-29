@@ -33,7 +33,7 @@ export async function changePasswordAction(
   }
 
   if (newPassword !== confirmPassword) {
-    return { error: "Kedua kata sandi belum sama. Coba cek lagi, ya." };
+    return { error: "Password-nya belum sama. Cek lagi, ya." };
   }
 
   const supabase = await createClient();
@@ -51,7 +51,7 @@ export async function changePasswordAction(
     .maybeSingle();
 
   if (!profile) {
-    return { error: "Data profil pengguna belum ditemukan." };
+    return { error: "Data profil kamu belum ditemukan." };
   }
 
   if (profile.status === "Locked") {
