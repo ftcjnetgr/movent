@@ -859,7 +859,7 @@ export default function AppShellClient({
                 placeholder="Mau cari tugas, armada, atau lokasi?"
               />
             </div>
-          )
+          )}
           {isDashboardDateFilter ? (
             <form className="topbar-date-filter" method="get" action={pathname}>
               <label>
