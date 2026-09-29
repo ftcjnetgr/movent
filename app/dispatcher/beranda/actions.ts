@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 
+const DISPATCHER_FLEET_OWNERSHIP = "TGR" as const;
+
 export type State = {
   error?: string;
   success?: string;
@@ -100,7 +102,7 @@ export async function createDispatcherTaskAction(
   const taskType = String(formData.get("taskType") ?? "");
   const ownership = String(formData.get("fleetOwnership") ?? "");
 
-  if (taskType !== "Supply" || ownership !== "TGR") {
+  if (taskType !== "Supply" || ownership !== DISPATCHER_FLEET_OWNERSHIP) {
     return { error: "Tugas baru dari Dispatcher sekarang khusus Armada TGR, ya." };
   }
 
@@ -238,7 +240,7 @@ export async function confirmDispatcherTaskAction(
       transaction_id: transactionId,
       source_type: "Schedule",
       task_type: "Supply",
-      fleet_ownership: "TGR",
+      fleet_ownership: DISPATCHER_FLEET_OWNERSHIP,
       status: "Assigned",
       created_by: profile.id,
       assigned_by: profile.id,
