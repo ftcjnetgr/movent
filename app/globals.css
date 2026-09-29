@@ -11370,3 +11370,32 @@ td select:focus,
 .super-dashboard .status-kpi-canceled {
   border-top-color: #dc2626 !important;
 }
+
+
+/* FINAL TIMETABLE POINT DETAIL — buttons fill the whole card */
+.schedule-page .schedule-point-detail-card {
+  padding: 12px !important;
+}
+
+.schedule-page .schedule-point-detail-card .schedule-point-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)) !important;
+  gap: 6px !important;
+  width: 100% !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 34px;
+  padding: 7px 8px;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .schedule-page .schedule-point-detail-card .schedule-point-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
