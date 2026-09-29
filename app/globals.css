@@ -11405,17 +11405,17 @@ td select:focus,
 .super-dashboard .status-kpi-assigned .super-kpi-icon,
 .super-dashboard .status-kpi-requested .super-kpi-icon {
   background: #fffde6 !important;
-  color: #EEED09 !important;
-  border-color: #EEED09 !important;
+  color: #C9C400 !important;
+  border-color: #C9C400 !important;
 }
 
 .super-dashboard .status-kpi-assigned,
 .super-dashboard .status-kpi-requested {
-  border-top-color: #EEED09 !important;
+  border-top-color: #C9C400 !important;
 }
 
 .status-badge.status-assigned,
 .status-badge.status-requested {
   background: #fffde6 !important;
-  color: #EEED09 !important;
+  color: #C9C400 !important;
 }
