@@ -185,6 +185,7 @@ export default function DispatcherCreateTask({
                   Pilih jadwal lain
                 </button>
               </div>
+
               <div className="dispatcher-selected-schedule-preview-grid">
                 <div>
                   <small>Start Point</small>
@@ -203,6 +204,11 @@ export default function DispatcherCreateTask({
                   <strong>{timeLabel(chosenSchedule.sta)}</strong>
                 </div>
               </div>
+            </div>
+
+            <div className="dispatcher-assignment-step-head">
+              <h2>Pilih Executor & Armada</h2>
+              <p>Jadwalnya udah aman, sekarang tinggal tentuin yang jalan.</p>
             </div>
 
             <div className="form-section">
@@ -366,6 +372,7 @@ export default function DispatcherCreateTask({
                       <strong>{chosenSchedule.schedule_id}</strong>
                     </div>
                   </div>
+
                   <div className="dispatcher-schedule-preview-grid">
                     <div>
                       <small>Start Point</small>
@@ -384,6 +391,7 @@ export default function DispatcherCreateTask({
                       <strong>{timeLabel(chosenSchedule.sta)}</strong>
                     </div>
                   </div>
+
                   <div className="dispatcher-schedule-preview-actions">
                     <button type="button" onClick={useChosenSchedule}>
                       Pakai jadwal ini
@@ -401,14 +409,7 @@ export default function DispatcherCreateTask({
             </div>
           </div>
         )
-      ) : (
-            <p className="form-helper">
-              Buka grup schedule, lalu pilih salah satu card.
-            </p>
-          )}
-        </form>
-      ) : (
-        <div className="metric-card dispatcher-task-preview">
+      ) : (        <div className="metric-card dispatcher-task-preview">
           <div className="card-title">Cek tugas dulu</div>
           <div className="task-summary-grid">
             <div>
