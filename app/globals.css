@@ -11580,3 +11580,37 @@ td select:focus,
   font-size: 10px;
   text-align: center;
 }
+
+
+/* report searchable dropdown — neutral + left aligned */
+.report-search-select-trigger {
+  background: #fff !important;
+  color: var(--text) !important;
+  justify-content: space-between !important;
+  text-align: left !important;
+}
+
+.report-search-select-option {
+  justify-content: flex-start !important;
+  background: #fff !important;
+  color: var(--text) !important;
+  text-align: left !important;
+  font-weight: 400 !important;
+}
+
+.report-search-select-option:hover,
+.report-search-select-option.is-selected,
+.report-search-select-option.is-selected:hover {
+  background: #fff !important;
+  color: var(--text) !important;
+}
+
+.report-search-select-option.is-selected {
+  font-weight: 400 !important;
+}
+
+.report-search-select-trigger:hover,
+.report-search-select-trigger[aria-expanded="true"] {
+  background: #fff !important;
+  color: var(--text) !important;
+}
