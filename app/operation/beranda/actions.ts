@@ -249,7 +249,7 @@ export async function confirmNonTgrSupplyAction(
 
     if (existing) {
       return {
-        success: `Tugas ${existing.transaction_id} sudah dikonfirmasi dan ditugaskan.`,
+        success: `Tugas ${existing.transaction_id} sudah dikonfirmasi dan ditugasin.`,
         transactionId: existing.transaction_id,
       };
     }
