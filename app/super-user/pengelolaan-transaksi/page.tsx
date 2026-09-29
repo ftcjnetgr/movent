@@ -149,7 +149,7 @@ export default async function SuperUserTransactionManagementPage() {
         <div className="section-heading">
           <div>
             <h2>Tugas</h2>
-            <p>Semua tugas dari berbagai alur ada di sini.</p>
+            <p>Semua tugas dari berbagai alur ada di sini, ya.</p>
           </div>
         </div>
         <div className="table-wrap">
@@ -216,7 +216,7 @@ export default async function SuperUserTransactionManagementPage() {
         <div className="section-heading">
           <div>
             <h2>Maintenance</h2>
-            <p>Semua maintenance dari Dispatcher ada di sini.</p>
+            <p>Semua maintenance dari Dispatcher ada di sini, ya.</p>
           </div>
         </div>
         <div className="table-wrap">
