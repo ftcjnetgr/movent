@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
-import { getDashboardData } from "@/lib/server/dashboard";
 import StatusBadge from "@/components/shared/status-badge";
 import { compareStatus, STATUS_LABELS, STATUS_SUBCOPY, StatusIcon } from "@/components/shared/status-config";
 
@@ -10,45 +9,21 @@ function statusLabel(status: string) {
 }
 
 
-function isReadyToGo(task: {
-  status: string;
-  task_type: string;
-  fleet_ownership: string | null;
-  sj_number: string | null;
-  odometer_start: number | null;
-  accepted_at: string | null;
-}) {
-  if (
-    task.status !== "Confirmed" ||
-    !task.accepted_at ||
-    task.odometer_start === null
-  ) return false;
-
-  if (task.task_type === "Supply" && task.fleet_ownership === "TGR") {
-    return Boolean(task.sj_number);
-  }
-
-  return true;
-}
-
 function displayTaskStatus(task: {
   status: string;
-  task_type: string;
-  fleet_ownership: string | null;
-  sj_number: string | null;
-  odometer_start: number | null;
   accepted_at: string | null;
 }) {
-  return isReadyToGo(task) ? "Ready" : task.status;
+  if (task.status === "Confirmed" && !task.accepted_at) return "Assigned";
+  return task.status;
 }
 
 function sortByStatusAndTime<T extends {
   status: string;
+  accepted_at: string | null;
   task_type: string;
   fleet_ownership: string | null;
   sj_number: string | null;
   odometer_start: number | null;
-  accepted_at: string | null;
   std: string | null;
   created_at: string;
 }>(rows: T[]) {
@@ -119,24 +94,40 @@ export default async function ControllerPenugasanDashboardPage({
     new Date(`${to}T00:00:00+07:00`).getTime() + 86400000,
   ).toISOString();
 
-  const [data, tasksResult, activityResult] =
-    await Promise.all([
-      getDashboardData(profile, from, to),
-      admin
-        .from("tasks")
-        .select(
-          "id, transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, sj_number, odometer_start, created_at",
-        )
-        .order("created_at", { ascending: false })
-        .gte("created_at", rangeStart)
-        .lt("created_at", rangeEnd)
-        .limit(8),
-      admin
-        .from("tasks")
-        .select("status, task_type, fleet_ownership, sj_number, odometer_start, accepted_at, std, created_at")
-        .gte("created_at", rangeStart)
-        .lt("created_at", rangeEnd),
-    ]);
+  const { data: dispatcherProfiles } = await admin
+    .from("user_profiles")
+    .select("id")
+    .eq("role", "Dispatcher");
+
+  const dispatcherIds = (dispatcherProfiles ?? []).map((item) => item.id);
+
+  const [tasksResult, activityResult] = dispatcherIds.length
+    ? await Promise.all([
+        admin
+          .from("tasks")
+          .select(
+            "id, transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, executor_snapshot, fleet_snapshot, schedule_id, sj_number, odometer_start, accepted_at, created_at, assigned_by, executor_nik",
+          )
+          .in("assigned_by", dispatcherIds)
+          .not("executor_nik", "is", null)
+          .order("created_at", { ascending: false })
+          .gte("created_at", rangeStart)
+          .lt("created_at", rangeEnd)
+          .limit(8),
+        admin
+          .from("tasks")
+          .select(
+            "status, task_type, fleet_ownership, sj_number, odometer_start, accepted_at, std, created_at, assigned_by, executor_nik",
+          )
+          .in("assigned_by", dispatcherIds)
+          .not("executor_nik", "is", null)
+          .gte("created_at", rangeStart)
+          .lt("created_at", rangeEnd),
+      ])
+    : [
+        { data: [], error: null },
+        { data: [], error: null },
+      ];
 
   const rawTasks = tasksResult.data ?? [];
   const activities = activityResult.data ?? [];
@@ -147,10 +138,7 @@ export default async function ControllerPenugasanDashboardPage({
   const taskStatusCounts = {
     Assigned: activities.filter((task) => displayTaskStatus(task) === "Assigned")
       .length,
-    Confirmed: activities.filter(
-      (task) => task.status === "Confirmed" && Boolean(task.accepted_at),
-    ).length,
-    Ready: activities.filter((task) => displayTaskStatus(task) === "Ready")
+    Confirmed: activities.filter((task) => displayTaskStatus(task) === "Confirmed")
       .length,
     Driving: activities.filter((task) => displayTaskStatus(task) === "Driving")
       .length,
@@ -163,7 +151,6 @@ export default async function ControllerPenugasanDashboardPage({
   const activeTasks =
     taskStatusCounts.Assigned +
     taskStatusCounts.Confirmed +
-    taskStatusCounts.Ready +
     taskStatusCounts.Driving;
 
   const completedTasks = taskStatusCounts.Completed;
@@ -189,7 +176,6 @@ export default async function ControllerPenugasanDashboardPage({
         .length,
       confirmed: rows.filter((task) => displayTaskStatus(task) === "Confirmed")
         .length,
-      ready: rows.filter((task) => displayTaskStatus(task) === "Ready").length,
       driving: rows.filter((task) => displayTaskStatus(task) === "Driving").length,
       completed: rows.filter((task) => displayTaskStatus(task) === "Completed")
         .length,
@@ -204,7 +190,6 @@ export default async function ControllerPenugasanDashboardPage({
       (item) =>
         item.assigned +
         item.confirmed +
-        item.ready +
         item.driving +
         item.completed +
         item.canceled,
@@ -318,9 +303,6 @@ export default async function ControllerPenugasanDashboardPage({
                 <i className="legend-confirmed" /> Udah Diterima
               </span>
               <span>
-                <i className="legend-ready" /> Siap Jalan
-              </span>
-              <span>
                 <i className="legend-driving" /> Lagi Jalan
               </span>
               <span>
@@ -354,14 +336,6 @@ export default async function ControllerPenugasanDashboardPage({
                         className="bar-confirmed"
                         style={{
                           height: String((item.confirmed / maxHour) * 100) + "%",
-                        }}
-                      />
-                    ) : null}
-                    {item.ready > 0 ? (
-                      <span
-                        className="bar-ready"
-                        style={{
-                          height: String((item.ready / maxHour) * 100) + "%",
                         }}
                       />
                     ) : null}
