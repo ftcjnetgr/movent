@@ -12872,6 +12872,9 @@ td select:focus,
   min-width: 58px;
   min-height: 32px;
   padding: 7px 10px;
+  background: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-dark) !important;
+  color: #fff !important;
   font-size: 10px;
 }
 
