@@ -1,21 +1,21 @@
-import DispatcherMaintenanceForm from "@/components/dispatcher/maintenance-form";
+import DispatcherPerbaikanForm from "@/components/dispatcher/perbaikan-form";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 
-export default async function DispatcherMaintenanceArmadaPage() {
+export default async function DispatcherPerbaikanArmadaPage() {
   const profile = await getCurrentProfile();
   const admin = createAdminClient();
   const [
-    { data: maintenanceLists },
+    { data: perbaikanLists },
     { data: locations },
     { data: fleets },
     { data: tickets },
   ] = await Promise.all([
     admin
-      .from("maintenance_lists")
-      .select("maintenance_list")
+      .from("perbaikan_lists")
+      .select("perbaikan_list")
       .eq("status", "Active")
-      .order("maintenance_list"),
+      .order("perbaikan_list"),
     admin
       .from("locations")
       .select("location")
@@ -30,7 +30,7 @@ export default async function DispatcherMaintenanceArmadaPage() {
       let query = admin
         .from("ticketings")
         .select(
-          "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note",
+          "transaction_id, status, perbaikan_list, location, fleet_plat_number, created_at, created_by, cancellation_note",
         )
         .order("created_at", { ascending: false })
         .limit(20);
@@ -44,13 +44,13 @@ export default async function DispatcherMaintenanceArmadaPage() {
     <>
       <div className="page-heading">
         <div>
-          <h1>Maintenance armada</h1>
-          <p>Mau bikin maintenance? Mulai dari sini, ya.</p>
+          <h1>Perbaikan armada</h1>
+          <p>Mau bikin perbaikan? Mulai dari sini, ya.</p>
         </div>
       </div>
-      <DispatcherMaintenanceForm
-        maintenanceLists={(maintenanceLists ?? []).map(
-          (item) => item.maintenance_list,
+      <DispatcherPerbaikanForm
+        perbaikanLists={(perbaikanLists ?? []).map(
+          (item) => item.perbaikan_list,
         )}
         locations={(locations ?? []).map((item) => item.location)}
         fleets={fleets ?? []}
