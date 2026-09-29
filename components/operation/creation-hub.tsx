@@ -7,10 +7,14 @@ import OperationRequestExtraScheduleForm from "@/components/operation/request-ex
 export default function OperationCreationHub({
   locations,
   products,
+  executors,
+  fleets,
   tasks,
 }: {
   locations: string[];
   products: string[];
+  executors: Array<{ executor_nik: string; full_name: string }>;
+  fleets: Array<{ plat_number: string; fleet_type: string }>;
   tasks: Array<{
     transaction_id: string;
     status: string;
@@ -48,7 +52,7 @@ export default function OperationCreationHub({
           >
             <span className="creation-choice-icon">SP</span>
             <span>
-              <strong>Buat Supply Non-TGR</strong>
+              <strong>Buat Supply TGR</strong>
               <small>Lengkapi detail perjalanan dan surat jalan, ya.</small>
             </span>
             <b>→</b>
@@ -75,7 +79,7 @@ export default function OperationCreationHub({
       <div className="creation-flow-toolbar">
         <div>
           <strong>
-            {choice === "supply" ? "Supply Non-TGR" : "Ajukan Jadwal Tambahan"}
+            {choice === "supply" ? "Supply TGR" : "Ajukan Jadwal Tambahan"}
           </strong>
         </div>
         <button
@@ -91,6 +95,8 @@ export default function OperationCreationHub({
         <OperationCreateTask
           locations={locations}
           products={products}
+          executors={executors}
+          fleets={fleets}
           tasks={tasks}
         />
       ) : (
