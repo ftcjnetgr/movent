@@ -11210,3 +11210,86 @@ td select:focus,
 .legend-requested {
   background: #2563eb !important;
 }
+
+
+/* FINAL TIMETABLE FILTER LAYOUT — balanced controls, no cramped labels */
+.schedule-filter-top {
+  grid-template-columns: minmax(240px, 1.6fr) minmax(360px, 3fr) minmax(260px, 1.8fr) !important;
+  align-items: stretch;
+}
+
+.schedule-page .schedule-point-card,
+.schedule-page .schedule-control-field {
+  min-width: 0;
+  padding: 12px !important;
+}
+
+.schedule-page .schedule-direction {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px !important;
+  margin-bottom: 8px;
+}
+
+.schedule-page .schedule-direction button {
+  flex: none !important;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 10px;
+}
+
+.schedule-page .schedule-point-tabs {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.schedule-page .schedule-point-tabs button {
+  flex: 0 0 auto !important;
+  min-width: 72px;
+}
+
+.schedule-page .schedule-category-buttons {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px !important;
+}
+
+.schedule-page .schedule-category-buttons button {
+  width: 100%;
+}
+
+.schedule-page .schedule-day-row {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px !important;
+}
+
+.schedule-page .schedule-day-row button {
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .schedule-filter-top {
+    grid-template-columns: minmax(220px, 1.4fr) minmax(300px, 2fr) !important;
+  }
+
+  .schedule-day-field {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 700px) {
+  .schedule-filter-top {
+    grid-template-columns: 1fr !important;
+  }
+
+  .schedule-day-field {
+    grid-column: auto;
+  }
+}
