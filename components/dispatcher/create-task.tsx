@@ -193,90 +193,76 @@ export default function DispatcherCreateTask({
               </div>
             </div>
 
-            <div className="dispatcher-schedule-table-wrap">
-              <table className="dispatcher-schedule-table">
-                <thead>
-                  <tr>
-                    <th>Schedule ID</th>
-                    <th>Start Point</th>
-                    <th>Destination</th>
-                    <th>STD</th>
-                    <th>STA</th>
-                  </tr>
-                </thead>
-              </table>
+            <div className="dispatcher-schedule-card-groups">
+              {!groupedSchedules.length ? (
+                <div className="empty-state">
+                  Schedule yang kamu cari belum ketemu.
+                </div>
+              ) : null}
 
-              <div className="dispatcher-schedule-groups">
-                {!groupedSchedules.length ? (
-                  <div className="empty-state">
-                    Schedule yang kamu cari belum ketemu.
-                  </div>
-                ) : null}
+              {groupedSchedules.map(([group, rows]) => {
+                const open = openGroups.has(group);
 
-                {groupedSchedules.map(([group, rows]) => {
-                  const open = openGroups.has(group);
-
-                  return (
-                    <section
-                      className={
-                        "dispatcher-schedule-group" + (open ? " is-open" : "")
-                      }
-                      key={group}
+                return (
+                  <section
+                    className={
+                      "dispatcher-schedule-group" + (open ? " is-open" : "")
+                    }
+                    key={group}
+                  >
+                    <button
+                      type="button"
+                      className="dispatcher-schedule-group-head"
+                      onClick={() => toggleGroup(group)}
+                      aria-expanded={open}
                     >
-                      <button
-                        type="button"
-                        className="dispatcher-schedule-group-head"
-                        onClick={() => toggleGroup(group)}
-                        aria-expanded={open}
-                      >
-                        <span>{group}</span>
-                        <span className="dispatcher-schedule-group-meta">
-                          {rows.length} jadwal
-                          <b aria-hidden="true">{open ? "⌃" : "⌄"}</b>
-                        </span>
-                      </button>
+                      <span>{group}</span>
+                      <span className="dispatcher-schedule-group-meta">
+                        {rows.length} jadwal
+                        <b aria-hidden="true">{open ? "⌃" : "⌄"}</b>
+                      </span>
+                    </button>
 
-                      {open ? (
-                        <div className="dispatcher-schedule-group-table">
-                          <table className="dispatcher-schedule-table">
-                            <tbody>
-                              {rows.map((schedule) => (
-                                <tr
-                                  key={schedule.schedule_id}
-                                  className={
-                                    schedule.schedule_id === scheduleId
-                                      ? "selected"
-                                      : ""
-                                  }
-                                  onClick={() => selectSchedule(schedule)}
-                                  onKeyDown={(event) => {
-                                    if (
-                                      event.key === "Enter" ||
-                                      event.key === " "
-                                    ) {
-                                      event.preventDefault();
-                                      selectSchedule(schedule);
-                                    }
-                                  }}
-                                  tabIndex={0}
-                                  aria-selected={schedule.schedule_id === scheduleId}
-                                  title="Pilih schedule ini"
-                                >
-                                  <td>{schedule.schedule_id}</td>
-                                  <td>{schedule.start_point}</td>
-                                  <td>{schedule.destination}</td>
-                                  <td>{timeLabel(schedule.std)}</td>
-                                  <td>{timeLabel(schedule.sta)}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : null}
-                    </section>
-                  );
-                })}
-              </div>
+                    {open ? (
+                      <div className="dispatcher-schedule-card-list">
+                        {rows.map((schedule) => (
+                          <button
+                            type="button"
+                            key={schedule.schedule_id}
+                            className={
+                              "dispatcher-schedule-card" +
+                              (schedule.schedule_id === scheduleId
+                                ? " selected"
+                                : "")
+                            }
+                            onClick={() => selectSchedule(schedule)}
+                            aria-pressed={schedule.schedule_id === scheduleId}
+                          >
+                            <div className="dispatcher-schedule-card-top">
+                              <strong>{schedule.schedule_id}</strong>
+                              <span>
+                                {timeLabel(schedule.std)} –{" "}
+                                {timeLabel(schedule.sta)}
+                              </span>
+                            </div>
+                            <div className="dispatcher-schedule-card-route">
+                              <div>
+                                <small>Start Point</small>
+                                <strong>{schedule.start_point}</strong>
+                              </div>
+                              <span aria-hidden="true">→</span>
+                              <div>
+                                <small>Destination</small>
+                                <strong>{schedule.destination}</strong>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    ) : null}
+                  </section>
+                );
+              })}
             </div>
           </div>
 
@@ -345,7 +331,7 @@ export default function DispatcherCreateTask({
             </>
           ) : (
             <p className="form-helper">
-              Buka grup schedule, lalu pilih satu baris buat lanjut.
+              Buka grup schedule, lalu pilih salah satu card.
             </p>
           )}
         </form>
