@@ -69,7 +69,7 @@ export default async function ControllerPenugasanDashboardPage({
 }: {
   searchParams: Promise<{ from?: string; to?: string }>;
 }) {
-  const profile = await getCurrentProfile();
+  await getCurrentProfile();
   const admin = createAdminClient();
 
   const now = new Date();
