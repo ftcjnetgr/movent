@@ -14208,3 +14208,52 @@ td select:focus,
     border-radius: 18px !important;
   }
 }
+
+
+/* Dispatcher assignment selects: neutral app-style controls */
+.role-dispatcher .task-create-form .master-select-field {
+  text-align: left !important;
+  font-weight: 500 !important;
+}
+
+.role-dispatcher .task-create-form .master-select-trigger {
+  background: #fff !important;
+  color: #5f6b7a !important;
+  text-align: left !important;
+  justify-content: space-between !important;
+  font-weight: 400 !important;
+}
+
+.role-dispatcher .task-create-form .master-select-trigger.has-value {
+  color: #1f2937 !important;
+}
+
+.role-dispatcher .task-create-form .master-select-trigger > span:first-child {
+  text-align: left !important;
+  font-weight: 400 !important;
+}
+
+.role-dispatcher .task-create-form .master-select-menu {
+  background: #fff !important;
+}
+
+.role-dispatcher .task-create-form .master-select-search {
+  background: #fff !important;
+  color: #344054 !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+}
+
+.role-dispatcher .task-create-form .master-select-option {
+  background: transparent !important;
+  color: #344054 !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+}
+
+.role-dispatcher .task-create-form .master-select-option:hover,
+.role-dispatcher .task-create-form .master-select-option.selected {
+  background: #f5f6f8 !important;
+  color: #344054 !important;
+  font-weight: 400 !important;
+}
