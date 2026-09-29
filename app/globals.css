@@ -11428,3 +11428,15 @@ td select:focus,
 .legend-requested {
   background: #C9C400 !important;
 }
+
+
+/* FINAL SYSTEM ACTIVITY DOT — neutral, no status color */
+.super-dashboard .super-activity-list .activity-dot,
+.super-dashboard .super-activity-list .activity-dot.blue,
+.super-dashboard .super-activity-list .activity-dot.green,
+.super-dashboard .super-activity-list .activity-dot.orange,
+.super-dashboard .super-activity-list .activity-dot.purple,
+.super-dashboard .super-activity-list .activity-dot.red {
+  background: #cbd5e1 !important;
+  border: 0 !important;
+}
