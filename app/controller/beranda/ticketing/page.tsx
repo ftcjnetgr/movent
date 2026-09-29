@@ -160,7 +160,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Semua Perbaikan</span>
             <strong>{totalMaintenance}</strong>
-            <small>{percentage(totalMaintenance, totalAllActivities)}% dari semua aktivitas</small>
+            <small>Total perbaikan</small>
           </div>
         </div>
 
