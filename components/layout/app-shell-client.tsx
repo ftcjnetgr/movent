@@ -693,7 +693,7 @@ export default function AppShellClient({
                     <div className="nav-group-title nav-group-title-static">
                       <span className="nav-icon nav-icon-with-badge">
                         <Icon name={group.icon} />
-                        {group.label === "Notifikasi" && totalAlertCount > 0 ? (
+                        {group.label === "Info buat kamu" && totalAlertCount > 0 ? (
                           <span
                             className="alert-nav-dot"
                             aria-label="Ada notifikasi baru"
@@ -716,7 +716,7 @@ export default function AppShellClient({
                           >
                             <span className="nav-icon nav-icon-with-badge">
                               <Icon name={item.icon} />
-                              {group.label === "Notifikasi" &&
+                              {group.label === "Info buat kamu" &&
                               alertCountForItem(item.label) > 0 ? (
                                 <span
                                   className="alert-nav-badge"
@@ -746,7 +746,7 @@ export default function AppShellClient({
                   >
                     <span className="nav-icon nav-icon-with-badge">
                       <Icon name={group.items[0].icon} />
-                      {group.label === "Notifikasi" && totalAlertCount > 0 ? (
+                      {group.label === "Info buat kamu" && totalAlertCount > 0 ? (
                         <span
                           className="alert-nav-dot"
                           aria-label="Ada notifikasi baru"
@@ -776,7 +776,7 @@ export default function AppShellClient({
                     >
                       <span className="nav-icon nav-icon-with-badge">
                         <Icon name={group.icon} />
-                        {group.label === "Notifikasi" && totalAlertCount > 0 ? (
+                        {group.label === "Info buat kamu" && totalAlertCount > 0 ? (
                           <span
                             className="alert-nav-dot"
                             aria-label="Ada notifikasi baru"
