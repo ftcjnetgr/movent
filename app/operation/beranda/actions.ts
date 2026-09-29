@@ -249,7 +249,7 @@ export async function confirmNonTgrSupplyAction(
 
     if (existing) {
       return {
-        success: `Tugas ${existing.transaction_id} sudah dikonfirmasi dan ditugasin.`,
+        success: `Tugas ${existing.transaction_id} udah dibuat dan ditugasin.`,
         transactionId: existing.transaction_id,
       };
     }
@@ -290,7 +290,7 @@ export async function confirmNonTgrSupplyAction(
 
   revalidateOperationPaths();
   return {
-    success: `Tugas ${transactionId} berhasil dikonfirmasi dan ditugasin.`,
+    success: `Tugas ${transactionId} udah dibuat dan ditugasin.`,
     transactionId,
   };
 }
@@ -338,7 +338,7 @@ export async function confirmNonTgrDepartureByOperationAction(
   if (error) return { error: "Konfirmasi berangkat belum berhasil. Coba lagi, ya." };
 
   revalidateOperationPaths();
-  return { success: `ATD ${transactionId} sudah dikonfirmasi.` };
+  return { success: `ATD ${transactionId} sudah dicatat.` };
 }
 
 function revalidateOperationPaths() {
