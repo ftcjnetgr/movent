@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 
-type State = {
+export type State = {
   error?: string;
   success?: string;
   transactionId?: string;
