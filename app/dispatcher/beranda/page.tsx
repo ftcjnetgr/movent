@@ -56,6 +56,25 @@ export default async function DispatcherBerandaPage() {
       .eq("created_by", profile.id)
       .order("created_at", { ascending: false }),
   ]);
+  const { data: dispatcherTasks } = await admin
+    .from("tasks")
+    .select("status, fleet_ownership, created_by")
+    .or(`created_by.eq.${profile.id},fleet_ownership.eq.Non-TGR`);
+
+  const taskStatusCounts = {
+    total: dispatcherTasks?.length ?? 0,
+    assigned:
+      dispatcherTasks?.filter((task) => task.status === "Assigned").length ?? 0,
+    confirmed:
+      dispatcherTasks?.filter((task) => task.status === "Confirmed").length ?? 0,
+    driving:
+      dispatcherTasks?.filter((task) => task.status === "Driving").length ?? 0,
+    completed:
+      dispatcherTasks?.filter((task) => task.status === "Completed").length ?? 0,
+    canceled:
+      dispatcherTasks?.filter((task) => task.status === "Canceled").length ?? 0,
+  };
+
   const data = await getDashboardData(profile);
 
   return (
@@ -71,6 +90,43 @@ export default async function DispatcherBerandaPage() {
         )}
         tickets={tickets ?? []}
       />
+
+      <section className="data-table-card dispatcher-status-card">
+        <div className="section-heading">
+          <div>
+            <h2>Status Penugasan</h2>
+            <p>Semua penugasan yang bisa kamu pantau.</p>
+          </div>
+        </div>
+        {[
+          ["Semua Tugas", taskStatusCounts.total],
+          ["Udah Ditugasin", taskStatusCounts.assigned],
+          ["Udah Diterima", taskStatusCounts.confirmed],
+          ["Lagi Jalan", taskStatusCounts.driving],
+          ["Udah Selesai", taskStatusCounts.completed],
+          ["Dibatalin", taskStatusCounts.canceled],
+        ].map(([label, count]) => (
+          <div className="summary-bar-row" key={String(label)}>
+            <span>{label}</span>
+            <strong>{count}</strong>
+            <i>
+              <b
+                style={{
+                  width:
+                    taskStatusCounts.total > 0
+                      ? String(
+                          Math.min(
+                            100,
+                            (Number(count) / taskStatusCounts.total) * 100,
+                          ),
+                        ) + "%"
+                      : "0%",
+                }}
+              />
+            </i>
+          </div>
+        ))}
+      </section>
 
       <section className="data-table-card dispatcher-ringkasan-card">
         <div className="section-heading">
