@@ -10901,3 +10901,35 @@ td select:focus,
 .schedule-route-tabs-standalone button:not(.active):hover {
   color: #5f6d80 !important;
 }
+
+/* FINAL UI COPY / FILTER WEIGHT / ACTIVE MENU STANDARD */
+.page-heading p,
+.section-heading p,
+.report-type-heading p,
+.report-filter-heading p,
+.report-type-button small {
+  font-weight: 400 !important;
+}
+
+.report-filter-fields input,
+.report-filter-fields select,
+.topbar-date-filter input,
+.database-management-filter input,
+.database-management-filter select {
+  font-weight: 400 !important;
+}
+
+.sidebar .nav-group-title.is-active,
+.sidebar .nav-group-title.is-active > span,
+.sidebar .nav-group-title.is-active .nav-icon,
+.sidebar .nav-group-title.is-active .nav-icon svg,
+.sidebar .nav-group-title.is-active .nav-icon svg *,
+.sidebar .nav-group-title.is-active .nav-group-chevron {
+  color: var(--theme-color) !important;
+}
+
+.sidebar .nav-group-title.is-active {
+  background: var(--theme-color-soft) !important;
+  box-shadow: inset 2px 0 0 var(--theme-color) !important;
+  font-weight: 400 !important;
+}
