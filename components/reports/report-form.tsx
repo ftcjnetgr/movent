@@ -52,14 +52,14 @@ const operationalReportColumns = [
   "arrived_at",
 ];
 
-const perbaikanReportColumns = [
+const maintenanceReportColumns = [
   "id",
   "transaction_id",
   "status",
   "created_by",
   "maintainer_user_id",
-  "perbaikan_list",
-  "perbaikan_snapshot",
+  "maintenance_list",
+  "maintenance_snapshot",
   "fleet_plat_number",
   "fleet_snapshot",
   "location",
@@ -72,7 +72,7 @@ const perbaikanReportColumns = [
   "canceled_from_status",
   "cancellation_note",
   "updated_at",
-  "perbaikan_pic",
+  "maintenance_pic",
   "requested_at",
 ];
 
@@ -139,13 +139,13 @@ const reportLabels: Record<string, string> = {
   updated_at: "Diperbarui Pada",
   arrived_at: "Tiba Pada",
   maintainer_user_id: "ID Petugas Perbaikan",
-  perbaikan_list: "Jenis Perbaikan",
-  perbaikan_snapshot: "Detail Perbaikan",
+  maintenance_list: "Jenis Perbaikan",
+  maintenance_snapshot: "Detail Perbaikan",
   fleet_plat_number: "Nomor Armada",
   location: "Lokasi",
   location_snapshot: "Detail Lokasi",
   in_progress_at: "Mulai Dikerjakan",
-  perbaikan_pic: "PIC Perbaikan",
+  maintenance_pic: "PIC Perbaikan",
 };
 
 function reportLabel(key: string) {
@@ -176,9 +176,9 @@ export default function ReportForm({
   startPoints: Option[];
   destinations: Option[];
   executors: Option[];
-  mode?: "operational" | "perbaikan";
+  mode?: "operational" | "maintenance";
 }) {
-  const perbaikanOnly = mode === "perbaikan";
+  const maintenanceOnly = mode === "maintenance";
   const [type, setType] = useState("STD");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -199,8 +199,8 @@ export default function ReportForm({
     return search;
   }, [type, from, to, startPoint, destination, executorNik]);
 
-  const reportHeaders = perbaikanOnly
-    ? perbaikanReportColumns
+  const reportHeaders = maintenanceOnly
+    ? maintenanceReportColumns
     : operationalReportColumns;
 
   function invalidatePulledReport() {
@@ -214,8 +214,8 @@ export default function ReportForm({
     setLoading(true);
     try {
       const response = await fetch(
-        (perbaikanOnly
-          ? "/api/reports/perbaikan?"
+        (maintenanceOnly
+          ? "/api/reports/maintenance?"
           : "/api/reports/operational?") + params.toString(),
         { credentials: "include" },
       );
@@ -246,7 +246,7 @@ export default function ReportForm({
     const headers = reportHeaders;
     let blob: Blob;
 
-    const fileName = perbaikanOnly
+    const fileName = maintenanceOnly
       ? `movent-laporan-perbaikan-${from}-${to}.${format}`
       : `movent-laporan-operasional-${type.toLowerCase()}-${from}-${to}.${format}`;
 
@@ -296,7 +296,7 @@ export default function ReportForm({
 
   return (
     <div className="report-workspace">
-      {perbaikanOnly ? (
+      {maintenanceOnly ? (
         <div className="report-type-picker">
           <div className="report-type-heading">
             <div>
@@ -360,7 +360,7 @@ export default function ReportForm({
           </div>
         </div>
         <div
-          className={`report-filter-fields ${perbaikanOnly ? "is-perbaikan" : "is-operational"}`}
+          className={`report-filter-fields ${maintenanceOnly ? "is-maintenance" : "is-operational"}`}
         >
           <label>
             Dari tanggal
@@ -384,7 +384,7 @@ export default function ReportForm({
               }}
             />
           </label>
-          {!perbaikanOnly ? (
+          {!maintenanceOnly ? (
             <label>
               Titik mulai
               <select
@@ -403,7 +403,7 @@ export default function ReportForm({
               </select>
             </label>
           ) : null}
-          {!perbaikanOnly ? (
+          {!maintenanceOnly ? (
             <label>
               Destinasi
               <select
@@ -422,7 +422,7 @@ export default function ReportForm({
               </select>
             </label>
           ) : null}
-          {!perbaikanOnly ? (
+          {!maintenanceOnly ? (
             <label>
               Executor
               <select
