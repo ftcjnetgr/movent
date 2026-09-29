@@ -222,7 +222,7 @@ export default async function ControllerPenugasanDashboardPage({
             Penugasan
           </Link>
           <Link href={`/controller/beranda/ticketing?from=${from}&to=${to}`}>
-            Maintenance
+            Perbaikan
           </Link>
         </nav>
       </div>
