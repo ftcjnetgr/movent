@@ -334,7 +334,7 @@ export default function ExecutorTaskCard({
             value={task.transaction_id}
           />
           <button type="submit" disabled={isPending}>
-            Terima Penugasan
+            Terima tugas
           </button>
         </form>
       ) : null}
@@ -364,7 +364,7 @@ export default function ExecutorTaskCard({
             label="Produk"
             name="product"
             options={productOptions}
-            placeholder="Pilih Produk"
+            placeholder="Pilih produk"
             required
           />
           <label>
@@ -397,7 +397,7 @@ export default function ExecutorTaskCard({
             />
           </label>
           <button type="submit" disabled={isPending}>
-            Simpan Odometer Awal
+            Simpan odometer awal
           </button>
         </form>
       ) : null}
@@ -412,7 +412,7 @@ export default function ExecutorTaskCard({
             value={task.transaction_id}
           />
           <button type="submit" disabled={isPending}>
-            Konfirmasi Berangkat
+            Siap jalan
           </button>
         </form>
       ) : null}
@@ -425,7 +425,7 @@ export default function ExecutorTaskCard({
             value={task.transaction_id}
           />
           <button type="submit" disabled={isPending}>
-            Konfirmasi Tiba
+            Udah sampai
           </button>
         </form>
       ) : null}
@@ -450,7 +450,7 @@ export default function ExecutorTaskCard({
             />
           </label>
           <button type="submit" disabled={isPending}>
-            Simpan Odometer Akhir
+            Simpan odometer akhir
           </button>
         </form>
       ) : null}
@@ -465,7 +465,7 @@ export default function ExecutorTaskCard({
             value={task.transaction_id}
           />
           <button type="submit" disabled={isPending}>
-            Selesaikan Tugas
+            Selesaikan tugas
           </button>
         </form>
       ) : null}
