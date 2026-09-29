@@ -13689,3 +13689,195 @@ td select:focus,
     font-size: 8px;
   }
 }
+
+
+/* Dispatcher schedule selection actions + selected preview */
+.role-dispatcher .dispatcher-schedule-card {
+  grid-template-columns: 1.0fr 1.15fr 1.15fr .62fr .62fr auto !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 8px;
+}
+
+.role-dispatcher .dispatcher-schedule-card-action button {
+  min-width: 42px !important;
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 0 9px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-card-action button:hover,
+.role-dispatcher .dispatcher-schedule-card-action button:active {
+  background: #3127a4 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-preview,
+.role-dispatcher .dispatcher-selected-schedule-preview {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--theme-color-light);
+  border-radius: 14px;
+  background: var(--theme-color-soft);
+}
+
+.role-dispatcher .dispatcher-schedule-preview-head,
+.role-dispatcher .dispatcher-selected-schedule-preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-head > div,
+.role-dispatcher .dispatcher-selected-schedule-preview-head > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-head small,
+.role-dispatcher .dispatcher-selected-schedule-preview-head small {
+  color: var(--theme-color-dark);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-head strong,
+.role-dispatcher .dispatcher-selected-schedule-preview-head strong {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-grid,
+.role-dispatcher .dispatcher-selected-schedule-preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-grid > div,
+.role-dispatcher .dispatcher-selected-schedule-preview-grid > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-grid small,
+.role-dispatcher .dispatcher-selected-schedule-preview-grid small {
+  color: #8994a6;
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-grid strong,
+.role-dispatcher .dispatcher-selected-schedule-preview-grid strong {
+  min-width: 0;
+  color: var(--text);
+  font-size: 9px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-actions button {
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 8px 10px !important;
+  border-radius: 10px !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.role-dispatcher .dispatcher-schedule-preview-actions .secondary-button {
+  background: #fff !important;
+  border: 1px solid var(--line-strong) !important;
+  color: var(--text-2) !important;
+}
+
+.role-dispatcher .dispatcher-selected-schedule-preview {
+  margin-top: 0;
+  background: #fafaff;
+}
+
+.role-dispatcher .dispatcher-schedule-change-button {
+  min-height: 30px !important;
+  padding: 6px 9px !important;
+  border: 1px solid var(--line-strong) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  color: var(--text-2) !important;
+  box-shadow: none !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+}
+
+.role-dispatcher .dispatcher-assignment-step-head {
+  display: grid;
+  gap: 4px;
+  margin-top: 2px;
+  padding: 0 2px;
+}
+
+.role-dispatcher .dispatcher-assignment-step-head h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.role-dispatcher .dispatcher-assignment-step-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.role-dispatcher .dispatcher-back-button {
+  display: grid !important;
+  place-items: center !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 430px) {
+  .role-dispatcher .dispatcher-schedule-card {
+    grid-template-columns: 1fr 1.12fr 1.12fr .58fr .58fr auto !important;
+  }
+
+  .role-dispatcher .dispatcher-schedule-card-action {
+    padding-left: 5px;
+  }
+
+  .role-dispatcher .dispatcher-schedule-card-action button {
+    min-width: 39px !important;
+    padding: 0 7px !important;
+    font-size: 7.5px !important;
+  }
+}
