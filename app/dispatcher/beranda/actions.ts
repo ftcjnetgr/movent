@@ -158,7 +158,7 @@ export async function createDispatcherTaskAction(
       .eq("status", "Active")
       .maybeSingle();
     if (!schedule) return { error: "Schedule-nya nggak tersedia." };
-    if (!scheduleStdNotPassed(schedule.std))
+    if (!scheduleStdNotPassed(schedule.std, Number(schedule.schedule_day)))
       return {
         error: "Jadwalnya sudah lewat STD, jadi nggak bisa dipakai lagi, ya.",
       };
