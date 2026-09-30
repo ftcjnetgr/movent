@@ -11,22 +11,22 @@ import DatabaseEditPreview from "@/components/shared/database/edit-preview";
 
 async function importMasterDatabaseFormAction(formData: FormData) {
   "use server";
-  await importMasterDatabaseAction(formData);
+  return await importMasterDatabaseAction(formData);
 }
 
 async function addMasterRowFormAction(formData: FormData) {
   "use server";
-  await addMasterRowAction(formData);
+  return await addMasterRowAction(formData);
 }
 
 async function updateMasterRowFormAction(formData: FormData) {
   "use server";
-  await updateMasterRowAction(formData);
+  return await updateMasterRowAction(formData);
 }
 
 async function deleteMasterRowFormAction(formData: FormData) {
   "use server";
-  await deleteMasterRowAction(formData);
+  return await deleteMasterRowAction(formData);
 }
 
 const databases = [
