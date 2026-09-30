@@ -54,6 +54,7 @@ export default function DispatcherCreateTask({
   const [assignmentStep, setAssignmentStep] = useState(false);
   const [query, setQuery] = useState("");
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
+  const [showAssignmentResult, setShowAssignmentResult] = useState(false);
 
   const filteredSchedules = useMemo(() => {
     const now = new Date();
@@ -208,10 +209,11 @@ export default function DispatcherCreateTask({
   }
 
   useEffect(() => {
-    if (confirmState.success) {
+    if (confirmState.result) {
+      setShowAssignmentResult(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [confirmState.success]);
+  }, [confirmState.result]);
 
   useEffect(() => {
     function handleDispatcherBack(event: Event) {
@@ -456,14 +458,28 @@ export default function DispatcherCreateTask({
           <div className="card-title">Cek tugas dulu</div>
           <div className="task-summary-grid">
             <div>
-              <span>ID Transaksi</span>
-              <strong>{state.preview.transactionId}</strong>
+              <span>ID Tugas</span>
+              <strong>Belum dibuat</strong>
             </div>
             <div>
-              <span>Rute</span>
-              <strong>
-                {state.preview.startPoint} → {state.preview.destination}
-              </strong>
+              <span>Schedule ID</span>
+              <strong>{state.preview.scheduleId ?? "-"}</strong>
+            </div>
+            <div>
+              <span>Start Point</span>
+              <strong>{state.preview.startPoint}</strong>
+            </div>
+            <div>
+              <span>Destination</span>
+              <strong>{state.preview.destination}</strong>
+            </div>
+            <div>
+              <span>STD</span>
+              <strong>{timeLabel(state.preview.std ?? "")}</strong>
+            </div>
+            <div>
+              <span>STA</span>
+              <strong>{timeLabel(state.preview.sta ?? "")}</strong>
             </div>
             <div>
               <span>Executor</span>
@@ -473,20 +489,11 @@ export default function DispatcherCreateTask({
               <span>Armada</span>
               <strong>{state.preview.externalFleet}</strong>
             </div>
-            <div>
-              <span>Schedule</span>
-              <strong>{state.preview.scheduleId ?? "-"}</strong>
-            </div>
           </div>
 
           <p className="muted">Udah pas? Tinggal konfirmasi tugasnya.</p>
 
           <form action={confirmAction} className="compact-form">
-            <input
-              type="hidden"
-              name="transactionId"
-              value={state.preview.transactionId}
-            />
             <input type="hidden" name="flow" value={state.preview.flow} />
             <input
               type="hidden"
@@ -543,6 +550,104 @@ export default function DispatcherCreateTask({
           </form>
         </div>
       )}
+
+
+      {showAssignmentResult && confirmState.result ? (
+        <div
+          className="dispatcher-task-result-backdrop"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) {
+              setShowAssignmentResult(false);
+            }
+          }}
+        >
+          <section
+            className="dispatcher-task-result-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="dispatcher-task-result-title"
+          >
+            <div className="dispatcher-task-result-head">
+              <div>
+                <small>Penugasan berhasil</small>
+                <strong id="dispatcher-task-result-title">
+                  {confirmState.result.transactionId}
+                </strong>
+              </div>
+              <button
+                type="button"
+                className="dispatcher-task-result-close"
+                aria-label="Tutup hasil penugasan"
+                onClick={() => setShowAssignmentResult(false)}
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="task-summary-grid dispatcher-task-result-grid">
+              <div>
+                <span>ID Tugas</span>
+                <strong>{confirmState.result.transactionId}</strong>
+              </div>
+              <div>
+                <span>Schedule ID</span>
+                <strong>{confirmState.result.scheduleId}</strong>
+              </div>
+              <div>
+                <span>Start Point</span>
+                <strong>{confirmState.result.startPoint}</strong>
+              </div>
+              <div>
+                <span>Destination</span>
+                <strong>{confirmState.result.destination}</strong>
+              </div>
+              <div>
+                <span>STD</span>
+                <strong>{timeLabel(confirmState.result.std)}</strong>
+              </div>
+              <div>
+                <span>STA</span>
+                <strong>{timeLabel(confirmState.result.sta)}</strong>
+              </div>
+              <div>
+                <span>Executor</span>
+                <strong>{confirmState.result.executorName}</strong>
+              </div>
+              <div>
+                <span>Armada</span>
+                <strong>{confirmState.result.fleetPlate}</strong>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="dispatcher-share-whatsapp-button"
+              onClick={() => {
+                const r = confirmState.result;
+                const message = [
+                  "Penugasan Movent",
+                  `ID Tugas: ${r.transactionId}`,
+                  `Schedule ID: ${r.scheduleId}`,
+                  `Start Point: ${r.startPoint}`,
+                  `Destination: ${r.destination}`,
+                  `STD: ${timeLabel(r.std)}`,
+                  `STA: ${timeLabel(r.sta)}`,
+                  `Executor: ${r.executorName}`,
+                  `Armada: ${r.fleetPlate}`,
+                ].join("\n");
+                window.open(
+                  `https://wa.me/?text=${encodeURIComponent(message)}`,
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+            >
+              Share ke WhatsApp
+            </button>
+          </section>
+        </div>
+      ) : null}
 
       {!state.preview && chosenSchedule && !assignmentStep ? (
         <div
