@@ -467,12 +467,6 @@ export default function DispatcherCreateTask({
       ) : (
         <div className="metric-card dispatcher-task-preview">
           <div className="card-title">Cek tugas dulu</div>
-          <div className="task-summary-grid">
-            <div>
-              <span>ID Tugas</span>
-              <strong>Belum dibuat</strong>
-            </div>
-            <div>
               <span>Schedule ID</span>
               <strong>{state.preview.scheduleId ?? "-"}</strong>
             </div>
