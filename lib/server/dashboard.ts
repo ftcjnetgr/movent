@@ -194,9 +194,10 @@ export async function getDashboardData(
       fleetPlat: null,
       scheduleHubId: schedule.schedule_hub_id as string | null,
     }))
-    .filter(
-      (alert) => now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000,
-    );
+    .filter((alert) => {
+      const diff = now.getTime() - alert.targetAt.getTime();
+      return diff >= -30 * 60 * 1000 && diff <= 30 * 60 * 1000;
+    });
 
   const assignedAlerts: TaskAlert[] = all
     .filter(
