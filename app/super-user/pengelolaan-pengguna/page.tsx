@@ -168,10 +168,7 @@ export default async function UserManagementPage() {
               {(users ?? []).map((user) => (
                 <tr key={user.id}>
                   <td>
-                    <strong>{user.full_name}</strong>
-                    <div className="muted">
-                      {user.username} · {user.nik}
-                    </div>
+                    <strong>{user.nik} - {user.full_name}</strong>
                   </td>
                   <td>{roleLabel(user.role)}</td>
                   <td>
