@@ -1,5 +1,7 @@
 "use client";
 
+import { showToast } from "@/components/shared/toast-provider";
+
 import { cloneElement, isValidElement, useEffect, useState, type ReactElement, type ReactNode } from "react";
 
 export default function DatabaseEditPreview({
@@ -19,7 +21,7 @@ export default function DatabaseEditPreview({
     return cloneElement(form, {
       action: async (formData: FormData) => {
         const result = await action(formData);
-        if (result && "success" in result && result.success) setOpen(false);
+        if (result && "success" in result && result.success) { showToast(result.success); window.setTimeout(() => setOpen(false), 650); }
         return result;
       },
     });
