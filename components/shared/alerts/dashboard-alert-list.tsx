@@ -63,8 +63,8 @@ function maintenanceBaseAt(maintenance: TicketAlert) {
 
 function maintenanceThresholdSeconds(status: string) {
   if (status === "Confirmed") return 24 * 60 * 60;
-  if (status === "In Progress") return 3 * 24 * 60 * 60;
-  return 3 * 60 * 60;
+  if (status === "In Progress") return 24 * 60 * 60;
+  return 60 * 60;
 }
 
 function maintenanceStatusLabel(status: string) {
