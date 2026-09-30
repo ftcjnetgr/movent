@@ -594,12 +594,12 @@ export default function DispatcherCreateTask({
 
             <div className="task-summary-grid dispatcher-task-result-grid">
               <div>
-                <span>ID Aktivitas</span>
-                <strong>{confirmState.result.transactionId}</strong>
-              </div>
-              <div>
                 <span>Schedule ID</span>
                 <strong>{confirmState.result.scheduleId}</strong>
+              </div>
+              <div>
+                <span>ID Aktivitas</span>
+                <strong>{confirmState.result.transactionId}</strong>
               </div>
               <div>
                 <span>Start Point</span>
