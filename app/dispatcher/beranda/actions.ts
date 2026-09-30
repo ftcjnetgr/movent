@@ -43,7 +43,11 @@ export type State = {
 };
 
 function todayTimestamp(time: string) {
-  const [hour, minute] = time.split(":").map(Number);
+  const raw = String(time ?? "").trim();
+  const match = raw.match(/(?:^|T|\s)(\d{2}):(\d{2})/);
+  const hour = Number(match?.[1]);
+  const minute = Number(match?.[2]);
+
   if (
     !Number.isInteger(hour) ||
     !Number.isInteger(minute) ||
