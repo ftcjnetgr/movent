@@ -87,7 +87,7 @@ export default function OperationRequestExtraScheduleForm({
           <h3>Cek permintaan dulu</h3>
           <div className="task-summary-grid">
             <div>
-              <span>ID Tugas</span>
+              <span>ID Aktivitas</span>
               <strong>Belum dibuat</strong>
             </div>
             <div>
@@ -155,7 +155,7 @@ export default function OperationRequestExtraScheduleForm({
               </button>
             </div>
             <div className="task-summary-grid operation-extra-result-grid">
-              <div><span>ID Tugas</span><strong>{confirmState.result.transactionId}</strong></div>
+              <div><span>ID Aktivitas</span><strong>{confirmState.result.transactionId}</strong></div>
               <div><span>Start Point</span><strong>{confirmState.result.startPoint}</strong></div>
               <div><span>Destination</span><strong>{confirmState.result.destination}</strong></div>
               <div><span>STD</span><strong>{confirmState.result.std.slice(11,16)}</strong></div>
@@ -169,7 +169,7 @@ export default function OperationRequestExtraScheduleForm({
                 if (!r) return;
                 const message = [
                   "MOVENT - Jadwal Tambahan",
-                  "ID Tugas: " + r.transactionId,
+                  "ID Aktivitas: " + r.transactionId,
                   "Start Point: " + r.startPoint,
                   "Destination: " + r.destination,
                   "STD: " + r.std.slice(11,16),
