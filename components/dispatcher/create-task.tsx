@@ -77,6 +77,32 @@ export default function DispatcherCreateTask({
     const currentHour = Number(jakartaParts.find((item) => item.type === "hour")?.value ?? 0);
     const currentMinute = Number(jakartaParts.find((item) => item.type === "minute")?.value ?? 0);
     const currentMinutes = currentHour * 60 + currentMinute;
+    const nowYear = Number(
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        year: "numeric",
+      }).format(now),
+    );
+    const nowMonth = Number(
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        month: "numeric",
+      }).format(now),
+    );
+    const nowDate = Number(
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        day: "numeric",
+      }).format(now),
+    );
+    const todayKey = Date.UTC(nowYear, nowMonth - 1, nowDate);
+    const twindateStartKey = Date.UTC(nowYear, nowMonth - 1, nowMonth);
+    const twindateEnd = new Date(twindateStartKey);
+    twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 3);
+    const isTwindateWindow =
+      todayKey >= twindateStartKey &&
+      todayKey <= twindateEnd.getTime();
+    const allowedCategory = isTwindateWindow ? "Campaign" : "Normal";
 
     const needle = query.trim().toLowerCase();
     const routeFiltered = (route
@@ -84,6 +110,7 @@ export default function DispatcherCreateTask({
       : schedules
     ).filter((schedule) => {
       if (schedule.schedule_day !== currentDay) return false;
+      if (schedule.category !== allowedCategory) return false;
       const [hour, minute] = schedule.std.slice(0, 5).split(":").map(Number);
       if (!Number.isFinite(hour) || !Number.isFinite(minute)) return false;
       return hour * 60 + minute >= currentMinutes;
