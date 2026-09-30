@@ -874,7 +874,11 @@ export default function AppShellClient({
                   aria-label="Kembali"
                   title="Kembali"
                   onClick={() =>
-                    window.dispatchEvent(new CustomEvent("movent:dispatcher-back"))
+                    window.dispatchEvent(
+                      new CustomEvent("movent:dispatcher-back", {
+                        detail: { handled: false },
+                      }),
+                    )
                   }
                 >
                   <span aria-hidden="true">←</span>
