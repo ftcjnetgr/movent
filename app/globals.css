@@ -14644,3 +14644,234 @@ td select:focus,
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+
+/* mobile alert cards */
+.alert-mobile-cards,
+.alert-mobile-modal-backdrop {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .alert-page .alert-table-scroll {
+    overflow-x: hidden;
+  }
+
+  .alert-page .alert-table-scroll .task-alert-group-table {
+    display: none;
+  }
+
+  .alert-page .alert-mobile-cards {
+    display: grid;
+    gap: 10px;
+    overflow-y: auto;
+    padding: 2px 2px 18px;
+  }
+
+  .alert-page .alert-mobile-card {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #d9e1eb;
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(23, 36, 58, 0.06);
+    color: #17243a;
+  }
+
+  .alert-page .alert-mobile-card.is-alert-late {
+    border-color: #efb0b0;
+  }
+
+  .alert-mobile-route {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+  }
+
+  .alert-mobile-route > div {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+  }
+
+  .alert-mobile-route span,
+  .alert-mobile-time span {
+    font-size: 10px;
+    font-weight: 600;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .alert-mobile-route strong {
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 600;
+    color: #17243a;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .alert-mobile-arrow {
+    color: #64748b !important;
+    font-size: 16px !important;
+    text-transform: none !important;
+  }
+
+  .alert-mobile-time {
+    min-width: 62px;
+    display: grid;
+    justify-items: end;
+    gap: 3px;
+  }
+
+  .alert-mobile-time strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: #17243a;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .alert-mobile-card.is-alert-late .alert-mobile-time strong {
+    color: #c53030;
+  }
+
+  .alert-mobile-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.48);
+  }
+
+  .alert-mobile-modal-backdrop[role="presentation"] {
+    display: flex;
+  }
+
+  .alert-mobile-modal {
+    width: min(100%, 520px);
+    max-height: 86vh;
+    overflow-y: auto;
+    padding: 18px;
+    border-radius: 18px 18px 12px 12px;
+    background: #fff;
+    box-shadow: 0 -8px 30px rgba(15, 23, 42, 0.18);
+  }
+
+  .alert-mobile-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .alert-mobile-modal-header span {
+    font-size: 11px;
+    color: #718096;
+  }
+
+  .alert-mobile-modal-header h2 {
+    margin: 4px 0 0;
+    font-size: 18px;
+    line-height: 1.2;
+    color: #17243a;
+  }
+
+  .alert-mobile-modal-header button {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border: 0;
+    border-radius: 50%;
+    background: #eef2f7;
+    color: #17243a;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .alert-mobile-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .alert-mobile-modal-grid > div {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    background: #f7f9fc;
+  }
+
+  .alert-mobile-modal-grid span {
+    font-size: 10px;
+    color: #718096;
+  }
+
+  .alert-mobile-modal-grid strong {
+    overflow-wrap: anywhere;
+    font-size: 13px;
+    font-weight: 600;
+    color: #17243a;
+  }
+
+  .alert-mobile-modal-time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #eef2f7;
+  }
+
+  .alert-mobile-modal-time span {
+    font-size: 11px;
+    color: #53647a;
+  }
+
+  .alert-mobile-modal-time strong {
+    font-size: 17px;
+    color: #17243a;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .alert-mobile-modal-time.is-late strong {
+    color: #c53030;
+  }
+
+  .alert-page .alert-hub-summary {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .alert-page .alert-mobile-card {
+    grid-template-columns: minmax(0, 1fr) 58px;
+    padding: 12px;
+  }
+
+  .alert-mobile-route {
+    gap: 5px;
+  }
+
+  .alert-mobile-route strong {
+    font-size: 12px;
+  }
+
+  .alert-mobile-modal-grid {
+    grid-template-columns: 1fr;
+  }
+}
