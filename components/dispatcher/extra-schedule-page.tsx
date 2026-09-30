@@ -154,7 +154,7 @@ export default function DispatcherExtraSchedulePage() {
           <div className="card-title">Preview Penugasan</div>
           <div className="task-summary-grid">
             <div>
-              <span>ID Transaksi</span>
+              <span>ID Aktivitas</span>
               <strong>{preview.transactionId}</strong>
             </div>
             <div>
