@@ -170,7 +170,7 @@ export async function getDashboardData(
   );
 
   const usedScheduleIds = new Set(
-    all
+    scopedTasks
       .filter((task) => task.status !== "Canceled")
       .map((task) => task.schedule_id)
       .filter((scheduleId): scheduleId is string => Boolean(scheduleId)),
@@ -199,7 +199,7 @@ export async function getDashboardData(
       return diff >= -30 * 60 * 1000 && diff <= 30 * 60 * 1000;
     });
 
-  const assignedAlerts: TaskAlert[] = all
+  const assignedAlerts: TaskAlert[] = scopedTasks
     .filter(
       (task) =>
         task.schedule_id &&
