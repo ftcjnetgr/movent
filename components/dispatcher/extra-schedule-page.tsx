@@ -207,11 +207,11 @@ export default function DispatcherExtraSchedulePage() {
         ) : null}
         {!loading && data.requests.length > 0 ? (
           <>
-          <div className="extra-schedule-mobile-cards">
+          <div className="extra-schedule-cards">
             {data.requests.map((row) => (
-              <article key={row.transaction_id} className="extra-schedule-mobile-card" onClick={() => setSelectedRow(row)}>
-                <div className="extra-schedule-mobile-route"><div><span>Start Point</span><strong>{row.start_point}</strong></div><b>→</b><div><span>Destination</span><strong>{row.destination}</strong></div></div>
-                <div className="extra-schedule-mobile-meta"><span>STD <strong>{time(row.std)}</strong></span><span>STA <strong>{time(row.sta)}</strong></span><button type="button" onClick={(event) => { event.stopPropagation(); confirm(row.transaction_id); }}>Terima Extra</button></div>
+              <article key={row.transaction_id} className="extra-schedule-card" onClick={() => setSelectedRow(row)}>
+                <div className="extra-schedule-card-route"><div><span>Start Point</span><strong>{row.start_point}</strong></div><b>→</b><div><span>Destination</span><strong>{row.destination}</strong></div></div>
+                <div className="extra-schedule-card-meta"><span>STD <strong>{time(row.std)}</strong></span><span>STA <strong>{time(row.sta)}</strong></span><button type="button" onClick={(event) => { event.stopPropagation(); confirm(row.transaction_id); }}>Terima Extra</button></div>
               </article>
             ))}
           </div>
@@ -277,11 +277,11 @@ export default function DispatcherExtraSchedulePage() {
           </div>
         ) : (
           <>
-          <div className="extra-schedule-mobile-cards">
+          <div className="extra-schedule-cards">
             {data.confirmed.map((row) => (
-              <article key={row.transaction_id} className="extra-schedule-mobile-card" onClick={() => setSelectedRow(row)}>
-                <div className="extra-schedule-mobile-route"><div><span>Start Point</span><strong>{row.start_point}</strong></div><b>→</b><div><span>Destination</span><strong>{row.destination}</strong></div></div>
-                <div className="extra-schedule-mobile-meta"><span>STD <strong>{time(row.std)}</strong></span><span>STA <strong>{time(row.sta)}</strong></span><span className="extra-schedule-ready">Siap Ditugaskan</span></div>
+              <article key={row.transaction_id} className="extra-schedule-card" onClick={() => setSelectedRow(row)}>
+                <div className="extra-schedule-card-route"><div><span>Start Point</span><strong>{row.start_point}</strong></div><b>→</b><div><span>Destination</span><strong>{row.destination}</strong></div></div>
+                <div className="extra-schedule-card-meta"><span>STD <strong>{time(row.std)}</strong></span><span>STA <strong>{time(row.sta)}</strong></span><span className="extra-schedule-ready">Siap Ditugaskan</span></div>
               </article>
             ))}
           </div>
