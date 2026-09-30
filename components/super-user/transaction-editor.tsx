@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
+import { showToast } from "@/components/shared/toast-provider";
 import {
   updateTaskTransactionAction,
   updateTicketTransactionAction,
@@ -90,7 +91,7 @@ export function SuperUserTaskEditor({
   const isSchedule = Boolean(task.schedule_id);
 
   useEffect(() => {
-    if (state.success) editorRef.current?.removeAttribute("open");
+    if (state.success) { showToast(state.success); window.setTimeout(() => editorRef.current?.removeAttribute("open"), 650); }
   }, [state.success]);
   return (
     <details ref={editorRef} className="transaction-editor">
