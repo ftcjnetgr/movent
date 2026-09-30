@@ -57,13 +57,20 @@ function todayTimestamp(time: string) {
     minute > 59
   )
     return null;
-  const date = new Intl.DateTimeFormat("en-CA", {
+  const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Jakarta",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date());
-  return `${date}T${time}:00+07:00`;
+  }).formatToParts(new Date());
+  const year = parts.find((item) => item.type === "year")?.value;
+  const month = parts.find((item) => item.type === "month")?.value;
+  const day = parts.find((item) => item.type === "day")?.value;
+  if (!year || !month || !day) return null;
+
+  return year + "-" + month + "-" + day + "T" +
+    String(hour).padStart(2, "0") + ":" +
+    String(minute).padStart(2, "0") + ":00+07:00";
 }
 
 async function activeExecutorAndFleet(
