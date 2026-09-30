@@ -187,7 +187,7 @@ export async function getDashboardData(
   const twindateStartKey = Date.UTC(
     calendarYear,
     calendarMonth - 1,
-    calendarMonth,
+    1,
   );
   const twindateEnd = new Date(twindateStartKey);
   twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 2);
@@ -266,6 +266,13 @@ export async function getDashboardData(
       (alert) => now.getTime() >= alert.targetAt.getTime() - 10 * 60 * 1000,
     );
 
+  const taskAlertHubs = [
+    ...new Set(
+      alertSchedules
+        .map((schedule) => schedule.schedule_hub_id as string | null)
+        .filter((hub): hub is string => Boolean(hub)),
+    ),
+  ];
   const taskAlerts = [...unassignedAlerts, ...assignedAlerts];
   const allTicketRows = (ticketings ?? []) as TicketRow[];
   const ticketRows = allTicketRows.filter((ticket) =>
@@ -375,6 +382,7 @@ export async function getDashboardData(
         .length,
     },
     taskAlerts,
+    taskAlertHubs,
     ticketAlerts,
     ticketAlertCount,
     averages: {
