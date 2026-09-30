@@ -293,10 +293,10 @@ export async function getDashboardData(
             ? (ticket.in_progress_at ?? ticket.created_at)
             : ticket.created_at,
       ).getTime();
-    if (ticket.status === "Requested") return elapsed >= 3 * 60 * 60 * 1000;
+    if (ticket.status === "Requested") return elapsed >= 1 * 60 * 60 * 1000;
     if (ticket.status === "Confirmed") return elapsed >= 24 * 60 * 60 * 1000;
     if (ticket.status === "In Progress")
-      return elapsed >= 3 * 24 * 60 * 60 * 1000;
+      return elapsed >= 1 * 24 * 60 * 60 * 1000;
     return false;
   }).length;
 
