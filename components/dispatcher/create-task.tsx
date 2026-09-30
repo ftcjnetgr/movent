@@ -98,7 +98,7 @@ export default function DispatcherCreateTask({
     const todayKey = Date.UTC(nowYear, nowMonth - 1, nowDate);
     const twindateStartKey = Date.UTC(nowYear, nowMonth - 1, nowMonth);
     const twindateEnd = new Date(twindateStartKey);
-    twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 3);
+    twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 2);
     const isTwindateWindow =
       todayKey >= twindateStartKey &&
       todayKey <= twindateEnd.getTime();
