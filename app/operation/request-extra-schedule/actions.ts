@@ -6,7 +6,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 
 type Preview = {
-  transactionId?: string;
   startPoint: string;
   destination: string;
   std: string;
@@ -18,6 +17,13 @@ type State = {
   success?: string;
   transactionId?: string;
   preview?: Preview;
+  result?: {
+    transactionId: string;
+    startPoint: string;
+    destination: string;
+    std: string;
+    sta: string;
+  };
 };
 
 function jakartaTimestamp(time: string) {
@@ -58,14 +64,6 @@ async function validate(formData: FormData) {
   }
 
   const admin = createAdminClient();
-  const { data: transactionId, error: transactionError } = await admin.rpc(
-    "movent_next_transaction_id",
-  );
-
-  if (transactionError || !transactionId) {
-    return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." } as const;
-  }
-
   const { data: locations } = await admin
     .from("locations")
     .select("location, grouping, status")
@@ -83,7 +81,6 @@ async function validate(formData: FormData) {
 
   return {
     value: {
-      transactionId: String(transactionId),
       startPoint,
       destination,
       std: stdTimestamp,
@@ -124,20 +121,10 @@ export async function confirmExtraScheduleAction(
     return { error: "Kamu belum punya akses ke bagian ini." };
   }
 
-  const suppliedTransactionId = String(
-    formData.get("transactionId") ?? "",
-  ).trim();
   const startPoint = String(formData.get("startPoint") ?? "").trim();
   const destination = String(formData.get("destination") ?? "").trim();
   const std = String(formData.get("std") ?? "").trim();
   const sta = String(formData.get("sta") ?? "").trim();
-
-  if (!suppliedTransactionId) {
-    return {
-      error:
-        "ID transaksi preview belum ada. Buat preview permintaan dulu, ya.",
-    };
-  }
 
   if (!startPoint || !destination || !std || !sta) {
     return { error: "Data permintaannya belum lengkap. Cek lagi, ya." };
@@ -155,7 +142,12 @@ export async function confirmExtraScheduleAction(
   }
 
   const admin = createAdminClient();
-  const transactionId = suppliedTransactionId;
+  const { data: transactionId, error: transactionError } = await admin.rpc(
+    "movent_next_transaction_id",
+  );
+  if (transactionError || !transactionId) {
+    return { error: "ID tugas belum berhasil dibuat. Coba lagi, ya." };
+  }
 
   const { data: locations } = await admin
     .from("locations")
@@ -238,7 +230,14 @@ export async function confirmExtraScheduleAction(
 
   return {
     success: `Permintaan ${transactionId} berhasil diajuin.`,
-    transactionId,
+    transactionId: String(transactionId),
+    result: {
+      transactionId: String(transactionId),
+      startPoint,
+      destination,
+      std: stdTimestamp,
+      sta: staTimestamp,
+    },
   };
 }
 
