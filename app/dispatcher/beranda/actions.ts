@@ -305,7 +305,7 @@ export async function confirmDispatcherTaskAction(
 
     transactionId = await nextTransaction(admin) ?? "";
     if (!transactionId)
-      return { error: "ID tugas belum berhasil dibuat. Coba lagi, ya." };
+      return { error: "ID aktivitas belum berhasil dibuat. Coba lagi, ya." };
 
     const { error } = await admin.from("tasks").insert({
       transaction_id: transactionId,
