@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { cloneElement, isValidElement, useEffect, useState, type ReactElement, type ReactNode } from "react";
 
 export default function DatabaseEditPreview({
   title = "Ubah data",
@@ -10,6 +10,20 @@ export default function DatabaseEditPreview({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+
+  function wrapForm(node: ReactNode) {
+    if (!isValidElement(node) || node.type !== "form") return node;
+    const form = node as ReactElement<{ action?: (formData: FormData) => Promise<{ success?: string; error?: string } | void> }>;
+    const action = form.props.action;
+    if (typeof action !== "function") return node;
+    return cloneElement(form, {
+      action: async (formData: FormData) => {
+        const result = await action(formData);
+        if (result && "success" in result && result.success) setOpen(false);
+        return result;
+      },
+    });
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -57,7 +71,7 @@ export default function DatabaseEditPreview({
                 ×
               </button>
             </div>
-            <div className="database-action-modal-body">{children}</div>
+            <div className="database-action-modal-body">{wrapForm(children)}</div>
           </div>
         </div>
       ) : null}
