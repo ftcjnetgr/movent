@@ -29,29 +29,29 @@ function userStatusLabel(status: string) {
       : status;
 }
 
-async function lockUserFormAction(formData: FormData) {
+async function lockUserFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await lockUserAction(formData);
+  return (await lockUserAction(formData)) as unknown as void;
 }
 
-async function unlockUserFormAction(formData: FormData) {
+async function unlockUserFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await unlockUserAction(formData);
+  return (await unlockUserAction(formData)) as unknown as void;
 }
 
-async function updateUserProfileFormAction(formData: FormData) {
+async function updateUserProfileFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await updateUserProfileAction(formData);
+  return (await updateUserProfileAction(formData)) as unknown as void;
 }
 
-async function addUserFormAction(formData: FormData) {
+async function addUserFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await addUserAction(formData);
+  return (await addUserAction(formData)) as unknown as void;
 }
 
-async function importUsersFormAction(formData: FormData) {
+async function importUsersFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await importUsersAction(formData);
+  return (await importUsersAction(formData)) as unknown as void;
 }
 
 export default async function UserManagementPage() {
