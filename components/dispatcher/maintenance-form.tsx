@@ -17,6 +17,11 @@ type MaintenanceFormState = {
   success?: string;
   transactionId?: string;
   preview?: {
+    maintenanceList: string;
+    location: string;
+    platNumber: string;
+  };
+  result?: {
     transactionId: string;
     maintenanceList: string;
     location: string;
@@ -142,18 +147,21 @@ export default function DispatcherMaintenanceForm({
           <div className="card-title">Cek perbaikan</div>
           {state.preview ? (
             <>
-              <h2>{state.preview.transactionId}</h2>
-              <div className="compact-form">
+              <div className="task-summary-grid">
                 <div>
-                  <span className="muted">Daftar Perbaikan</span>
+                  <span>ID Tugas</span>
+                  <strong>Belum dibuat</strong>
+                </div>
+                <div>
+                  <span>Daftar Perbaikan</span>
                   <strong>{state.preview.maintenanceList}</strong>
                 </div>
                 <div>
-                  <span className="muted">Lokasi</span>
+                  <span>Lokasi</span>
                   <strong>{state.preview.location}</strong>
                 </div>
                 <div>
-                  <span className="muted">Armada</span>
+                  <span>Armada</span>
                   <strong>{state.preview.platNumber}</strong>
                 </div>
               </div>
@@ -172,11 +180,6 @@ export default function DispatcherMaintenanceForm({
                 }}
                 className="compact-form"
               >
-                <input
-                  type="hidden"
-                  name="transactionId"
-                  value={state.preview.transactionId}
-                />
                 <input
                   type="hidden"
                   name="maintenanceList"
@@ -312,6 +315,53 @@ export default function DispatcherMaintenanceForm({
           </table>
         </div>
       </section>
+      {state.result ? (
+        <div className="dispatcher-maintenance-result-backdrop" role="presentation">
+          <section className="dispatcher-maintenance-result-modal" role="dialog" aria-modal="true">
+            <div className="dispatcher-maintenance-result-head">
+              <div>
+                <small>Maintenance berhasil diajuin</small>
+                <strong>{state.result.transactionId}</strong>
+              </div>
+              <button
+                type="button"
+                onClick={() => setState({})}
+                aria-label="Tutup hasil maintenance"
+              >
+                ×
+              </button>
+            </div>
+            <div className="task-summary-grid dispatcher-maintenance-result-grid">
+              <div><span>ID Tugas</span><strong>{state.result.transactionId}</strong></div>
+              <div><span>Daftar Perbaikan</span><strong>{state.result.maintenanceList}</strong></div>
+              <div><span>Lokasi</span><strong>{state.result.location}</strong></div>
+              <div><span>Armada</span><strong>{state.result.platNumber}</strong></div>
+            </div>
+            <button
+              type="button"
+              className="dispatcher-maintenance-share-button"
+              onClick={() => {
+                const r = state.result;
+                const message = [
+                  "MOVENT - Maintenance",
+                  "ID Tugas: " + r.transactionId,
+                  "Perbaikan: " + r.maintenanceList,
+                  "Lokasi: " + r.location,
+                  "Armada: " + r.platNumber,
+                ].join("\n");
+                window.open(
+                  "https://wa.me/?text=" + encodeURIComponent(message),
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+            >
+              Share ke WhatsApp
+            </button>
+          </section>
+        </div>
+      ) : null}
+
     </section>
   );
 }
