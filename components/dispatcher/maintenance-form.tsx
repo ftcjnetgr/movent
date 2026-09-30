@@ -241,7 +241,7 @@ export default function DispatcherMaintenanceForm({
           <table>
             <thead>
               <tr>
-                <th>ID Transaksi</th>
+                <th>ID Aktivitas</th>
                 <th>Perbaikan</th>
                 <th>Lokasi</th>
                 <th>Armada</th>
