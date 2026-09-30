@@ -15,6 +15,7 @@ export default async function RoleAlertPage({ type }: { type: string }) {
           ...alert,
           targetAt: alert.targetAt.toISOString(),
         }))}
+        taskAlertHubs={data.taskAlertHubs}
         ticketAlerts={data.ticketAlerts}
       />
     </div>
