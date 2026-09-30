@@ -14541,3 +14541,64 @@ td select:focus,
   border: 1px solid #dfe4ea !important;
   color: var(--text-2) !important;
 }
+
+
+/* Dispatcher task confirmation — compact mobile preview */
+.role-dispatcher .dispatcher-task-preview {
+  min-height: 0 !important;
+  padding: 14px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .card-title {
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .task-summary-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .task-summary-grid > div {
+  min-width: 0 !important;
+  padding: 9px !important;
+  border-radius: 10px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .task-summary-grid span {
+  margin-bottom: 3px !important;
+  font-size: 9px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .task-summary-grid strong {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .muted {
+  margin: 10px 0 0 !important;
+  font-size: 10px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .form-actions {
+  gap: 8px !important;
+  margin-top: 2px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .form-actions button {
+  min-height: 42px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .secondary-button {
+  background: linear-gradient(135deg, #4f46e5 0%, #1d5bd7 100%) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .secondary-button:hover,
+.role-dispatcher .dispatcher-task-preview .secondary-button:active {
+  background: linear-gradient(135deg, #4338ca 0%, #1747b2 100%) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
