@@ -14410,3 +14410,134 @@ td select:focus,
   background: #3127a4 !important;
   color: #fff !important;
 }
+
+
+/* Unified confirmation result popups for creation flows */
+.role-dispatcher .dispatcher-maintenance-result-backdrop,
+.role-operation .operation-task-result-backdrop,
+.role-operation .operation-extra-result-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 5300 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+  background: rgba(15, 23, 42, 0.48) !important;
+  backdrop-filter: blur(4px);
+}
+
+.role-dispatcher .dispatcher-maintenance-result-modal,
+.role-operation .operation-task-result-modal,
+.role-operation .operation-extra-result-modal {
+  width: min(380px, calc(100vw - 24px)) !important;
+  max-height: calc(100vh - 90px) !important;
+  overflow: hidden auto !important;
+  display: grid !important;
+  gap: 12px !important;
+  padding: 0 !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22) !important;
+}
+
+.role-dispatcher .dispatcher-maintenance-result-head,
+.role-operation .operation-task-result-head,
+.role-operation .operation-extra-result-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 15px 16px 13px !important;
+  border-bottom: 1px solid #edf0f4 !important;
+}
+
+.role-dispatcher .dispatcher-maintenance-result-head > div,
+.role-operation .operation-task-result-head > div,
+.role-operation .operation-extra-result-head > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.role-dispatcher .dispatcher-maintenance-result-head small,
+.role-operation .operation-task-result-head small,
+.role-operation .operation-extra-result-head small {
+  color: var(--theme-color-dark) !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+}
+
+.role-dispatcher .dispatcher-maintenance-result-head strong,
+.role-operation .operation-task-result-head strong,
+.role-operation .operation-extra-result-head strong {
+  color: var(--text) !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+
+.role-dispatcher .dispatcher-maintenance-result-head button,
+.role-operation .operation-task-result-head > button,
+.role-operation .operation-extra-result-head > button {
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.role-dispatcher .dispatcher-maintenance-result-grid,
+.role-operation .operation-task-result-grid,
+.role-operation .operation-extra-result-grid {
+  margin: 0 !important;
+  padding: 2px 16px 0 !important;
+  gap: 9px !important;
+}
+
+.role-dispatcher .dispatcher-maintenance-share-button,
+.role-operation .operation-task-result-actions button:first-child,
+.role-operation .operation-extra-share-button {
+  min-height: 42px !important;
+  margin: 0 16px 16px !important;
+  padding: 9px 12px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+.role-operation .operation-task-result-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  margin: 0 16px 16px !important;
+}
+
+.role-operation .operation-task-result-actions button {
+  min-height: 42px !important;
+  margin: 0 !important;
+}
+
+.role-operation .operation-task-result-actions button:first-child {
+  margin: 0 !important;
+}
+
+.role-operation .operation-task-result-actions .secondary-button {
+  background: #fff !important;
+  border: 1px solid #dfe4ea !important;
+  color: var(--text-2) !important;
+}
