@@ -96,11 +96,13 @@ function taskDetail(alert: TaskAlert, now: number) {
 
 export default function DashboardAlertList({
   taskAlerts,
+  taskAlertHubs = [],
   ticketAlerts,
   mode = "all",
   embedded = false,
 }: {
   taskAlerts?: TaskAlert[];
+  taskAlertHubs?: string[];
   ticketAlerts?: TicketAlert[];
   mode?: "all" | "task" | "ticket";
   embedded?: boolean;
@@ -177,12 +179,15 @@ export default function DashboardAlertList({
 
   const taskGroups = useMemo(() => {
     const groups = new Map<string, typeof taskItems>();
+    for (const hub of taskAlertHubs) {
+      groups.set(hub, []);
+    }
     for (const item of taskItems) {
       const hub = item.scheduleHubId || "Hub-nya belum ada";
       groups.set(hub, [...(groups.get(hub) ?? []), item]);
     }
     return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-  }, [taskItems]);
+  }, [taskAlertHubs, taskItems]);
 
   const ticketGroups = useMemo(() => {
     const groups = new Map<string, typeof ticketItems>();
