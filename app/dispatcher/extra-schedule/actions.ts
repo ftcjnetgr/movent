@@ -24,7 +24,7 @@ export async function confirmExtraScheduleRequestAction(
     return { error: "Kamu belum punya akses ke bagian ini." };
 
   const transactionId = String(formData.get("transactionId") ?? "").trim();
-  if (!transactionId) return { error: "ID transaksi perlu diisi dulu, ya." };
+  if (!transactionId) return { error: "ID Aktivitas perlu diisi dulu, ya." };
 
   const admin = createAdminClient();
   const { data: task } = await admin
