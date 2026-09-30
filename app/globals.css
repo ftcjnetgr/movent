@@ -14614,3 +14614,33 @@ td select:focus,
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+/* Dispatcher activity result: compact 2-column grid */
+.role-dispatcher .dispatcher-task-result-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.role-dispatcher .dispatcher-task-result-grid > div {
+  min-width: 0 !important;
+  padding: 9px !important;
+  border-radius: 10px !important;
+}
+
+.role-dispatcher .dispatcher-task-result-grid > div:nth-child(2) {
+  grid-column: 2 !important;
+}
+
+.role-dispatcher .dispatcher-task-result-grid > div:nth-child(3),
+.role-dispatcher .dispatcher-task-result-grid > div:nth-child(4),
+.role-dispatcher .dispatcher-task-result-grid > div:nth-child(5),
+.role-dispatcher .dispatcher-task-result-grid > div:nth-child(6),
+.role-dispatcher .dispatcher-task-result-grid > div:nth-child(7),
+.role-dispatcher .dispatcher-task-result-grid > div:nth-child(8) {
+  grid-column: auto !important;
+}
+
+@media (max-width: 640px) {
+  .role-dispatcher .dispatcher-task-result-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
