@@ -342,6 +342,7 @@ export default function DispatcherMaintenanceForm({
               className="dispatcher-maintenance-share-button"
               onClick={() => {
                 const r = state.result;
+                if (!r) return;
                 const message = [
                   "MOVENT - Maintenance",
                   "ID Tugas: " + r.transactionId,
