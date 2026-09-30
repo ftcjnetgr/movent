@@ -31,27 +31,27 @@ function userStatusLabel(status: string) {
 
 async function lockUserFormAction(formData: FormData) {
   "use server";
-  await lockUserAction(formData);
+  return await lockUserAction(formData);
 }
 
 async function unlockUserFormAction(formData: FormData) {
   "use server";
-  await unlockUserAction(formData);
+  return await unlockUserAction(formData);
 }
 
 async function updateUserProfileFormAction(formData: FormData) {
   "use server";
-  await updateUserProfileAction(formData);
+  return await updateUserProfileAction(formData);
 }
 
 async function addUserFormAction(formData: FormData) {
   "use server";
-  await addUserAction(formData);
+  return await addUserAction(formData);
 }
 
 async function importUsersFormAction(formData: FormData) {
   "use server";
-  await importUsersAction(formData);
+  return await importUsersAction(formData);
 }
 
 export default async function UserManagementPage() {
