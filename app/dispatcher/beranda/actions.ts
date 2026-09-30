@@ -74,6 +74,31 @@ async function activeExecutorAndFleet(
   return { executor, fleet };
 }
 
+function scheduleCategoryAllowed(category: string) {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  }).formatToParts(now);
+
+  const year = Number(parts.find((item) => item.type === "year")?.value ?? 0);
+  const month = Number(parts.find((item) => item.type === "month")?.value ?? 0);
+  const day = Number(parts.find((item) => item.type === "day")?.value ?? 0);
+  if (!year || !month || !day) return false;
+
+  const todayKey = Date.UTC(year, month - 1, day);
+  const twindateStartKey = Date.UTC(year, month - 1, month);
+  const twindateEnd = new Date(twindateStartKey);
+  twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 3);
+  const isTwindateWindow =
+    todayKey >= twindateStartKey &&
+    todayKey <= twindateEnd.getTime();
+
+  return category === (isTwindateWindow ? "Campaign" : "Normal");
+}
+
 function scheduleStdNotPassed(std: string, scheduleDay: number) {
   const now = new Date();
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -246,6 +271,13 @@ export async function confirmDispatcherTaskAction(
 
     if (!schedule) {
       return { error: "Schedule-nya nggak tersedia." };
+    }
+
+    if (!scheduleCategoryAllowed(String(schedule.category ?? ""))) {
+      return {
+        error:
+          "Jenis schedule-nya nggak sesuai periode Twindate hari ini, jadi nggak bisa dipakai, ya.",
+      };
     }
 
     if (!scheduleStdNotPassed(schedule.std, Number(schedule.schedule_day))) {
