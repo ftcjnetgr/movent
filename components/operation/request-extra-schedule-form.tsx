@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import {
   createExtraScheduleAction,
   confirmExtraScheduleAction,
@@ -10,6 +10,12 @@ type State = {
   error?: string;
   success?: string;
   preview?: {
+    startPoint: string;
+    destination: string;
+    std: string;
+    sta: string;
+  };
+  result?: {
     transactionId: string;
     startPoint: string;
     destination: string;
@@ -31,6 +37,11 @@ export default function OperationRequestExtraScheduleForm({
     confirmExtraScheduleAction,
     {} as State,
   );
+  const [showResult, setShowResult] = useState(false);
+
+  useEffect(() => {
+    if (confirmState.result) setShowResult(true);
+  }, [confirmState.result]);
   return (
     <div>
       <form action={formAction} className="data-form">
@@ -73,8 +84,12 @@ export default function OperationRequestExtraScheduleForm({
       </form>
       {state.preview ? (
         <div className="metric-card" style={{ marginTop: 16 }}>
-          <h3>{state.preview.transactionId}</h3>
+          <h3>Cek permintaan dulu</h3>
           <div className="task-summary-grid">
+            <div>
+              <span>ID Tugas</span>
+              <strong>Belum dibuat</strong>
+            </div>
             <div>
               <span>Rute</span>
               <strong>
@@ -92,11 +107,6 @@ export default function OperationRequestExtraScheduleForm({
           </div>
           <p className="muted">Cek dulu datanya sebelum kita kirim, ya.</p>
           <form action={confirmAction} className="compact-form">
-            <input
-              type="hidden"
-              name="transactionId"
-              value={state.preview.transactionId}
-            />
             <input
               type="hidden"
               name="startPoint"
@@ -132,6 +142,51 @@ export default function OperationRequestExtraScheduleForm({
           </form>
         </div>
       ) : null}
+      {showResult && confirmState.result ? (
+        <div className="operation-extra-result-backdrop" role="presentation">
+          <section className="operation-extra-result-modal" role="dialog" aria-modal="true">
+            <div className="operation-extra-result-head">
+              <div>
+                <small>Permintaan berhasil diajuin</small>
+                <strong>{confirmState.result.transactionId}</strong>
+              </div>
+              <button type="button" onClick={() => setShowResult(false)} aria-label="Tutup">
+                ×
+              </button>
+            </div>
+            <div className="task-summary-grid operation-extra-result-grid">
+              <div><span>ID Tugas</span><strong>{confirmState.result.transactionId}</strong></div>
+              <div><span>Start Point</span><strong>{confirmState.result.startPoint}</strong></div>
+              <div><span>Destination</span><strong>{confirmState.result.destination}</strong></div>
+              <div><span>STD</span><strong>{confirmState.result.std.slice(11,16)}</strong></div>
+              <div><span>STA</span><strong>{confirmState.result.sta.slice(11,16)}</strong></div>
+            </div>
+            <button
+              type="button"
+              className="operation-extra-share-button"
+              onClick={() => {
+                const r = confirmState.result;
+                const message = [
+                  "MOVENT - Jadwal Tambahan",
+                  "ID Tugas: " + r.transactionId,
+                  "Start Point: " + r.startPoint,
+                  "Destination: " + r.destination,
+                  "STD: " + r.std.slice(11,16),
+                  "STA: " + r.sta.slice(11,16),
+                ].join("\n");
+                window.open(
+                  "https://wa.me/?text=" + encodeURIComponent(message),
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+            >
+              Share ke WhatsApp
+            </button>
+          </section>
+        </div>
+      ) : null}
+
     </div>
   );
 }
