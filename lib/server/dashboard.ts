@@ -126,7 +126,7 @@ export async function getDashboardData(
       admin
         .from("schedules")
         .select(
-          "schedule_id, schedule_day, schedule_hub_id, start_point, destination, std, sta, status",
+          "schedule_id, schedule_day, category, schedule_hub_id, start_point, destination, std, sta, status",
         )
         .eq("status", "Active"),
       admin
@@ -162,6 +162,46 @@ export async function getDashboardData(
   const day = ((new Date(date + "T12:00:00+07:00").getUTCDay() + 6) % 7) + 1;
   const now = new Date();
 
+  // Keep alert schedule filtering identical to the Dispatcher assignment picker:
+  // current schedule day + Normal/Campaign category for the current Twindate window.
+  const calendarParts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  }).formatToParts(now);
+  const calendarYear = Number(
+    calendarParts.find((item) => item.type === "year")?.value ?? 0,
+  );
+  const calendarMonth = Number(
+    calendarParts.find((item) => item.type === "month")?.value ?? 0,
+  );
+  const calendarDay = Number(
+    calendarParts.find((item) => item.type === "day")?.value ?? 0,
+  );
+  const todayKey = Date.UTC(
+    calendarYear,
+    calendarMonth - 1,
+    calendarDay,
+  );
+  const twindateStartKey = Date.UTC(
+    calendarYear,
+    calendarMonth - 1,
+    calendarMonth,
+  );
+  const twindateEnd = new Date(twindateStartKey);
+  twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 2);
+  const isTwindateWindow =
+    todayKey >= twindateStartKey &&
+    todayKey <= twindateEnd.getTime();
+  const allowedCategory = isTwindateWindow ? "Campaign" : "Normal";
+
+  const alertSchedules = (schedules ?? []).filter(
+    (schedule) =>
+      schedule.schedule_day === day &&
+      schedule.category === allowedCategory,
+  );
+
   const scheduleHubById = new Map(
     (schedules ?? []).map((schedule) => [
       schedule.schedule_id,
@@ -176,10 +216,9 @@ export async function getDashboardData(
       .filter((scheduleId): scheduleId is string => Boolean(scheduleId)),
   );
 
-  const unassignedAlerts: TaskAlert[] = (schedules ?? [])
+  const unassignedAlerts: TaskAlert[] = alertSchedules
     .filter(
       (schedule) =>
-        schedule.schedule_day === day &&
         !usedScheduleIds.has(schedule.schedule_id),
     )
     .map((schedule) => ({
@@ -204,7 +243,10 @@ export async function getDashboardData(
       (task) =>
         task.schedule_id &&
         ["Assigned", "Confirmed", "Driving"].includes(task.status) &&
-        task.sta,
+        task.sta &&
+        alertSchedules.some(
+          (schedule) => schedule.schedule_id === task.schedule_id,
+        ),
     )
     .map((task) => ({
       kind: "assigned" as const,
