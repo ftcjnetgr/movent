@@ -14292,3 +14292,121 @@ td select:focus,
 .role-dispatcher .task-create-form .master-select-option:last-child {
   border-bottom: 1px solid #1f1f1f !important;
 }
+
+
+/* Dispatcher task confirmation preview */
+.role-dispatcher .dispatcher-task-preview .card-title {
+  margin-bottom: 12px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .task-summary-grid {
+  gap: 9px !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .secondary-button {
+  background: var(--theme-color-dark) !important;
+  border-color: var(--theme-color-dark) !important;
+  color: #fff !important;
+}
+
+.role-dispatcher .dispatcher-task-preview .secondary-button:hover,
+.role-dispatcher .dispatcher-task-preview .secondary-button:active {
+  background: #3127a4 !important;
+  border-color: #3127a4 !important;
+  color: #fff !important;
+}
+
+.role-dispatcher .dispatcher-task-result-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 5200 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+  background: rgba(15, 23, 42, 0.48) !important;
+  backdrop-filter: blur(4px);
+}
+
+.role-dispatcher .dispatcher-task-result-modal {
+  width: min(380px, calc(100vw - 24px)) !important;
+  max-height: calc(100vh - 90px) !important;
+  overflow: hidden auto !important;
+  display: grid !important;
+  gap: 12px !important;
+  padding: 0 !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22) !important;
+}
+
+.role-dispatcher .dispatcher-task-result-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 15px 16px 13px !important;
+  border-bottom: 1px solid #edf0f4 !important;
+}
+
+.role-dispatcher .dispatcher-task-result-head > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.role-dispatcher .dispatcher-task-result-head small {
+  color: var(--theme-color-dark) !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+}
+
+.role-dispatcher .dispatcher-task-result-head strong {
+  color: var(--text) !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+
+.role-dispatcher .dispatcher-task-result-close {
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.role-dispatcher .dispatcher-task-result-grid {
+  margin: 0 !important;
+  padding: 2px 16px 0 !important;
+  gap: 9px !important;
+}
+
+.role-dispatcher .dispatcher-share-whatsapp-button {
+  min-height: 42px !important;
+  margin: 0 16px 16px !important;
+  padding: 9px 12px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: var(--theme-color-dark) !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+.role-dispatcher .dispatcher-share-whatsapp-button:hover,
+.role-dispatcher .dispatcher-share-whatsapp-button:active {
+  background: #3127a4 !important;
+  color: #fff !important;
+}
