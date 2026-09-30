@@ -91,7 +91,7 @@ export function SuperUserTaskEditor({
   const isSchedule = Boolean(task.schedule_id);
 
   useEffect(() => {
-    if (state.success) { showToast(state.success); window.setTimeout(() => editorRef.current?.removeAttribute("open"), 650); }
+    if (state.success) { showToast(state.success); window.setTimeout(() => editorRef.current?.removeAttribute("open"), 1000); }
   }, [state.success]);
   return (
     <details ref={editorRef} className="transaction-editor">
