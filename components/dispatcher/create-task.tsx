@@ -15,6 +15,7 @@ type Schedule = {
   route: string;
   category: string;
   schedule_hub_id: string | null;
+  schedule_day: number;
   start_point: string;
   destination: string;
   std: string;
@@ -55,10 +56,38 @@ export default function DispatcherCreateTask({
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
 
   const filteredSchedules = useMemo(() => {
+    const now = new Date();
+    const jakartaParts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Jakarta",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).formatToParts(now);
+    const weekdayMap: Record<string, number> = {
+      Mon: 1,
+      Tue: 2,
+      Wed: 3,
+      Thu: 4,
+      Fri: 5,
+      Sat: 6,
+      Sun: 7,
+    };
+    const currentDay = weekdayMap[jakartaParts.find((item) => item.type === "weekday")?.value ?? ""];
+    const currentHour = Number(jakartaParts.find((item) => item.type === "hour")?.value ?? 0);
+    const currentMinute = Number(jakartaParts.find((item) => item.type === "minute")?.value ?? 0);
+    const currentMinutes = currentHour * 60 + currentMinute;
+
     const needle = query.trim().toLowerCase();
-    const routeFiltered = route
+    const routeFiltered = (route
       ? schedules.filter((schedule) => schedule.route === route)
-      : schedules;
+      : schedules
+    ).filter((schedule) => {
+      if (schedule.schedule_day !== currentDay) return true;
+      const [hour, minute] = schedule.std.slice(0, 5).split(":").map(Number);
+      if (!Number.isFinite(hour) || !Number.isFinite(minute)) return true;
+      return hour * 60 + minute >= currentMinutes;
+    });
 
     if (!needle) return routeFiltered;
 
