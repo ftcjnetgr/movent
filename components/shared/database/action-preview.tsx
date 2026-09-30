@@ -21,7 +21,7 @@ export default function DatabaseActionPreview({
     return cloneElement(form, {
       action: async (formData: FormData) => {
         const result = await action(formData);
-        if (result && "success" in result && result.success) { showToast(result.success); window.setTimeout(() => setOpen(false), 650); }
+        if (result && "success" in result && result.success) { showToast(result.success); window.setTimeout(() => setOpen(false), 1000); }
         return result;
       },
     });
