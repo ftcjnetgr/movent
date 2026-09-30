@@ -143,10 +143,10 @@ export default function DashboardAlertList({
             late: elapsed >= thresholdSeconds,
             threshold:
               ticket.status === "Requested"
-                ? "3 jam"
+                ? "1 jam"
                 : ticket.status === "Confirmed"
                   ? "1 hari"
-                  : "3 hari",
+                  : "1 hari",
             location: ticket.location ?? "Lokasi tidak tersedia",
             maintenance:
               ticket.maintenance_list ?? "Perbaikan tidak tersedia",
