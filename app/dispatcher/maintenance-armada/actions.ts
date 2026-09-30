@@ -10,6 +10,11 @@ type State = {
   success?: string;
   transactionId?: string;
   preview?: {
+    maintenanceList: string;
+    location: string;
+    platNumber: string;
+  };
+  result?: {
     transactionId: string;
     maintenanceList: string;
     location: string;
@@ -58,17 +63,8 @@ async function validate(formData: FormData) {
     } as const;
   }
 
-  const { data: transactionId, error: transactionError } = await admin.rpc(
-    "movent_next_transaction_id",
-  );
-
-  if (transactionError || !transactionId) {
-    return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." } as const;
-  }
-
   return {
     value: {
-      transactionId,
       maintenanceList: maintenance.maintenance_list,
       location: locationRow.location,
       platNumber: fleet.plat_number,
@@ -112,19 +108,9 @@ export async function confirmMaintenanceTicketAction(
     return { error: "Kamu belum punya akses ke bagian ini." };
   }
 
-  const suppliedTransactionId = String(
-    formData.get("transactionId") ?? "",
-  ).trim();
   const maintenanceList = String(formData.get("maintenanceList") ?? "").trim();
   const location = String(formData.get("location") ?? "").trim();
   const platNumber = String(formData.get("platNumber") ?? "").trim();
-
-  if (!suppliedTransactionId) {
-    return {
-      error:
-        "ID transaksi preview belum ada. Buat preview maintenance dulu, ya.",
-    };
-  }
 
   if (!maintenanceList || !location || !platNumber) {
     return { error: "Data maintenance-nya belum lengkap. Cek lagi, ya." };
@@ -158,7 +144,12 @@ export async function confirmMaintenanceTicketAction(
     return { error: "Data maintenance-nya sudah nggak tersedia. Buat preview baru, ya." };
   }
 
-  const transactionId = suppliedTransactionId;
+  const { data: transactionId, error: transactionError } = await admin.rpc(
+    "movent_next_transaction_id",
+  );
+  if (transactionError || !transactionId) {
+    return { error: "ID maintenance belum berhasil dibuat. Coba lagi, ya." };
+  }
 
   const { error } = await admin.from("ticketings").insert({
     transaction_id: transactionId,
@@ -196,7 +187,13 @@ export async function confirmMaintenanceTicketAction(
 
   return {
     success: `Maintenance ${transactionId} udah dibuat.`,
-    transactionId,
+    transactionId: String(transactionId),
+    result: {
+      transactionId: String(transactionId),
+      maintenanceList,
+      location,
+      platNumber: fleet.plat_number,
+    },
   };
 }
 
