@@ -100,14 +100,14 @@ function scheduleStdNotPassed(std: string, scheduleDay: number) {
 
   if (!currentDay || !Number.isInteger(scheduleDay)) return false;
 
-  const dayDelta = (scheduleDay - currentDay + 7) % 7;
+  if (scheduleDay !== currentDay) return false;
+
   const year = parts.find((item) => item.type === "year")?.value;
   const month = parts.find((item) => item.type === "month")?.value;
   const day = parts.find((item) => item.type === "day")?.value;
   if (!year || !month || !day) return false;
 
   const targetDate = new Date(`${year}-${month}-${day}T00:00:00+07:00`);
-  targetDate.setDate(targetDate.getDate() + dayDelta);
 
   const nextDate = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Jakarta",
