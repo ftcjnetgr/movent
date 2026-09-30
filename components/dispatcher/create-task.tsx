@@ -31,8 +31,14 @@ type Props = {
 };
 
 function timeLabel(value: string) {
-  const raw = value?.slice(0, 5);
-  return raw || "-";
+  const raw = String(value ?? "").trim();
+  if (!raw) return "-";
+
+  const direct = raw.match(/^(\d{2}:\d{2})/);
+  if (direct) return direct[1];
+
+  const embedded = raw.match(/(?:T|\s)(\d{2}:\d{2})/);
+  return embedded?.[1] ?? "-";
 }
 
 export default function DispatcherCreateTask({
