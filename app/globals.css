@@ -14257,3 +14257,38 @@ td select:focus,
   color: #344054 !important;
   font-weight: 400 !important;
 }
+
+
+/* Dispatcher executor + fleet option list */
+.role-dispatcher .task-create-form .master-select-options {
+  text-align: left !important;
+}
+
+.role-dispatcher .task-create-form .master-select-option {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-height: 38px !important;
+  padding: 9px 4px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1f1f1f !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #111827 !important;
+  text-align: left !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+}
+
+.role-dispatcher .task-create-form .master-select-option:hover,
+.role-dispatcher .task-create-form .master-select-option.selected {
+  background: transparent !important;
+  color: #111827 !important;
+}
+
+.role-dispatcher .task-create-form .master-select-option:last-child {
+  border-bottom: 1px solid #1f1f1f !important;
+}
