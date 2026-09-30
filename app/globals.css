@@ -14602,3 +14602,15 @@ td select:focus,
   border-color: transparent !important;
   color: #fff !important;
 }
+
+
+/* Dispatcher activity preview: compact 1 + 2-column layout */
+.role-dispatcher .dispatcher-task-preview .task-summary-grid > div:first-child {
+  grid-column: 1 / -1 !important;
+}
+
+@media (max-width: 640px) {
+  .role-dispatcher .dispatcher-task-preview .task-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
