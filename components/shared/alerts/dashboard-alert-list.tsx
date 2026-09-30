@@ -110,6 +110,7 @@ export default function DashboardAlertList({
   const [now, setNow] = useState(() => Date.now());
   const [activeTaskHub, setActiveTaskHub] = useState("");
   const [activeTicketLocation, setActiveTicketLocation] = useState("");
+  const [selectedTask, setSelectedTask] = useState<(ReturnType<typeof taskDetail> & { scheduleHubId: string | null }) | null>(null);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
@@ -262,6 +263,33 @@ export default function DashboardAlertList({
                       <strong>{late}</strong>
                       <span>udah lewat batas</span>
                     </div>
+                  </div>
+
+                  <div className="alert-mobile-cards" role="list" aria-label="Daftar alert schedule">
+                    {activeItems.map((item) => (
+                      <button
+                        key={`mobile-${item.scheduleId}-${item.transactionId ?? "schedule"}`}
+                        type="button"
+                        className={`alert-mobile-card${item.late ? " is-alert-late" : ""}`}
+                        onClick={() => setSelectedTask(item)}
+                      >
+                        <div className="alert-mobile-route">
+                          <div>
+                            <span>Start Point</span>
+                            <strong>{item.startPoint}</strong>
+                          </div>
+                          <span className="alert-mobile-arrow" aria-hidden="true">→</span>
+                          <div>
+                            <span>Destination</span>
+                            <strong>{item.destination}</strong>
+                          </div>
+                        </div>
+                        <div className="alert-mobile-time">
+                          <span>{item.label}</span>
+                          <strong>{item.time}</strong>
+                        </div>
+                      </button>
+                    ))}
                   </div>
 
                   <div
@@ -551,6 +579,43 @@ export default function DashboardAlertList({
           })()}
         </section>
       ) : null}
-    </div>
+    {selectedTask ? (
+      <div className="alert-mobile-modal-backdrop" role="presentation" onClick={() => setSelectedTask(null)}>
+        <div
+          className="alert-mobile-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Detail aktivitas"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <div className="alert-mobile-modal-header">
+            <div>
+              <span>Detail aktivitas</span>
+              <h2>{selectedTask.scheduleId}</h2>
+            </div>
+            <button type="button" onClick={() => setSelectedTask(null)} aria-label="Tutup">
+              ×
+            </button>
+          </div>
+
+          <div className="alert-mobile-modal-grid">
+            <div><span>Start Point</span><strong>{selectedTask.startPoint}</strong></div>
+            <div><span>Destination</span><strong>{selectedTask.destination}</strong></div>
+            <div><span>STD</span><strong>{selectedTask.std}</strong></div>
+            <div><span>STA</span><strong>{selectedTask.sta}</strong></div>
+            <div><span>Pengemudi</span><strong>{selectedTask.driverName ?? "-"}</strong></div>
+            <div><span>Armada</span><strong>{selectedTask.fleetPlat ?? "-"}</strong></div>
+            <div><span>Schedule Hub</span><strong>{selectedTask.scheduleHubId ?? "-"}</strong></div>
+            <div><span>Status</span><strong>{selectedTask.kind === "unassigned" ? "Belum ditugasin" : "Udah ditugasin"}</strong></div>
+          </div>
+
+          <div className={`alert-mobile-modal-time${selectedTask.late ? " is-late" : ""}`}>
+            <span>{selectedTask.label}</span>
+            <strong>{selectedTask.time}</strong>
+          </div>
+        </div>
+      </div>
+    ) : null}
+  </div>
   );
 }
