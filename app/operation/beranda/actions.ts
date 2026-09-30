@@ -5,7 +5,6 @@ import { getCurrentProfile } from "@/lib/server/profile";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 type Preview = {
-  transactionId?: string;
   startPoint: string;
   destination: string;
   std: string;
@@ -29,6 +28,16 @@ type State = {
   success?: string;
   transactionId?: string;
   preview?: Preview;
+  result?: {
+    transactionId: string;
+    startPoint: string;
+    destination: string;
+    std: string;
+    sta: string;
+    externalExecutor: string;
+    externalFleet: string;
+    sjs: Preview["sjs"];
+  };
 };
 
 function jakartaTimestamp(value: string) {
@@ -65,7 +74,7 @@ async function activeExecutorAndFleet(
   return { executor, fleet };
 }
 
-async function validateTgrInput(formData: FormData, transactionId?: string) {
+async function validateTgrInput(formData: FormData) {
   const startPoint = String(formData.get("startPoint") ?? "").trim();
   const destination = String(formData.get("destination") ?? "").trim();
   const std = String(formData.get("std") ?? "").trim();
@@ -186,10 +195,6 @@ async function validateTgrInput(formData: FormData, transactionId?: string) {
 
   return {
     value: {
-      transactionId:
-        transactionId ||
-        ((await createAdminClient().rpc("movent_next_transaction_id"))
-          .data as string),
       startPoint,
       destination,
       std: stdTimestamp,
@@ -230,19 +235,17 @@ export async function confirmTgrSupplyAction(
   if (!["Operation", "Super User"].includes(profile.role))
     return { error: "Kamu belum punya akses ke bagian ini." };
 
-  const validated = await validateTgrInput(
-    formData,
-    String(formData.get("transactionId") ?? "").trim(),
-  );
+  const validated = await validateTgrInput(formData);
   if ("error" in validated) return validated;
-
-  const transactionId = String(formData.get("transactionId") ?? "").trim();
-  if (!transactionId) {
-    return { error: "ID transaksi preview belum ada. Buat preview tugas dulu, ya." };
-  }
 
   const { snapshots, value } = validated;
   const admin = createAdminClient();
+  const { data: transactionId, error: transactionError } = await admin.rpc(
+    "movent_next_transaction_id",
+  );
+  if (transactionError || !transactionId) {
+    return { error: "ID tugas belum berhasil dibuat. Coba lagi, ya." };
+  }
   const { error } = await admin.from("tasks").insert({
     transaction_id: transactionId,
     source_type: "Manual",
@@ -326,6 +329,16 @@ export async function confirmTgrSupplyAction(
   return {
     success: `Tugas ${transactionId} udah dibuat dan ditugasin.`,
     transactionId,
+    result: {
+      transactionId: String(transactionId),
+      startPoint: value.startPoint,
+      destination: value.destination,
+      std: value.std,
+      sta: value.sta,
+      externalExecutor: value.externalExecutor,
+      externalFleet: value.externalFleet,
+      sjs: value.sjs,
+    },
   };
 }
 
