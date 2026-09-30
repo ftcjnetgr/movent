@@ -21,7 +21,7 @@ export async function confirmExtraScheduleRequestAction(
 ): Promise<State> {
   const profile = await getCurrentProfile();
   if (!["Dispatcher", "Super User"].includes(profile.role))
-    return { error: "Kamu belum punya akses ke bagian ini." };
+    return { error: "Bagian ini belum bisa kamu akses, ya." };
 
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   if (!transactionId) return { error: "ID Aktivitas perlu diisi dulu, ya." };
@@ -37,7 +37,7 @@ export async function confirmExtraScheduleRequestAction(
 
   if (!task)
     return {
-      error: "Permintaan jadwal tambahan nggak ditemukan atau sudah diproses.",
+      error: "Extra-nya nggak ketemu atau udah diproses.",
     };
 
   const { error } = await admin
@@ -50,11 +50,11 @@ export async function confirmExtraScheduleRequestAction(
     .eq("id", task.id)
     .eq("status", "Requested");
 
-  if (error) return { error: "Permintaannya belum berhasil diterima. Coba lagi, ya." };
+  if (error) return { error: "Belum berhasil diterima. Coba lagi, ya." };
 
   revalidatePaths();
   return {
-    success: `Request ${transactionId} udah diterima. Pilih Executor dan Armada buat lanjut, ya.`,
+    success: `Request ${transactionId} udah diterima. Pilih executor dan armada buat lanjut, ya.`,
   };
 }
 
@@ -63,13 +63,13 @@ export async function previewExtraScheduleAssignmentAction(
 ): Promise<State> {
   const profile = await getCurrentProfile();
   if (!["Dispatcher", "Super User"].includes(profile.role))
-    return { error: "Kamu belum punya akses ke bagian ini." };
+    return { error: "Bagian ini belum bisa kamu akses, ya." };
 
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const executorNik = String(formData.get("executorNik") ?? "").trim();
   const platNumber = String(formData.get("platNumber") ?? "").trim();
   if (!transactionId || !executorNik || !platNumber)
-    return { error: "Executor dan nomor plat perlu dipilih dulu, ya." };
+    return { error: "Executor dan armadanya pilih dulu, ya." };
 
   const admin = createAdminClient();
   const [{ data: task }, { data: executor }, { data: fleet }] =
@@ -97,10 +97,10 @@ export async function previewExtraScheduleAssignmentAction(
 
   if (!task)
     return {
-      error: "Permintaan jadwal tambahan belum diterima atau sudah diproses.",
+      error: "Extra ini belum diterima atau udah diproses.",
     };
-  if (!executor) return { error: "Executor-nya nggak tersedia." };
-  if (!fleet) return { error: "Armadanya nggak tersedia." };
+  if (!executor) return { error: "Executor-nya lagi nggak tersedia." };
+  if (!fleet) return { error: "Armadanya lagi nggak tersedia." };
 
   return {
     preview: {
@@ -118,13 +118,13 @@ export async function confirmExtraScheduleAssignmentAction(
 ): Promise<State> {
   const profile = await getCurrentProfile();
   if (!["Dispatcher", "Super User"].includes(profile.role))
-    return { error: "Kamu belum punya akses ke bagian ini." };
+    return { error: "Bagian ini belum bisa kamu akses, ya." };
 
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const executorNik = String(formData.get("executorNik") ?? "").trim();
   const platNumber = String(formData.get("platNumber") ?? "").trim();
   if (!transactionId || !executorNik || !platNumber)
-    return { error: "Data penugasannya belum lengkap. Cek lagi, ya." };
+    return { error: "Data penugasannya belum lengkap. Cek lagi dulu, ya." };
 
   const admin = createAdminClient();
   const [{ data: task }, { data: executor }, { data: fleet }] =
@@ -152,10 +152,10 @@ export async function confirmExtraScheduleAssignmentAction(
 
   if (!task)
     return {
-      error: "Permintaan jadwal tambahan belum diterima atau sudah diproses.",
+      error: "Extra ini belum diterima atau udah diproses.",
     };
-  if (!executor) return { error: "Executor-nya nggak tersedia." };
-  if (!fleet) return { error: "Armadanya nggak tersedia." };
+  if (!executor) return { error: "Executor-nya lagi nggak tersedia." };
+  if (!fleet) return { error: "Armadanya lagi nggak tersedia." };
 
   const { error } = await admin
     .from("tasks")
@@ -171,10 +171,10 @@ export async function confirmExtraScheduleAssignmentAction(
     .eq("status", "Confirmed");
 
   if (error)
-    return { error: "Penugasannya belum berhasil diselesaikan. Coba lagi, ya." };
+    return { error: "Belum berhasil ditugasin. Coba lagi, ya." };
 
   revalidatePaths();
-  return { success: `Jadwal tambahan ${transactionId} berhasil ditugasin.` };
+  return { success: `Extra ${transactionId} udah berhasil ditugasin.` };
 }
 
 async function revalidatePaths() {
