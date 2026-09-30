@@ -246,6 +246,7 @@ export async function confirmDispatcherTaskAction(
   const scheduleId = String(formData.get("scheduleId") ?? "").trim();
 
   const admin = createAdminClient();
+  let transactionId = "";
   const { executor, fleet } = await activeExecutorAndFleet(
     admin,
     executorNik,
@@ -298,7 +299,7 @@ export async function confirmDispatcherTaskAction(
       return { error: "STA harus setelah STD, ya." };
     }
 
-    const transactionId = await nextTransaction(admin);
+    transactionId = await nextTransaction(admin) ?? "";
     if (!transactionId)
       return { error: "ID tugas belum berhasil dibuat. Coba lagi, ya." };
 
