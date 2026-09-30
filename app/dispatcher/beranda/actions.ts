@@ -368,7 +368,7 @@ export async function cancelDispatcherTaskAction(formData: FormData) {
   const note = String(formData.get("note") ?? "").trim();
   if (!transactionId || !note)
     return {
-      error: "Transaction ID dan alasan pembatalan perlu diisi dulu, ya.",
+      error: "ID Aktivitas dan alasan pembatalan perlu diisi dulu, ya.",
     };
 
   const admin = createAdminClient();
