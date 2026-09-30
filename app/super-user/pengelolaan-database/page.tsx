@@ -9,24 +9,24 @@ import {
 import DatabaseActionPreview from "@/components/shared/database/action-preview";
 import DatabaseEditPreview from "@/components/shared/database/edit-preview";
 
-async function importMasterDatabaseFormAction(formData: FormData) {
+async function importMasterDatabaseFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await importMasterDatabaseAction(formData);
+  return (await importMasterDatabaseAction(formData)) as unknown as void;
 }
 
-async function addMasterRowFormAction(formData: FormData) {
+async function addMasterRowFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await addMasterRowAction(formData);
+  return (await addMasterRowAction(formData)) as unknown as void;
 }
 
-async function updateMasterRowFormAction(formData: FormData) {
+async function updateMasterRowFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await updateMasterRowAction(formData);
+  return (await updateMasterRowAction(formData)) as unknown as void;
 }
 
-async function deleteMasterRowFormAction(formData: FormData) {
+async function deleteMasterRowFormAction(formData: FormData): Promise<void> {
   "use server";
-  return await deleteMasterRowAction(formData);
+  return (await deleteMasterRowAction(formData)) as unknown as void;
 }
 
 const databases = [
