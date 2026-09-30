@@ -15180,3 +15180,76 @@ td select:focus,
   .extra-schedule-tabs span{font-size:12px}
   .extra-schedule-tabs small{font-size:10px}
 }
+
+/* Jadwal Tambahan: cards under status tabs */
+.extra-schedule-cards{
+  display:grid;
+  gap:8px;
+}
+.extra-schedule-card{
+  display:block;
+  width:100%;
+  padding:12px;
+  border:1px solid #e1e7ef;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(20,30,45,.04);
+  cursor:pointer;
+  text-align:left;
+}
+.extra-schedule-card-route{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+}
+.extra-schedule-card-route>div{min-width:0}
+.extra-schedule-card-route span,
+.extra-schedule-card-meta span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+}
+.extra-schedule-card-route strong{
+  display:block;
+  margin-top:3px;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.extra-schedule-card-route>b{
+  color:var(--muted);
+  font-size:15px;
+}
+.extra-schedule-card-meta{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid #edf1f5;
+}
+.extra-schedule-card-meta>span{flex:0 0 auto}
+.extra-schedule-card-meta strong{
+  display:inline;
+  font-size:11px;
+  color:var(--text);
+}
+.extra-schedule-card-meta button{
+  margin-left:auto;
+  padding:7px 10px;
+  font-size:10px;
+}
+.extra-schedule-card-meta .extra-schedule-ready{
+  margin-left:auto;
+}
+.extra-schedule-panel>.section-heading{
+  display:none;
+}
+.extra-schedule-panel>.table-wrap{
+  display:none;
+}
+@media(max-width:820px){
+  .extra-schedule-card{padding:12px}
+}
