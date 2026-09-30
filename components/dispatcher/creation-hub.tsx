@@ -11,6 +11,7 @@ type Props = {
     route: string;
     category: string;
     schedule_hub_id: string | null;
+    schedule_day: number;
     start_point: string;
     destination: string;
     std: string;
