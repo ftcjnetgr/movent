@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 import {
   updateTaskTransactionAction,
@@ -86,9 +86,14 @@ export function SuperUserTaskEditor({
     {},
   );
   const [editableSjItems, setEditableSjItems] = useState(sjItems);
+  const editorRef = useRef<HTMLDetailsElement>(null);
   const isSchedule = Boolean(task.schedule_id);
+
+  useEffect(() => {
+    if (state.success) editorRef.current?.removeAttribute("open");
+  }, [state.success]);
   return (
-    <details className="transaction-editor">
+    <details ref={editorRef} className="transaction-editor">
       <summary className="link-button">Mau ubah transaksi?</summary>
       {task.status === "Completed" ? (
         <p className="muted">Transaksi yang udah selesai nggak bisa diubah, ya.</p>
@@ -348,8 +353,14 @@ export function SuperUserTicketEditor({
     updateTicketTransactionAction,
     {},
   );
+  const editorRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    if (state.success) editorRef.current?.removeAttribute("open");
+  }, [state.success]);
+
   return (
-    <details className="transaction-editor">
+    <details ref={editorRef} className="transaction-editor">
       <summary className="link-button">Mau ubah transaksi?</summary>
       {ticket.status === "Completed" ? (
         <p className="muted">
