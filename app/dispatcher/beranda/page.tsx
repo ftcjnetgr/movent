@@ -25,7 +25,7 @@ export default async function DispatcherBerandaPage() {
     admin
       .from("schedules")
       .select(
-        "schedule_id, route, category, schedule_hub_id, start_point, destination, std, sta, trip",
+        "schedule_id, route, category, schedule_hub_id, schedule_day, start_point, destination, std, sta, trip",
       )
       .eq("status", "Active")
       .order("schedule_day")
