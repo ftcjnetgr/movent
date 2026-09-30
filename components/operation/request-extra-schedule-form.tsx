@@ -166,6 +166,7 @@ export default function OperationRequestExtraScheduleForm({
               className="operation-extra-share-button"
               onClick={() => {
                 const r = confirmState.result;
+                if (!r) return;
                 const message = [
                   "MOVENT - Jadwal Tambahan",
                   "ID Tugas: " + r.transactionId,
