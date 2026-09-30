@@ -149,7 +149,7 @@ export default function DispatcherMaintenanceForm({
             <>
               <div className="task-summary-grid">
                 <div>
-                  <span>ID Tugas</span>
+                  <span>ID Aktivitas</span>
                   <strong>Belum dibuat</strong>
                 </div>
                 <div>
@@ -332,7 +332,7 @@ export default function DispatcherMaintenanceForm({
               </button>
             </div>
             <div className="task-summary-grid dispatcher-maintenance-result-grid">
-              <div><span>ID Tugas</span><strong>{state.result.transactionId}</strong></div>
+              <div><span>ID Aktivitas</span><strong>{state.result.transactionId}</strong></div>
               <div><span>Daftar Perbaikan</span><strong>{state.result.maintenanceList}</strong></div>
               <div><span>Lokasi</span><strong>{state.result.location}</strong></div>
               <div><span>Armada</span><strong>{state.result.platNumber}</strong></div>
@@ -345,7 +345,7 @@ export default function DispatcherMaintenanceForm({
                 if (!r) return;
                 const message = [
                   "MOVENT - Maintenance",
-                  "ID Tugas: " + r.transactionId,
+                  "ID Aktivitas: " + r.transactionId,
                   "Perbaikan: " + r.maintenanceList,
                   "Lokasi: " + r.location,
                   "Armada: " + r.platNumber,
