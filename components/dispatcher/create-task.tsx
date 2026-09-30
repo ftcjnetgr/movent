@@ -217,21 +217,26 @@ export default function DispatcherCreateTask({
 
   useEffect(() => {
     function handleDispatcherBack(event: Event) {
-      if (!assignmentStep) return;
+      if (!chosenSchedule && !assignmentStep) return;
+
       const customEvent = event as CustomEvent<{ handled?: boolean }>;
       if (customEvent.detail) {
         customEvent.detail.handled = true;
       }
+
+      if (assignmentStep) {
+        setAssignmentStep(false);
+        return;
+      }
+
       setChosenSchedule(null);
       setScheduleId("");
-      setAssignmentStep(false);
     }
 
     window.addEventListener("movent:dispatcher-back", handleDispatcherBack);
     return () =>
       window.removeEventListener("movent:dispatcher-back", handleDispatcherBack);
-  }, [assignmentStep]);
-
+  }, [assignmentStep, chosenSchedule]);
   useEffect(() => {
     if (!chosenSchedule || assignmentStep) return;
 
