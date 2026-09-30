@@ -13,7 +13,6 @@ export type State = {
   success?: string;
   transactionId?: string;
   preview?: {
-    transactionId?: string;
     flow: "tgr" | "distribusi";
     startPoint: string;
     destination: string;
@@ -29,6 +28,17 @@ export type State = {
     platNumber?: string;
     std?: string;
     sta?: string;
+  };
+  result?: {
+    transactionId: string;
+    scheduleId: string;
+    startPoint: string;
+    destination: string;
+    std: string;
+    sta: string;
+    executorName: string;
+    executorNik: string;
+    fleetPlate: string;
   };
 };
 
@@ -196,13 +206,9 @@ export async function createDispatcherTaskAction(
     if (!executor || !fleet)
       return { error: "Executor atau armadanya belum tersedia, ya." };
 
-    const transactionId = await nextTransaction(admin);
-    if (!transactionId)
-      return { error: "ID transaksinya belum berhasil dibuat. Coba lagi, ya." };
     return {
       success: "Preview tugasnya sudah siap. Cek dulu sebelum lanjut, ya.",
       preview: {
-        transactionId,
         flow: "tgr",
         startPoint: schedule.start_point,
         destination: schedule.destination,
@@ -235,23 +241,11 @@ export async function confirmDispatcherTaskAction(
   }
 
   const flow = String(formData.get("flow") ?? "");
-  const suppliedTransactionId = String(
-    formData.get("transactionId") ?? "",
-  ).trim();
   const executorNik = String(formData.get("executorNik") ?? "").trim();
   const platNumber = String(formData.get("platNumber") ?? "").trim();
   const scheduleId = String(formData.get("scheduleId") ?? "").trim();
 
   const admin = createAdminClient();
-  const transactionId = suppliedTransactionId;
-
-  if (!transactionId) {
-    return {
-      error:
-        "ID transaksi preview belum ada. Buat preview tugas dulu, ya.",
-    };
-  }
-
   const { executor, fleet } = await activeExecutorAndFleet(
     admin,
     executorNik,
@@ -304,6 +298,10 @@ export async function confirmDispatcherTaskAction(
       return { error: "STA harus setelah STD, ya." };
     }
 
+    const transactionId = await nextTransaction(admin);
+    if (!transactionId)
+      return { error: "ID tugas belum berhasil dibuat. Coba lagi, ya." };
+
     const { error } = await admin.from("tasks").insert({
       transaction_id: transactionId,
       source_type: "Schedule",
@@ -350,6 +348,17 @@ export async function confirmDispatcherTaskAction(
   return {
     success: `Tugas ${transactionId} udah dibuat dan ditugasin.`,
     transactionId,
+    result: {
+      transactionId,
+      scheduleId: String(formData.get("scheduleId") ?? ""),
+      startPoint: String(formData.get("startPoint") ?? ""),
+      destination: String(formData.get("destination") ?? ""),
+      std: String(formData.get("std") ?? ""),
+      sta: String(formData.get("sta") ?? ""),
+      executorName: executor.full_name,
+      executorNik: executor.executor_nik,
+      fleetPlate: fleet.plat_number,
+    },
   };
 }
 
