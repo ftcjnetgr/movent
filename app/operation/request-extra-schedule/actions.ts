@@ -142,13 +142,6 @@ export async function confirmExtraScheduleAction(
   }
 
   const admin = createAdminClient();
-  const { data: transactionId, error: transactionError } = await admin.rpc(
-    "movent_next_transaction_id",
-  );
-  if (transactionError || !transactionId) {
-    return { error: "ID tugas belum berhasil dibuat. Coba lagi, ya." };
-  }
-
   const { data: locations } = await admin
     .from("locations")
     .select("location")
@@ -182,6 +175,13 @@ export async function confirmExtraScheduleAction(
       error:
         "Start Point dan Destinasi harus berasal dari Database Lokasi yang Active.",
     };
+  }
+
+  const { data: transactionId, error: transactionError } = await admin.rpc(
+    "movent_next_transaction_id",
+  );
+  if (transactionError || !transactionId) {
+    return { error: "ID tugas belum berhasil dibuat. Coba lagi, ya." };
   }
 
   const { data: inserted, error } = await admin
