@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import SearchableMasterSelect from "@/components/shared/forms/searchable-master-select";
 import StatusBadge from "@/components/shared/status-badge";
@@ -13,7 +13,6 @@ import {
 
 type Option = { value: string; label: string; searchText?: string };
 type Preview = {
-  transactionId: string;
   startPoint: string;
   destination: string;
   std: string;
@@ -87,6 +86,7 @@ export default function OperationCreateTask({
   );
   const [preview, setPreview] = useState<Preview | null>(null);
   const [sjRows, setSjRows] = useState([0]);
+  const [showAssignmentResult, setShowAssignmentResult] = useState(false);
 
   const locationOptions: Option[] = locations.map((value) => ({
     value,
@@ -103,8 +103,9 @@ export default function OperationCreateTask({
     label: item.plat_number + " - " + item.fleet_type,
     searchText: item.plat_number + " " + item.fleet_type,
   }));
-  function sharePreview() {
-    if (!state.preview) return;
+  function shareResult() {
+    if (!confirmState.result) return;
+    const result = confirmState.result;
     const doc = new jsPDF({
       orientation: "landscape",
       unit: "mm",
@@ -113,15 +114,15 @@ export default function OperationCreateTask({
     doc.setFontSize(16);
     doc.text("SURAT JALAN", 10, 14);
     doc.setFontSize(10);
-    doc.text("ID Transaksi: " + state.preview.transactionId, 10, 22);
-    doc.text("Titik Mulai: " + state.preview.startPoint, 10, 30);
-    doc.text("Destinasi: " + state.preview.destination, 10, 38);
-    doc.text("STD: " + timeValue(state.preview.std), 10, 46);
-    doc.text("STA: " + timeValue(state.preview.sta), 10, 54);
-    doc.text("Executor: " + state.preview.externalExecutor, 10, 62);
-    doc.text("Armada: " + state.preview.externalFleet, 10, 70);
+    doc.text("ID Tugas: " + result.transactionId, 10, 22);
+    doc.text("Titik Mulai: " + result.startPoint, 10, 30);
+    doc.text("Destinasi: " + result.destination, 10, 38);
+    doc.text("STD: " + timeValue(result.std), 10, 46);
+    doc.text("STA: " + timeValue(result.sta), 10, 54);
+    doc.text("Executor: " + result.externalExecutor, 10, 62);
+    doc.text("Armada: " + result.externalFleet, 10, 70);
     let y = 78;
-    state.preview.sjs.forEach((sj, i) => {
+    result.sjs.forEach((sj, i) => {
       doc.text(
         "SJ " +
           (i + 1) +
@@ -138,18 +139,18 @@ export default function OperationCreateTask({
       );
       y += 7;
     });
-    doc.save(state.preview.transactionId + "-SJ.pdf");
+    doc.save(result.transactionId + "-SJ.pdf");
 
     const lines = [
       "MOVENT - Surat Jalan",
-      "ID Transaksi: " + state.preview.transactionId,
-      "Titik Mulai: " + state.preview.startPoint,
-      "Destinasi: " + state.preview.destination,
-      "STD: " + timeValue(state.preview.std),
-      "STA: " + timeValue(state.preview.sta),
-      "Executor: " + state.preview.externalExecutor,
-      "Armada: " + state.preview.externalFleet,
-      ...state.preview.sjs.flatMap((sj, i) => [
+      "ID Tugas: " + result.transactionId,
+      "Titik Mulai: " + result.startPoint,
+      "Destinasi: " + result.destination,
+      "STD: " + timeValue(result.std),
+      "STA: " + timeValue(result.sta),
+      "Executor: " + result.externalExecutor,
+      "Armada: " + result.externalFleet,
+      ...result.sjs.flatMap((sj, i) => [
         "SJ " + (i + 1) + ": " + sj.sjNumber,
         "Qty: " + sj.sjQty,
         "Berat: " + sj.sjWeight,
@@ -163,6 +164,12 @@ export default function OperationCreateTask({
       "noopener,noreferrer",
     );
   }
+
+  useEffect(() => {
+    if (confirmState.result) {
+      setShowAssignmentResult(true);
+    }
+  }, [confirmState.result]);
 
   const productOptions: Option[] = products.map((value) => ({
     value,
@@ -287,8 +294,12 @@ export default function OperationCreateTask({
 
         {state.preview ? (
           <div className="metric-card compact-form" style={{ marginTop: 16 }}>
-            <div className="card-title">Cek penugasan & SJ</div>
+            <div className="card-title">Cek tugas dulu</div>
             <div className="task-summary-grid">
+              <div>
+                <span>ID Tugas</span>
+                <strong>Belum dibuat</strong>
+              </div>
               <div>
                 <span>Rute</span>
                 <strong>
@@ -320,11 +331,6 @@ export default function OperationCreateTask({
               Cek data penugasan dan hasil SJ sebelum lanjut, ya.
             </p>
             <form action={confirmAction} className="compact-form">
-              <input
-                type="hidden"
-                name="transactionId"
-                value={state.preview.transactionId}
-              />
               <input
                 type="hidden"
                 name="startPoint"
@@ -375,13 +381,6 @@ export default function OperationCreateTask({
                 </p>
               ) : null}
               <div className="inline-actions">
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={sharePreview}
-                >
-                  Bagikan
-                </button>
                 <button type="submit" disabled={confirmPending}>
                   {confirmPending ? "Lagi konfirmasi..." : "Tugasnya udah oke?"}
                 </button>
@@ -390,6 +389,46 @@ export default function OperationCreateTask({
           </div>
         ) : null}
       </section>
+
+      {showAssignmentResult && confirmState.result ? (
+        <div className="operation-task-result-backdrop" role="presentation">
+          <section className="operation-task-result-modal" role="dialog" aria-modal="true">
+            <div className="operation-task-result-head">
+              <div>
+                <small>Penugasan berhasil</small>
+                <strong>{confirmState.result.transactionId}</strong>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAssignmentResult(false)}
+                aria-label="Tutup hasil penugasan"
+              >
+                ×
+              </button>
+            </div>
+            <div className="task-summary-grid operation-task-result-grid">
+              <div><span>ID Tugas</span><strong>{confirmState.result.transactionId}</strong></div>
+              <div><span>Start Point</span><strong>{confirmState.result.startPoint}</strong></div>
+              <div><span>Destination</span><strong>{confirmState.result.destination}</strong></div>
+              <div><span>STD</span><strong>{timeValue(confirmState.result.std)}</strong></div>
+              <div><span>STA</span><strong>{timeValue(confirmState.result.sta)}</strong></div>
+              <div><span>Executor</span><strong>{confirmState.result.externalExecutor}</strong></div>
+              <div><span>Armada</span><strong>{confirmState.result.externalFleet}</strong></div>
+              <div><span>Jumlah SJ</span><strong>{confirmState.result.sjs.length}</strong></div>
+            </div>
+            <div className="inline-actions operation-task-result-actions">
+              <button type="button" onClick={shareResult}>Bagikan</button>
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => setShowAssignmentResult(false)}
+              >
+                Tutup
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : null}
 
       <section className="metric-card">
         <div className="card-title">Tugas siap jalan</div>
