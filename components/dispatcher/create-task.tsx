@@ -625,6 +625,7 @@ export default function DispatcherCreateTask({
               className="dispatcher-share-whatsapp-button"
               onClick={() => {
                 const r = confirmState.result;
+                if (!r) return;
                 const message = [
                   "Penugasan Movent",
                   `ID Tugas: ${r.transactionId}`,
