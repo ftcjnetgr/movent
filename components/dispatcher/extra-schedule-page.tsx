@@ -39,6 +39,8 @@ export default function DispatcherExtraSchedulePage() {
   );
   const [feedback, setFeedback] = useState<Record<string, string>>({});
   const [preview, setPreview] = useState<Preview | null>(null);
+  const [activeTab, setActiveTab] = useState<"requests" | "confirmed">("requests");
+  const [selectedRow, setSelectedRow] = useState<Row | null>(null);
   const [loading, setLoading] = useState(true);
 
   const executorOptions = useMemo(
@@ -185,7 +187,12 @@ export default function DispatcherExtraSchedulePage() {
         </section>
       ) : null}
 
-      <section className="data-table-card section-block">
+      <div className="extra-schedule-tabs" role="tablist" aria-label="Status Jadwal Tambahan">
+        <button type="button" role="tab" aria-selected={activeTab === "requests"} className={activeTab === "requests" ? "is-active" : ""} onClick={() => setActiveTab("requests")}><span>Terima Extra</span><small>{data.requests.length} request</small></button>
+        <button type="button" role="tab" aria-selected={activeTab === "confirmed"} className={activeTab === "confirmed" ? "is-active" : ""} onClick={() => setActiveTab("confirmed")}><span>Siap Ditugaskan</span><small>{data.confirmed.length} aktivitas</small></button>
+      </div>
+      {activeTab === "requests" ? (
+      <section className="data-table-card section-block extra-schedule-panel">
         <div className="section-heading">
           <div>
             <h2>Ada permintaan baru</h2>
@@ -199,6 +206,15 @@ export default function DispatcherExtraSchedulePage() {
           <div className="empty-state">Belum ada request baru di sini.</div>
         ) : null}
         {!loading && data.requests.length > 0 ? (
+          <>
+          <div className="extra-schedule-mobile-cards">
+            {data.requests.map((row) => (
+              <article key={row.transaction_id} className="extra-schedule-mobile-card" onClick={() => setSelectedRow(row)}>
+                <div className="extra-schedule-mobile-route"><div><span>Start Point</span><strong>{row.start_point}</strong></div><b>→</b><div><span>Destination</span><strong>{row.destination}</strong></div></div>
+                <div className="extra-schedule-mobile-meta"><span>STD <strong>{time(row.std)}</strong></span><span>STA <strong>{time(row.sta)}</strong></span><button type="button" onClick={(event) => { event.stopPropagation(); confirm(row.transaction_id); }}>Terima Extra</button></div>
+              </article>
+            ))}
+          </div>
           <div className="table-wrap">
             <table>
               <thead>
@@ -239,10 +255,13 @@ export default function DispatcherExtraSchedulePage() {
               </tbody>
             </table>
           </div>
+          </>
         ) : null}
       </section>
+      ) : null}
 
-      <section className="data-table-card section-block">
+      {activeTab === "confirmed" ? (
+      <section className="data-table-card section-block extra-schedule-panel">
         <div className="section-heading">
           <div>
             <h2>Siap ditugasin</h2>
@@ -257,6 +276,15 @@ export default function DispatcherExtraSchedulePage() {
             Belum ada request yang siap ditugasin.
           </div>
         ) : (
+          <>
+          <div className="extra-schedule-mobile-cards">
+            {data.confirmed.map((row) => (
+              <article key={row.transaction_id} className="extra-schedule-mobile-card" onClick={() => setSelectedRow(row)}>
+                <div className="extra-schedule-mobile-route"><div><span>Start Point</span><strong>{row.start_point}</strong></div><b>→</b><div><span>Destination</span><strong>{row.destination}</strong></div></div>
+                <div className="extra-schedule-mobile-meta"><span>STD <strong>{time(row.std)}</strong></span><span>STA <strong>{time(row.sta)}</strong></span><span className="extra-schedule-ready">Siap Ditugaskan</span></div>
+              </article>
+            ))}
+          </div>
           <div className="table-wrap">
             <table>
               <thead>
@@ -329,8 +357,28 @@ export default function DispatcherExtraSchedulePage() {
               </tbody>
             </table>
           </div>
+          </>
         )}
       </section>
+      ) : null}
+
+      {selectedRow ? (
+        <div className="extra-schedule-modal-backdrop" onClick={() => setSelectedRow(null)}>
+          <div className="extra-schedule-modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+            <div className="extra-schedule-modal-header"><div><span>Detail Jadwal Tambahan</span><h2>{selectedRow.transaction_id}</h2></div><button type="button" onClick={() => setSelectedRow(null)} aria-label="Tutup">×</button></div>
+            <div className="extra-schedule-modal-grid">
+              <div><span>Start Point</span><strong>{selectedRow.start_point}</strong></div><div><span>Destination</span><strong>{selectedRow.destination}</strong></div><div><span>STD</span><strong>{time(selectedRow.std)}</strong></div><div><span>STA</span><strong>{time(selectedRow.sta)}</strong></div><div><span>Status</span><strong>{activeTab === "requests" ? "Terima Extra" : "Siap Ditugaskan"}</strong></div><div><span>Dibuat</span><strong>{selectedRow.created_at ? new Date(selectedRow.created_at).toLocaleDateString("id-ID") : "-"}</strong></div>
+            </div>
+            {activeTab === "requests" ? <button type="button" className="extra-schedule-modal-primary" onClick={() => { confirm(selectedRow.transaction_id); setSelectedRow(null); }}>Terima Extra</button> : (
+              <div className="extra-schedule-modal-assignment">
+                <SearchableMasterSelect label="Executor" name={"modal-executor-" + selectedRow.transaction_id} options={executorOptions} placeholder="Pilih executor" value={selectedExecutor[selectedRow.transaction_id] ?? ""} onValueChange={(value) => setSelectedExecutor((current) => ({ ...current, [selectedRow.transaction_id]: value }))} />
+                <SearchableMasterSelect label="Armada" name={"modal-fleet-" + selectedRow.transaction_id} options={fleetOptions} placeholder="Pilih armada" value={selectedFleet[selectedRow.transaction_id] ?? ""} onValueChange={(value) => setSelectedFleet((current) => ({ ...current, [selectedRow.transaction_id]: value }))} />
+                <button type="button" className="extra-schedule-modal-primary" onClick={() => { previewAssignment(selectedRow.transaction_id); setSelectedRow(null); }}>Pratinjau Tugas</button>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
