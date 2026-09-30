@@ -83,9 +83,9 @@ export default function DispatcherCreateTask({
       ? schedules.filter((schedule) => schedule.route === route)
       : schedules
     ).filter((schedule) => {
-      if (schedule.schedule_day !== currentDay) return true;
+      if (schedule.schedule_day !== currentDay) return false;
       const [hour, minute] = schedule.std.slice(0, 5).split(":").map(Number);
-      if (!Number.isFinite(hour) || !Number.isFinite(minute)) return true;
+      if (!Number.isFinite(hour) || !Number.isFinite(minute)) return false;
       return hour * 60 + minute >= currentMinutes;
     });
 
