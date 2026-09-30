@@ -496,7 +496,7 @@ export default function DispatcherCreateTask({
             </div>
           </div>
 
-          <p className="muted">Udah pas? Tinggal konfirmasi tugasnya.</p>
+          <p className="muted">Udah pas? Tinggal konfirmasi aktivitasnya.</p>
 
           <form action={confirmAction} className="compact-form">
             <input type="hidden" name="flow" value={state.preview.flow} />
@@ -542,7 +542,7 @@ export default function DispatcherCreateTask({
 
             <div className="form-actions">
               <button type="submit" disabled={confirmPending}>
-                {confirmPending ? "Lagi konfirmasi..." : "Konfirmasi tugas"}
+                {confirmPending ? "Lagi konfirmasi..." : "Konfirmasi aktivitas"}
               </button>
               <button
                 type="button"
@@ -592,7 +592,7 @@ export default function DispatcherCreateTask({
 
             <div className="task-summary-grid dispatcher-task-result-grid">
               <div>
-                <span>ID Tugas</span>
+                <span>ID Aktivitas</span>
                 <strong>{confirmState.result.transactionId}</strong>
               </div>
               <div>
@@ -633,7 +633,7 @@ export default function DispatcherCreateTask({
                 if (!r) return;
                 const message = [
                   "Penugasan Movent",
-                  `ID Tugas: ${r.transactionId}`,
+                  `ID Aktivitas: ${r.transactionId}`,
                   `Schedule ID: ${r.scheduleId}`,
                   `Start Point: ${r.startPoint}`,
                   `Destination: ${r.destination}`,
