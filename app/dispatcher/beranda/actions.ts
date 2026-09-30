@@ -74,14 +74,49 @@ async function activeExecutorAndFleet(
   return { executor, fleet };
 }
 
-function scheduleStdNotPassed(std: string) {
-  const date = new Intl.DateTimeFormat("en-CA", {
+function scheduleStdNotPassed(std: string, scheduleDay: number) {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jakarta",
+    weekday: "short",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(now);
+
+  const weekdayMap: Record<string, number> = {
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+    Sun: 7,
+  };
+
+  const currentDay = weekdayMap[
+    parts.find((item) => item.type === "weekday")?.value ?? ""
+  ];
+
+  if (!currentDay || !Number.isInteger(scheduleDay)) return false;
+
+  const dayDelta = (scheduleDay - currentDay + 7) % 7;
+  const year = parts.find((item) => item.type === "year")?.value;
+  const month = parts.find((item) => item.type === "month")?.value;
+  const day = parts.find((item) => item.type === "day")?.value;
+  if (!year || !month || !day) return false;
+
+  const targetDate = new Date(`${year}-${month}-${day}T00:00:00+07:00`);
+  targetDate.setDate(targetDate.getDate() + dayDelta);
+
+  const nextDate = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Jakarta",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date());
-  const stdAt = new Date(`${date}T${std}+07:00`);
+  }).format(targetDate);
+
+  const stdAt = new Date(`${nextDate}T${std}+07:00`);
   return new Date() <= stdAt;
 }
 
@@ -213,7 +248,7 @@ export async function confirmDispatcherTaskAction(
       return { error: "Schedule-nya nggak tersedia." };
     }
 
-    if (!scheduleStdNotPassed(schedule.std)) {
+    if (!scheduleStdNotPassed(schedule.std, Number(schedule.schedule_day))) {
       return {
         error: "Jadwalnya sudah lewat STD, jadi nggak bisa dipakai lagi, ya.",
       };
