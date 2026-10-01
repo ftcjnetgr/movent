@@ -338,6 +338,29 @@ export default async function ControllerTicketingDashboardPage({
               {byHour.map((item) => (
                 <div className="super-chart-column" key={item.hour}>
                   <div className="super-chart-stack">
+                    <strong
+                      className="super-chart-value-label"
+                      style={{
+                        bottom:
+                          String(
+                            ((item.requested +
+                              item.confirmed +
+                              item.inProgress +
+                              item.completed +
+                              item.canceled) /
+                              maxHour) *
+                              100,
+                          ) + "%",
+                      }}
+                    >
+                      {new Intl.NumberFormat("id-ID").format(
+                        item.requested +
+                          item.confirmed +
+                          item.inProgress +
+                          item.completed +
+                          item.canceled,
+                      )}
+                    </strong>
                     {item.requested > 0 ? (
                       <span
                         className="bar-requested"
