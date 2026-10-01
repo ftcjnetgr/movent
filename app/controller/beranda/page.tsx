@@ -693,22 +693,40 @@ export default async function ControllerPenugasanDashboardPage({
           </div>
           <div className="super-activity-list">
             <DashboardPreviewButton
-              title="Pratinjau — Berangkatnya Pas"
+              title="Pratinjau — Tugas yang berangkatnya tepat waktu"
               items={departureOnTimePreview}
               variant="activity"
-              dotClass="blue"
-              label="Berangkatnya pas"
+              dotClass="green"
+              label="tugas yang berangkatnya tepat waktu"
               value={departureMetrics.onTime}
               subtitle={`${departurePerformance}%`}
             />
             <DashboardPreviewButton
-              title="Pratinjau — Berangkatnya Telat"
+              title="Pratinjau — Tugas yang berangkatnya telat"
               items={departureLatePreview}
               variant="activity"
               dotClass="red"
-              label="Berangkatnya telat"
+              label="tugas yang berangkatnya telat"
               value={departureMetrics.late}
               subtitle={`${percentage(departureMetrics.late, departureMetrics.total)}%`}
+            />
+            <DashboardPreviewButton
+              title="Pratinjau — Tugas yang sampainya tepat waktu"
+              items={arrivalOnTimePreview}
+              variant="activity"
+              dotClass="green"
+              label="tugas yang sampainya tepat waktu"
+              value={arrivalMetrics.onTime}
+              subtitle={`${arrivalPerformance}%`}
+            />
+            <DashboardPreviewButton
+              title="Pratinjau — Tugas yang sampainya telat"
+              items={arrivalLatePreview}
+              variant="activity"
+              dotClass="red"
+              label="tugas yang sampainya telat"
+              value={arrivalMetrics.late}
+              subtitle={`${percentage(arrivalMetrics.late, arrivalMetrics.total)}%`}
             />
           </div>
         </div>
