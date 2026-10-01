@@ -41,9 +41,30 @@ function numberLabel(value: number | null) {
   return value === null ? "-" : new Intl.NumberFormat("id-ID").format(value);
 }
 
+function parseTimeOnly(value: string | null) {
+  if (!value) return null;
+  const match = value.trim().match(/^(\\d{1,2}):(\\d{2})(?::(\\d{2}))?$/);
+  if (!match) return null;
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (hour > 23 || minute > 59) return null;
+  return hour * 60 + minute;
+}
+
 function timeLabel(value: string | null) {
   if (!value) return "-";
-  return new Date(value).toLocaleTimeString("id-ID", {
+
+  const timeOnly = parseTimeOnly(value);
+  if (timeOnly !== null) {
+    const hour = Math.floor(timeOnly / 60);
+    const minute = timeOnly % 60;
+    return String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "-";
+
+  return date.toLocaleTimeString("id-ID", {
     hour: "2-digit",
     minute: "2-digit",
     timeZone: "Asia/Jakarta",
@@ -52,7 +73,21 @@ function timeLabel(value: string | null) {
 
 function scheduleDurationLabel(std: string | null, sta: string | null) {
   if (!std || !sta) return "-";
-  const minutes = Math.max(0, Math.round((new Date(sta).getTime() - new Date(std).getTime()) / 60000));
+
+  const stdMinutes = parseTimeOnly(std);
+  const staMinutes = parseTimeOnly(sta);
+
+  if (stdMinutes !== null && staMinutes !== null) {
+    let duration = staMinutes - stdMinutes;
+    if (duration < 0) duration += 24 * 60;
+    return String(duration) + " menit";
+  }
+
+  const stdDate = new Date(std);
+  const staDate = new Date(sta);
+  if (Number.isNaN(stdDate.getTime()) || Number.isNaN(staDate.getTime())) return "-";
+
+  const minutes = Math.max(0, Math.round((staDate.getTime() - stdDate.getTime()) / 60000));
   return String(minutes) + " menit";
 }
 
