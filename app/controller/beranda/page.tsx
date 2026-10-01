@@ -205,23 +205,6 @@ export default async function ControllerPenugasanDashboardPage({
     { total: 0, onTime: 0, late: 0 },
   );
 
-  const durationMetrics = activities.reduce(
-    (acc, task) => {
-      if (!task.driving_at || !task.arrived_at) return acc;
-
-      const duration =
-        new Date(task.arrived_at).getTime() -
-        new Date(task.driving_at).getTime();
-
-      if (duration < 0) return acc;
-
-      acc.totalMs += duration;
-      acc.count += 1;
-      return acc;
-    },
-    { totalMs: 0, count: 0 },
-  );
-
   const departurePerformance = percentage(
     departureMetrics.onTime,
     departureMetrics.total,
@@ -234,17 +217,6 @@ export default async function ControllerPenugasanDashboardPage({
     durationMetrics.count > 0
       ? Math.round(durationMetrics.totalMs / durationMetrics.count / 60000)
       : 0;
-
-  function durationLabel(totalMinutes: number) {
-    if (!totalMinutes) return "-";
-
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    if (!hours) return String(minutes) + "m";
-    if (!minutes) return String(hours) + "j";
-    return String(hours) + "j " + String(minutes) + "m";
-  }
 
   const [{ count: totalMaintenance }, { count: totalSchedulesToday }] =
     await Promise.all([
