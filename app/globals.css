@@ -15237,3 +15237,85 @@ td select:focus,
     padding: 16px;
   }
 }
+
+
+/* =========================================================
+   CONTROLLER DASHBOARD — FINAL KPI + PERFORMANCE CARD PASS
+   ========================================================= */
+
+.super-dashboard .assignment-kpi-grid {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  align-items: stretch;
+}
+
+.super-dashboard .maintenance-kpi-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  align-items: stretch;
+}
+
+.super-dashboard .super-kpi-card {
+  min-width: 0;
+}
+
+.super-dashboard .super-kpi-card > .super-kpi-content > strong {
+  font-size: 28px !important;
+  line-height: 1 !important;
+  letter-spacing: -0.045em !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.super-dashboard .super-kpi-card > .super-kpi-content > small {
+  font-size: 9px !important;
+  white-space: nowrap;
+}
+
+.super-dashboard .kpi-gray .super-kpi-icon {
+  background: #f1f3f5 !important;
+  color: #64748b !important;
+}
+
+.super-dashboard .kpi-gray {
+  border-top: 3px solid #94a3b8 !important;
+}
+
+.super-dashboard .super-dashboard-main-grid {
+  align-items: stretch !important;
+}
+
+.super-dashboard .super-dashboard-main-grid .super-chart-panel {
+  order: 1;
+}
+
+.super-dashboard .super-dashboard-main-grid .super-activity-panel {
+  order: 2;
+  min-height: 0 !important;
+  height: fit-content !important;
+  align-self: start !important;
+}
+
+.super-dashboard .super-activity-list > div {
+  min-height: 46px;
+}
+
+.super-dashboard .super-activity-list .activity-dot.green {
+  background: var(--success) !important;
+}
+
+.super-dashboard .super-activity-list .activity-dot.red {
+  background: var(--danger) !important;
+}
+
+@media (max-width: 1180px) {
+  .super-dashboard .assignment-kpi-grid,
+  .super-dashboard .maintenance-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .super-dashboard .assignment-kpi-grid,
+  .super-dashboard .maintenance-kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
