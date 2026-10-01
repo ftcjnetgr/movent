@@ -351,6 +351,15 @@ export default async function ControllerPenugasanDashboardPage({
         task?.fleet_snapshot?.plat_number ??
         task?.fleet_snapshot?.plate_number ??
         null,
+      fleetType:
+        task?.fleet_snapshot?.fleet_type ??
+        task?.fleet_snapshot?.type ??
+        task?.fleet_snapshot?.vehicle_type ??
+        null,
+      fleetStatus:
+        task?.fleet_snapshot?.fleet_status ??
+        task?.fleet_snapshot?.status ??
+        null,
       atd,
       ata,
       std: task?.std ?? schedule.std ?? null,
