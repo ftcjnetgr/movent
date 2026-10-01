@@ -584,6 +584,29 @@ export default async function ControllerPenugasanDashboardPage({
               {byHour.map((item) => (
                 <div className="super-chart-column" key={item.hour}>
                   <div className="super-chart-stack">
+                    <strong
+                      className="super-chart-value-label"
+                      style={{
+                        bottom:
+                          String(
+                            ((item.assigned +
+                              item.confirmed +
+                              item.driving +
+                              item.completed +
+                              item.canceled) /
+                              maxHour) *
+                              100,
+                          ) + "%",
+                      }}
+                    >
+                      {new Intl.NumberFormat("id-ID").format(
+                        item.assigned +
+                          item.confirmed +
+                          item.driving +
+                          item.completed +
+                          item.canceled,
+                      )}
+                    </strong>
                     {item.assigned > 0 ? (
                       <span
                         className="bar-assigned"
