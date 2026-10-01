@@ -24,7 +24,7 @@ export default async function ExecutorHistoryPage() {
     .order("completed_at", { ascending: false });
 
   if (profile.role === "Executor")
-    query = query.eq("executor_nik", profile.nik);
+    query = query.eq("executor_nik", profile.username);
 
   const { data: tasks } = await query;
 
