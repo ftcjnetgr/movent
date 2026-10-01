@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
 import { compareStatus, STATUS_LABELS, STATUS_SUBCOPY, StatusIcon } from "@/components/shared/status-config";
+import DashboardPreviewButton, { type DashboardPreviewItem } from "@/components/controller/dashboard-preview";
 
 function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
@@ -67,7 +68,7 @@ export default async function ControllerTicketingDashboardPage({
       .limit(12),
     admin
       .from("ticketings")
-      .select("status, maintenance_list, created_at, completed_at")
+      .select("transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at, completed_at")
       .gte("created_at", rangeStart)
       .lt("created_at", rangeEnd),
     admin
@@ -137,6 +138,41 @@ export default async function ControllerTicketingDashboardPage({
   const maintenanceLatePercentage = maintenancePerformance.total > 0
     ? Math.round((maintenancePerformance.late / maintenancePerformance.total) * 100)
     : 0;
+  const maintenancePreviewItems: DashboardPreviewItem[] = performanceRows.map((ticket) => ({
+    scheduleId: ticket.transaction_id,
+    status: statusLabel(ticket.status),
+    startPoint: ticket.maintenance_list,
+    destination: ticket.fleet_location,
+    executor: null,
+    fleet: ticket.fleet_plat_number,
+    atd: ticket.created_at,
+    ata: ticket.completed_at,
+    distance: null,
+    drivingDurationMs:
+      ticket.completed_at
+        ? new Date(ticket.completed_at).getTime() - new Date(ticket.created_at).getTime()
+        : null,
+  }));
+
+  const maintenancePerformanceItems = performanceRows.reduce(
+    (acc, ticket) => {
+      const aging = maintenanceAging.get(ticket.maintenance_list ?? "");
+      if (!aging || aging < 1 || ticket.status !== "Completed" || !ticket.completed_at) {
+        return acc;
+      }
+      const item = maintenancePreviewItems.find(
+        (preview) => preview.scheduleId === ticket.transaction_id,
+      );
+      if (!item) return acc;
+      const completedOnTime =
+        jakartaDate(ticket.completed_at) <= addDays(jakartaDate(ticket.created_at), aging - 1);
+      if (completedOnTime) acc.onTime.push(item);
+      else acc.late.push(item);
+      return acc;
+    },
+    { onTime: [] as DashboardPreviewItem[], late: [] as DashboardPreviewItem[] },
+  );
+
   const { data: todayTickets } = await admin
     .from("ticketings")
     .select("status, created_at")
@@ -201,71 +237,71 @@ export default async function ControllerTicketingDashboardPage({
       </div>
 
       <section className="super-kpi-grid maintenance-kpi-grid">
-        <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-total-maintenance">
-          <div className="super-kpi-icon">
-            <StatusIcon status="" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Total Perbaikan</span>
-            <strong>{totalMaintenance}</strong>
-            <small>Semua pengajuan</small>
-          </div>
-        </div>
+        <DashboardPreviewButton
+          title="Total Perbaikan"
+          items={maintenancePreviewItems}
+          mode="maintenance"
+          className="kpi-purple status-kpi-card status-kpi-total-maintenance"
+          iconStatus="Requested"
+          label="Total Perbaikan"
+          value={totalMaintenance}
+          subtitle="Semua pengajuan"
+        />
 
-        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-requested">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Requested" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Udah Diajuin</span>
-            <strong>{data.ticketCounts.Requested ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Requested ?? 0, totalMaintenance)}% dari total</small>
-          </div>
-        </div>
+        <DashboardPreviewButton
+          title="Udah Diajuin"
+          items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Requested"))}
+          mode="maintenance"
+          className="kpi-blue status-kpi-card status-kpi-requested"
+          iconStatus="Requested"
+          label="Udah Diajuin"
+          value={data.ticketCounts.Requested ?? 0}
+          subtitle={percentage(data.ticketCounts.Requested ?? 0, totalMaintenance) + "% dari total"}
+        />
 
-        <div className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Confirmed" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Udah Diterima</span>
-            <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Confirmed ?? 0, totalMaintenance)}% dari total</small>
-          </div>
-        </div>
+        <DashboardPreviewButton
+          title="Udah Diterima"
+          items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Confirmed"))}
+          mode="maintenance"
+          className="kpi-cyan status-kpi-card status-kpi-confirmed"
+          iconStatus="Confirmed"
+          label="Udah Diterima"
+          value={data.ticketCounts.Confirmed ?? 0}
+          subtitle={percentage(data.ticketCounts.Confirmed ?? 0, totalMaintenance) + "% dari total"}
+        />
 
-        <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-in-progress">
-          <div className="super-kpi-icon">
-            <StatusIcon status="In Progress" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Lagi Dikerjain</span>
-            <strong>{data.ticketCounts["In Progress"] ?? 0}</strong>
-            <small>{percentage(data.ticketCounts["In Progress"] ?? 0, totalMaintenance)}% dari total</small>
-          </div>
-        </div>
+        <DashboardPreviewButton
+          title="Lagi Dikerjain"
+          items={maintenancePreviewItems.filter((item) => item.status === statusLabel("In Progress"))}
+          mode="maintenance"
+          className="kpi-orange status-kpi-card status-kpi-in-progress"
+          iconStatus="In Progress"
+          label="Lagi Dikerjain"
+          value={data.ticketCounts["In Progress"] ?? 0}
+          subtitle={percentage(data.ticketCounts["In Progress"] ?? 0, totalMaintenance) + "% dari total"}
+        />
 
-        <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Completed" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Udah Selesai</span>
-            <strong>{data.ticketCounts.Completed ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Completed ?? 0, totalMaintenance)}% dari total</small>
-          </div>
-        </div>
+        <DashboardPreviewButton
+          title="Udah Selesai"
+          items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Completed"))}
+          mode="maintenance"
+          className="kpi-purple status-kpi-card status-kpi-completed"
+          iconStatus="Completed"
+          label="Udah Selesai"
+          value={data.ticketCounts.Completed ?? 0}
+          subtitle={percentage(data.ticketCounts.Completed ?? 0, totalMaintenance) + "% dari total"}
+        />
 
-        <div className="super-kpi-card kpi-red status-kpi-card status-kpi-canceled">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Canceled" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Dibatalin</span>
-            <strong>{data.ticketCounts.Canceled ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Canceled ?? 0, totalMaintenance)}% dari total</small>
-          </div>
-        </div>
+        <DashboardPreviewButton
+          title="Dibatalin"
+          items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Canceled"))}
+          mode="maintenance"
+          className="kpi-red status-kpi-card status-kpi-canceled"
+          iconStatus="Canceled"
+          label="Dibatalin"
+          value={data.ticketCounts.Canceled ?? 0}
+          subtitle={percentage(data.ticketCounts.Canceled ?? 0, totalMaintenance) + "% dari total"}
+        />
       </section>
 
       <section className="super-dashboard-main-grid maintenance-dashboard-main-grid">
@@ -350,18 +386,24 @@ export default async function ControllerTicketingDashboardPage({
             </div>
           </div>
           <div className="super-activity-list">
-            <div>
-              <span className="activity-dot blue" />
-              <span>Perbaikannya pas</span>
-              <strong>{maintenancePerformance.onTime}</strong>
-              <time>{maintenanceOnTimePercentage}%</time>
-            </div>
-            <div>
-              <span className="activity-dot orange" />
-              <span>Perbaikannya telat</span>
-              <strong>{maintenancePerformance.late}</strong>
-              <time>{maintenanceLatePercentage}%</time>
-            </div>
+            <DashboardPreviewButton
+              title="Perbaikannya pas"
+              items={maintenancePerformanceItems.onTime}
+              mode="maintenance"
+              variant="activity"
+              dotClass="blue"
+              label="Perbaikannya pas"
+              value={maintenancePerformance.onTime}
+            />
+            <DashboardPreviewButton
+              title="Perbaikannya telat"
+              items={maintenancePerformanceItems.late}
+              mode="maintenance"
+              variant="activity"
+              dotClass="red"
+              label="Perbaikannya telat"
+              value={maintenancePerformance.late}
+            />
           </div>
         </div>      </section>
 
