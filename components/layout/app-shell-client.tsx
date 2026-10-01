@@ -160,6 +160,64 @@ const navByRole: Record<string, NavGroup[]> = {
       items: [{ label: "Atur akun", href: "/executor/profil", icon: "user" }],
     },
   ],
+  Delivery: [
+    {
+      label: "Tugas kamu",
+      icon: "clipboard",
+      items: [
+        {
+          label: "Tugas kamu",
+          href: "/delivery/tugas-saya",
+          icon: "clipboard",
+        },
+      ],
+    },
+    {
+      label: "Riwayat Tugas",
+      icon: "history",
+      items: [
+        {
+          label: "Riwayat Tugas",
+          href: "/delivery/riwayat-tugas",
+          icon: "history",
+        },
+      ],
+    },
+    {
+      label: "Atur akun",
+      icon: "user",
+      items: [{ label: "Atur akun", href: "/delivery/profil", icon: "user" }],
+    },
+  ],
+  Pickup: [
+    {
+      label: "Tugas kamu",
+      icon: "clipboard",
+      items: [
+        {
+          label: "Tugas kamu",
+          href: "/pickup/tugas-saya",
+          icon: "clipboard",
+        },
+      ],
+    },
+    {
+      label: "Riwayat Tugas",
+      icon: "history",
+      items: [
+        {
+          label: "Riwayat Tugas",
+          href: "/pickup/riwayat-tugas",
+          icon: "history",
+        },
+      ],
+    },
+    {
+      label: "Atur akun",
+      icon: "user",
+      items: [{ label: "Atur akun", href: "/pickup/profil", icon: "user" }],
+    },
+  ],
   Maintainer: [
     {
       label: "Info buat kamu",
@@ -373,6 +431,8 @@ const modeRoutes: Record<string, string> = {
   Controller: "/controller/beranda",
   Dispatcher: "/dispatcher/beranda",
   Executor: "/executor/tugas-saya",
+  Delivery: "/delivery/tugas-saya",
+  Pickup: "/pickup/tugas-saya",
   Maintainer: "/maintainer/beranda",
   Operation: "/operation/beranda",
 };
