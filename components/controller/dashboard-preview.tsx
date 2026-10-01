@@ -62,6 +62,30 @@ function valueLabel(value: string | number) {
     : value;
 }
 
+function previewStatusLabel(status: string, mode: "schedule" | "maintenance") {
+  if (mode === "maintenance") {
+    const labels: Record<string, string> = {
+      "Udah Diajuin": "Belum Diterima",
+      Requested: "Belum Diterima",
+      Confirmed: "Udah Diterima",
+      "In Progress": "Lagi Dikerjain",
+      Completed: "Udah Selesai",
+      Canceled: "Dibatalin",
+    };
+    return labels[status] ?? status;
+  }
+
+  const labels: Record<string, string> = {
+    Unassigned: "Belum Ditugasin",
+    Assigned: "Udah Ditugasin",
+    Confirmed: "Udah Diterima",
+    Driving: "Lagi Jalan",
+    Completed: "Udah Selesai",
+    Canceled: "Dibatalin",
+  };
+  return labels[status] ?? status;
+}
+
 export default function DashboardPreviewButton({
   title,
   items,
@@ -195,7 +219,7 @@ export default function DashboardPreviewButton({
                   {items.map((item, index) => (
                     <tr key={item.scheduleId + "-" + index}>
                       <td><strong>{item.scheduleId}</strong></td>
-                      <td>{displayStatus ?? item.status}</td>
+                      <td>{displayStatus ?? previewStatusLabel(item.status, mode)}</td>
                       {mode === "maintenance" ? (
                         <>
                           <td>{item.startPoint ?? "-"}</td>
