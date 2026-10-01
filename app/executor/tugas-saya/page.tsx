@@ -15,7 +15,7 @@ export default async function ExecutorTugasSayaPage() {
     .order("created_at", { ascending: false });
 
   if (profile.role === "Executor")
-    taskQuery = taskQuery.eq("executor_nik", profile.nik);
+    taskQuery = taskQuery.eq("executor_nik", profile.username);
 
   const [{ data: tasks }, { data: products }] = await Promise.all([
     taskQuery,
