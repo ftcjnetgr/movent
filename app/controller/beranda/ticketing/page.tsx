@@ -79,11 +79,11 @@ export default async function ControllerTicketingDashboardPage({
 
   const tickets = [...(ticketResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
   const maintenanceStatusCounts = {
-    Requested: maintenanceStatusCounts.Requested,
-    Confirmed: maintenanceStatusCounts.Confirmed,
-    "In Progress": maintenanceStatusCounts["In Progress"],
-    Completed: maintenanceStatusCounts.Completed,
-    Canceled: maintenanceStatusCounts.Canceled,
+    Requested: data.ticketCounts.Requested ?? 0,
+    Confirmed: data.ticketCounts.Confirmed ?? 0,
+    "In Progress": data.ticketCounts["In Progress"] ?? 0,
+    Completed: data.ticketCounts.Completed ?? 0,
+    Canceled: data.ticketCounts.Canceled ?? 0,
   };
   const totalMaintenance =
     maintenanceStatusCounts.Requested +
@@ -403,6 +403,7 @@ export default async function ControllerTicketingDashboardPage({
               dotClass="blue"
               label="Perbaikannya pas"
               value={maintenancePerformance.onTime}
+              subtitle={maintenanceOnTimePercentage + "%"}
             />
             <DashboardPreviewButton
               title="Perbaikannya telat"
@@ -412,6 +413,7 @@ export default async function ControllerTicketingDashboardPage({
               dotClass="red"
               label="Perbaikannya telat"
               value={maintenancePerformance.late}
+              subtitle={maintenanceLatePercentage + "%"}
             />
           </div>
         </div>      </section>
