@@ -15666,7 +15666,8 @@ td select:focus,
 
 
 /* CONTROLLER PERBAIKAN — PERCENTAGE DI KETEPATAN */
-.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row {
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row,
+.super-dashboard:not(:has(.maintenance-dashboard-main-grid)) .dashboard-preview-activity-row {
   grid-template-columns: 8px minmax(0, 1fr) auto !important;
   grid-template-rows: auto auto !important;
 }
