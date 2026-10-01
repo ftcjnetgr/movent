@@ -137,10 +137,6 @@ export default async function ControllerTicketingDashboardPage({
   const maintenanceLatePercentage = maintenancePerformance.total > 0
     ? Math.round((maintenancePerformance.late / maintenancePerformance.total) * 100)
     : 0;
-  const averageMaintenanceDays = maintenancePerformance.durationCount > 0
-    ? maintenancePerformance.durationDays / maintenancePerformance.durationCount
-    : 0;
-
   const { data: todayTickets } = await admin
     .from("ticketings")
     .select("status, created_at")
@@ -210,9 +206,9 @@ export default async function ControllerTicketingDashboardPage({
             <StatusIcon status="" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Total Pengajuan Perbaikan</span>
+            <span>Total Perbaikan</span>
             <strong>{totalMaintenance}</strong>
-            <small>Semua pengajuan di periode ini</small>
+            <small>Semua pengajuan</small>
           </div>
         </div>
 
@@ -350,7 +346,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-panel-heading">
             <div>
               <h2>Ketepatan Perbaikan</h2>
-              <p>Ngikut aging dari jenis perbaikannya. Hari dibuat dihitung sebagai hari ke-1.</p>
+              <p>Sesuai batas waktu perbaikannya.</p>
             </div>
           </div>
           <div className="super-activity-list">
@@ -365,12 +361,6 @@ export default async function ControllerTicketingDashboardPage({
               <span>Perbaikannya telat</span>
               <strong>{maintenancePerformance.late}</strong>
               <time>{maintenanceLatePercentage}%</time>
-            </div>
-            <div>
-              <span className="activity-dot purple" />
-              <span>Rata-rata perbaikan</span>
-              <strong>{averageMaintenanceDays.toFixed(1)} hari</strong>
-              <time>{maintenancePerformance.total} perbaikan selesai</time>
             </div>
           </div>
         </div>      </section>
