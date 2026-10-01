@@ -349,7 +349,7 @@ export default async function ControllerPenugasanDashboardPage({
       <section className="super-kpi-grid assignment-kpi-grid">
         <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-total-tasks">
           <div className="super-kpi-icon">
-            <StatusIcon status="" size={20} />
+            <StatusIcon status="Requested" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Total Schedule Hari Ini</span>
@@ -360,12 +360,12 @@ export default async function ControllerPenugasanDashboardPage({
 
         <div className="super-kpi-card kpi-gray status-kpi-card status-kpi-unassigned">
           <div className="super-kpi-icon">
-            <StatusIcon status="" size={20} />
+            <StatusIcon status="Unassigned" size={20} />
           </div>
           <div className="super-kpi-content">
             <span>Belum Ditugasin</span>
             <strong>{taskStatusCounts.Unassigned}</strong>
-            <small>{percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total</small>
           </div>
         </div>
 
@@ -376,7 +376,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Ditugasin</span>
             <strong>{taskStatusCounts.Assigned}</strong>
-            <small>{percentage(taskStatusCounts.Assigned, totalSchedulesToday)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Assigned, totalSchedulesToday)}% dari total</small>
           </div>
         </div>
 
@@ -387,7 +387,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{taskStatusCounts.Confirmed}</strong>
-            <small>{percentage(taskStatusCounts.Confirmed, totalSchedulesToday)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Confirmed, totalSchedulesToday)}% dari total</small>
           </div>
         </div>
 
@@ -398,7 +398,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{taskStatusCounts.Driving}</strong>
-            <small>{percentage(taskStatusCounts.Driving, totalSchedulesToday)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Driving, totalSchedulesToday)}% dari total</small>
           </div>
         </div>
 
@@ -409,7 +409,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{taskStatusCounts.Completed}</strong>
-            <small>{percentage(taskStatusCounts.Completed, totalSchedulesToday)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Completed, totalSchedulesToday)}% dari total</small>
           </div>
         </div>
 
@@ -420,7 +420,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Dibatalin</span>
             <strong>{taskStatusCounts.Canceled}</strong>
-            <small>{percentage(taskStatusCounts.Canceled, totalSchedulesToday)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Canceled, totalSchedulesToday)}% dari total</small>
           </div>
         </div>
       </section>
@@ -520,17 +520,17 @@ export default async function ControllerPenugasanDashboardPage({
           </div>
           <div className="super-activity-list">
             <div>
-              <span className="activity-dot blue" />
+              <span className="activity-dot green" />
               <span>Berangkatnya pas</span>
               <strong>{departureMetrics.onTime}</strong>
             </div>
             <div>
-              <span className="activity-dot orange" />
+              <span className="activity-dot red" />
               <span>Berangkatnya telat</span>
               <strong>{departureMetrics.late}</strong>
             </div>
             <div>
-              <span className="activity-dot purple" />
+              <span className="activity-dot green" />
               <span>Sampainya pas</span>
               <strong>{arrivalMetrics.onTime}</strong>
             </div>
@@ -540,12 +540,12 @@ export default async function ControllerPenugasanDashboardPage({
               <strong>{arrivalMetrics.late}</strong>
             </div>
             <div>
-              <span className="activity-dot blue" />
+              <span className="activity-dot green" />
               <span>Yang berangkatnya pas</span>
               <strong>{departurePerformance}%</strong>
             </div>
             <div>
-              <span className="activity-dot purple" />
+              <span className="activity-dot green" />
               <span>Yang sampainya pas</span>
               <strong>{arrivalPerformance}%</strong>
             </div>
