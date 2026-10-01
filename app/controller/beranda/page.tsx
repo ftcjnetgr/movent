@@ -520,6 +520,7 @@ export default async function ControllerPenugasanDashboardPage({
           value={taskStatusCounts.Unassigned}
           subtitle={`${percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total`}
           timeMode="planned"
+          displayStatus="Belum Ditugasin"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Ditugasin"
@@ -530,6 +531,7 @@ export default async function ControllerPenugasanDashboardPage({
           value={taskStatusCounts.Assigned}
           subtitle={`${percentage(taskStatusCounts.Assigned, totalSchedulesToday)}% dari total`}
           timeMode="planned"
+          displayStatus="Udah Ditugasin"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Diterima"
@@ -539,6 +541,7 @@ export default async function ControllerPenugasanDashboardPage({
           label="Udah Diterima"
           value={taskStatusCounts.Confirmed}
           subtitle={`${percentage(taskStatusCounts.Confirmed, totalSchedulesToday)}% dari total`}
+          displayStatus="Udah Diterima"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Lagi Jalan"
@@ -548,6 +551,7 @@ export default async function ControllerPenugasanDashboardPage({
           label="Lagi Jalan"
           value={taskStatusCounts.Driving}
           subtitle={`${percentage(taskStatusCounts.Driving, totalSchedulesToday)}% dari total`}
+          displayStatus="Lagi Jalan"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Selesai"
@@ -557,6 +561,7 @@ export default async function ControllerPenugasanDashboardPage({
           label="Udah Selesai"
           value={taskStatusCounts.Completed}
           subtitle={`${percentage(taskStatusCounts.Completed, totalSchedulesToday)}% dari total`}
+          displayStatus="Udah Selesai"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Dibatalin"
@@ -567,6 +572,7 @@ export default async function ControllerPenugasanDashboardPage({
           value={taskStatusCounts.Canceled}
           subtitle={`${percentage(taskStatusCounts.Canceled, totalSchedulesToday)}% dari total`}
           timeMode="planned"
+          displayStatus="Dibatalin"
         />
       </section>
 
