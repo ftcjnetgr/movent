@@ -276,7 +276,6 @@ export default async function ControllerPenugasanDashboardPage({
     }
   }
 
-  const totalAllActivities = totalTasks + (totalMaintenance ?? 0);
 
   const activeTasks =
     taskStatusCounts.Assigned +
@@ -377,7 +376,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Ditugasin</span>
             <strong>{taskStatusCounts.Assigned}</strong>
-            <small>{percentage(taskStatusCounts.Assigned, totalAllActivities)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Assigned, totalSchedulesToday)}% dari total schedule</small>
           </div>
         </div>
 
@@ -388,7 +387,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{taskStatusCounts.Confirmed}</strong>
-            <small>{percentage(taskStatusCounts.Confirmed, totalAllActivities)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Confirmed, totalSchedulesToday)}% dari total schedule</small>
           </div>
         </div>
 
@@ -399,7 +398,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{taskStatusCounts.Driving}</strong>
-            <small>{percentage(taskStatusCounts.Driving, totalAllActivities)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Driving, totalSchedulesToday)}% dari total schedule</small>
           </div>
         </div>
 
@@ -410,7 +409,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{taskStatusCounts.Completed}</strong>
-            <small>{percentage(taskStatusCounts.Completed, totalAllActivities)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Completed, totalSchedulesToday)}% dari total schedule</small>
           </div>
         </div>
 
@@ -421,7 +420,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Dibatalin</span>
             <strong>{taskStatusCounts.Canceled}</strong>
-            <small>{percentage(taskStatusCounts.Canceled, totalAllActivities)}% dari total schedule</small>
+            <small>{percentage(taskStatusCounts.Canceled, totalSchedulesToday)}% dari total schedule</small>
           </div>
         </div>
       </section>
