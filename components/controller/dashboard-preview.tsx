@@ -205,6 +205,8 @@ export default function DashboardPreviewButton({
                       <th>Status</th>
                       <th>Jenis Perbaikan</th>
                       <th>Armada</th>
+                      <th>Tipe Armada</th>
+                      <th>Status Armada</th>
                       <th>Lokasi</th>
                       <th>Dibuat</th>
                       <th>Selesai</th>
@@ -234,6 +236,8 @@ export default function DashboardPreviewButton({
                         <>
                           <td>{item.startPoint ?? "-"}</td>
                           <td>{item.fleet ?? "-"}</td>
+                          <td>{item.fleetType ?? "-"}</td>
+                          <td>{item.fleetStatus ?? "-"}</td>
                           <td>{item.destination ?? "-"}</td>
                           <td>{timeLabel(item.atd)}</td>
                           <td>{timeLabel(item.ata)}</td>
