@@ -15580,3 +15580,32 @@ td select:focus,
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* CONTROLLER PENUGASAN — MATCH KPI CARD WIDTHS EXACTLY */
+.super-dashboard .super-dashboard-main-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+.super-dashboard .super-dashboard-main-grid .super-chart-panel {
+  grid-column: span 5 !important;
+  width: auto !important;
+  min-width: 0 !important;
+}
+.super-dashboard .super-dashboard-main-grid .super-activity-panel {
+  grid-column: span 2 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  align-self: stretch !important;
+}
+@media (max-width: 900px) {
+  .super-dashboard .super-dashboard-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .super-dashboard .super-dashboard-main-grid .super-chart-panel,
+  .super-dashboard .super-dashboard-main-grid .super-activity-panel {
+    grid-column: auto !important;
+  }
+}
