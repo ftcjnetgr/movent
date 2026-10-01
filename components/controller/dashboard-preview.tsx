@@ -26,6 +26,7 @@ type Props = {
   subtitle?: string;
   variant?: "kpi" | "activity";
   dotClass?: "blue" | "green" | "red";
+  mode?: "schedule" | "maintenance";
 };
 
 function numberLabel(value: number | null) {
@@ -66,6 +67,7 @@ export default function DashboardPreviewButton({
   subtitle,
   variant = "kpi",
   dotClass = "blue",
+  mode = "schedule",
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -148,37 +150,63 @@ export default function DashboardPreviewButton({
             <div className="dashboard-preview-table-wrap">
               <table className="dashboard-preview-table">
                 <thead>
-                  <tr>
-                    <th>Schedule ID</th>
-                    <th>Status</th>
-                    <th>Start Point</th>
-                    <th>Destination</th>
-                    <th>Executor</th>
-                    <th>Armada</th>
-                    <th>ATD</th>
-                    <th>ATA</th>
-                    <th>Jarak Tempuh</th>
-                    <th>Durasi Mengemudi</th>
-                  </tr>
+                  {mode === "maintenance" ? (
+                    <tr>
+                      <th>ID Perbaikan</th>
+                      <th>Status</th>
+                      <th>Jenis Perbaikan</th>
+                      <th>Armada</th>
+                      <th>Lokasi</th>
+                      <th>Dibuat</th>
+                      <th>Selesai</th>
+                      <th>Durasi</th>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <th>Schedule ID</th>
+                      <th>Status</th>
+                      <th>Start Point</th>
+                      <th>Destination</th>
+                      <th>Executor</th>
+                      <th>Armada</th>
+                      <th>ATD</th>
+                      <th>ATA</th>
+                      <th>Jarak Tempuh</th>
+                      <th>Durasi Mengemudi</th>
+                    </tr>
+                  )}
                 </thead>
                 <tbody>
                   {items.map((item, index) => (
                     <tr key={item.scheduleId + "-" + index}>
                       <td><strong>{item.scheduleId}</strong></td>
                       <td>{item.status}</td>
-                      <td>{item.startPoint ?? "-"}</td>
-                      <td>{item.destination ?? "-"}</td>
-                      <td>{item.executor ?? "-"}</td>
-                      <td>{item.fleet ?? "-"}</td>
-                      <td>{timeLabel(item.atd)}</td>
-                      <td>{timeLabel(item.ata)}</td>
-                      <td>{item.distance === null ? "-" : numberLabel(item.distance) + " km"}</td>
-                      <td>{durationLabel(item.drivingDurationMs)}</td>
+                      {mode === "maintenance" ? (
+                        <>
+                          <td>{item.startPoint ?? "-"}</td>
+                          <td>{item.fleet ?? "-"}</td>
+                          <td>{item.destination ?? "-"}</td>
+                          <td>{timeLabel(item.atd)}</td>
+                          <td>{timeLabel(item.ata)}</td>
+                          <td>{durationLabel(item.drivingDurationMs)}</td>
+                        </>
+                      ) : (
+                        <>
+                          <td>{item.startPoint ?? "-"}</td>
+                          <td>{item.destination ?? "-"}</td>
+                          <td>{item.executor ?? "-"}</td>
+                          <td>{item.fleet ?? "-"}</td>
+                          <td>{timeLabel(item.atd)}</td>
+                          <td>{timeLabel(item.ata)}</td>
+                          <td>{item.distance === null ? "-" : numberLabel(item.distance) + " km"}</td>
+                          <td>{durationLabel(item.drivingDurationMs)}</td>
+                        </>
+                      )}
                     </tr>
                   ))}
                   {!items.length ? (
                     <tr>
-                      <td colSpan={10} className="dashboard-preview-empty">
+                      <td colSpan={mode === "maintenance" ? 8 : 10} className="dashboard-preview-empty">
                         Belum ada data di sini.
                       </td>
                     </tr>
