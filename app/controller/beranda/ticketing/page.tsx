@@ -249,12 +249,12 @@ export default async function ControllerTicketingDashboardPage({
         />
 
         <DashboardPreviewButton
-          title="Udah Diajuin"
+          title="Belum Diterima"
           items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Requested"))}
           mode="maintenance"
           className="kpi-blue status-kpi-card status-kpi-requested"
           iconStatus="Requested"
-          label="Udah Diajuin"
+          label="Belum Diterima"
           value={data.ticketCounts.Requested ?? 0}
           subtitle={percentage(data.ticketCounts.Requested ?? 0, totalMaintenance) + "% dari total"}
         />
