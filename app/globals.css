@@ -15609,3 +15609,32 @@ td select:focus,
     grid-column: auto !important;
   }
 }
+
+
+/* CONTROLLER PERBAIKAN — MATCH SUMMARY CARD WIDTHS */
+.super-dashboard .maintenance-dashboard-main-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+.super-dashboard .maintenance-dashboard-main-grid .super-chart-panel {
+  grid-column: span 4 !important;
+  width: auto !important;
+  min-width: 0 !important;
+}
+.super-dashboard .maintenance-dashboard-main-grid .super-activity-panel {
+  grid-column: span 2 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  align-self: stretch !important;
+}
+@media (max-width: 900px) {
+  .super-dashboard .maintenance-dashboard-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .super-dashboard .maintenance-dashboard-main-grid .super-chart-panel,
+  .super-dashboard .maintenance-dashboard-main-grid .super-activity-panel {
+    grid-column: auto !important;
+  }
+}
