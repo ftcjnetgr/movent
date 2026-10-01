@@ -11,6 +11,8 @@ export type DashboardPreviewItem = {
   destination: string | null;
   executor: string | null;
   fleet: string | null;
+  fleetType: string | null;
+  fleetStatus: string | null;
   atd: string | null;
   ata: string | null;
   std: string | null;
@@ -253,7 +255,7 @@ export default function DashboardPreviewButton({
                   ))}
                   {!items.length ? (
                     <tr>
-                      <td colSpan={mode === "maintenance" ? 8 : compactSchedulePreview ? 7 : 10} className="dashboard-preview-empty">
+                      <td colSpan={mode === "maintenance" ? 10 : compactSchedulePreview ? 7 : 12} className="dashboard-preview-empty">
                         Belum ada data di sini.
                       </td>
                     </tr>
