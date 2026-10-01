@@ -37,9 +37,11 @@ export async function changePasswordAction(
   }
 
   const supabase = await createClient();
-  const { data: userData, error: userError } = await supabase.auth.getUser();
+  const { data: claimsData, error: claimsError } =
+    await supabase.auth.getClaims();
+  const userId = claimsData?.claims?.sub;
 
-  if (userError || !userData.user) {
+  if (claimsError || !userId || typeof userId !== "string") {
     redirect("/login");
   }
 
@@ -47,7 +49,7 @@ export async function changePasswordAction(
   const { data: profile } = await admin
     .from("user_profiles")
     .select("id, role, status")
-    .eq("auth_user_id", userData.user.id)
+    .eq("auth_user_id", userId)
     .maybeSingle();
 
   if (!profile) {
@@ -61,9 +63,10 @@ export async function changePasswordAction(
     };
   }
 
-  const { error: passwordError } = await supabase.auth.updateUser({
-    password: newPassword,
-  });
+  const { error: passwordError } = await admin.auth.admin.updateUserById(
+    userId,
+    { password: newPassword },
+  );
 
   if (passwordError) {
     return { error: "Password belum berhasil diubah. Coba lagi, ya." };
