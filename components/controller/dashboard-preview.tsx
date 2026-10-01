@@ -43,7 +43,7 @@ function numberLabel(value: number | null) {
 
 function parseTimeOnly(value: string | null) {
   if (!value) return null;
-  const match = value.trim().match(/^(\\d{1,2}):(\\d{2})(?::(\\d{2}))?$/);
+  const match = value.trim().match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
   if (!match) return null;
   const hour = Number(match[1]);
   const minute = Number(match[2]);
