@@ -32,6 +32,7 @@ type Props = {
   mode?: "schedule" | "maintenance";
   timeMode?: "actual" | "planned";
   displayStatus?: string;
+  compactSchedulePreview?: boolean;
 };
 
 function numberLabel(value: number | null) {
@@ -45,6 +46,12 @@ function timeLabel(value: string | null) {
     minute: "2-digit",
     timeZone: "Asia/Jakarta",
   });
+}
+
+function scheduleDurationLabel(std: string | null, sta: string | null) {
+  if (!std || !sta) return "-";
+  const minutes = Math.max(0, Math.round((new Date(sta).getTime() - new Date(std).getTime()) / 60000));
+  return String(minutes) + " menit";
 }
 
 function durationLabel(value: number | null) {
@@ -99,6 +106,7 @@ export default function DashboardPreviewButton({
   mode = "schedule",
   timeMode = "actual",
   displayStatus,
+  compactSchedulePreview = false,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -206,12 +214,12 @@ export default function DashboardPreviewButton({
                       <th>Status</th>
                       <th>Start Point</th>
                       <th>Destination</th>
-                      <th>Executor</th>
-                      <th>Armada</th>
+                      {!compactSchedulePreview ? <th>Executor</th> : null}
+                      {!compactSchedulePreview ? <th>Armada</th> : null}
                       <th>{timeMode === "planned" ? "STD" : "ATD"}</th>
                       <th>{timeMode === "planned" ? "STA" : "ATA"}</th>
-                      <th>Jarak Tempuh</th>
-                      <th>Durasi Mengemudi</th>
+                      {!compactSchedulePreview ? <th>Jarak Tempuh</th> : null}
+                      <th>{compactSchedulePreview ? "Durasi Schedule" : "Durasi Mengemudi"}</th>
                     </tr>
                   )}
                 </thead>
@@ -233,19 +241,19 @@ export default function DashboardPreviewButton({
                         <>
                           <td>{item.startPoint ?? "-"}</td>
                           <td>{item.destination ?? "-"}</td>
-                          <td>{item.executor ?? "-"}</td>
-                          <td>{item.fleet ?? "-"}</td>
+                          {!compactSchedulePreview ? <td>{item.executor ?? "-"}</td> : null}
+                          {!compactSchedulePreview ? <td>{item.fleet ?? "-"}</td> : null}
                           <td>{timeLabel(timeMode === "planned" ? item.std : item.atd)}</td>
                           <td>{timeLabel(timeMode === "planned" ? item.sta : item.ata)}</td>
-                          <td>{item.distance === null ? "-" : numberLabel(item.distance) + " km"}</td>
-                          <td>{durationLabel(item.drivingDurationMs)}</td>
+                          {!compactSchedulePreview ? <td>{item.distance === null ? "-" : numberLabel(item.distance) + " km"}</td> : null}
+                          <td>{compactSchedulePreview ? scheduleDurationLabel(item.std, item.sta) : durationLabel(item.drivingDurationMs)}</td>
                         </>
                       )}
                     </tr>
                   ))}
                   {!items.length ? (
                     <tr>
-                      <td colSpan={mode === "maintenance" ? 8 : 10} className="dashboard-preview-empty">
+                      <td colSpan={mode === "maintenance" ? 8 : compactSchedulePreview ? 7 : 10} className="dashboard-preview-empty">
                         Belum ada data di sini.
                       </td>
                     </tr>
