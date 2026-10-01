@@ -15876,3 +15876,158 @@ td select:focus,
 .super-dashboard .dashboard-preview-activity-row time {
   display: none !important;
 }
+
+
+/* CONTROLLER DASHBOARD — FINAL STATUS COLORS + ACTIVITY ALIGNMENT */
+.super-dashboard .assignment-kpi-grid .status-kpi-total-tasks,
+.super-dashboard .maintenance-kpi-grid .status-kpi-total-maintenance {
+  border-top-color: #7c3aed !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-total-tasks .super-kpi-icon,
+.super-dashboard .maintenance-kpi-grid .status-kpi-total-maintenance .super-kpi-icon {
+  background: #f5f3ff !important;
+  color: #7c3aed !important;
+}
+
+.super-dashboard .assignment-kpi-grid .status-kpi-unassigned,
+.super-dashboard .maintenance-kpi-grid .status-kpi-requested {
+  border-top-color: #94a3b8 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-unassigned .super-kpi-icon,
+.super-dashboard .maintenance-kpi-grid .status-kpi-requested .super-kpi-icon {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+}
+
+.super-dashboard .assignment-kpi-grid .status-kpi-assigned {
+  border-top-color: #ca8a04 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-assigned .super-kpi-icon {
+  background: #fefce8 !important;
+  color: #ca8a04 !important;
+}
+
+.super-dashboard .assignment-kpi-grid .status-kpi-confirmed,
+.super-dashboard .maintenance-kpi-grid .status-kpi-confirmed {
+  border-top-color: #f97316 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-confirmed .super-kpi-icon,
+.super-dashboard .maintenance-kpi-grid .status-kpi-confirmed .super-kpi-icon {
+  background: #fff7ed !important;
+  color: #f97316 !important;
+}
+
+.super-dashboard .assignment-kpi-grid .status-kpi-driving,
+.super-dashboard .maintenance-kpi-grid .status-kpi-in-progress {
+  border-top-color: #2563eb !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-driving .super-kpi-icon,
+.super-dashboard .maintenance-kpi-grid .status-kpi-in-progress .super-kpi-icon {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+
+.super-dashboard .assignment-kpi-grid .status-kpi-completed,
+.super-dashboard .maintenance-kpi-grid .status-kpi-completed {
+  border-top-color: #16a34a !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-completed .super-kpi-icon,
+.super-dashboard .maintenance-kpi-grid .status-kpi-completed .super-kpi-icon {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+}
+
+.super-dashboard .assignment-kpi-grid .status-kpi-canceled,
+.super-dashboard .maintenance-kpi-grid .status-kpi-canceled {
+  border-top-color: #dc2626 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-canceled .super-kpi-icon,
+.super-dashboard .maintenance-kpi-grid .status-kpi-canceled .super-kpi-icon {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+
+/* Assignment chart: legend + bars = exact summary-card colors */
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .legend-unassigned,
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .bar-unassigned {
+  background: #94a3b8 !important;
+}
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .legend-assigned,
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .bar-assigned {
+  background: #ca8a04 !important;
+}
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .legend-confirmed,
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .bar-confirmed {
+  background: #f97316 !important;
+}
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .legend-driving,
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .bar-driving {
+  background: #2563eb !important;
+}
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .legend-completed,
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .bar-completed {
+  background: #16a34a !important;
+}
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .legend-canceled,
+.super-dashboard .assignment-kpi-grid ~ .super-dashboard-main-grid .bar-canceled {
+  background: #dc2626 !important;
+}
+
+/* Maintenance chart: legend + bars = exact summary-card colors */
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .legend-requested,
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .bar-requested {
+  background: #94a3b8 !important;
+}
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .legend-confirmed,
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .bar-confirmed {
+  background: #f97316 !important;
+}
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .legend-in-progress,
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .bar-in-progress {
+  background: #2563eb !important;
+}
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .legend-completed,
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .bar-completed {
+  background: #16a34a !important;
+}
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .legend-canceled,
+.super-dashboard .maintenance-kpi-grid ~ .maintenance-dashboard-main-grid .bar-canceled {
+  background: #dc2626 !important;
+}
+
+/* Activity cards: no bottom line on the last item */
+.super-dashboard .super-activity-list > .dashboard-preview-activity-row:last-child {
+  border-bottom: 0 !important;
+}
+
+/* Activity totals/ratios: wider, cleaner columns with more breathing room */
+.super-dashboard .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) 44px 42px !important;
+  column-gap: 8px !important;
+}
+.super-dashboard .dashboard-preview-activity-row .activity-meta,
+.super-dashboard .dashboard-preview-activity-row .activity-values {
+  font-size: 8px !important;
+}
+.super-dashboard .dashboard-preview-activity-row .activity-meta {
+  font-weight: 500 !important;
+}
+.super-dashboard .dashboard-preview-activity-row .activity-values {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+}
+.super-dashboard .dashboard-preview-activity-row > span:nth-child(2) {
+  font-size: 8px !important;
+}
+
+/* Task activity legend: keep all statuses on one line */
+.super-dashboard .super-chart-panel .super-chart-legend {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  gap: 7px !important;
+  padding-right: 4px !important;
+}
+.super-dashboard .super-chart-panel .super-chart-legend span {
+  white-space: nowrap !important;
+  font-size: 7px !important;
+}
