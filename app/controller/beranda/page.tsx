@@ -298,6 +298,8 @@ export default async function ControllerPenugasanDashboardPage({
       schedule_id: string;
       start_point?: string | null;
       destination?: string | null;
+      std?: string | null;
+      sta?: string | null;
     },
     task?: {
       status?: string | null;
@@ -351,8 +353,8 @@ export default async function ControllerPenugasanDashboardPage({
         null,
       atd,
       ata,
-      std: task?.std ?? null,
-      sta: task?.sta ?? null,
+      std: task?.std ?? schedule.std ?? null,
+      sta: task?.sta ?? schedule.sta ?? null,
       distance,
       drivingDurationMs,
     };
@@ -362,6 +364,8 @@ export default async function ControllerPenugasanDashboardPage({
     schedule_id: schedule.schedule_id,
     start_point: schedule.start_point,
     destination: schedule.destination,
+    std: schedule.std,
+    sta: schedule.sta,
   }));
 
   const schedulePreviewItems = scheduleRows.map((schedule) =>
@@ -510,6 +514,7 @@ export default async function ControllerPenugasanDashboardPage({
           value={totalSchedulesToday ?? 0}
           subtitle={`Category ${todayScheduleCategory}`}
           timeMode="planned"
+          compactSchedulePreview
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Belum Ditugasin"
@@ -520,6 +525,7 @@ export default async function ControllerPenugasanDashboardPage({
           value={taskStatusCounts.Unassigned}
           subtitle={`${percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total`}
           timeMode="planned"
+          compactSchedulePreview
           displayStatus="Belum Ditugasin"
         />
         <DashboardPreviewButton
