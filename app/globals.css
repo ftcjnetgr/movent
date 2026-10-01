@@ -15534,3 +15534,49 @@ td select:focus,
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* CONTROLLER DASHBOARD — FINAL PREVIEW + TWO-COLUMN FIX */
+.super-dashboard .super-dashboard-main-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) !important;
+  align-items: stretch !important;
+}
+.super-dashboard .super-chart-panel,
+.super-dashboard .super-activity-panel {
+  min-width: 0 !important;
+  width: auto !important;
+}
+.super-dashboard .super-activity-panel {
+  height: auto !important;
+  align-self: stretch !important;
+}
+.super-dashboard .dashboard-preview-kpi {
+  background: #fff !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+  border-top-width: 3px !important;
+}
+.super-dashboard .dashboard-preview-kpi.kpi-purple {
+  border-top-color: #7c3aed !important;
+}
+.super-dashboard .dashboard-preview-kpi.kpi-blue {
+  border-top-color: var(--primary) !important;
+}
+.super-dashboard .dashboard-preview-kpi.kpi-cyan {
+  border-top-color: #16758a !important;
+}
+.super-dashboard .dashboard-preview-kpi.kpi-orange {
+  border-top-color: var(--warning) !important;
+}
+.super-dashboard .dashboard-preview-kpi.kpi-red {
+  border-top-color: var(--danger) !important;
+}
+.super-dashboard .dashboard-preview-kpi.kpi-gray {
+  border-top-color: #94a3b8 !important;
+}
+@media (max-width: 900px) {
+  .super-dashboard .super-dashboard-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
