@@ -362,8 +362,8 @@ export default async function ControllerPenugasanDashboardPage({
         null,
       atd,
       ata,
-      std: task?.std ?? schedule.std ?? null,
-      sta: task?.sta ?? schedule.sta ?? null,
+      std: schedule.std ?? null,
+      sta: schedule.sta ?? null,
       distance,
       drivingDurationMs,
     };
