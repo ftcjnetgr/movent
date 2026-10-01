@@ -103,13 +103,21 @@ export default function DispatcherCreateTask({
       }).format(now),
     );
     const todayKey = Date.UTC(nowYear, nowMonth - 1, nowDate);
-    const twindateStartKey = Date.UTC(nowYear, nowMonth - 1, nowMonth);
-    const twindateEnd = new Date(twindateStartKey);
-    twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 2);
-    const isTwindateWindow =
-      todayKey >= twindateStartKey &&
-      todayKey <= twindateEnd.getTime();
-    const allowedCategory = isTwindateWindow ? "Campaign" : "Normal";
+
+    // Twin Date mengikuti pola tanggal-bulan yang sama:
+    // Oktober -> 10-10, November -> 11-11, dst.
+    // Twin Date dihitung sebagai hari pertama, jadi periodenya 3 hari inclusive.
+    const twinDateDay = nowMonth;
+    const twinDateStartKey = Date.UTC(nowYear, nowMonth - 1, twinDateDay);
+    const twinDateEnd = new Date(twinDateStartKey);
+    twinDateEnd.setUTCDate(twinDateEnd.getUTCDate() + 2);
+
+    const isTwinDateWindow =
+      todayKey >= twinDateStartKey &&
+      todayKey <= twinDateEnd.getTime();
+
+    // Di luar window Twin Date tetap pakai schedule Normal.
+    const allowedCategory = isTwinDateWindow ? "Campaign" : "Normal";
 
     const needle = query.trim().toLowerCase();
     const routeFiltered = (route
