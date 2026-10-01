@@ -197,7 +197,7 @@ export default function DashboardPreviewButton({
             </div>
 
             <div className="dashboard-preview-table-wrap">
-              <table className="dashboard-preview-table">
+              <table className={`dashboard-preview-table ${mode === "maintenance" ? "is-maintenance" : compactSchedulePreview ? "is-compact-schedule" : "is-full-schedule"}`}>
                 <thead>
                   {mode === "maintenance" ? (
                     <tr>
