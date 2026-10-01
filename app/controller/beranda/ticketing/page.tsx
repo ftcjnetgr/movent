@@ -54,17 +54,26 @@ export default async function ControllerTicketingDashboardPage({
     new Date(`${to}T00:00:00+07:00`).getTime() + 86400000,
   ).toISOString();
 
-  const [data, ticketResult] = await Promise.all([
+  const [data, ticketResult, performanceResult, maintenanceListResult] = await Promise.all([
     getDashboardData(profile, from, to),
     admin
       .from("ticketings")
       .select(
-        "transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at",
+        "transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at, completed_at",
       )
       .order("created_at", { ascending: false })
       .gte("created_at", rangeStart)
       .lt("created_at", rangeEnd)
       .limit(12),
+    admin
+      .from("ticketings")
+      .select("status, maintenance_list, created_at, completed_at")
+      .gte("created_at", rangeStart)
+      .lt("created_at", rangeEnd),
+    admin
+      .from("maintenance_lists")
+      .select("maintenance_list, aging")
+      .eq("status", "Active"),
   ]);
 
   const tickets = [...(ticketResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
@@ -88,6 +97,64 @@ export default async function ControllerTicketingDashboardPage({
         .lt("created_at", rangeEnd)
     : { count: 0 };
   const totalAllActivities = totalMaintenance + (totalAssignments ?? 0);
+  const maintenanceAging = new Map(
+    (maintenanceListResult.data ?? []).map((item) => [
+      item.maintenance_list,
+      item.aging,
+    ]),
+  );
+
+  function jakartaDate(value: string) {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Jakarta",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(value));
+  }
+
+  function addDays(date: string, days: number) {
+    const base = new Date(date + "T00:00:00+07:00");
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Jakarta",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(base.getTime() + days * 86400000));
+  }
+
+  const performanceRows = performanceResult.data ?? [];
+  const maintenancePerformance = performanceRows.reduce(
+    (acc, ticket) => {
+      const aging = maintenanceAging.get(ticket.maintenance_list ?? "");
+      if (!aging || aging < 1 || ticket.status !== "Completed" || !ticket.completed_at) {
+        return acc;
+      }
+      const createdDate = jakartaDate(ticket.created_at);
+      const deadlineDate = addDays(createdDate, aging - 1);
+      const completedDate = jakartaDate(ticket.completed_at);
+      const completedOnTime = completedDate <= deadlineDate;
+      acc.total += 1;
+      if (completedOnTime) acc.onTime += 1;
+      else acc.late += 1;
+      const durationMs = new Date(ticket.completed_at).getTime() - new Date(ticket.created_at).getTime();
+      if (Number.isFinite(durationMs) && durationMs >= 0) {
+        acc.durationDays += durationMs / 86400000;
+        acc.durationCount += 1;
+      }
+      return acc;
+    },
+    { total: 0, onTime: 0, late: 0, durationDays: 0, durationCount: 0 },
+  );
+  const maintenanceOnTimePercentage = maintenancePerformance.total > 0
+    ? Math.round((maintenancePerformance.onTime / maintenancePerformance.total) * 100)
+    : 0;
+  const maintenanceLatePercentage = maintenancePerformance.total > 0
+    ? Math.round((maintenancePerformance.late / maintenancePerformance.total) * 100)
+    : 0;
+  const averageMaintenanceDays = maintenancePerformance.durationCount > 0
+    ? maintenancePerformance.durationDays / maintenancePerformance.durationCount
+    : 0;
 
   const { data: todayTickets } = await admin
     .from("ticketings")
@@ -297,35 +364,31 @@ export default async function ControllerTicketingDashboardPage({
         <div className="super-panel super-activity-panel">
           <div className="super-panel-heading">
             <div>
-              <h2>Aktivitas Sistem</h2>
-              <p>Aktivitas terbaru perbaikan.</p>
+              <h2>Ketepatan Perbaikan</h2>
+              <p>Ngikut aging dari jenis perbaikannya. Hari dibuat dihitung sebagai hari ke-1.</p>
             </div>
           </div>
           <div className="super-activity-list">
             <div>
               <span className="activity-dot blue" />
-              <span>{tickets.length} perbaikan terbaru</span>
-              <time>{shortTime(new Date().toISOString())}</time>
+              <span>Perbaikannya pas</span>
+              <strong>{maintenancePerformance.onTime}</strong>
+              <time>{maintenanceOnTimePercentage}%</time>
             </div>
             <div>
               <span className="activity-dot orange" />
-              <span>
-                {(data.ticketCounts.Confirmed ?? 0) +
-                  (data.ticketCounts["In Progress"] ?? 0)}{" "}
-                perbaikan sedang berjalan
-              </span>
-              <time>{shortTime(new Date().toISOString())}</time>
+              <span>Perbaikannya telat</span>
+              <strong>{maintenancePerformance.late}</strong>
+              <time>{maintenanceLatePercentage}%</time>
             </div>
             <div>
               <span className="activity-dot purple" />
-              <span>
-                {data.ticketCounts.Completed ?? 0} perbaikan selesai
-              </span>
-              <time>{shortTime(new Date().toISOString())}</time>
+              <span>Rata-rata perbaikan</span>
+              <strong>{averageMaintenanceDays.toFixed(1)} hari</strong>
+              <time>{maintenancePerformance.total} perbaikan selesai</time>
             </div>
           </div>
-        </div>
-      </section>
+        </div>      </section>
 
       <section className="super-dashboard-table-grid controller-detail-tables controller-single-detail-table">
         <div className="super-panel super-table-panel">
