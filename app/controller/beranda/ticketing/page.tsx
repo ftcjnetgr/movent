@@ -261,7 +261,7 @@ export default async function ControllerTicketingDashboardPage({
           title="Belum Diterima"
           items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Requested"))}
           mode="maintenance"
-          className="kpi-blue status-kpi-card status-kpi-requested"
+          className="kpi-blue status-kpi-card status-kpi-requested kpi-gray"
           iconStatus="Requested"
           label="Belum Diterima"
           value={maintenanceStatusCounts.Requested}
@@ -272,7 +272,7 @@ export default async function ControllerTicketingDashboardPage({
           title="Udah Diterima"
           items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Confirmed"))}
           mode="maintenance"
-          className="kpi-cyan status-kpi-card status-kpi-confirmed"
+          className="kpi-cyan status-kpi-card status-kpi-confirmed kpi-orange"
           iconStatus="Confirmed"
           label="Udah Diterima"
           value={maintenanceStatusCounts.Confirmed}
@@ -283,7 +283,7 @@ export default async function ControllerTicketingDashboardPage({
           title="Lagi Dikerjain"
           items={maintenancePreviewItems.filter((item) => item.status === statusLabel("In Progress"))}
           mode="maintenance"
-          className="kpi-orange status-kpi-card status-kpi-in-progress"
+          className="kpi-orange status-kpi-card status-kpi-in-progress kpi-blue"
           iconStatus="In Progress"
           label="Lagi Dikerjain"
           value={maintenanceStatusCounts["In Progress"]}
@@ -294,7 +294,7 @@ export default async function ControllerTicketingDashboardPage({
           title="Udah Selesai"
           items={maintenancePreviewItems.filter((item) => item.status === statusLabel("Completed"))}
           mode="maintenance"
-          className="kpi-purple status-kpi-card status-kpi-completed"
+          className="kpi-purple status-kpi-card status-kpi-completed kpi-green"
           iconStatus="Completed"
           label="Udah Selesai"
           value={maintenanceStatusCounts.Completed}
@@ -321,7 +321,7 @@ export default async function ControllerTicketingDashboardPage({
               <p>Biar gampang dipantau, perbaikan di periode ini ada di sini.</p>
             </div>
             <div className="super-chart-legend">
-              <span><i className="legend-requested" /> Udah Diajuin</span>
+              <span><i className="legend-requested" /> Belum Diterima</span>
               <span><i className="legend-confirmed" /> Udah Diterima</span>
               <span><i className="legend-in-progress" /> Lagi Dikerjain</span>
               <span><i className="legend-completed" /> Udah Selesai</span>
