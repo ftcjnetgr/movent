@@ -15667,13 +15667,33 @@ td select:focus,
 
 /* CONTROLLER PERBAIKAN — PERCENTAGE DI KETEPATAN */
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row {
-  grid-template-columns: 8px minmax(0, 1fr) auto auto !important;
+  grid-template-columns: 8px minmax(0, 1fr) auto !important;
+  grid-template-rows: auto auto !important;
+}
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-dot {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row > span:not(.activity-dot) {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row strong {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: end;
 }
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row time {
+  grid-column: 3;
+  grid-row: 2;
+  align-self: start;
+  justify-self: end;
   color: var(--text-2);
   font-size: 9px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  margin-top: 2px;
 }
 
 
