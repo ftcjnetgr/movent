@@ -78,10 +78,19 @@ export default async function ControllerTicketingDashboardPage({
   ]);
 
   const tickets = [...(ticketResult.data ?? [])].sort((a, b) => compareStatus(a.status, b.status));
-  const totalMaintenance = Object.values(data.ticketCounts).reduce(
-    (total, count) => total + (count ?? 0),
-    0,
-  );
+  const maintenanceStatusCounts = {
+    Requested: maintenanceStatusCounts.Requested,
+    Confirmed: maintenanceStatusCounts.Confirmed,
+    "In Progress": maintenanceStatusCounts["In Progress"],
+    Completed: maintenanceStatusCounts.Completed,
+    Canceled: maintenanceStatusCounts.Canceled,
+  };
+  const totalMaintenance =
+    maintenanceStatusCounts.Requested +
+    maintenanceStatusCounts.Confirmed +
+    maintenanceStatusCounts["In Progress"] +
+    maintenanceStatusCounts.Completed +
+    maintenanceStatusCounts.Canceled;
 
   const maintenanceAging = new Map(
     (maintenanceListResult.data ?? []).map((item) => [
@@ -255,8 +264,8 @@ export default async function ControllerTicketingDashboardPage({
           className="kpi-blue status-kpi-card status-kpi-requested"
           iconStatus="Requested"
           label="Belum Diterima"
-          value={data.ticketCounts.Requested ?? 0}
-          subtitle={percentage(data.ticketCounts.Requested ?? 0, totalMaintenance) + "% dari total"}
+          value={maintenanceStatusCounts.Requested}
+          subtitle={percentage(maintenanceStatusCounts.Requested, totalMaintenance) + "% dari total"}
         />
 
         <DashboardPreviewButton
@@ -266,8 +275,8 @@ export default async function ControllerTicketingDashboardPage({
           className="kpi-cyan status-kpi-card status-kpi-confirmed"
           iconStatus="Confirmed"
           label="Udah Diterima"
-          value={data.ticketCounts.Confirmed ?? 0}
-          subtitle={percentage(data.ticketCounts.Confirmed ?? 0, totalMaintenance) + "% dari total"}
+          value={maintenanceStatusCounts.Confirmed}
+          subtitle={percentage(maintenanceStatusCounts.Confirmed, totalMaintenance) + "% dari total"}
         />
 
         <DashboardPreviewButton
@@ -277,8 +286,8 @@ export default async function ControllerTicketingDashboardPage({
           className="kpi-orange status-kpi-card status-kpi-in-progress"
           iconStatus="In Progress"
           label="Lagi Dikerjain"
-          value={data.ticketCounts["In Progress"] ?? 0}
-          subtitle={percentage(data.ticketCounts["In Progress"] ?? 0, totalMaintenance) + "% dari total"}
+          value={maintenanceStatusCounts["In Progress"]}
+          subtitle={percentage(maintenanceStatusCounts["In Progress"], totalMaintenance) + "% dari total"}
         />
 
         <DashboardPreviewButton
@@ -288,8 +297,8 @@ export default async function ControllerTicketingDashboardPage({
           className="kpi-purple status-kpi-card status-kpi-completed"
           iconStatus="Completed"
           label="Udah Selesai"
-          value={data.ticketCounts.Completed ?? 0}
-          subtitle={percentage(data.ticketCounts.Completed ?? 0, totalMaintenance) + "% dari total"}
+          value={maintenanceStatusCounts.Completed}
+          subtitle={percentage(maintenanceStatusCounts.Completed, totalMaintenance) + "% dari total"}
         />
 
         <DashboardPreviewButton
@@ -299,8 +308,8 @@ export default async function ControllerTicketingDashboardPage({
           className="kpi-red status-kpi-card status-kpi-canceled"
           iconStatus="Canceled"
           label="Dibatalin"
-          value={data.ticketCounts.Canceled ?? 0}
-          subtitle={percentage(data.ticketCounts.Canceled ?? 0, totalMaintenance) + "% dari total"}
+          value={maintenanceStatusCounts.Canceled}
+          subtitle={percentage(maintenanceStatusCounts.Canceled, totalMaintenance) + "% dari total"}
         />
       </section>
 
