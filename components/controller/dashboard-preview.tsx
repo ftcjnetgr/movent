@@ -86,7 +86,7 @@ export default function DashboardPreviewButton({
   const buttonClass =
     variant === "activity"
       ? "dashboard-preview-activity-row"
-      : className ?? "dashboard-preview-kpi";
+      : `dashboard-preview-kpi ${className ?? ""}`.trim();
 
   return (
     <>
