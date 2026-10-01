@@ -115,7 +115,9 @@ export async function loginAction(
       }
     }
 
-    return { error: "Username atau password belum benar." };
+    return {
+      error: `Login gagal: ${signInError?.message ?? "session tidak terbentuk"}`,
+    };
   }
 
   await admin
