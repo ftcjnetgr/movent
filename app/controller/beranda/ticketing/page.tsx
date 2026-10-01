@@ -154,6 +154,8 @@ export default async function ControllerTicketingDashboardPage({
     destination: ticket.fleet_location,
     executor: null,
     fleet: ticket.fleet_plat_number,
+    fleetType: null,
+    fleetStatus: null,
     atd: ticket.created_at,
     ata: ticket.completed_at,
     std: null,
