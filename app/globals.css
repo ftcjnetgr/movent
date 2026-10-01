@@ -10675,7 +10675,6 @@ td select:focus,
   box-shadow: none !important;
 }
 
-
 /* Unified status visuals across every dashboard. */
 .status-badge svg {
   flex: 0 0 auto;
@@ -10760,7 +10759,6 @@ td select:focus,
 .status-legend-in-progress { color: #ea580c; }
 .status-legend-completed { color: #16a34a; }
 .status-legend-canceled { color: #dc2626; }
-
 
 /* FINAL STATUS FLOW — dashboards use one shared visual/copy system. */
 .status-badge.status-ready {
@@ -10995,7 +10993,6 @@ td select:focus,
   }
 }
 
-
 /* FINAL STATUS PALETTE — one color + one icon meaning per status */
 .status-badge.status-requested,
 .status-kpi-requested .super-kpi-icon {
@@ -11098,7 +11095,6 @@ td select:focus,
 .legend-completed { background: #7c3aed !important; }
 .bar-canceled,
 .legend-canceled { background: #dc2626 !important; }
-
 
 /* FINAL STATUS STANDARD — shared across Penugasan & Perbaikan */
 .status-kpi-total-tasks .super-kpi-icon,
@@ -11211,7 +11207,6 @@ td select:focus,
   background: #2563eb !important;
 }
 
-
 /* FINAL TIMETABLE FILTER LAYOUT — top controls + full-width point detail */
 .schedule-filter-top {
   grid-template-columns: minmax(220px, 1.25fr) minmax(180px, 1fr) minmax(420px, 3.7fr) !important;
@@ -11307,7 +11302,6 @@ td select:focus,
   }
 }
 
-
 /* FINAL KPI STATUS ICON COLORS — stronger specificity than legacy kpi-* rules */
 .super-dashboard .status-kpi-total-tasks .super-kpi-icon,
 .super-dashboard .status-kpi-total-maintenance .super-kpi-icon {
@@ -11371,7 +11365,6 @@ td select:focus,
   border-top-color: #dc2626 !important;
 }
 
-
 /* FINAL TIMETABLE POINT DETAIL — buttons fill the whole card */
 .schedule-page .schedule-point-detail-card {
   padding: 12px !important;
@@ -11400,7 +11393,6 @@ td select:focus,
   }
 }
 
-
 /* FINAL REQUESTED COLOR — queued/assigned status uses Xhantic yellow */
 .super-dashboard .status-kpi-assigned .super-kpi-icon,
 .super-dashboard .status-kpi-requested .super-kpi-icon {
@@ -11420,7 +11412,6 @@ td select:focus,
   color: #C9C400 !important;
 }
 
-
 /* FINAL CHART LEGEND COLOR — match Assigned/Requested status cards */
 .bar-assigned,
 .legend-assigned,
@@ -11428,7 +11419,6 @@ td select:focus,
 .legend-requested {
   background: #C9C400 !important;
 }
-
 
 /* FINAL SYSTEM ACTIVITY DOT — neutral, no status color */
 .super-dashboard .super-activity-list .activity-dot,
@@ -11440,7 +11430,6 @@ td select:focus,
   background: #cbd5e1 !important;
   border: 0 !important;
 }
-
 
 /* report searchable dropdowns */
 .report-filter-fields .report-search-select-field {
@@ -11581,7 +11570,6 @@ td select:focus,
   text-align: center;
 }
 
-
 /* report searchable dropdown — neutral + left aligned */
 .report-search-select-trigger {
   background: #fff !important;
@@ -11614,7 +11602,6 @@ td select:focus,
   background: #fff !important;
   color: var(--text) !important;
 }
-
 
 /* =========================================================
    DISPATCHER — MOBILE FIRST
@@ -11954,7 +11941,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher mobile bottom navigation */
 .dispatcher-mobile-navbar,
 .dispatcher-mobile-more-menu,
@@ -12170,7 +12156,6 @@ td select:focus,
   }
 }
 
-
 /* FINAL DISPATCHER MODE — dedicated mobile UI at every viewport */
 .role-dispatcher .sidebar {
   display: none !important;
@@ -12300,7 +12285,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher home action buttons */
 .role-dispatcher .dispatcher-create-actions {
   display: grid;
@@ -12355,7 +12339,6 @@ td select:focus,
     grid-template-columns: 1fr;
   }
 }
-
 
 /* Dispatcher header greeting + floating create menu */
 .role-dispatcher .dispatcher-topbar-copy {
@@ -12581,7 +12564,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher create quick actions — match mobile reference */
 .role-dispatcher .dispatcher-create-backdrop {
   display: none !important;
@@ -12704,13 +12686,11 @@ td select:focus,
   }
 }
 
-
 .role-dispatcher .dispatcher-fab:has(+ .dispatcher-create-menu.is-open) {
   opacity: 0 !important;
   pointer-events: none !important;
   transform: scale(0.9) !important;
 }
-
 
 /* FINAL DISPATCHER QUICK CREATE — exactly two one-line actions */
 .role-dispatcher .dispatcher-create-menu {
@@ -12793,7 +12773,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher create actions — dark purple + white text */
 .role-dispatcher .dispatcher-create-menu-item {
   background: var(--theme-color-dark) !important;
@@ -12807,7 +12786,6 @@ td select:focus,
   border-color: #3127a4 !important;
   color: #fff !important;
 }
-
 
 /* Dispatcher summary clickable counts + preview */
 .role-dispatcher .dispatcher-summary-count-button {
@@ -12953,7 +12931,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher app-like create flow: focus only on the active next section */
 .role-dispatcher .role-page:has(.dispatcher-create-flow) .dispatcher-status-card,
 .role-dispatcher .role-page:has(.dispatcher-create-flow) .dispatcher-ringkasan-card {
@@ -12963,7 +12940,6 @@ td select:focus,
 .role-dispatcher .dispatcher-create-flow {
   margin-top: 10px !important;
 }
-
 
 /* Dispatcher active flow header + schedule picker */
 .role-dispatcher .creation-flow-toolbar {
@@ -13231,7 +13207,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher create flow — native mobile-app look */
 .role-dispatcher .page-content {
   padding: 10px 12px 24px !important;
@@ -13466,7 +13441,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher — centered phone canvas + app-header back */
 .role-dispatcher .app-content {
   width: min(100vw, 430px) !important;
@@ -13635,7 +13609,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher schedule cards — one horizontal row */
 .role-dispatcher .dispatcher-schedule-card {
   grid-template-columns: 1.05fr 1.2fr 1.2fr .7fr .7fr !important;
@@ -13705,7 +13678,6 @@ td select:focus,
     font-size: 8px;
   }
 }
-
 
 /* Dispatcher schedule selection actions + selected preview */
 .role-dispatcher .dispatcher-schedule-card {
@@ -13898,7 +13870,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher app header back */
 .role-dispatcher .topbar {
   position: sticky !important;
@@ -13969,7 +13940,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher mobile flow spacing + route tabs */
 .role-dispatcher .role-page:has(.dispatcher-create-flow) .dispatcher-create-flow {
   margin-top: 14px !important;
@@ -14035,7 +14005,6 @@ td select:focus,
 .role-dispatcher .dispatcher-selected-schedule-preview-grid strong {
   text-transform: none !important;
 }
-
 
 /* Dispatcher schedule preview — real popup */
 .role-dispatcher .dispatcher-schedule-preview-backdrop {
@@ -14107,7 +14076,6 @@ td select:focus,
     padding: 15px;
   }
 }
-
 
 /* Dispatcher schedule picker — popup + centered header back */
 .role-dispatcher .dispatcher-schedule-preview-backdrop {
@@ -14225,7 +14193,6 @@ td select:focus,
   }
 }
 
-
 /* Dispatcher assignment selects: neutral app-style controls */
 .role-dispatcher .task-create-form .master-select-field {
   text-align: left !important;
@@ -14274,7 +14241,6 @@ td select:focus,
   font-weight: 400 !important;
 }
 
-
 /* Dispatcher executor + fleet option list */
 .role-dispatcher .task-create-form .master-select-options {
   text-align: left !important;
@@ -14308,7 +14274,6 @@ td select:focus,
 .role-dispatcher .task-create-form .master-select-option:last-child {
   border-bottom: 1px solid #1f1f1f !important;
 }
-
 
 /* Dispatcher task confirmation preview */
 .role-dispatcher .dispatcher-task-preview .card-title {
@@ -14426,7 +14391,6 @@ td select:focus,
   background: #3127a4 !important;
   color: #fff !important;
 }
-
 
 /* Unified confirmation result popups for creation flows */
 .role-dispatcher .dispatcher-maintenance-result-backdrop,
@@ -14558,7 +14522,6 @@ td select:focus,
   color: var(--text-2) !important;
 }
 
-
 /* Dispatcher task confirmation — compact mobile preview */
 .role-dispatcher .dispatcher-task-preview {
   min-height: 0 !important;
@@ -14619,7 +14582,6 @@ td select:focus,
   color: #fff !important;
 }
 
-
 /* Dispatcher activity preview: compact 1 + 2-column layout */
 .role-dispatcher .dispatcher-task-preview .task-summary-grid > div:first-child {
   grid-column: 1 / -1 !important;
@@ -14660,7 +14622,6 @@ td select:focus,
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
-
 
 /* mobile alert cards */
 .alert-mobile-cards,
@@ -15032,7 +14993,6 @@ td select:focus,
     grid-template-columns: 1fr 1fr;
   }
 }
-
 
 .movent-toast {
   position: fixed;
