@@ -120,7 +120,7 @@ export default async function ControllerPenugasanDashboardPage({
         admin
           .from("tasks")
           .select(
-            "status, task_type, fleet_ownership, sj_number, odometer_start, accepted_at, std, created_at, assigned_by, executor_nik",
+            "status, task_type, fleet_ownership, sj_number, odometer_start, accepted_at, driving_at, arrived_at, std, sta, created_at, assigned_by, executor_nik",
           )
           .in("assigned_by", dispatcherIds)
           .not("executor_nik", "is", null)
@@ -137,6 +137,78 @@ export default async function ControllerPenugasanDashboardPage({
   const tasks = sortByStatusAndTime(rawTasks);
 
   const totalTasks = activities.length;
+
+  const departureMetrics = activities.reduce(
+    (acc, task) => {
+      if (!task.std || !task.driving_at) return acc;
+
+      acc.total += 1;
+      if (new Date(task.driving_at).getTime() <= new Date(task.std).getTime()) {
+        acc.onTime += 1;
+      } else {
+        acc.late += 1;
+      }
+      return acc;
+    },
+    { total: 0, onTime: 0, late: 0 },
+  );
+
+  const arrivalMetrics = activities.reduce(
+    (acc, task) => {
+      if (!task.sta || !task.arrived_at) return acc;
+
+      acc.total += 1;
+      if (new Date(task.arrived_at).getTime() <= new Date(task.sta).getTime()) {
+        acc.onTime += 1;
+      } else {
+        acc.late += 1;
+      }
+      return acc;
+    },
+    { total: 0, onTime: 0, late: 0 },
+  );
+
+  const durationMetrics = activities.reduce(
+    (acc, task) => {
+      if (!task.driving_at || !task.arrived_at) return acc;
+
+      const duration =
+        new Date(task.arrived_at).getTime() -
+        new Date(task.driving_at).getTime();
+
+      if (duration < 0) return acc;
+
+      acc.totalMs += duration;
+      acc.count += 1;
+      return acc;
+    },
+    { totalMs: 0, count: 0 },
+  );
+
+  const departurePerformance = percentage(
+    departureMetrics.onTime,
+    departureMetrics.total,
+  );
+  const arrivalPerformance = percentage(
+    arrivalMetrics.onTime,
+    arrivalMetrics.total,
+  );
+  const averageDurationMinutes =
+    durationMetrics.count > 0
+      ? Math.round(durationMetrics.totalMs / durationMetrics.count / 60000)
+      : 0;
+
+  function durationLabel(totalMinutes: number) {
+    if (!totalMinutes) return "-";
+
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    if (!hours) return String(minutes) + "m";
+    if (!minutes) return String(hours) + "j";
+    return String(hours) + "j " + String(minutes) + "m";
+  }
+
   const { count: totalMaintenance } = await admin
     .from("ticketings")
     .select("transaction_id", { count: "exact", head: true })
@@ -383,25 +455,45 @@ export default async function ControllerPenugasanDashboardPage({
         <div className="super-panel super-activity-panel">
           <div className="super-panel-heading">
             <div>
-              <h2>Aktivitas Sistem</h2>
-              <p>Aktivitas terbaru di sistem.</p>
+              <h2>Ketepatan STD &amp; STA</h2>
+              <p>Lihat berangkat, sampai, dan durasi dari semua tugas di periode ini.</p>
             </div>
           </div>
           <div className="super-activity-list">
             <div>
               <span className="activity-dot blue" />
-              <span>{tasks.length} penugasan terbaru</span>
-              <time>{shortTime(now.toISOString())}</time>
-            </div>
-            <div>
-              <span className="activity-dot purple" />
-              <span>{completedTasks} tugas selesai dalam periode</span>
-              <time>{shortTime(now.toISOString())}</time>
+              <span>Berangkatnya pas</span>
+              <strong>{departureMetrics.onTime}</strong>
             </div>
             <div>
               <span className="activity-dot orange" />
-              <span>{activeTasks} tugas sedang berjalan</span>
-              <time>{shortTime(now.toISOString())}</time>
+              <span>Berangkatnya telat</span>
+              <strong>{departureMetrics.late}</strong>
+            </div>
+            <div>
+              <span className="activity-dot purple" />
+              <span>Sampainya pas</span>
+              <strong>{arrivalMetrics.onTime}</strong>
+            </div>
+            <div>
+              <span className="activity-dot red" />
+              <span>Sampainya telat</span>
+              <strong>{arrivalMetrics.late}</strong>
+            </div>
+            <div>
+              <span className="activity-dot blue" />
+              <span>Yang berangkat pas</span>
+              <strong>{departurePerformance}%</strong>
+            </div>
+            <div>
+              <span className="activity-dot purple" />
+              <span>Yang sampai pas</span>
+              <strong>{arrivalPerformance}%</strong>
+            </div>
+            <div>
+              <span className="activity-dot orange" />
+              <span>Rata-rata perjalanan</span>
+              <strong>{durationLabel(averageDurationMinutes)}</strong>
             </div>
           </div>
         </div>
