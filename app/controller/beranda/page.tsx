@@ -223,7 +223,7 @@ export default async function ControllerPenugasanDashboardPage({
         .lt("created_at", rangeEnd),
       admin
         .from("schedules")
-        .select("schedule_id, start_point, destination, std")
+        .select("schedule_id, start_point, destination, std, sta")
         .eq("status", "Active")
         .eq("schedule_day", todayDay)
         .eq("category", todayScheduleCategory),
