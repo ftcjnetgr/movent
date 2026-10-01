@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import StatusBadge from "@/components/shared/status-badge";
 import { compareStatus, STATUS_LABELS, STATUS_SUBCOPY, StatusIcon } from "@/components/shared/status-config";
+import DashboardPreviewButton, { type DashboardPreviewItem } from "@/components/controller/dashboard-preview";
 
 function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
@@ -157,7 +158,7 @@ export default async function ControllerPenugasanDashboardPage({
         admin
           .from("tasks")
           .select(
-            "status, task_type, fleet_ownership, sj_number, odometer_start, accepted_at, driving_at, arrived_at, std, sta, created_at, assigned_by, executor_nik",
+            "status, task_type, fleet_ownership, sj_number, odometer_start, odometer_end, accepted_at, driving_at, arrived_at, std, sta, created_at, assigned_by, executor_nik, schedule_id, start_point, destination, executor_snapshot, fleet_snapshot",
           )
           .in("assigned_by", dispatcherIds)
           .not("executor_nik", "is", null)
@@ -222,7 +223,7 @@ export default async function ControllerPenugasanDashboardPage({
         .lt("created_at", rangeEnd),
       admin
         .from("schedules")
-        .select("schedule_id")
+        .select("schedule_id, start_point, destination")
         .eq("status", "Active")
         .eq("schedule_day", todayDay)
         .eq("category", todayScheduleCategory),
@@ -235,7 +236,7 @@ export default async function ControllerPenugasanDashboardPage({
   const { data: todayScheduleTasks } = todayScheduleIds.length
     ? await admin
         .from("tasks")
-        .select("schedule_id, status, accepted_at, created_at")
+        .select("schedule_id, status, accepted_at, created_at, start_point, destination, driving_at, arrived_at, odometer_start, odometer_end, executor_snapshot, fleet_snapshot")
         .in("schedule_id", todayScheduleIds)
         .order("created_at", { ascending: false })
     : { data: [] };
@@ -246,6 +247,14 @@ export default async function ControllerPenugasanDashboardPage({
       status: string;
       accepted_at: string | null;
       created_at: string;
+      start_point: string | null;
+      destination: string | null;
+      driving_at: string | null;
+      arrived_at: string | null;
+      odometer_start: number | null;
+      odometer_end: number | null;
+      executor_snapshot: Record<string, any> | null;
+      fleet_snapshot: Record<string, any> | null;
     }
   >();
 
@@ -283,6 +292,131 @@ export default async function ControllerPenugasanDashboardPage({
     taskStatusCounts.Driving;
 
   const completedTasks = taskStatusCounts.Completed;
+
+  function buildPreviewItem(
+    schedule: {
+      schedule_id: string;
+      start_point?: string | null;
+      destination?: string | null;
+    },
+    task?: {
+      status?: string | null;
+      accepted_at?: string | null;
+      start_point?: string | null;
+      destination?: string | null;
+      driving_at?: string | null;
+      arrived_at?: string | null;
+      odometer_start?: number | null;
+      odometer_end?: number | null;
+      executor_snapshot?: Record<string, any> | null;
+      fleet_snapshot?: Record<string, any> | null;
+    },
+    fallbackStatus = "Unassigned",
+  ): DashboardPreviewItem {
+    const atd = task?.driving_at ?? null;
+    const ata = task?.arrived_at ?? null;
+    const startOdo = task?.odometer_start;
+    const endOdo = task?.odometer_end;
+    const distance =
+      typeof startOdo === "number" &&
+      typeof endOdo === "number" &&
+      endOdo >= startOdo
+        ? endOdo - startOdo
+        : null;
+    const drivingDurationMs =
+      atd && ata
+        ? Math.max(0, new Date(ata).getTime() - new Date(atd).getTime())
+        : null;
+
+    return {
+      scheduleId: schedule.schedule_id,
+      status: task?.status
+        ? displayTaskStatus({
+            status: task.status,
+            accepted_at: task.accepted_at ?? null,
+          })
+        : fallbackStatus,
+      startPoint: task?.start_point ?? schedule.start_point ?? null,
+      destination: task?.destination ?? schedule.destination ?? null,
+      executor:
+        task?.executor_snapshot?.full_name ??
+        task?.executor_snapshot?.executor_nik ??
+        task?.executor_snapshot?.username ??
+        null,
+      fleet:
+        task?.fleet_snapshot?.plat_number ??
+        task?.fleet_snapshot?.plate_number ??
+        null,
+      atd,
+      ata,
+      distance,
+      drivingDurationMs,
+    };
+  }
+
+  const scheduleRows = (todaySchedules ?? []).map((schedule) => ({
+    schedule_id: schedule.schedule_id,
+    start_point: schedule.start_point,
+    destination: schedule.destination,
+  }));
+
+  const schedulePreviewItems = scheduleRows.map((schedule) =>
+    buildPreviewItem(schedule, latestTaskBySchedule.get(schedule.schedule_id)),
+  );
+
+  const statusPreviewItems = {
+    Unassigned: schedulePreviewItems.filter((item) => item.status === "Unassigned"),
+    Assigned: schedulePreviewItems.filter((item) => item.status === "Assigned"),
+    Confirmed: schedulePreviewItems.filter((item) => item.status === "Confirmed"),
+    Driving: schedulePreviewItems.filter((item) => item.status === "Driving"),
+    Completed: schedulePreviewItems.filter((item) => item.status === "Completed"),
+    Canceled: schedulePreviewItems.filter((item) => item.status === "Canceled"),
+  };
+
+  const performancePreviewItems = activities.map((task) =>
+    buildPreviewItem(
+      {
+        schedule_id: task.schedule_id ?? "-",
+        start_point: task.start_point,
+        destination: task.destination,
+      },
+      task,
+      task.status ?? "-",
+    ),
+  );
+
+  const departureOnTimePreview = performancePreviewItems.filter((item, index) => {
+    const task = activities[index];
+    return (
+      !!task.std &&
+      !!task.driving_at &&
+      new Date(task.driving_at).getTime() <= new Date(task.std).getTime()
+    );
+  });
+  const departureLatePreview = performancePreviewItems.filter((item, index) => {
+    const task = activities[index];
+    return (
+      !!task.std &&
+      !!task.driving_at &&
+      new Date(task.driving_at).getTime() > new Date(task.std).getTime()
+    );
+  });
+  const arrivalOnTimePreview = performancePreviewItems.filter((item, index) => {
+    const task = activities[index];
+    return (
+      !!task.sta &&
+      !!task.arrived_at &&
+      new Date(task.arrived_at).getTime() <= new Date(task.sta).getTime()
+    );
+  });
+  const arrivalLatePreview = performancePreviewItems.filter((item, index) => {
+    const task = activities[index];
+    return (
+      !!task.sta &&
+      !!task.arrived_at &&
+      new Date(task.arrived_at).getTime() > new Date(task.sta).getTime()
+    );
+  });
 
   const byHour = Array.from({ length: 24 }, (_, hour) => {
     const rows = activities.filter((task) => {
@@ -347,82 +481,69 @@ export default async function ControllerPenugasanDashboardPage({
       </div>
 
       <section className="super-kpi-grid assignment-kpi-grid">
-        <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-total-tasks">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Requested" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Total Schedule Hari Ini</span>
-            <strong>{totalSchedulesToday ?? 0}</strong>
-            <small>Category {todayScheduleCategory}</small>
-          </div>
-        </div>
-
-        <div className="super-kpi-card kpi-gray status-kpi-card status-kpi-unassigned">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Unassigned" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Belum Ditugasin</span>
-            <strong>{taskStatusCounts.Unassigned}</strong>
-            <small>{percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total</small>
-          </div>
-        </div>
-
-        <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-assigned">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Assigned" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Udah Ditugasin</span>
-            <strong>{taskStatusCounts.Assigned}</strong>
-            <small>{percentage(taskStatusCounts.Assigned, totalSchedulesToday)}% dari total</small>
-          </div>
-        </div>
-
-        <div className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Confirmed" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Udah Diterima</span>
-            <strong>{taskStatusCounts.Confirmed}</strong>
-            <small>{percentage(taskStatusCounts.Confirmed, totalSchedulesToday)}% dari total</small>
-          </div>
-        </div>
-
-        <div className="super-kpi-card kpi-orange status-kpi-card status-kpi-driving">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Driving" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Lagi Jalan</span>
-            <strong>{taskStatusCounts.Driving}</strong>
-            <small>{percentage(taskStatusCounts.Driving, totalSchedulesToday)}% dari total</small>
-          </div>
-        </div>
-
-        <div className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Completed" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Udah Selesai</span>
-            <strong>{taskStatusCounts.Completed}</strong>
-            <small>{percentage(taskStatusCounts.Completed, totalSchedulesToday)}% dari total</small>
-          </div>
-        </div>
-
-        <div className="super-kpi-card kpi-red status-kpi-card status-kpi-canceled">
-          <div className="super-kpi-icon">
-            <StatusIcon status="Canceled" size={20} />
-          </div>
-          <div className="super-kpi-content">
-            <span>Dibatalin</span>
-            <strong>{taskStatusCounts.Canceled}</strong>
-            <small>{percentage(taskStatusCounts.Canceled, totalSchedulesToday)}% dari total</small>
-          </div>
-        </div>
+        <DashboardPreviewButton
+          title="Pratinjau Schedule Hari Ini"
+          items={schedulePreviewItems}
+          className="super-kpi-card kpi-purple status-kpi-card status-kpi-total-tasks"
+          iconStatus="Requested"
+          label="Schedule Hari Ini"
+          value={totalSchedulesToday ?? 0}
+          subtitle={`Category ${todayScheduleCategory}`}
+        />
+        <DashboardPreviewButton
+          title="Pratinjau Schedule — Belum Ditugasin"
+          items={statusPreviewItems.Unassigned}
+          className="super-kpi-card kpi-gray status-kpi-card status-kpi-unassigned"
+          iconStatus="Unassigned"
+          label="Belum Ditugasin"
+          value={taskStatusCounts.Unassigned}
+          subtitle={`${percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total`}
+        />
+        <DashboardPreviewButton
+          title="Pratinjau Schedule — Udah Ditugasin"
+          items={statusPreviewItems.Assigned}
+          className="super-kpi-card kpi-blue status-kpi-card status-kpi-assigned"
+          iconStatus="Assigned"
+          label="Udah Ditugasin"
+          value={taskStatusCounts.Assigned}
+          subtitle={`${percentage(taskStatusCounts.Assigned, totalSchedulesToday)}% dari total`}
+        />
+        <DashboardPreviewButton
+          title="Pratinjau Schedule — Udah Diterima"
+          items={statusPreviewItems.Confirmed}
+          className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed"
+          iconStatus="Confirmed"
+          label="Udah Diterima"
+          value={taskStatusCounts.Confirmed}
+          subtitle={`${percentage(taskStatusCounts.Confirmed, totalSchedulesToday)}% dari total`}
+        />
+        <DashboardPreviewButton
+          title="Pratinjau Schedule — Lagi Jalan"
+          items={statusPreviewItems.Driving}
+          className="super-kpi-card kpi-orange status-kpi-card status-kpi-driving"
+          iconStatus="Driving"
+          label="Lagi Jalan"
+          value={taskStatusCounts.Driving}
+          subtitle={`${percentage(taskStatusCounts.Driving, totalSchedulesToday)}% dari total`}
+        />
+        <DashboardPreviewButton
+          title="Pratinjau Schedule — Udah Selesai"
+          items={statusPreviewItems.Completed}
+          className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed"
+          iconStatus="Completed"
+          label="Udah Selesai"
+          value={taskStatusCounts.Completed}
+          subtitle={`${percentage(taskStatusCounts.Completed, totalSchedulesToday)}% dari total`}
+        />
+        <DashboardPreviewButton
+          title="Pratinjau Schedule — Dibatalin"
+          items={statusPreviewItems.Canceled}
+          className="super-kpi-card kpi-red status-kpi-card status-kpi-canceled"
+          iconStatus="Canceled"
+          label="Dibatalin"
+          value={taskStatusCounts.Canceled}
+          subtitle={`${percentage(taskStatusCounts.Canceled, totalSchedulesToday)}% dari total`}
+        />
       </section>
 
       <section className="super-dashboard-main-grid">
@@ -519,36 +640,54 @@ export default async function ControllerPenugasanDashboardPage({
             </div>
           </div>
           <div className="super-activity-list">
-            <div>
-              <span className="activity-dot green" />
-              <span>Berangkatnya pas</span>
-              <strong>{departureMetrics.onTime}</strong>
-            </div>
-            <div>
-              <span className="activity-dot red" />
-              <span>Berangkatnya telat</span>
-              <strong>{departureMetrics.late}</strong>
-            </div>
-            <div>
-              <span className="activity-dot green" />
-              <span>Sampainya pas</span>
-              <strong>{arrivalMetrics.onTime}</strong>
-            </div>
-            <div>
-              <span className="activity-dot red" />
-              <span>Sampainya telat</span>
-              <strong>{arrivalMetrics.late}</strong>
-            </div>
-            <div>
-              <span className="activity-dot green" />
-              <span>Yang berangkatnya pas</span>
-              <strong>{departurePerformance}%</strong>
-            </div>
-            <div>
-              <span className="activity-dot green" />
-              <span>Yang sampainya pas</span>
-              <strong>{arrivalPerformance}%</strong>
-            </div>
+            <DashboardPreviewButton
+              title="Pratinjau — Berangkatnya Pas"
+              items={departureOnTimePreview}
+              variant="activity"
+              dotClass="blue"
+              label="Berangkatnya pas"
+              value={departureMetrics.onTime}
+            />
+            <DashboardPreviewButton
+              title="Pratinjau — Berangkatnya Telat"
+              items={departureLatePreview}
+              variant="activity"
+              dotClass="red"
+              label="Berangkatnya telat"
+              value={departureMetrics.late}
+            />
+            <DashboardPreviewButton
+              title="Pratinjau — Sampainya Pas"
+              items={arrivalOnTimePreview}
+              variant="activity"
+              dotClass="blue"
+              label="Sampainya pas"
+              value={arrivalMetrics.onTime}
+            />
+            <DashboardPreviewButton
+              title="Pratinjau — Sampainya Telat"
+              items={arrivalLatePreview}
+              variant="activity"
+              dotClass="red"
+              label="Sampainya telat"
+              value={arrivalMetrics.late}
+            />
+            <DashboardPreviewButton
+              title="Pratinjau — Yang Berangkatnya Pas"
+              items={departureOnTimePreview}
+              variant="activity"
+              dotClass="blue"
+              label="Yang berangkatnya pas"
+              value={`${departurePerformance}%`}
+            />
+            <DashboardPreviewButton
+              title="Pratinjau — Yang Sampainya Pas"
+              items={arrivalOnTimePreview}
+              variant="activity"
+              dotClass="blue"
+              label="Yang sampainya pas"
+              value={`${arrivalPerformance}%`}
+            />
           </div>
         </div>
       </section>
