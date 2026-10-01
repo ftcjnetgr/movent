@@ -43,7 +43,7 @@ export async function acceptExtraScheduleAction(
   if (
     !task ||
     task.fleet_ownership === "Non-TGR" ||
-    !allowedExecutor(profile.role, task.executor_nik, profile.nik)
+    !allowedExecutor(profile.role, task.executor_nik, profile.username)
   ) {
     return { error: "Tugas ini belum tersedia buat kamu." };
   }
@@ -86,7 +86,7 @@ export async function submitExtraScheduleSjAction(
   if (
     !task ||
     !requiresSj(task) ||
-    !allowedExecutor(profile.role, task.executor_nik, profile.nik)
+    !allowedExecutor(profile.role, task.executor_nik, profile.username)
   ) {
     return { error: "Tugas ini belum siap buat isi SJ." };
   }
@@ -153,7 +153,7 @@ export async function saveOdometerStartAction(
     return { error: "Odometer awal belum benar. Cek lagi, ya." };
 
   const { admin, task } = await getTask(transactionId, ["Confirmed"]);
-  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
+  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.username))
     return { error: "Tugas ini belum tersedia buat kamu." };
   if (requiresSj(task)) {
     const { count } = await admin
@@ -182,7 +182,7 @@ export async function confirmDrivingAction(
   if (
     !task ||
     task.fleet_ownership === "Non-TGR" ||
-    !allowedExecutor(profile.role, task.executor_nik, profile.nik)
+    !allowedExecutor(profile.role, task.executor_nik, profile.username)
   )
     return { error: "Tugas ini belum tersedia buat kamu." };
   if (requiresSj(task)) {
@@ -211,7 +211,7 @@ export async function confirmArrivalAction(
   const profile = await getCurrentProfile();
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const { admin, task } = await getTask(transactionId, ["Driving"]);
-  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
+  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.username))
     return { error: "Tugas ini belum tersedia buat kamu." };
 
   const { error } = await admin
@@ -236,7 +236,7 @@ export async function saveOdometerEndAction(
     return { error: "Odometer akhir belum benar. Cek lagi, ya." };
 
   const { admin, task } = await getTask(transactionId, ["Driving"]);
-  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
+  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.username))
     return { error: "Tugas ini belum tersedia buat kamu." };
   if (!task.arrived_at) return { error: "Konfirmasi kedatangan dulu, ya." };
   if (task.odometer_start !== null && value < Number(task.odometer_start))
@@ -260,7 +260,7 @@ export async function confirmCompletedAction(
   const profile = await getCurrentProfile();
   const transactionId = String(formData.get("transactionId") ?? "").trim();
   const { admin, task } = await getTask(transactionId, ["Driving"]);
-  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.nik))
+  if (!task || !allowedExecutor(profile.role, task.executor_nik, profile.username))
     return { error: "Tugas ini belum tersedia buat kamu." };
   if (!task.arrived_at) return { error: "Konfirmasi kedatangan dulu, ya." };
   if (task.odometer_end === null)
