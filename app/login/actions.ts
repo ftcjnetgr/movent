@@ -40,7 +40,7 @@ export async function loginAction(
     .select(
       "id, username, email, role, status, must_change_password, failed_login_attempts, auth_user_id",
     )
-    .eq("username", username)
+    .ilike("username", username)
     .maybeSingle();
 
   if (profileError) {
