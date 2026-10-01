@@ -15676,8 +15676,8 @@ td select:focus,
 }
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row > span:not(.activity-dot) {
   grid-column: 2;
-  grid-row: 1 / span 2;
-  align-self: center;
+  grid-row: 1;
+  align-self: start;
 }
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row strong {
   grid-column: 3;
