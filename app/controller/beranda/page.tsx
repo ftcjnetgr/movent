@@ -97,6 +97,43 @@ export default async function ControllerPenugasanDashboardPage({
     new Date(`${to}T00:00:00+07:00`).getTime() + 86400000,
   ).toISOString();
 
+  const todayParts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    weekday: "short",
+  }).formatToParts(now);
+  const weekdayMap: Record<string, number> = {
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+    Sun: 7,
+  };
+  const todayDay =
+    weekdayMap[todayParts.find((part) => part.type === "weekday")?.value ?? ""] ??
+    1;
+  const todayMonth = Number(
+    todayParts.find((part) => part.type === "month")?.value ?? 1,
+  );
+  const todayDate = Number(
+    todayParts.find((part) => part.type === "day")?.value ?? 1,
+  );
+  const todayYear = Number(
+    todayParts.find((part) => part.type === "year")?.value ?? now.getFullYear(),
+  );
+
+  const twinDateStart = Date.UTC(todayYear, todayMonth - 1, todayMonth);
+  const twinDateEnd = new Date(twinDateStart);
+  twinDateEnd.setUTCDate(twinDateEnd.getUTCDate() + 2);
+  const todayKey = Date.UTC(todayYear, todayMonth - 1, todayDate);
+  const isTwinDateWindow =
+    todayKey >= twinDateStart && todayKey <= twinDateEnd.getTime();
+  const todayScheduleCategory = isTwinDateWindow ? "Campaign" : "Normal";
+
   const { data: dispatcherProfiles } = await admin
     .from("user_profiles")
     .select("id")
@@ -209,11 +246,20 @@ export default async function ControllerPenugasanDashboardPage({
     return String(hours) + "j " + String(minutes) + "m";
   }
 
-  const { count: totalMaintenance } = await admin
-    .from("ticketings")
-    .select("transaction_id", { count: "exact", head: true })
-    .gte("created_at", rangeStart)
-    .lt("created_at", rangeEnd);
+  const [{ count: totalMaintenance }, { count: totalSchedulesToday }] =
+    await Promise.all([
+      admin
+        .from("ticketings")
+        .select("transaction_id", { count: "exact", head: true })
+        .gte("created_at", rangeStart)
+        .lt("created_at", rangeEnd),
+      admin
+        .from("schedules")
+        .select("schedule_id", { count: "exact", head: true })
+        .eq("status", "Active")
+        .eq("schedule_day", todayDay)
+        .eq("category", todayScheduleCategory),
+    ]);
   const totalAllActivities = totalTasks + (totalMaintenance ?? 0);
 
   const taskStatusCounts = {
@@ -304,9 +350,9 @@ export default async function ControllerPenugasanDashboardPage({
             <StatusIcon status="" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Semua Penugasan</span>
-            <strong>{totalTasks}</strong>
-            <small>Total penugasan</small>
+            <span>Total Schedule Hari Ini</span>
+            <strong>{totalSchedulesToday ?? 0}</strong>
+            <small>Category {todayScheduleCategory}</small>
           </div>
         </div>
 
@@ -482,18 +528,13 @@ export default async function ControllerPenugasanDashboardPage({
             </div>
             <div>
               <span className="activity-dot blue" />
-              <span>Yang berangkat pas</span>
+              <span>Yang berangkatnya pas</span>
               <strong>{departurePerformance}%</strong>
             </div>
             <div>
               <span className="activity-dot purple" />
-              <span>Yang sampai pas</span>
+              <span>Yang sampainya pas</span>
               <strong>{arrivalPerformance}%</strong>
-            </div>
-            <div>
-              <span className="activity-dot orange" />
-              <span>Rata-rata perjalanan</span>
-              <strong>{durationLabel(averageDurationMinutes)}</strong>
             </div>
           </div>
         </div>
