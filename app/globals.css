@@ -15708,3 +15708,113 @@ td select:focus,
   font-size: 8px !important;
   font-weight: 400 !important;
 }
+
+
+/* CONTROLLER DASHBOARD — STATUS PALETTE FINAL */
+.super-dashboard .assignment-kpi-grid .kpi-purple {
+  border-top-color: #7c3aed !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-gray {
+  border-top-color: #94a3b8 !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-yellow {
+  border-top-color: #ca8a04 !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-orange {
+  border-top-color: #f97316 !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-blue {
+  border-top-color: #2563eb !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-green {
+  border-top-color: #16a34a !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-red {
+  border-top-color: #dc2626 !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-gray .super-kpi-icon {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-yellow .super-kpi-icon {
+  background: #fefce8 !important;
+  color: #ca8a04 !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-orange .super-kpi-icon {
+  background: #fff7ed !important;
+  color: #f97316 !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-blue .super-kpi-icon {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.super-dashboard .assignment-kpi-grid .kpi-green .super-kpi-icon {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-purple {
+  border-top-color: #7c3aed !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-gray {
+  border-top-color: #94a3b8 !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-orange {
+  border-top-color: #f97316 !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-blue {
+  border-top-color: #2563eb !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-green {
+  border-top-color: #16a34a !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-red {
+  border-top-color: #dc2626 !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-gray .super-kpi-icon {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-orange .super-kpi-icon {
+  background: #fff7ed !important;
+  color: #f97316 !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-blue .super-kpi-icon {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.super-dashboard .maintenance-kpi-grid .kpi-green .super-kpi-icon {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+}
+
+/* Bars + legends must use the same status colors as their summary cards. */
+.super-dashboard .bar-unassigned,
+.super-dashboard .legend-unassigned {
+  background: #94a3b8 !important;
+}
+.super-dashboard .bar-assigned,
+.super-dashboard .legend-assigned {
+  background: #ca8a04 !important;
+}
+.super-dashboard .bar-confirmed,
+.super-dashboard .legend-confirmed {
+  background: #f97316 !important;
+}
+.super-dashboard .bar-driving,
+.super-dashboard .legend-driving,
+.super-dashboard .bar-in-progress,
+.super-dashboard .legend-in-progress {
+  background: #2563eb !important;
+}
+.super-dashboard .bar-completed,
+.super-dashboard .legend-completed {
+  background: #16a34a !important;
+}
+.super-dashboard .bar-canceled,
+.super-dashboard .legend-canceled {
+  background: #dc2626 !important;
+}
+.super-dashboard .bar-requested,
+.super-dashboard .legend-requested {
+  background: #94a3b8 !important;
+}
