@@ -16098,7 +16098,7 @@ td select:focus,
   transform: none !important;
 }
 
-/* DASHBOARD PREVIEW — prevent column overlap */
+/* DASHBOARD PREVIEW — balanced columns, no overlap */
 .dashboard-preview-table-wrap {
   width: 100% !important;
   overflow-x: auto !important;
@@ -16117,33 +16117,73 @@ td select:focus,
   white-space: nowrap !important;
   vertical-align: middle !important;
   box-sizing: border-box !important;
-}
-
-.dashboard-preview-table th {
-  min-width: 120px !important;
-}
-
-.dashboard-preview-table th:first-child,
-.dashboard-preview-table td:first-child {
-  min-width: 150px !important;
-}
-
-.dashboard-preview-table th:nth-child(2),
-.dashboard-preview-table td:nth-child(2) {
-  min-width: 120px !important;
-}
-
-.dashboard-preview-table th:nth-last-child(1),
-.dashboard-preview-table td:nth-last-child(1) {
-  min-width: 130px !important;
-}
-
-/* Keep fleet-related columns readable */
-.dashboard-preview-table th:has(+ th),
-.dashboard-preview-table td {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
+
+/* Full schedule: give each field room according to its actual content. */
+.dashboard-preview-table.is-full-schedule th:nth-child(1),
+.dashboard-preview-table.is-full-schedule td:nth-child(1) { min-width: 145px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(2),
+.dashboard-preview-table.is-full-schedule td:nth-child(2) { min-width: 120px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(3),
+.dashboard-preview-table.is-full-schedule td:nth-child(3),
+.dashboard-preview-table.is-full-schedule th:nth-child(4),
+.dashboard-preview-table.is-full-schedule td:nth-child(4) { min-width: 155px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(5),
+.dashboard-preview-table.is-full-schedule td:nth-child(5) { min-width: 130px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(6),
+.dashboard-preview-table.is-full-schedule td:nth-child(6) { min-width: 115px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(7),
+.dashboard-preview-table.is-full-schedule td:nth-child(7),
+.dashboard-preview-table.is-full-schedule th:nth-child(8),
+.dashboard-preview-table.is-full-schedule td:nth-child(8) { min-width: 78px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(9),
+.dashboard-preview-table.is-full-schedule td:nth-child(9) { min-width: 105px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(10),
+.dashboard-preview-table.is-full-schedule td:nth-child(10) { min-width: 130px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(11),
+.dashboard-preview-table.is-full-schedule td:nth-child(11) { min-width: 105px !important; }
+.dashboard-preview-table.is-full-schedule th:nth-child(12),
+.dashboard-preview-table.is-full-schedule td:nth-child(12) { min-width: 130px !important; }
+
+/* Compact schedule: fewer columns, so keep short fields genuinely compact. */
+.dashboard-preview-table.is-compact-schedule th:nth-child(1),
+.dashboard-preview-table.is-compact-schedule td:nth-child(1) { min-width: 145px !important; }
+.dashboard-preview-table.is-compact-schedule th:nth-child(2),
+.dashboard-preview-table.is-compact-schedule td:nth-child(2) { min-width: 120px !important; }
+.dashboard-preview-table.is-compact-schedule th:nth-child(3),
+.dashboard-preview-table.is-compact-schedule td:nth-child(3),
+.dashboard-preview-table.is-compact-schedule th:nth-child(4),
+.dashboard-preview-table.is-compact-schedule td:nth-child(4) { min-width: 165px !important; }
+.dashboard-preview-table.is-compact-schedule th:nth-child(5),
+.dashboard-preview-table.is-compact-schedule td:nth-child(5),
+.dashboard-preview-table.is-compact-schedule th:nth-child(6),
+.dashboard-preview-table.is-compact-schedule td:nth-child(6) { min-width: 78px !important; }
+.dashboard-preview-table.is-compact-schedule th:nth-child(7),
+.dashboard-preview-table.is-compact-schedule td:nth-child(7) { min-width: 125px !important; }
+
+/* Maintenance: longer text fields get room; short status/time fields stay compact. */
+.dashboard-preview-table.is-maintenance th:nth-child(1),
+.dashboard-preview-table.is-maintenance td:nth-child(1) { min-width: 145px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(2),
+.dashboard-preview-table.is-maintenance td:nth-child(2) { min-width: 120px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(3),
+.dashboard-preview-table.is-maintenance td:nth-child(3) { min-width: 165px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(4),
+.dashboard-preview-table.is-maintenance td:nth-child(4) { min-width: 115px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(5),
+.dashboard-preview-table.is-maintenance td:nth-child(5) { min-width: 120px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(6),
+.dashboard-preview-table.is-maintenance td:nth-child(6) { min-width: 125px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(7),
+.dashboard-preview-table.is-maintenance td:nth-child(7) { min-width: 155px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(8),
+.dashboard-preview-table.is-maintenance td:nth-child(8),
+.dashboard-preview-table.is-maintenance th:nth-child(9),
+.dashboard-preview-table.is-maintenance td:nth-child(9) { min-width: 78px !important; }
+.dashboard-preview-table.is-maintenance th:nth-child(10),
+.dashboard-preview-table.is-maintenance td:nth-child(10) { min-width: 105px !important; }
 
 @media (max-width: 1100px) {
   .dashboard-preview-modal {
@@ -16153,6 +16193,13 @@ td select:focus,
 
   .dashboard-preview-table th,
   .dashboard-preview-table td {
-    min-width: 110px !important;
+    min-width: 0 !important;
   }
+
+  .dashboard-preview-table.is-full-schedule th:nth-child(1),
+  .dashboard-preview-table.is-full-schedule td:nth-child(1),
+  .dashboard-preview-table.is-compact-schedule th:nth-child(1),
+  .dashboard-preview-table.is-compact-schedule td:nth-child(1),
+  .dashboard-preview-table.is-maintenance th:nth-child(1),
+  .dashboard-preview-table.is-maintenance td:nth-child(1) { min-width: 130px !important; }
 }
