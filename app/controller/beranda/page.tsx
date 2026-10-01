@@ -306,6 +306,8 @@ export default async function ControllerPenugasanDashboardPage({
       destination?: string | null;
       driving_at?: string | null;
       arrived_at?: string | null;
+      std?: string | null;
+      sta?: string | null;
       odometer_start?: number | null;
       odometer_end?: number | null;
       executor_snapshot?: Record<string, any> | null;
@@ -349,6 +351,8 @@ export default async function ControllerPenugasanDashboardPage({
         null,
       atd,
       ata,
+      std: task?.std ?? null,
+      sta: task?.sta ?? null,
       distance,
       drivingDurationMs,
     };
@@ -505,6 +509,7 @@ export default async function ControllerPenugasanDashboardPage({
           label="Schedule Hari Ini"
           value={totalSchedulesToday ?? 0}
           subtitle={`Category ${todayScheduleCategory}`}
+          timeMode="planned"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Belum Ditugasin"
@@ -514,6 +519,7 @@ export default async function ControllerPenugasanDashboardPage({
           label="Belum Ditugasin"
           value={taskStatusCounts.Unassigned}
           subtitle={`${percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total`}
+          timeMode="planned"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Ditugasin"
@@ -523,6 +529,7 @@ export default async function ControllerPenugasanDashboardPage({
           label="Udah Ditugasin"
           value={taskStatusCounts.Assigned}
           subtitle={`${percentage(taskStatusCounts.Assigned, totalSchedulesToday)}% dari total`}
+          timeMode="planned"
         />
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Diterima"
@@ -559,6 +566,7 @@ export default async function ControllerPenugasanDashboardPage({
           label="Dibatalin"
           value={taskStatusCounts.Canceled}
           subtitle={`${percentage(taskStatusCounts.Canceled, totalSchedulesToday)}% dari total`}
+          timeMode="planned"
         />
       </section>
 
