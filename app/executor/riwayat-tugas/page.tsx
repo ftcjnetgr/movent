@@ -13,7 +13,7 @@ function formatDateTime(value: string | null) {
 
 export default async function ExecutorHistoryPage() {
   const profile = await getCurrentProfile();
-  if (!["Executor", "Super User"].includes(profile.role)) notFound();
+  if (!["Executor", "Delivery", "Pickup", "Super User"].includes(profile.role)) notFound();
   const admin = createAdminClient();
   let query = admin
     .from("tasks")
@@ -23,7 +23,7 @@ export default async function ExecutorHistoryPage() {
     .eq("status", "Completed")
     .order("completed_at", { ascending: false });
 
-  if (profile.role === "Executor")
+  if (["Executor", "Delivery", "Pickup"].includes(profile.role))
     query = query.eq("executor_nik", profile.username);
 
   const { data: tasks } = await query;
