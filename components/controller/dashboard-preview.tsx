@@ -31,6 +31,7 @@ type Props = {
   dotClass?: "blue" | "green" | "red";
   mode?: "schedule" | "maintenance";
   timeMode?: "actual" | "planned";
+  displayStatus?: string;
 };
 
 function numberLabel(value: number | null) {
@@ -73,6 +74,7 @@ export default function DashboardPreviewButton({
   dotClass = "blue",
   mode = "schedule",
   timeMode = "actual",
+  displayStatus,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -193,7 +195,7 @@ export default function DashboardPreviewButton({
                   {items.map((item, index) => (
                     <tr key={item.scheduleId + "-" + index}>
                       <td><strong>{item.scheduleId}</strong></td>
-                      <td>{item.status}</td>
+                      <td>{displayStatus ?? item.status}</td>
                       {mode === "maintenance" ? (
                         <>
                           <td>{item.startPoint ?? "-"}</td>
