@@ -213,12 +213,7 @@ export default async function ControllerPenugasanDashboardPage({
     arrivalMetrics.onTime,
     arrivalMetrics.total,
   );
-  const averageDurationMinutes =
-    durationMetrics.count > 0
-      ? Math.round(durationMetrics.totalMs / durationMetrics.count / 60000)
-      : 0;
-
-  const [{ count: totalMaintenance }, { count: totalSchedulesToday }] =
+  const [{ count: totalMaintenance }, { data: todaySchedules }] =
     await Promise.all([
       admin
         .from("ticketings")
@@ -227,25 +222,61 @@ export default async function ControllerPenugasanDashboardPage({
         .lt("created_at", rangeEnd),
       admin
         .from("schedules")
-        .select("schedule_id", { count: "exact", head: true })
+        .select("schedule_id")
         .eq("status", "Active")
         .eq("schedule_day", todayDay)
         .eq("category", todayScheduleCategory),
     ]);
-  const totalAllActivities = totalTasks + (totalMaintenance ?? 0);
+
+  const todayScheduleIds = (todaySchedules ?? []).map(
+    (schedule) => schedule.schedule_id,
+  );
+
+  const { data: todayScheduleTasks } = todayScheduleIds.length
+    ? await admin
+        .from("tasks")
+        .select("schedule_id, status, accepted_at, created_at")
+        .in("schedule_id", todayScheduleIds)
+        .order("created_at", { ascending: false })
+    : { data: [] };
+
+  const latestTaskBySchedule = new Map<
+    string,
+    {
+      status: string;
+      accepted_at: string | null;
+      created_at: string;
+    }
+  >();
+
+  for (const task of todayScheduleTasks ?? []) {
+    if (!task.schedule_id || latestTaskBySchedule.has(task.schedule_id)) continue;
+    latestTaskBySchedule.set(task.schedule_id, task);
+  }
+
+  const totalSchedulesToday = todayScheduleIds.length;
 
   const taskStatusCounts = {
-    Assigned: activities.filter((task) => displayTaskStatus(task) === "Assigned")
-      .length,
-    Confirmed: activities.filter((task) => displayTaskStatus(task) === "Confirmed")
-      .length,
-    Driving: activities.filter((task) => displayTaskStatus(task) === "Driving")
-      .length,
-    Completed: activities.filter((task) => displayTaskStatus(task) === "Completed")
-      .length,
-    Canceled: activities.filter((task) => displayTaskStatus(task) === "Canceled")
-      .length,
+    Unassigned: todayScheduleIds.filter(
+      (scheduleId) => !latestTaskBySchedule.has(scheduleId),
+    ).length,
+    Assigned: 0,
+    Confirmed: 0,
+    Driving: 0,
+    Completed: 0,
+    Canceled: 0,
   };
+
+  for (const task of latestTaskBySchedule.values()) {
+    const status = displayTaskStatus(task);
+    if (status in taskStatusCounts) {
+      taskStatusCounts[status as keyof typeof taskStatusCounts] += 1;
+    } else {
+      taskStatusCounts.Unassigned += 1;
+    }
+  }
+
+  const totalAllActivities = totalTasks + (totalMaintenance ?? 0);
 
   const activeTasks =
     taskStatusCounts.Assigned +
@@ -328,6 +359,17 @@ export default async function ControllerPenugasanDashboardPage({
           </div>
         </div>
 
+        <div className="super-kpi-card kpi-gray status-kpi-card status-kpi-unassigned">
+          <div className="super-kpi-icon">
+            <StatusIcon status="" size={20} />
+          </div>
+          <div className="super-kpi-content">
+            <span>Belum Ditugasin</span>
+            <strong>{taskStatusCounts.Unassigned}</strong>
+            <small>{percentage(taskStatusCounts.Unassigned, totalSchedulesToday)}% dari total schedule</small>
+          </div>
+        </div>
+
         <div className="super-kpi-card kpi-blue status-kpi-card status-kpi-assigned">
           <div className="super-kpi-icon">
             <StatusIcon status="Assigned" size={20} />
@@ -335,7 +377,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Ditugasin</span>
             <strong>{taskStatusCounts.Assigned}</strong>
-            <small>{percentage(taskStatusCounts.Assigned, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(taskStatusCounts.Assigned, totalAllActivities)}% dari total schedule</small>
           </div>
         </div>
 
@@ -346,7 +388,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{taskStatusCounts.Confirmed}</strong>
-            <small>{percentage(taskStatusCounts.Confirmed, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(taskStatusCounts.Confirmed, totalAllActivities)}% dari total schedule</small>
           </div>
         </div>
 
@@ -357,7 +399,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Jalan</span>
             <strong>{taskStatusCounts.Driving}</strong>
-            <small>{percentage(taskStatusCounts.Driving, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(taskStatusCounts.Driving, totalAllActivities)}% dari total schedule</small>
           </div>
         </div>
 
@@ -368,7 +410,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{taskStatusCounts.Completed}</strong>
-            <small>{percentage(taskStatusCounts.Completed, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(taskStatusCounts.Completed, totalAllActivities)}% dari total schedule</small>
           </div>
         </div>
 
@@ -379,7 +421,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-kpi-content">
             <span>Dibatalin</span>
             <strong>{taskStatusCounts.Canceled}</strong>
-            <small>{percentage(taskStatusCounts.Canceled, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(taskStatusCounts.Canceled, totalAllActivities)}% dari total schedule</small>
           </div>
         </div>
       </section>
@@ -474,7 +516,7 @@ export default async function ControllerPenugasanDashboardPage({
           <div className="super-panel-heading">
             <div>
               <h2>Ketepatan STD &amp; STA</h2>
-              <p>Lihat berangkat, sampai, dan durasi dari semua tugas di periode ini.</p>
+              <p>Lihat ketepatan berangkat dan sampai dari semua tugas di periode ini.</p>
             </div>
           </div>
           <div className="super-activity-list">
