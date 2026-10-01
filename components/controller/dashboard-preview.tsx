@@ -126,7 +126,8 @@ export default function DashboardPreviewButton({
         )}
       </button>
 
-      {open ? createPortal(
+      {open
+        ? createPortal(
         <div
           className="dashboard-preview-backdrop"
           role="presentation"
@@ -218,13 +219,15 @@ export default function DashboardPreviewButton({
                         Belum ada data di sini.
                       </td>
                     </tr>
-                  , document.body) : null}
+                  ) : null}
                 </tbody>
               </table>
             </div>
           </section>
-        </div>
-      ) : null}
+        </div>,
+        document.body
+      )
+        : null}
     </>
   );
 }
