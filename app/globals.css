@@ -16031,3 +16031,18 @@ td select:focus,
   white-space: nowrap !important;
   font-size: 7px !important;
 }
+
+/* DASHBOARD SUMMARY CARDS — left aligned, vertically centered like Perbaikan */
+.super-dashboard .assignment-kpi-grid .super-kpi-card,
+.super-dashboard .maintenance-kpi-grid .super-kpi-card {
+  justify-content: flex-start !important;
+  align-items: center !important;
+  text-align: left !important;
+}
+
+.super-dashboard .assignment-kpi-grid .super-kpi-content,
+.super-dashboard .maintenance-kpi-grid .super-kpi-content {
+  align-self: center !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
