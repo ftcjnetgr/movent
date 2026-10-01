@@ -15835,3 +15835,44 @@ td select:focus,
 .super-dashboard .legend-requested {
   background: #94a3b8 !important;
 }
+
+
+/* CONTROLLER DASHBOARD — ACTIVITY ROW ALIGNMENT FINAL */
+.super-dashboard .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) 38px 34px !important;
+  grid-template-rows: auto !important;
+  align-items: center !important;
+}
+.super-dashboard .dashboard-preview-activity-row .activity-dot {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+.super-dashboard .dashboard-preview-activity-row > span:nth-child(2) {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  align-self: center !important;
+}
+.super-dashboard .dashboard-preview-activity-row .activity-meta {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  align-self: center !important;
+  justify-self: start !important;
+  text-align: left !important;
+}
+.super-dashboard .dashboard-preview-activity-row .activity-values {
+  grid-column: 4 !important;
+  grid-row: 1 !important;
+  align-self: center !important;
+  justify-self: start !important;
+  text-align: left !important;
+}
+.super-dashboard .dashboard-preview-activity-row .activity-meta > span,
+.super-dashboard .dashboard-preview-activity-row .activity-values > span {
+  display: block !important;
+  line-height: 1.35 !important;
+}
+.super-dashboard .dashboard-preview-activity-row strong,
+.super-dashboard .dashboard-preview-activity-row time {
+  display: none !important;
+}
