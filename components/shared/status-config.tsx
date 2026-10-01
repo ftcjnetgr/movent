@@ -68,6 +68,13 @@ export function StatusIcon({
   };
 
   switch (status) {
+    case "Unassigned":
+      return (
+        <svg {...common}>
+          <path d="M5 7h14v12H5z" />
+          <path d="M8 7V5h8v2M8 11h8M8 15h5" />
+        </svg>
+      );
     case "Requested":
       return (
         <svg {...common}>
