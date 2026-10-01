@@ -423,7 +423,7 @@ export default async function ControllerTicketingDashboardPage({
               items={maintenancePerformanceItems.onTime}
               mode="maintenance"
               variant="activity"
-              dotClass="blue"
+              dotClass="green"
               label="perbaikannya tepat waktu"
               value={maintenancePerformance.onTime}
               subtitle={maintenanceOnTimePercentage + "%"}
