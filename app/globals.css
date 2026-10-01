@@ -1391,10 +1391,19 @@ tbody tr:hover td {
 .super-chart-panel,
 .super-fleet-panel,
 .super-info-panel {
-  min-height: 260px;
+  min-height: 500px;
+}
+.super-chart-panel {
+  display: flex;
+  flex-direction: column;
+}
+.super-chart-panel .super-chart {
+  flex: 1;
+  min-height: 400px;
+  height: auto;
 }
 .super-chart {
-  height: 200px;
+  height: 400px;
   display: grid;
   grid-template-columns: 24px 1fr;
   gap: 7px;
