@@ -15324,23 +15324,39 @@ td select:focus,
 /* CONTROLLER DASHBOARD — CLICKABLE PREVIEW */
 .dashboard-preview-activity-row {
   width: 100%;
+  min-width: 0;
   border: 0;
   border-bottom: 1px solid #eef2f6;
   background: transparent;
   display: grid;
-  grid-template-columns: 8px 1fr auto;
+  grid-template-columns: 8px minmax(0, 1fr) 38px 28px;
   align-items: center;
   gap: 7px;
   padding: 9px 0;
   color: var(--text-2);
   font: inherit;
   font-size: 9px;
+  line-height: 1.35;
   text-align: left;
   cursor: pointer;
 }
 .dashboard-preview-activity-row:last-child { border-bottom: 0; }
 .dashboard-preview-activity-row:hover { background: #f8faff; }
 .dashboard-preview-activity-row strong { color: var(--text); }
+.dashboard-preview-activity-row .activity-meta,
+.dashboard-preview-activity-row .activity-values {
+  display: grid;
+  gap: 2px;
+  white-space: nowrap;
+}
+.dashboard-preview-activity-row .activity-meta {
+  color: var(--text-2);
+}
+.dashboard-preview-activity-row .activity-values {
+  color: var(--text);
+  font-weight: 600;
+  text-align: left;
+}
 
 .dashboard-preview-kpi {
   width: 100%;
