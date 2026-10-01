@@ -15455,3 +15455,33 @@ td select:focus,
 .super-dashboard .super-activity-panel { min-height: 0 !important; }
 .super-dashboard .super-chart-panel .super-chart { min-height: 0 !important; height: 340px !important; }
 .super-dashboard .super-activity-panel { height: 100% !important; align-self: stretch !important; }
+
+
+/* CONTROLLER DASHBOARD — CHART LABEL + 5 : 2 GRID */
+.super-dashboard .super-dashboard-main-grid {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) !important;
+}
+
+.super-dashboard .super-chart-stack {
+  position: relative;
+}
+
+.super-dashboard .super-chart-value-label {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  margin-bottom: 3px;
+  color: #64748b;
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (max-width: 1180px) {
+  .super-dashboard .super-dashboard-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
