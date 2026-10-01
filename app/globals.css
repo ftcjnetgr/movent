@@ -15485,3 +15485,52 @@ td select:focus,
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* CONTROLLER DASHBOARD — FIX PREVIEW BUTTON THEME + DESKTOP SPLIT */
+.super-dashboard .dashboard-preview-kpi {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: #fff !important;
+  border: 1px solid var(--line) !important;
+  border-top-width: 3px !important;
+  color: var(--text) !important;
+  box-shadow: var(--shadow) !important;
+}
+.super-dashboard .dashboard-preview-kpi:hover {
+  background: #fff !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+  box-shadow: var(--shadow-hover) !important;
+}
+.super-dashboard .dashboard-preview-activity-row {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  min-height: 46px !important;
+  padding: 9px 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #eef2f6 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--text-2) !important;
+  box-shadow: none !important;
+}
+.super-dashboard .dashboard-preview-activity-row:hover {
+  background: #f8faff !important;
+  color: var(--text-2) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.super-dashboard .dashboard-preview-activity-row strong {
+  color: var(--text) !important;
+}
+
+/* Keep the requested 5 : 2 layout on normal desktop widths. */
+.super-dashboard .super-dashboard-main-grid {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) !important;
+}
+@media (max-width: 820px) {
+  .super-dashboard .super-dashboard-main-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
