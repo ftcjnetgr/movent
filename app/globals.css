@@ -15675,3 +15675,16 @@ td select:focus,
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+
+
+/* CONTROLLER PENUGASAN — RAPATKAN TYPO SUMMARY CARD */
+.super-dashboard .assignment-kpi-grid .dashboard-preview-kpi .super-kpi-content > span {
+  font-size: 8px !important;
+}
+.super-dashboard .assignment-kpi-grid .dashboard-preview-kpi .super-kpi-content > strong {
+  font-size: 24px !important;
+}
+.super-dashboard .assignment-kpi-grid .dashboard-preview-kpi .super-kpi-content > small {
+  font-size: 8px !important;
+  font-weight: 400 !important;
+}
