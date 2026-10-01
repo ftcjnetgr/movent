@@ -15662,3 +15662,15 @@ td select:focus,
     min-height: 260px !important;
   }
 }
+
+
+/* CONTROLLER PERBAIKAN — PERCENTAGE DI KETEPATAN */
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) auto auto !important;
+}
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row time {
+  color: var(--text-2);
+  font-size: 9px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
