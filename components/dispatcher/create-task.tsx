@@ -166,7 +166,6 @@ export default function DispatcherCreateTask({
     });
   }, [schedules]);
 
-
   useEffect(() => {
     if (!query.trim()) {
       setOpenGroups(new Set());
@@ -557,7 +556,6 @@ export default function DispatcherCreateTask({
           </form>
         </div>
       )}
-
 
       {showAssignmentResult && confirmState.result ? (
         <div
