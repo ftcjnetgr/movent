@@ -156,6 +156,8 @@ export default async function ControllerTicketingDashboardPage({
     fleet: ticket.fleet_plat_number,
     atd: ticket.created_at,
     ata: ticket.completed_at,
+    std: null,
+    sta: null,
     distance: null,
     drivingDurationMs:
       ticket.completed_at
