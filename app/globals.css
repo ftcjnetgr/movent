@@ -15213,3 +15213,18 @@ td select:focus,
 @media(max-width:820px){
   .extra-schedule-card{padding:12px}
 }
+
+.password-page-first {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.password-page-first .password-card {
+  width: min(100%, 780px);
+}
+@media (max-width: 680px) {
+  .password-page-first {
+    padding: 16px;
+  }
+}
