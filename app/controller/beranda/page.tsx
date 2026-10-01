@@ -223,7 +223,7 @@ export default async function ControllerPenugasanDashboardPage({
         .lt("created_at", rangeEnd),
       admin
         .from("schedules")
-        .select("schedule_id, start_point, destination")
+        .select("schedule_id, start_point, destination, std")
         .eq("status", "Active")
         .eq("schedule_day", todayDay)
         .eq("category", todayScheduleCategory),
@@ -433,8 +433,23 @@ export default async function ControllerPenugasanDashboardPage({
       );
     });
 
+    const unassigned = (todaySchedules ?? []).filter((schedule) => {
+      if (latestTaskBySchedule.has(schedule.schedule_id)) return false;
+      if (!schedule.std) return false;
+      return (
+        new Date(schedule.std)
+          .toLocaleString("en-US", {
+            timeZone: "Asia/Jakarta",
+            hour: "2-digit",
+            hour12: false,
+          })
+          .slice(0, 2) === String(hour).padStart(2, "0")
+      );
+    }).length;
+
     return {
       hour,
+      unassigned,
       assigned: rows.filter((task) => displayTaskStatus(task) === "Assigned")
         .length,
       confirmed: rows.filter((task) => displayTaskStatus(task) === "Confirmed")
@@ -451,6 +466,7 @@ export default async function ControllerPenugasanDashboardPage({
     1,
     ...byHour.map(
       (item) =>
+        item.unassigned +
         item.assigned +
         item.confirmed +
         item.driving +
@@ -502,7 +518,7 @@ export default async function ControllerPenugasanDashboardPage({
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Ditugasin"
           items={statusPreviewItems.Assigned}
-          className="super-kpi-card kpi-blue status-kpi-card status-kpi-assigned"
+          className="super-kpi-card kpi-blue status-kpi-card status-kpi-assigned kpi-yellow"
           iconStatus="Assigned"
           label="Udah Ditugasin"
           value={taskStatusCounts.Assigned}
@@ -511,7 +527,7 @@ export default async function ControllerPenugasanDashboardPage({
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Diterima"
           items={statusPreviewItems.Confirmed}
-          className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed"
+          className="super-kpi-card kpi-cyan status-kpi-card status-kpi-confirmed kpi-orange"
           iconStatus="Confirmed"
           label="Udah Diterima"
           value={taskStatusCounts.Confirmed}
@@ -520,7 +536,7 @@ export default async function ControllerPenugasanDashboardPage({
         <DashboardPreviewButton
           title="Pratinjau Schedule — Lagi Jalan"
           items={statusPreviewItems.Driving}
-          className="super-kpi-card kpi-orange status-kpi-card status-kpi-driving"
+          className="super-kpi-card kpi-orange status-kpi-card status-kpi-driving kpi-blue"
           iconStatus="Driving"
           label="Lagi Jalan"
           value={taskStatusCounts.Driving}
@@ -529,7 +545,7 @@ export default async function ControllerPenugasanDashboardPage({
         <DashboardPreviewButton
           title="Pratinjau Schedule — Udah Selesai"
           items={statusPreviewItems.Completed}
-          className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed"
+          className="super-kpi-card kpi-purple status-kpi-card status-kpi-completed kpi-green"
           iconStatus="Completed"
           label="Udah Selesai"
           value={taskStatusCounts.Completed}
@@ -557,6 +573,9 @@ export default async function ControllerPenugasanDashboardPage({
               </p>
             </div>
             <div className="super-chart-legend">
+              <span>
+                <i className="legend-unassigned" /> Belum Ditugasin
+              </span>
               <span>
                 <i className="legend-assigned" /> Udah Ditugasin
               </span>
@@ -589,7 +608,8 @@ export default async function ControllerPenugasanDashboardPage({
                       style={{
                         bottom:
                           String(
-                            ((item.assigned +
+                            ((item.unassigned +
+                              item.assigned +
                               item.confirmed +
                               item.driving +
                               item.completed +
@@ -600,13 +620,22 @@ export default async function ControllerPenugasanDashboardPage({
                       }}
                     >
                       {new Intl.NumberFormat("id-ID").format(
-                        item.assigned +
+                        item.unassigned +
+                          item.assigned +
                           item.confirmed +
                           item.driving +
                           item.completed +
                           item.canceled,
                       )}
                     </strong>
+                    {item.unassigned > 0 ? (
+                      <span
+                        className="bar-unassigned"
+                        style={{
+                          height: String((item.unassigned / maxHour) * 100) + "%",
+                        }}
+                      />
+                    ) : null}
                     {item.assigned > 0 ? (
                       <span
                         className="bar-assigned"
