@@ -13,6 +13,8 @@ export type DashboardPreviewItem = {
   fleet: string | null;
   atd: string | null;
   ata: string | null;
+  std: string | null;
+  sta: string | null;
   distance: number | null;
   drivingDurationMs: number | null;
 };
@@ -28,6 +30,7 @@ type Props = {
   variant?: "kpi" | "activity";
   dotClass?: "blue" | "green" | "red";
   mode?: "schedule" | "maintenance";
+  timeMode?: "actual" | "planned";
 };
 
 function numberLabel(value: number | null) {
@@ -69,6 +72,7 @@ export default function DashboardPreviewButton({
   variant = "kpi",
   dotClass = "blue",
   mode = "schedule",
+  timeMode = "actual",
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -178,8 +182,8 @@ export default function DashboardPreviewButton({
                       <th>Destination</th>
                       <th>Executor</th>
                       <th>Armada</th>
-                      <th>ATD</th>
-                      <th>ATA</th>
+                      <th>{timeMode === "planned" ? "STD" : "ATD"}</th>
+                      <th>{timeMode === "planned" ? "STA" : "ATA"}</th>
                       <th>Jarak Tempuh</th>
                       <th>Durasi Mengemudi</th>
                     </tr>
@@ -205,8 +209,8 @@ export default function DashboardPreviewButton({
                           <td>{item.destination ?? "-"}</td>
                           <td>{item.executor ?? "-"}</td>
                           <td>{item.fleet ?? "-"}</td>
-                          <td>{timeLabel(item.atd)}</td>
-                          <td>{timeLabel(item.ata)}</td>
+                          <td>{timeLabel(timeMode === "planned" ? item.std : item.atd)}</td>
+                          <td>{timeLabel(timeMode === "planned" ? item.sta : item.ata)}</td>
                           <td>{item.distance === null ? "-" : numberLabel(item.distance) + " km"}</td>
                           <td>{durationLabel(item.drivingDurationMs)}</td>
                         </>
