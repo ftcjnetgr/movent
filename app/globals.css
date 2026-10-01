@@ -16046,3 +16046,54 @@ td select:focus,
   align-items: flex-start !important;
   text-align: left !important;
 }
+
+/* ALL DASHBOARD PREVIEWS — fixed to viewport + standard close button */
+.dashboard-preview-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-preview-modal {
+  width: min(1280px, calc(100vw - 48px)) !important;
+  max-width: calc(100vw - 48px) !important;
+  margin: 0 !important;
+  position: relative !important;
+}
+
+.dashboard-preview-head {
+  min-height: 72px !important;
+  padding: 16px 22px !important;
+  align-items: flex-start !important;
+}
+
+.dashboard-preview-close {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  flex: 0 0 40px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 11px !important;
+  background: #4f46e5 !important;
+  color: #fff !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.18) !important;
+}
+
+.dashboard-preview-close:hover {
+  background: #4338ca !important;
+  color: #fff !important;
+  border: 0 !important;
+  transform: none !important;
+}
