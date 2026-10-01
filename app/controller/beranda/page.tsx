@@ -699,6 +699,7 @@ export default async function ControllerPenugasanDashboardPage({
               dotClass="blue"
               label="Berangkatnya pas"
               value={departureMetrics.onTime}
+              subtitle={`${departurePerformance}%`}
             />
             <DashboardPreviewButton
               title="Pratinjau — Berangkatnya Telat"
@@ -707,38 +708,7 @@ export default async function ControllerPenugasanDashboardPage({
               dotClass="red"
               label="Berangkatnya telat"
               value={departureMetrics.late}
-            />
-            <DashboardPreviewButton
-              title="Pratinjau — Sampainya Pas"
-              items={arrivalOnTimePreview}
-              variant="activity"
-              dotClass="blue"
-              label="Sampainya pas"
-              value={arrivalMetrics.onTime}
-            />
-            <DashboardPreviewButton
-              title="Pratinjau — Sampainya Telat"
-              items={arrivalLatePreview}
-              variant="activity"
-              dotClass="red"
-              label="Sampainya telat"
-              value={arrivalMetrics.late}
-            />
-            <DashboardPreviewButton
-              title="Pratinjau — Yang Berangkatnya Pas"
-              items={departureOnTimePreview}
-              variant="activity"
-              dotClass="blue"
-              label="Yang berangkatnya pas"
-              value={`${departurePerformance}%`}
-            />
-            <DashboardPreviewButton
-              title="Pratinjau — Yang Sampainya Pas"
-              items={arrivalOnTimePreview}
-              variant="activity"
-              dotClass="blue"
-              label="Yang sampainya pas"
-              value={`${arrivalPerformance}%`}
+              subtitle={`${percentage(departureMetrics.late, departureMetrics.total)}%`}
             />
           </div>
         </div>
