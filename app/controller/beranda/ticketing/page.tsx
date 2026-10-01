@@ -223,7 +223,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diajuin</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Requested ?? 0, totalMaintenance)}% dari total pengajuan</small>
+            <small>{percentage(data.ticketCounts.Requested ?? 0, totalMaintenance)}% dari total</small>
           </div>
         </div>
 
@@ -234,7 +234,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Confirmed ?? 0, totalMaintenance)}% dari total pengajuan</small>
+            <small>{percentage(data.ticketCounts.Confirmed ?? 0, totalMaintenance)}% dari total</small>
           </div>
         </div>
 
@@ -245,7 +245,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Dikerjain</span>
             <strong>{data.ticketCounts["In Progress"] ?? 0}</strong>
-            <small>{percentage(data.ticketCounts["In Progress"] ?? 0, totalMaintenance)}% dari total pengajuan</small>
+            <small>{percentage(data.ticketCounts["In Progress"] ?? 0, totalMaintenance)}% dari total</small>
           </div>
         </div>
 
@@ -256,7 +256,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{data.ticketCounts.Completed ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Completed ?? 0, totalMaintenance)}% dari total pengajuan</small>
+            <small>{percentage(data.ticketCounts.Completed ?? 0, totalMaintenance)}% dari total</small>
           </div>
         </div>
 
@@ -267,7 +267,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Dibatalin</span>
             <strong>{data.ticketCounts.Canceled ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Canceled ?? 0, totalMaintenance)}% dari total pengajuan</small>
+            <small>{percentage(data.ticketCounts.Canceled ?? 0, totalMaintenance)}% dari total</small>
           </div>
         </div>
       </section>
