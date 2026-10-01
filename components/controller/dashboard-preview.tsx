@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { StatusIcon } from "@/components/shared/status-config";
 
 export type DashboardPreviewItem = {
@@ -125,7 +126,7 @@ export default function DashboardPreviewButton({
         )}
       </button>
 
-      {open ? (
+      {open ? createPortal(
         <div
           className="dashboard-preview-backdrop"
           role="presentation"
@@ -217,7 +218,7 @@ export default function DashboardPreviewButton({
                         Belum ada data di sini.
                       </td>
                     </tr>
-                  ) : null}
+                  , document.body) : null}
                 </tbody>
               </table>
             </div>
