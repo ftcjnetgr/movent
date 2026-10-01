@@ -82,21 +82,6 @@ export default async function ControllerTicketingDashboardPage({
     0,
   );
 
-  const { data: dispatcherProfiles } = await admin
-    .from("user_profiles")
-    .select("id")
-    .eq("role", "Dispatcher");
-  const dispatcherIds = (dispatcherProfiles ?? []).map((item) => item.id);
-  const { count: totalAssignments } = dispatcherIds.length
-    ? await admin
-        .from("tasks")
-        .select("transaction_id", { count: "exact", head: true })
-        .in("assigned_by", dispatcherIds)
-        .not("executor_nik", "is", null)
-        .gte("created_at", rangeStart)
-        .lt("created_at", rangeEnd)
-    : { count: 0 };
-  const totalAllActivities = totalMaintenance + (totalAssignments ?? 0);
   const maintenanceAging = new Map(
     (maintenanceListResult.data ?? []).map((item) => [
       item.maintenance_list,
@@ -225,9 +210,9 @@ export default async function ControllerTicketingDashboardPage({
             <StatusIcon status="" size={20} />
           </div>
           <div className="super-kpi-content">
-            <span>Semua Perbaikan</span>
+            <span>Total Pengajuan Perbaikan</span>
             <strong>{totalMaintenance}</strong>
-            <small>Total perbaikan</small>
+            <small>Semua pengajuan di periode ini</small>
           </div>
         </div>
 
@@ -238,7 +223,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diajuin</span>
             <strong>{data.ticketCounts.Requested ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Requested ?? 0, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(data.ticketCounts.Requested ?? 0, totalMaintenance)}% dari total pengajuan</small>
           </div>
         </div>
 
@@ -249,7 +234,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Diterima</span>
             <strong>{data.ticketCounts.Confirmed ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Confirmed ?? 0, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(data.ticketCounts.Confirmed ?? 0, totalMaintenance)}% dari total pengajuan</small>
           </div>
         </div>
 
@@ -260,7 +245,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Lagi Dikerjain</span>
             <strong>{data.ticketCounts["In Progress"] ?? 0}</strong>
-            <small>{percentage(data.ticketCounts["In Progress"] ?? 0, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(data.ticketCounts["In Progress"] ?? 0, totalMaintenance)}% dari total pengajuan</small>
           </div>
         </div>
 
@@ -271,7 +256,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Udah Selesai</span>
             <strong>{data.ticketCounts.Completed ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Completed ?? 0, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(data.ticketCounts.Completed ?? 0, totalMaintenance)}% dari total pengajuan</small>
           </div>
         </div>
 
@@ -282,7 +267,7 @@ export default async function ControllerTicketingDashboardPage({
           <div className="super-kpi-content">
             <span>Dibatalin</span>
             <strong>{data.ticketCounts.Canceled ?? 0}</strong>
-            <small>{percentage(data.ticketCounts.Canceled ?? 0, totalAllActivities)}% dari semua aktivitas</small>
+            <small>{percentage(data.ticketCounts.Canceled ?? 0, totalMaintenance)}% dari total pengajuan</small>
           </div>
         </div>
       </section>
