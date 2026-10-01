@@ -255,6 +255,7 @@ export default async function ControllerTicketingDashboardPage({
           label="Total Perbaikan"
           value={totalMaintenance}
           subtitle="Semua pengajuan"
+          displayStatus="Semua Perbaikan"
         />
 
         <DashboardPreviewButton
@@ -266,6 +267,7 @@ export default async function ControllerTicketingDashboardPage({
           label="Belum Diterima"
           value={maintenanceStatusCounts.Requested}
           subtitle={percentage(maintenanceStatusCounts.Requested, totalMaintenance) + "% dari total"}
+          displayStatus="Belum Diterima"
         />
 
         <DashboardPreviewButton
@@ -277,6 +279,7 @@ export default async function ControllerTicketingDashboardPage({
           label="Udah Diterima"
           value={maintenanceStatusCounts.Confirmed}
           subtitle={percentage(maintenanceStatusCounts.Confirmed, totalMaintenance) + "% dari total"}
+          displayStatus="Udah Diterima"
         />
 
         <DashboardPreviewButton
@@ -288,6 +291,7 @@ export default async function ControllerTicketingDashboardPage({
           label="Lagi Dikerjain"
           value={maintenanceStatusCounts["In Progress"]}
           subtitle={percentage(maintenanceStatusCounts["In Progress"], totalMaintenance) + "% dari total"}
+          displayStatus="Lagi Dikerjain"
         />
 
         <DashboardPreviewButton
@@ -299,6 +303,7 @@ export default async function ControllerTicketingDashboardPage({
           label="Udah Selesai"
           value={maintenanceStatusCounts.Completed}
           subtitle={percentage(maintenanceStatusCounts.Completed, totalMaintenance) + "% dari total"}
+          displayStatus="Udah Selesai"
         />
 
         <DashboardPreviewButton
@@ -310,6 +315,7 @@ export default async function ControllerTicketingDashboardPage({
           label="Dibatalin"
           value={maintenanceStatusCounts.Canceled}
           subtitle={percentage(maintenanceStatusCounts.Canceled, totalMaintenance) + "% dari total"}
+          displayStatus="Dibatalin"
         />
       </section>
 
