@@ -8512,10 +8512,12 @@ td select:focus,
   align-items: center !important;
 }
 
-/* Schedule preview: status added while keeping every detail in one line */
+/* Schedule preview: all 10 detail fields stay on one horizontal row */
 .schedule-preview-item {
-  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  grid-template-columns: 1.05fr 1.15fr 1.15fr 0.62fr 0.62fr 0.62fr 0.62fr 0.95fr 0.9fr 0.9fr !important;
   align-items: center !important;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .schedule-preview-item > div {
