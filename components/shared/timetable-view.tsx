@@ -804,10 +804,9 @@ export default function TimetableView({
                 <button
                   key={day.value}
                   type="button"
-                  disabled={view === "realized" && day.value !== todayDay}
+                  disabled={false}
                   className={selectedDay === day.value ? "active" : ""}
                   onClick={() => {
-                    if (view === "realized" && day.value !== todayDay) return;
                     setSelectedDay(day.value);
                     setPoint("");
                   }}
