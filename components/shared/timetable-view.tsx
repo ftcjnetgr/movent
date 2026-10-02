@@ -21,6 +21,8 @@ type Schedule = {
   actualStd?: string | null;
   actualSta?: string | null;
   actualStatus?: string | null;
+  actualExecutor?: string | null;
+  actualFleet?: string | null;
 };
 
 type Task = {
@@ -251,6 +253,12 @@ export default function TimetableView({
         actualSta: actualTask.arrived_at,
         actualStatus: actualTask.status,
         status: actualTask.status,
+        actualExecutor:
+          actualTask.executor_snapshot?.full_name ??
+          actualTask.executor_snapshot?.executor_nik ??
+          actualTask.executor_nik ??
+          null,
+        actualFleet: actualTask.fleet_snapshot?.plat_number ?? null,
       };
     });
   }
@@ -891,13 +899,69 @@ export default function TimetableView({
             <div className="schedule-preview-list">
               {previewSchedules.map((item, index) => (
                 <div
-                  className="schedule-preview-item"
+                  className={`schedule-preview-item ${
+                    previewMode === "realized"
+                      ? "is-realized-preview"
+                      : "is-scheduled-preview"
+                  }`}
                   key={item.schedule_id + "-" + index}
                 >
                   <div>
                     <span>ID Jadwal</span>
                     <strong>{item.schedule_id}</strong>
                   </div>
+                  <div>
+                    <span>Start Point</span>
+                    <strong>{item.start_point || "-"}</strong>
+                  </div>
+                  <div>
+                    <span>Destination</span>
+                    <strong>{item.destination || "-"}</strong>
+                  </div>
+                  {previewMode === "realized" ? (
+                    <>
+                      <div>
+                        <span>Executor</span>
+                        <strong>{item.actualExecutor || "-"}</strong>
+                      </div>
+                      <div>
+                        <span>Armada</span>
+                        <strong>{item.actualFleet || "-"}</strong>
+                      </div>
+                      <div>
+                        <span>STD</span>
+                        <strong>{timeValue(item.std)}</strong>
+                      </div>
+                      <div>
+                        <span>ATD</span>
+                        <strong>{timeValue(item.actualStd ?? null)}</strong>
+                      </div>
+                      <div>
+                        <span>STA</span>
+                        <strong>{timeValue(item.sta)}</strong>
+                      </div>
+                      <div>
+                        <span>ATA</span>
+                        <strong>{timeValue(item.actualSta ?? null)}</strong>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <span>STD</span>
+                        <strong>{timeValue(item.std)}</strong>
+                      </div>
+                      <div>
+                        <span>STA</span>
+                        <strong>{timeValue(item.sta)}</strong>
+                      </div>
+                      <div>
+                        <span>Durasi Perjalanan</span>
+                        <strong>{durationValue(item.std, item.sta)}</strong>
+                      </div>
+                    </>
+                  )}
+                </div>
                   <div>
                     <span>Start Point</span>
                     <strong>{item.start_point || "-"}</strong>
