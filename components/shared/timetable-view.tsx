@@ -274,7 +274,11 @@ export default function TimetableView({
       } as CSSProperties;
     }
 
-    return scheduleDensityStyle(total);
+    return {
+      "--density-background": "rgba(148, 163, 184, 0.16)",
+      "--density-color": "rgba(71, 85, 105, 0.62)",
+      "--density-border": "rgba(148, 163, 184, 0.28)",
+    } as CSSProperties;
   }
 
   const categories = useMemo(() => {
