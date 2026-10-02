@@ -16,44 +16,44 @@ type NavGroup = {
 const navByRole: Record<string, NavGroup[]> = {
   Controller: [
     {
-      label: "Info buat kamu",
+      label: "Perlu Dicek",
       icon: "bell",
-      items: [{ label: "Info buat kamu", href: "/controller/alert", icon: "bell" }],
+      items: [{ label: "Perlu Dicek", href: "/controller/alert", icon: "bell" }],
     },
     {
-      label: "Beranda",
+      label: "Lihat Ringkasan",
       icon: "home",
-      items: [{ label: "Beranda", href: "/controller/beranda", icon: "home" }],
+      items: [{ label: "Lihat Ringkasan", href: "/controller/beranda", icon: "home" }],
     },
     {
-      label: "Jadwal",
+      label: "Cek Jadwal",
       icon: "calendar",
       items: [
-        { label: "Jadwal", href: "/controller/timetable", icon: "calendar" },
+        { label: "Cek Jadwal", href: "/controller/timetable", icon: "calendar" },
       ],
     },
     {
-      label: "Laporan",
+      label: "Tarik Laporan",
       icon: "report",
       items: [
         {
-          label: "Laporan",
+          label: "Tarik Laporan",
           href: "/controller/penarikan-report",
           icon: "report",
         },
       ],
     },
     {
-      label: "Atur akun",
+      label: "Atur Akun",
       icon: "user",
       items: [
-        { label: "Atur akun", href: "/controller/profil", icon: "user" },
+        { label: "Atur Akun", href: "/controller/profil", icon: "user" },
       ],
     },
   ],
   Dispatcher: [
     {
-      label: "Info buat kamu",
+      label: "Perlu Dicek",
       icon: "bell",
       items: [
         {
@@ -80,25 +80,25 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Armada Non TGR",
+      label: "Armada Non-TGR",
       icon: "truck",
       items: [
         {
-          label: "Armada Non TGR",
+          label: "Armada Non-TGR",
           href: "/dispatcher/armada-non-tgr",
           icon: "truck",
         },
       ],
     },
     {
-      label: "Atur akun",
+      label: "Atur Akun",
       icon: "user",
       items: [
-        { label: "Atur akun", href: "/dispatcher/profil", icon: "user" },
+        { label: "Atur Akun", href: "/dispatcher/profil", icon: "user" },
       ],
     },
     {
-      label: "Beranda",
+      label: "Lihat Ringkasan",
       icon: "home",
       items: [
         {
@@ -117,7 +117,7 @@ const navByRole: Record<string, NavGroup[]> = {
   ],
   Executor: [
     {
-      label: "Info buat kamu",
+      label: "Perlu Dicek",
       icon: "bell",
       items: [
         {
@@ -133,11 +133,11 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Tugas kamu",
+      label: "Tugas Kamu",
       icon: "clipboard",
       items: [
         {
-          label: "Tugas kamu",
+          label: "Tugas Kamu",
           href: "/executor/tugas-saya",
           icon: "clipboard",
         },
@@ -155,18 +155,18 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Atur akun",
+      label: "Atur Akun",
       icon: "user",
-      items: [{ label: "Atur akun", href: "/executor/profil", icon: "user" }],
+      items: [{ label: "Atur Akun", href: "/executor/profil", icon: "user" }],
     },
   ],
   Delivery: [
     {
-      label: "Tugas kamu",
+      label: "Tugas Kamu",
       icon: "clipboard",
       items: [
         {
-          label: "Tugas kamu",
+          label: "Tugas Kamu",
           href: "/delivery/tugas-saya",
           icon: "clipboard",
         },
@@ -184,18 +184,18 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Atur akun",
+      label: "Atur Akun",
       icon: "user",
-      items: [{ label: "Atur akun", href: "/delivery/profil", icon: "user" }],
+      items: [{ label: "Atur Akun", href: "/delivery/profil", icon: "user" }],
     },
   ],
   Pickup: [
     {
-      label: "Tugas kamu",
+      label: "Tugas Kamu",
       icon: "clipboard",
       items: [
         {
-          label: "Tugas kamu",
+          label: "Tugas Kamu",
           href: "/pickup/tugas-saya",
           icon: "clipboard",
         },
@@ -213,27 +213,27 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Atur akun",
+      label: "Atur Akun",
       icon: "user",
-      items: [{ label: "Atur akun", href: "/pickup/profil", icon: "user" }],
+      items: [{ label: "Atur Akun", href: "/pickup/profil", icon: "user" }],
     },
   ],
   Maintainer: [
     {
-      label: "Info buat kamu",
+      label: "Perlu Dicek",
       icon: "bell",
       items: [
         {
-          label: "Info buat kamu",
+          label: "Perlu Dicek",
           href: "/maintainer/alert/ticketing-maintenance",
           icon: "bell",
         },
       ],
     },
     {
-      label: "Beranda",
+      label: "Lihat Ringkasan",
       icon: "home",
-      items: [{ label: "Beranda", href: "/maintainer/beranda", icon: "home" }],
+      items: [{ label: "Lihat Ringkasan", href: "/maintainer/beranda", icon: "home" }],
     },
     {
       label: "Perbaikan",
@@ -247,27 +247,27 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Laporan",
+      label: "Tarik Laporan",
       icon: "report",
       items: [
         {
-          label: "Laporan",
+          label: "Tarik Laporan",
           href: "/maintainer/penarikan-report",
           icon: "report",
         },
       ],
     },
     {
-      label: "Atur akun",
+      label: "Atur Akun",
       icon: "user",
       items: [
-        { label: "Atur akun", href: "/maintainer/profil", icon: "user" },
+        { label: "Atur Akun", href: "/maintainer/profil", icon: "user" },
       ],
     },
   ],
   Operation: [
     {
-      label: "Info buat kamu",
+      label: "Perlu Dicek",
       icon: "bell",
       items: [
         {
@@ -283,32 +283,32 @@ const navByRole: Record<string, NavGroup[]> = {
       ],
     },
     {
-      label: "Beranda",
+      label: "Lihat Ringkasan",
       icon: "home",
-      items: [{ label: "Beranda", href: "/operation/beranda", icon: "home" }],
+      items: [{ label: "Lihat Ringkasan", href: "/operation/beranda", icon: "home" }],
     },
     {
-      label: "Permintaan jadwal",
+      label: "Ajukan Jadwal",
       icon: "calendar",
       items: [
         {
-          label: "Permintaan jadwal",
+          label: "Ajukan Jadwal",
           href: "/operation/riwayat-permintaan",
           icon: "history",
         },
       ],
     },
     {
-      label: "Atur akun",
+      label: "Atur Akun",
       icon: "user",
-      items: [{ label: "Atur akun", href: "/operation/profil", icon: "user" }],
+      items: [{ label: "Atur Akun", href: "/operation/profil", icon: "user" }],
     },
   ],
 };
 
 const superUserNav: NavGroup[] = [
   {
-    label: "Info buat kamu",
+    label: "Perlu Dicek",
     icon: "bell",
     items: [
       { label: "Penugasan", href: "/alert/penugasan", icon: "clipboard" },
@@ -320,16 +320,16 @@ const superUserNav: NavGroup[] = [
     ],
   },
   {
-    label: "Beranda",
+    label: "Lihat Ringkasan",
     icon: "home",
-    items: [{ label: "Beranda", href: "/controller/beranda", icon: "home" }],
+    items: [{ label: "Lihat Ringkasan", href: "/controller/beranda", icon: "home" }],
   },
   {
-    label: "Operasional",
+    label: "Atur Operasional",
     icon: "calendar",
     items: [
       {
-        label: "Jadwal",
+        label: "Cek Jadwal",
         href: "/controller/timetable?view=plan",
         icon: "calendar",
       },
@@ -376,14 +376,14 @@ const superUserNav: NavGroup[] = [
         icon: "wrench",
       },
       {
-        label: "Jadwal",
+        label: "Cek Jadwal",
         href: "/super-user/pengelolaan-database?db=schedules",
         icon: "calendar",
       },
     ],
   },
   {
-    label: "Kelola",
+    label: "Kelola Sistem",
     icon: "settings",
     items: [
       {
@@ -404,18 +404,18 @@ const superUserNav: NavGroup[] = [
     ],
   },
   {
-    label: "Laporan",
+    label: "Tarik Laporan",
     icon: "report",
     items: [
       {
-        label: "Laporan",
+        label: "Tarik Laporan",
         href: "/controller/penarikan-report",
         icon: "report",
       },
     ],
   },
   {
-    label: "Atur akun",
+    label: "Atur Akun",
     icon: "settings",
     items: [
       {
@@ -634,7 +634,7 @@ export default function AppShellClient({
     return [
       ...roleNav,
       {
-        label: "Kelola",
+        label: "Kelola Sistem",
         icon: "settings",
         items: [
           {
@@ -770,7 +770,7 @@ export default function AppShellClient({
                     <div className="nav-group-title nav-group-title-static">
                       <span className="nav-icon nav-icon-with-badge">
                         <Icon name={group.icon} />
-                        {group.label === "Info buat kamu" && totalAlertCount > 0 ? (
+                        {group.label === "Perlu Dicek" && totalAlertCount > 0 ? (
                           <span
                             className="alert-nav-dot"
                             aria-label="Ada notifikasi baru"
@@ -793,7 +793,7 @@ export default function AppShellClient({
                           >
                             <span className="nav-icon nav-icon-with-badge">
                               <Icon name={item.icon} />
-                              {group.label === "Info buat kamu" &&
+                              {group.label === "Perlu Dicek" &&
                               alertCountForItem(item.label) > 0 ? (
                                 <span
                                   className="alert-nav-badge"
@@ -823,7 +823,7 @@ export default function AppShellClient({
                   >
                     <span className="nav-icon nav-icon-with-badge">
                       <Icon name={group.items[0].icon} />
-                      {group.label === "Info buat kamu" && totalAlertCount > 0 ? (
+                      {group.label === "Perlu Dicek" && totalAlertCount > 0 ? (
                         <span
                           className="alert-nav-dot"
                           aria-label="Ada notifikasi baru"
@@ -853,7 +853,7 @@ export default function AppShellClient({
                     >
                       <span className="nav-icon nav-icon-with-badge">
                         <Icon name={group.icon} />
-                        {group.label === "Info buat kamu" && totalAlertCount > 0 ? (
+                        {group.label === "Perlu Dicek" && totalAlertCount > 0 ? (
                           <span
                             className="alert-nav-dot"
                             aria-label="Ada notifikasi baru"
