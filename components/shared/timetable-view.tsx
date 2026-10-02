@@ -259,25 +259,23 @@ export default function TimetableView({
     if (view !== "realized") return scheduleDensityStyle(total);
 
     const actualTask = actualTaskBySchedule.get(item.schedule_id);
-    if (actualTask?.status === "Completed") {
+    const palette = scheduleDensityPalette[
+      Math.min(Math.max(total, 1), scheduleDensityPalette.length) - 1
+    ];
+
+    if (actualTask?.status === "Driving" || actualTask?.status === "Completed") {
       return {
-        "--density-background": "#dcfce7",
-        "--density-color": "#15803d",
-        "--density-border": "#86efac",
-      } as CSSProperties;
-    }
-    if (actualTask?.status === "Driving") {
-      return {
-        "--density-background": "#dbeafe",
-        "--density-color": "#1d4ed8",
-        "--density-border": "#93c5fd",
+        "--density-background": palette.background,
+        "--density-color": palette.color,
+        "--density-border": palette.border,
       } as CSSProperties;
     }
 
     return {
-      "--density-background": "rgba(148, 163, 184, 0.16)",
-      "--density-color": "rgba(71, 85, 105, 0.62)",
-      "--density-border": "rgba(148, 163, 184, 0.28)",
+      "--density-background": palette.background,
+      "--density-color": palette.color,
+      "--density-border": palette.border,
+      opacity: "0.42",
     } as CSSProperties;
   }
 
