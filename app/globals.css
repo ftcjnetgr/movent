@@ -16233,3 +16233,62 @@ td select:focus,
 .schedule-view-realized .schedule-route-tabs button:hover {
   transform: translateY(-1px);
 }
+
+/* Account profile: use the full workspace width */
+.profile-settings-content {
+  width: 100%;
+  padding: 26px 30px;
+}
+
+.profile-settings-section {
+  width: 100%;
+  max-width: none;
+}
+
+.profile-settings-section-heading {
+  padding-bottom: 18px;
+}
+
+.profile-settings-section-heading h2 {
+  font-size: 17px;
+}
+
+.profile-settings-section-heading p {
+  font-size: 10px;
+}
+
+.profile-settings-fields {
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 44px;
+}
+
+.profile-settings-field {
+  min-height: 82px;
+  padding: 4px 0;
+}
+
+.profile-settings-field span {
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+.profile-settings-field strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profile-settings-workspace {
+  min-height: 430px;
+}
+
+@media (max-width: 760px) {
+  .profile-settings-content {
+    padding: 20px;
+  }
+
+  .profile-settings-fields {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+}
