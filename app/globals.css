@@ -16212,3 +16212,52 @@ td select:focus,
   .dashboard-preview-table.is-maintenance th:nth-child(1),
   .dashboard-preview-table.is-maintenance td:nth-child(1) { min-width: 130px !important; }
 }
+
+
+/* Timetable filters: cleaner pill-style controls */
+.schedule-page .schedule-category-buttons,
+.schedule-page .schedule-day-row,
+.schedule-page .schedule-direction {
+  gap: 8px;
+}
+
+.schedule-page .schedule-category-buttons button,
+.schedule-page .schedule-day-row button,
+.schedule-page .schedule-direction button {
+  min-height: 42px;
+  padding: 0 20px;
+  border: 1px solid #cbd5ff;
+  border-radius: 11px;
+  background: linear-gradient(180deg, #f8f9ff 0%, #eef1ff 100%);
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  box-shadow: 0 2px 5px rgba(67, 56, 202, 0.06);
+  transition: all 160ms ease;
+}
+
+.schedule-page .schedule-category-buttons button:hover,
+.schedule-page .schedule-day-row button:hover,
+.schedule-page .schedule-direction button:hover {
+  border-color: #a5b4fc;
+  background: #eef2ff;
+  color: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(67, 56, 202, 0.1);
+}
+
+.schedule-page .schedule-category-buttons button.active,
+.schedule-page .schedule-day-row button.active,
+.schedule-page .schedule-direction button.active {
+  border-color: #4f46e5;
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(67, 56, 202, 0.2);
+}
+
+.schedule-page .schedule-category-buttons button:focus-visible,
+.schedule-page .schedule-day-row button:focus-visible,
+.schedule-page .schedule-direction button:focus-visible {
+  outline: 3px solid rgba(99, 102, 241, 0.2);
+  outline-offset: 2px;
+}
