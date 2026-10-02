@@ -272,10 +272,10 @@ export default function TimetableView({
     }
 
     return {
-      "--density-background": palette.background,
-      "--density-color": palette.color,
-      "--density-border": palette.border,
-      opacity: "0.42",
+      "--density-background": "#f1f5f9",
+      "--density-color": "#94a3b8",
+      "--density-border": "#e2e8f0",
+      opacity: "1",
     } as CSSProperties;
   }
 
