@@ -12,6 +12,7 @@ type ProfileData = {
   phone_number?: string | null;
   status?: string | null;
   password_changed_at?: string | null;
+  last_login_at?: string | null;
 };
 
 export default function ProfilePage({
@@ -33,30 +34,22 @@ export default function ProfilePage({
     );
   }, [profile.full_name]);
 
+  const formatDateTime = (value: string | null | undefined) =>
+    value
+      ? new Intl.DateTimeFormat("id-ID", {
+          dateStyle: "medium",
+          timeStyle: "short",
+          timeZone: "Asia/Jakarta",
+        }).format(new Date(value))
+      : "-";
+
   const fields = [
-    ["Nama Lengkap", profile.full_name],
     ["Username", profile.username],
-    ...(profile.email !== undefined ? [["Email", profile.email || "-"]] : []),
-    ["NIK", profile.nik || "-"],
-    ...(profile.phone_number !== undefined
-      ? [["No. Telepon", profile.phone_number || "-"]]
-      : []),
+    ["Nama Lengkap", profile.full_name],
+    ["No. Telepon", profile.phone_number || "-"],
     ["Role", profile.role],
-    ...(profile.status !== undefined
-      ? [["Status", profile.status || "-"]]
-      : []),
-    ...(profile.password_changed_at
-      ? [
-          [
-            "Terakhir Ganti Password",
-            new Intl.DateTimeFormat("id-ID", {
-              dateStyle: "medium",
-              timeStyle: "short",
-              timeZone: "Asia/Jakarta",
-            }).format(new Date(profile.password_changed_at)),
-          ],
-        ]
-      : []),
+    ["Terakhir Login", formatDateTime(profile.last_login_at)],
+    ["Terakhir Ganti Password", formatDateTime(profile.password_changed_at)],
   ] as Array<[string, string]>;
 
   return (
