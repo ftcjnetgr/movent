@@ -914,18 +914,14 @@ export default function TimetableView({
                     <span>STA</span>
                     <strong>{timeValue(item.sta)}</strong>
                   </div>
-                  {previewMode === "realized" ? (
-                    <>
-                      <div>
-                        <span>ATD</span>
-                        <strong>{timeValue(item.actualStd ?? null)}</strong>
-                      </div>
-                      <div>
-                        <span>ATA</span>
-                        <strong>{timeValue(item.actualSta ?? null)}</strong>
-                      </div>
-                    </>
-                  ) : null}
+                  <div>
+                    <span>ATD</span>
+                    <strong>{timeValue(item.actualStd ?? null)}</strong>
+                  </div>
+                  <div>
+                    <span>ATA</span>
+                    <strong>{timeValue(item.actualSta ?? null)}</strong>
+                  </div>
                   <div>
                     <span>Status</span>
                     <strong
@@ -942,14 +938,12 @@ export default function TimetableView({
                     <span>Durasi Perjalanan</span>
                     <strong>{durationValue(item.std, item.sta)}</strong>
                   </div>
-                  {previewMode === "realized" ? (
-                    <div>
-                      <span>Durasi Aktual</span>
-                      <strong>
-                        {durationValue(item.actualStd ?? null, item.actualSta ?? null)}
-                      </strong>
-                    </div>
-                  ) : null}
+                  <div>
+                    <span>Durasi Aktual</span>
+                    <strong>
+                      {durationValue(item.actualStd ?? null, item.actualSta ?? null)}
+                    </strong>
+                  </div>
                 </div>
               ))}
             </div>
