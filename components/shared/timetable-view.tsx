@@ -905,33 +905,25 @@ export default function TimetableView({
                     <strong>{item.destination || "-"}</strong>
                   </div>
                   <div>
-                    <span>
-                      {previewMode === "realized" && item.actualStd
-                        ? "ATD"
-                        : "STD"}
-                    </span>
-                    <strong>
-                      {timeValue(
-                        previewMode === "realized" && item.actualStd
-                          ? item.actualStd
-                          : item.std,
-                      )}
-                    </strong>
+                    <span>STD</span>
+                    <strong>{timeValue(item.std)}</strong>
                   </div>
                   <div>
-                    <span>
-                      {previewMode === "realized" && item.actualSta
-                        ? "ATA"
-                        : "STA"}
-                    </span>
-                    <strong>
-                      {timeValue(
-                        previewMode === "realized" && item.actualSta
-                          ? item.actualSta
-                          : item.sta,
-                      )}
-                    </strong>
+                    <span>STA</span>
+                    <strong>{timeValue(item.sta)}</strong>
                   </div>
+                  {previewMode === "realized" ? (
+                    <>
+                      <div>
+                        <span>ATD</span>
+                        <strong>{timeValue(item.actualStd ?? null)}</strong>
+                      </div>
+                      <div>
+                        <span>ATA</span>
+                        <strong>{timeValue(item.actualSta ?? null)}</strong>
+                      </div>
+                    </>
+                  ) : null}
                   <div>
                     <span>Status</span>
                     <strong
@@ -946,17 +938,16 @@ export default function TimetableView({
                   </div>
                   <div>
                     <span>Durasi Perjalanan</span>
-                    <strong>
-                      {durationValue(
-                        previewMode === "realized" && item.actualStd
-                          ? item.actualStd
-                          : item.std,
-                        previewMode === "realized" && item.actualSta
-                          ? item.actualSta
-                          : item.sta,
-                      )}
-                    </strong>
+                    <strong>{durationValue(item.std, item.sta)}</strong>
                   </div>
+                  {previewMode === "realized" ? (
+                    <div>
+                      <span>Durasi Aktual</span>
+                      <strong>
+                        {durationValue(item.actualStd ?? null, item.actualSta ?? null)}
+                      </strong>
+                    </div>
+                  ) : null}
                 </div>
               ))}
             </div>
