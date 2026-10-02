@@ -18,6 +18,9 @@ type Schedule = {
   std: string;
   sta: string;
   status?: string;
+  actualStd?: string | null;
+  actualSta?: string | null;
+  actualStatus?: string | null;
 };
 
 type Task = {
@@ -190,7 +193,7 @@ export default function TimetableView({
   todayTasks: Task[];
   liveTasks: Task[];
   taskBySchedule: Record<string, Task>;
-  initialView?: "database" | "live";
+  initialView?: "database" | "realized";
 }) {
   const view = initialView;
   const [selectedDay, setSelectedDay] = useState(todayDay);
@@ -201,7 +204,7 @@ export default function TimetableView({
   const [category, setCategory] = useState("Normal");
   const [point, setPoint] = useState("");
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([]);
-  const [previewMode, setPreviewMode] = useState<"schedule" | "live">(
+  const [previewMode, setPreviewMode] = useState<"schedule" | "realized">(
     "schedule",
   );
   const [openLiveDestinationGroups, setOpenLiveDestinationGroups] = useState<
@@ -222,6 +225,56 @@ export default function TimetableView({
     () => new Map(schedules.map((item) => [item.schedule_id, item])),
     [schedules],
   );
+
+  const actualTaskBySchedule = useMemo(() => {
+    const map = new Map<string, Task>();
+    for (const task of liveTasks) {
+      if (!task.schedule_id) continue;
+      const current = map.get(task.schedule_id);
+      if (!current || task.status === "Completed") {
+        map.set(task.schedule_id, task);
+      }
+    }
+    return map;
+  }, [liveTasks]);
+
+  function previewItemsForSchedules(items: Schedule[]) {
+    if (view !== "realized") return items;
+
+    return items.map((item) => {
+      const actualTask = actualTaskBySchedule.get(item.schedule_id);
+      if (!actualTask) return item;
+
+      return {
+        ...item,
+        actualStd: actualTask.driving_at,
+        actualSta: actualTask.arrived_at,
+        actualStatus: actualTask.status,
+      };
+    });
+  }
+
+  function realizedCellStyle(total: number, item: Schedule) {
+    if (view !== "realized") return scheduleDensityStyle(total);
+
+    const actualTask = actualTaskBySchedule.get(item.schedule_id);
+    if (actualTask?.status === "Completed") {
+      return {
+        "--density-background": "#dcfce7",
+        "--density-color": "#15803d",
+        "--density-border": "#86efac",
+      } as CSSProperties;
+    }
+    if (actualTask?.status === "Driving") {
+      return {
+        "--density-background": "#dbeafe",
+        "--density-color": "#1d4ed8",
+        "--density-border": "#93c5fd",
+      } as CSSProperties;
+    }
+
+    return scheduleDensityStyle(total);
+  }
 
   const categories = useMemo(() => {
     const unique = [
@@ -319,11 +372,13 @@ export default function TimetableView({
 
   function openSchedulePreview(
     items: Schedule[],
-    mode: "schedule" | "live" = "schedule",
+    mode: "schedule" | "realized" = "schedule",
   ) {
     if (!items.length) return;
     setPreviewMode(mode);
-    setPreviewSchedules(items);
+    setPreviewSchedules(
+      mode === "realized" ? previewItemsForSchedules(items) : items,
+    );
   }
 
   function closeSchedulePreview() {
@@ -388,8 +443,13 @@ export default function TimetableView({
                       <button
                         type="button"
                         className="schedule-cell-button"
-                        style={scheduleDensityStyle(total)}
-                        onClick={() => openSchedulePreview(cellItems)}
+                        style={realizedCellStyle(total, first)}
+                        onClick={() =>
+                          openSchedulePreview(
+                            cellItems,
+                            view === "realized" ? "realized" : "schedule",
+                          )
+                        }
                         title={
                           "Lihat " +
                           total +
@@ -406,7 +466,12 @@ export default function TimetableView({
                   <button
                     type="button"
                     className="schedule-total-button"
-                    onClick={() => openSchedulePreview(rowItems)}
+                    onClick={() =>
+                      openSchedulePreview(
+                        rowItems,
+                        view === "realized" ? "realized" : "schedule",
+                      )
+                    }
                   >
                     {rowItems.length}
                   </button>
@@ -433,7 +498,12 @@ export default function TimetableView({
                 <button
                   type="button"
                   className="schedule-total-button"
-                  onClick={() => openSchedulePreview(items)}
+                  onClick={() =>
+                    openSchedulePreview(
+                      items,
+                      view === "realized" ? "realized" : "schedule",
+                    )
+                  }
                 >
                   {items.length}
                 </button>
@@ -660,8 +730,7 @@ export default function TimetableView({
     [liveTasks, direction, route, category, point, scheduleById],
   );
 
-  const activeRows =
-    view === "database" ? filteredSchedules : filteredLiveTasks;
+  const activeRows = filteredSchedules;
 
   return (
     <div className={`schedule-page schedule-view-${view}`}>
@@ -716,7 +785,7 @@ export default function TimetableView({
                 <button
                   key={day.value}
                   type="button"
-                  disabled={view === "live" && day.value !== todayDay}
+                  disabled={view === "realized" && day.value !== todayDay}
                   className={selectedDay === day.value ? "active" : ""}
                   onClick={() => {
                     if (view === "live") return;
@@ -779,9 +848,7 @@ export default function TimetableView({
           <span>Jadwal</span>
           {renderScheduleDensityLegend()}
         </div>
-        {view === "database"
-          ? renderPlanTable(activeRows as Schedule[])
-          : renderLiveTable(activeRows as Task[])}
+        {renderPlanTable(activeRows as Schedule[])}
         {!activeRows.length ? (
           <div className="schedule-empty">Belum ada jadwal yang cocok.</div>
         ) : null}
@@ -832,12 +899,32 @@ export default function TimetableView({
                     <strong>{item.destination || "-"}</strong>
                   </div>
                   <div>
-                    <span>{previewMode === "live" ? "ATD" : "STD"}</span>
-                    <strong>{timeValue(item.std)}</strong>
+                    <span>
+                      {previewMode === "realized" && item.actualStd
+                        ? "ATD"
+                        : "STD"}
+                    </span>
+                    <strong>
+                      {timeValue(
+                        previewMode === "realized" && item.actualStd
+                          ? item.actualStd
+                          : item.std,
+                      )}
+                    </strong>
                   </div>
                   <div>
-                    <span>{previewMode === "live" ? "ATA" : "STA"}</span>
-                    <strong>{timeValue(item.sta)}</strong>
+                    <span>
+                      {previewMode === "realized" && item.actualSta
+                        ? "ATA"
+                        : "STA"}
+                    </span>
+                    <strong>
+                      {timeValue(
+                        previewMode === "realized" && item.actualSta
+                          ? item.actualSta
+                          : item.sta,
+                      )}
+                    </strong>
                   </div>
                   <div>
                     <span>Status</span>
@@ -855,9 +942,12 @@ export default function TimetableView({
                     <span>Durasi Perjalanan</span>
                     <strong>
                       {durationValue(
-                        item.std,
-                        item.sta,
-                        previewMode === "live",
+                        previewMode === "realized" && item.actualStd
+                          ? item.actualStd
+                          : item.std,
+                        previewMode === "realized" && item.actualSta
+                          ? item.actualSta
+                          : item.sta,
                       )}
                     </strong>
                   </div>
