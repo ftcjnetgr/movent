@@ -750,8 +750,9 @@ export default function TimetableView({
 
   return (
     <div className={`schedule-page schedule-view-${view}`}>
-      <div className="schedule-control-compact">
-        <div className="schedule-filter-top">
+      {view !== "realized" ? (
+        <div className="schedule-control-compact">
+          <div className="schedule-filter-top">
           <div className="schedule-point-card">
             <span className="schedule-control-label">Titik Filter</span>
             <div className="schedule-direction" aria-label="Pilih titik filter">
@@ -856,8 +857,9 @@ export default function TimetableView({
               {routeLabels[item] ?? item}
             </button>
           ))}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
