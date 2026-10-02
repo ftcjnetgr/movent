@@ -6678,7 +6678,7 @@ html {
 }
 
 .schedule-preview-modal {
-  width: min(900px, 100%);
+  width: min(1180px, 100%);
   max-height: min(720px, calc(100vh - 40px));
   overflow: hidden;
   display: flex;
@@ -6740,7 +6740,7 @@ html {
 
 .schedule-preview-item {
   display: grid;
-  grid-template-columns: 1.1fr 1.2fr 1.2fr 0.7fr 0.7fr;
+  grid-template-columns: 1.1fr 1.2fr 1.2fr 0.7fr 0.7fr 0.7fr 0.7fr 1fr 1fr 0.9fr;
   gap: 10px;
   padding: 11px 12px;
   border: 1px solid #e3e8ef;
