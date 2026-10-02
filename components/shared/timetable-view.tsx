@@ -962,53 +962,6 @@ export default function TimetableView({
                     </>
                   )}
                 </div>
-                  <div>
-                    <span>Start Point</span>
-                    <strong>{item.start_point || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>Destination</span>
-                    <strong>{item.destination || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>STD</span>
-                    <strong>{timeValue(item.std)}</strong>
-                  </div>
-                  <div>
-                    <span>STA</span>
-                    <strong>{timeValue(item.sta)}</strong>
-                  </div>
-                  <div>
-                    <span>ATD</span>
-                    <strong>{timeValue(item.actualStd ?? null)}</strong>
-                  </div>
-                  <div>
-                    <span>ATA</span>
-                    <strong>{timeValue(item.actualSta ?? null)}</strong>
-                  </div>
-                  <div>
-                    <span>Status</span>
-                    <strong
-                      className={
-                        previewStatus(item) === "Belum Ditugasin"
-                          ? "schedule-preview-status-unassigned"
-                          : `status-badge ${statusClass(previewStatus(item))}`
-                      }
-                    >
-                      {statusLabel(previewStatus(item))}
-                    </strong>
-                  </div>
-                  <div>
-                    <span>Durasi Perjalanan</span>
-                    <strong>{durationValue(item.std, item.sta)}</strong>
-                  </div>
-                  <div>
-                    <span>Durasi Aktual</span>
-                    <strong>
-                      {durationValue(item.actualStd ?? null, item.actualSta ?? null)}
-                    </strong>
-                  </div>
-                </div>
               ))}
             </div>
           </div>
