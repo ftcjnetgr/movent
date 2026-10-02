@@ -11,7 +11,7 @@ export default async function ControllerTimetablePage({
   const profile = await getCurrentProfile();
   const data = await getTimetableData(profile);
   const params = await searchParams;
-  const view = params.view === "live" ? "live" : "plan";
+  const view = params.view === "realized" ? "realized" : "plan";
 
   return (
     <>
@@ -19,8 +19,8 @@ export default async function ControllerTimetablePage({
         <div>
           <h1>Jadwal</h1>
           <p>
-            {view === "live"
-              ? "Pantau penugasan hari ini langsung dari sini."
+            {view === "realized"
+              ? "Lihat jadwal dan progres realisasinya di sini."
               : "Pilih harinya, terus lihat jadwalnya di sini."}
           </p>
         </div>
@@ -29,13 +29,13 @@ export default async function ControllerTimetablePage({
             href="/controller/timetable?view=plan"
             className={view === "plan" ? "active" : ""}
           >
-            Rencana
+            Terjadwal
           </Link>
           <Link
-            href="/controller/timetable?view=live"
-            className={view === "live" ? "active" : ""}
+            href="/controller/timetable?view=realized"
+            className={view === "realized" ? "active" : ""}
           >
-            Pantau Langsung
+            Terealisasi
           </Link>
         </nav>
       </div>
@@ -47,7 +47,7 @@ export default async function ControllerTimetablePage({
         todayTasks={data.todayTasks}
         liveTasks={data.liveTasks}
         taskBySchedule={data.taskBySchedule}
-        initialView={view === "live" ? "live" : "database"}
+        initialView={view === "realized" ? "realized" : "database"}
       />
     </>
   );
