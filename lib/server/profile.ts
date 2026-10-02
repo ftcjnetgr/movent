@@ -12,6 +12,7 @@ export type AppProfile = {
   email: string | null;
   phone_number: string | null;
   password_changed_at: string | null;
+  last_login_at: string | null;
 };
 
 export const getCurrentProfile = cache(async (): Promise<AppProfile> => {
@@ -41,5 +42,6 @@ export const getCurrentProfile = cache(async (): Promise<AppProfile> => {
     email: profile.email ?? userData.user?.email ?? null,
     phone_number: profile.phone_number ?? null,
     password_changed_at: userData.user?.updated_at ?? null,
+    last_login_at: userData.user?.last_sign_in_at ?? null,
   };
 });
