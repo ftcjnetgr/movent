@@ -250,6 +250,7 @@ export default function TimetableView({
         actualStd: actualTask.driving_at,
         actualSta: actualTask.arrived_at,
         actualStatus: actualTask.status,
+        status: actualTask.status,
       };
     });
   }
@@ -487,7 +488,12 @@ export default function TimetableView({
                   <button
                     type="button"
                     className="schedule-total-button"
-                    onClick={() => openSchedulePreview(hourItems)}
+                    onClick={() =>
+                      openSchedulePreview(
+                        hourItems,
+                        view === "realized" ? "realized" : "schedule",
+                      )
+                    }
                     aria-label={`Lihat total schedule jam ${String(hour).padStart(2, "0")}: ${hourItems.length}`}
                   >
                     {hourItems.length}
@@ -788,7 +794,7 @@ export default function TimetableView({
                   disabled={view === "realized" && day.value !== todayDay}
                   className={selectedDay === day.value ? "active" : ""}
                   onClick={() => {
-                    if (view === "live") return;
+                    if (view === "realized" && day.value !== todayDay) return;
                     setSelectedDay(day.value);
                     setPoint("");
                   }}
