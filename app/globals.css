@@ -16292,3 +16292,118 @@ td select:focus,
     column-gap: 0;
   }
 }
+
+/* Account profile refresh */
+.profile-settings-workspace {
+  grid-template-columns: 178px minmax(0, 1fr);
+  min-height: 0;
+  border-radius: 20px;
+}
+
+.profile-settings-nav {
+  padding: 16px;
+  background: linear-gradient(180deg, #f8faff 0%, #f5f7fc 100%);
+}
+
+.profile-settings-nav button {
+  min-height: 66px;
+  padding: 12px 14px;
+  border-radius: 14px;
+}
+
+.profile-settings-nav button.active {
+  background: linear-gradient(135deg, var(--primary) 0%, #5548e8 100%);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.18);
+  inset: none;
+}
+
+.profile-settings-nav button.active span {
+  color: #fff;
+}
+
+.profile-settings-nav button.active small {
+  color: rgba(255,255,255,.72);
+}
+
+.profile-settings-content {
+  min-width: 0;
+  padding: 30px 34px 34px;
+}
+
+.profile-settings-section-heading {
+  align-items: center;
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+}
+
+.profile-settings-section-heading h2 {
+  font-size: 20px;
+  letter-spacing: -0.03em;
+}
+
+.profile-settings-section-heading p {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.profile-settings-state {
+  padding: 8px 12px;
+  font-size: 9px;
+  border: 1px solid rgba(16,185,129,.12);
+}
+
+.profile-settings-fields {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-settings-field {
+  min-height: 108px;
+  padding: 18px 18px;
+  align-content: center;
+  gap: 9px;
+  border: 1px solid #e8edf5;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfe 100%);
+  box-shadow: 0 5px 16px rgba(15,23,42,.035);
+}
+
+.profile-settings-field:hover {
+  border-color: #d7ddf8;
+  box-shadow: 0 8px 22px rgba(15,23,42,.055);
+}
+
+.profile-settings-field span {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .01em;
+}
+
+.profile-settings-field strong {
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.profile-settings-field:nth-child(5),
+.profile-settings-field:nth-child(6) {
+  background: linear-gradient(180deg, #fafaff 0%, #f5f6ff 100%);
+  border-color: #e2e4ff;
+}
+
+@media (max-width: 980px) {
+  .profile-settings-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .profile-settings-content {
+    padding: 22px 18px;
+  }
+
+  .profile-settings-fields {
+    grid-template-columns: 1fr;
+  }
+}
