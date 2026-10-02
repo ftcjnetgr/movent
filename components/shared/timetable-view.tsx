@@ -577,7 +577,7 @@ export default function TimetableView({
                   onClick={() =>
                     openSchedulePreview(
                       cellItems.map(toPreviewSchedule),
-                      "live",
+                      "realized",
                     )
                   }
                   title={cellItems
@@ -600,7 +600,7 @@ export default function TimetableView({
               type="button"
               className="schedule-total-button"
               onClick={() =>
-                openSchedulePreview(fleetItems.map(toPreviewSchedule), "live")
+                openSchedulePreview(fleetItems.map(toPreviewSchedule), "realized")
               }
             >
               {fleetItems.length}
@@ -693,7 +693,7 @@ export default function TimetableView({
                     onClick={() =>
                       openSchedulePreview(
                         hourItems.map(toPreviewSchedule),
-                        "live",
+                        "realized",
                       )
                     }
                   >
@@ -706,7 +706,7 @@ export default function TimetableView({
                   type="button"
                   className="schedule-total-button"
                   onClick={() =>
-                    openSchedulePreview(items.map(toPreviewSchedule), "live")
+                    openSchedulePreview(items.map(toPreviewSchedule), "realized")
                   }
                 >
                   {items.length}
