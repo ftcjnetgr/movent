@@ -750,9 +750,8 @@ export default function TimetableView({
 
   return (
     <div className={`schedule-page schedule-view-${view}`}>
-      {view !== "realized" ? (
-        <div className="schedule-control-compact">
-          <div className="schedule-filter-top">
+      <div className="schedule-control-compact">
+        <div className="schedule-filter-top">
           <div className="schedule-point-card">
             <span className="schedule-control-label">Titik Filter</span>
             <div className="schedule-direction" aria-label="Pilih titik filter">
@@ -779,6 +778,7 @@ export default function TimetableView({
             </div>
           </div>
 
+          {view !== "realized" ? (
           <div className="schedule-control-field schedule-category-field">
             <span className="schedule-control-label">Category</span>
             <div className="schedule-category-buttons">
@@ -794,7 +794,9 @@ export default function TimetableView({
               ))}
             </div>
           </div>
+          ) : null}
 
+          {view !== "realized" ? (
           <div className="schedule-control-field schedule-day-field">
             <span className="schedule-control-label">Hari</span>
             <div className="schedule-day-row">
@@ -815,6 +817,7 @@ export default function TimetableView({
               ))}
             </div>
           </div>
+          ) : null}
         </div>
 
         <div className="schedule-point-detail-card">
@@ -859,7 +862,6 @@ export default function TimetableView({
           ))}
           </div>
         </div>
-      ) : null}
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
