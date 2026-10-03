@@ -213,7 +213,7 @@ export default function TimetableView({
   const [direction, setDirection] = useState<"start-point" | "destination">(
     "start-point",
   );
-  const [route, setRoute] = useState("Interhub");
+  const [route, setRoute] = useState("");
   const [category, setCategory] = useState(defaultCategory);
   const [point, setPoint] = useState("");
 
@@ -338,15 +338,12 @@ export default function TimetableView({
     );
   }, [schedules]);
 
-  const defaultRoute = "Interhub";
-
   const defaultScheduledSchedules = useMemo(
     () =>
       schedules.filter(
         (item) =>
           item.schedule_day === todayDay &&
-          item.category === defaultCategory &&
-          item.route === defaultRoute,
+          item.category === defaultCategory,
       ),
     [schedules, todayDay, defaultCategory],
   );
