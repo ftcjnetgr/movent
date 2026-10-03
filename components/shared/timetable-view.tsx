@@ -181,7 +181,6 @@ function renderScheduleDensityLegend() {
 export default function TimetableView({
   date,
   todayDay,
-  todayScheduleCategory,
   schedules,
   tasks,
   todayTasks,
@@ -191,7 +190,6 @@ export default function TimetableView({
 }: {
   date: string;
   todayDay: number;
-  todayScheduleCategory: string;
   schedules: Schedule[];
   tasks: Task[];
   todayTasks: Task[];
@@ -200,19 +198,29 @@ export default function TimetableView({
   initialView?: "database" | "realized";
 }) {
   const view = initialView;
+
+  const defaultCategory = useMemo(() => {
+    const [year, month, day] = date.split("-").map(Number);
+    if (!year || !month || !day) return "Normal";
+
+    const twinDateStart = month;
+    const twinDateEnd = month + 2;
+    return day >= twinDateStart && day <= twinDateEnd ? "Campaign" : "Normal";
+  }, [date]);
+
   const [selectedDay, setSelectedDay] = useState(todayDay);
   const [direction, setDirection] = useState<"start-point" | "destination">(
     "start-point",
   );
   const [route, setRoute] = useState("");
-  const [category, setCategory] = useState(todayScheduleCategory);
+  const [category, setCategory] = useState(defaultCategory);
   const [point, setPoint] = useState("");
 
   useEffect(() => {
     setSelectedDay(todayDay);
-    setCategory(todayScheduleCategory);
+    setCategory(defaultCategory);
     setPoint("");
-  }, [todayDay, todayScheduleCategory]);
+  }, [todayDay, defaultCategory]);
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([]);
   const [previewMode, setPreviewMode] = useState<"schedule" | "realized">(
     "schedule",
@@ -239,7 +247,7 @@ export default function TimetableView({
   const actualTaskBySchedule = useMemo(() => {
     const map = new Map<string, Task>();
 
-    for (const task of tasks) {
+    for (const task of liveTasks) {
       if (
         !task.schedule_id ||
         !["Driving", "Completed"].includes(task.status)
@@ -271,7 +279,7 @@ export default function TimetableView({
     }
 
     return map;
-  }, [tasks]);
+  }, [liveTasks]);
 
   function previewItemsForSchedules(items: Schedule[]) {
     if (view !== "realized") return items;
@@ -334,9 +342,9 @@ export default function TimetableView({
       schedules.filter(
         (item) =>
           item.schedule_day === todayDay &&
-          item.category === todayScheduleCategory,
+          item.category === defaultCategory,
       ),
-    [schedules, todayDay, todayScheduleCategory],
+    [schedules, todayDay, defaultCategory],
   );
 
   const routes = useMemo(() => {
@@ -361,9 +369,7 @@ export default function TimetableView({
 
   const pointOptions = useMemo(() => {
     const source =
-      view === "database"
-        ? selectedPlanSchedules
-        : defaultScheduledSchedules;
+      view === "database" ? selectedPlanSchedules : defaultScheduledSchedules;
     const values =
       direction === "start-point"
         ? source.map((item) => item.start_point)
@@ -371,12 +377,7 @@ export default function TimetableView({
     return [...new Set(values.filter(Boolean))].sort((a, b) =>
       a.localeCompare(b),
     );
-  }, [
-    selectedPlanSchedules,
-    defaultScheduledSchedules,
-    view,
-    direction,
-  ]);
+  }, [selectedPlanSchedules, defaultScheduledSchedules, view, direction]);
 
   const filteredSchedules = useMemo(
     () =>
@@ -825,43 +826,42 @@ export default function TimetableView({
           </div>
 
           {view !== "realized" ? (
-            <div className="schedule-control-field schedule-category-field">
-              <span className="schedule-control-label">Category</span>
-              <div className="schedule-category-buttons">
-                {categories.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    className={category === item ? "active" : ""}
-                    onClick={() => setCategory(item)}
-                  >
-                    {item}
-                  </button>
-                ))}
+            <>
+              <div className="schedule-control-field schedule-category-field">
+                <span className="schedule-control-label">Category</span>
+                <div className="schedule-category-buttons">
+                  {categories.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      className={category === item ? "active" : ""}
+                      onClick={() => setCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : null}
 
-          {view !== "realized" ? (
-            <div className="schedule-control-field schedule-day-field">
-              <span className="schedule-control-label">Hari</span>
-              <div className="schedule-day-row">
-                {DAYS.map((day) => (
-                  <button
-                    key={day.value}
-                    type="button"
-                    disabled={false}
-                    className={selectedDay === day.value ? "active" : ""}
-                    onClick={() => {
-                      setSelectedDay(day.value);
-                      setPoint("");
-                    }}
-                  >
-                    {day.label}
-                  </button>
-                ))}
+              <div className="schedule-control-field schedule-day-field">
+                <span className="schedule-control-label">Hari</span>
+                <div className="schedule-day-row">
+                  {DAYS.map((day) => (
+                    <button
+                      key={day.value}
+                      type="button"
+                      className={selectedDay === day.value ? "active" : ""}
+                      onClick={() => {
+                        setSelectedDay(day.value);
+                        setPoint("");
+                      }}
+                    >
+                      {day.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            </>
           ) : null}
         </div>
 
