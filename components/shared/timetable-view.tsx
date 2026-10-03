@@ -338,29 +338,17 @@ export default function TimetableView({
     );
   }, [schedules]);
 
-  const realizedCategory = useMemo(() => {
-    if (view !== "realized") return null;
-
-    const [year, month, day] = date.split("-").map(Number);
-    if (!year || !month || !day) return "Normal";
-
-    const twinDateStart = month;
-    const twinDateEnd = month + 2;
-    const isTwinDateWindow = day >= twinDateStart && day <= twinDateEnd;
-
-    return isTwinDateWindow ? "Campaign" : "Normal";
-  }, [date, view]);
-
   const realizedBaseSchedules = useMemo(
     () =>
       view === "realized"
         ? schedules.filter(
             (item) =>
               item.schedule_day === todayDay &&
-              item.category === realizedCategory,
+              item.category === defaultCategory &&
+              item.route === "Interhub",
           )
         : [],
-    [schedules, todayDay, realizedCategory, view],
+    [schedules, todayDay, defaultCategory, view],
   );
 
   const routes = useMemo(() => {
