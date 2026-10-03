@@ -37,6 +37,7 @@ export async function getTimetableData(profile: AppProfile) {
         .eq("status", "Active")
         .order("schedule_day")
         .order("std")
+        .order("schedule_id")
         .range(from, from + pageSize - 1);
 
       if (error) throw error;
