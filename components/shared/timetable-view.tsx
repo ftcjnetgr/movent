@@ -338,17 +338,17 @@ export default function TimetableView({
     );
   }, [schedules]);
 
-  const realizedBaseSchedules = useMemo(
+  const defaultRoute = "Interhub";
+
+  const defaultScheduledSchedules = useMemo(
     () =>
-      view === "realized"
-        ? schedules.filter(
-            (item) =>
-              item.schedule_day === todayDay &&
-              item.category === defaultCategory &&
-              item.route === "Interhub",
-          )
-        : [],
-    [schedules, todayDay, defaultCategory, view],
+      schedules.filter(
+        (item) =>
+          item.schedule_day === todayDay &&
+          item.category === defaultCategory &&
+          item.route === defaultRoute,
+      ),
+    [schedules, todayDay, defaultCategory],
   );
 
   const routes = useMemo(() => {
@@ -373,7 +373,9 @@ export default function TimetableView({
 
   const pointOptions = useMemo(() => {
     const source =
-      view === "database" ? selectedPlanSchedules : realizedBaseSchedules;
+      view === "database"
+        ? selectedPlanSchedules
+        : defaultScheduledSchedules;
     const values =
       direction === "start-point"
         ? source.map((item) => item.start_point)
@@ -383,7 +385,7 @@ export default function TimetableView({
     );
   }, [
     selectedPlanSchedules,
-    realizedBaseSchedules,
+    defaultScheduledSchedules,
     view,
     direction,
   ]);
@@ -792,13 +794,13 @@ export default function TimetableView({
 
   const filteredRealizedSchedules = useMemo(
     () =>
-      realizedBaseSchedules.filter((item) => {
+      defaultScheduledSchedules.filter((item) => {
         const filterPoint =
           direction === "start-point" ? item.start_point : item.destination;
         if (point && filterPoint !== point) return false;
         return true;
       }),
-    [realizedBaseSchedules, direction, point],
+    [defaultScheduledSchedules, direction, point],
   );
 
   const activeRows =
