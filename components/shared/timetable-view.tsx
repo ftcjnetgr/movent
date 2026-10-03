@@ -214,7 +214,7 @@ export default function TimetableView({
     "start-point",
   );
   const [route, setRoute] = useState("Interhub");
-  const [category, setCategory] = useState("Normal");
+  const [category, setCategory] = useState(defaultCategory);
   const [point, setPoint] = useState("");
 
   useEffect(() => {
