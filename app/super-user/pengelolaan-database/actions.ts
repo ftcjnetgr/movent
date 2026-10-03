@@ -159,14 +159,7 @@ function normalizeImportedRows(
       for (const column of config.columns) {
         if (Object.prototype.hasOwnProperty.call(source, column)) {
           const value = source[column];
-          if (value === null || value === undefined) {
-            clean[column] = null;
-          } else if (typeof value === "string") {
-            const trimmed = value.trim();
-            clean[column] = trimmed === "" ? null : trimmed;
-          } else {
-            clean[column] = value;
-          }
+          clean[column] = value === "" || value === undefined ? null : value;
         }
       }
       return clean;
