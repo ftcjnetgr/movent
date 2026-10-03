@@ -1,6 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { AppProfile } from "@/lib/server/profile";
-import { getScheduleDayAndCategory } from "@/lib/server/schedule-rules";
 
 function jakartaNow() {
   const now = new Date();
@@ -23,9 +22,7 @@ function jakartaNow() {
 
 export async function getTimetableData(profile: AppProfile) {
   const admin = createAdminClient();
-  const { date, startIso, endIso } = jakartaNow();
-  const { day, category: todayScheduleCategory } =
-    getScheduleDayAndCategory(date);
+  const { date, day, startIso, endIso } = jakartaNow();
 
   const [{ data: schedules }, { data: allTasks }] = await Promise.all([
     admin
@@ -108,7 +105,6 @@ export async function getTimetableData(profile: AppProfile) {
   return {
     date,
     todayDay: day,
-    todayScheduleCategory,
     schedules: schedules ?? [],
     tasks,
     todayTasks,
