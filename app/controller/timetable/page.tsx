@@ -43,6 +43,7 @@ export default async function ControllerTimetablePage({
         date={data.date}
         todayDay={data.todayDay}
         schedules={data.schedules}
+        todayScheduleCategory={data.todayScheduleCategory}
         tasks={data.tasks}
         todayTasks={data.todayTasks}
         liveTasks={data.liveTasks}
