@@ -230,15 +230,40 @@ export default function TimetableView({
 
   const actualTaskBySchedule = useMemo(() => {
     const map = new Map<string, Task>();
-    for (const task of liveTasks) {
-      if (!task.schedule_id) continue;
+
+    for (const task of tasks) {
+      if (
+        !task.schedule_id ||
+        !["Driving", "Completed"].includes(task.status)
+      ) {
+        continue;
+      }
+
       const current = map.get(task.schedule_id);
-      if (!current || task.status === "Completed") {
+      if (!current) {
+        map.set(task.schedule_id, task);
+        continue;
+      }
+
+      const currentActual =
+        current.status === "Completed"
+          ? current.arrived_at
+          : current.driving_at;
+      const taskActual =
+        task.status === "Completed" ? task.arrived_at : task.driving_at;
+
+      const currentTime = currentActual
+        ? new Date(currentActual).getTime()
+        : 0;
+      const taskTime = taskActual ? new Date(taskActual).getTime() : 0;
+
+      if (task.status === "Completed" || taskTime >= currentTime) {
         map.set(task.schedule_id, task);
       }
     }
+
     return map;
-  }, [liveTasks]);
+  }, [tasks]);
 
   function previewItemsForSchedules(items: Schedule[]) {
     if (view !== "realized") return items;
@@ -729,24 +754,20 @@ export default function TimetableView({
     );
   }
 
-  const filteredLiveTasks = useMemo(
+  const filteredRealizedSchedules = useMemo(
     () =>
-      liveTasks.filter((task) => {
+      schedules.filter((item) => {
         const filterPoint =
-          direction === "start-point" ? task.start_point : task.destination;
-        const schedule = task.schedule_id
-          ? scheduleById.get(task.schedule_id)
-          : null;
-        if (route && schedule && schedule.route !== route) return false;
-        if (category && schedule && schedule.category !== category)
-          return false;
+          direction === "start-point" ? item.start_point : item.destination;
+        if (route && item.route !== route) return false;
         if (point && filterPoint !== point) return false;
         return true;
       }),
-    [liveTasks, direction, route, category, point, scheduleById],
+    [schedules, direction, route, point],
   );
 
-  const activeRows = filteredSchedules;
+  const activeRows =
+    view === "realized" ? filteredRealizedSchedules : filteredSchedules;
 
   return (
     <div className={`schedule-page schedule-view-${view}`}>
