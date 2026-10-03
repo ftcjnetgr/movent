@@ -49,6 +49,45 @@ const configs = {
     identifier: "maintenance_list",
     columns: ["maintenance_code", "maintenance_list", "aging", "status"],
   },
+  tasks: {
+    identifier: "transaction_id",
+    columns: [
+      "id","transaction_id","source_type","task_type","fleet_ownership","status",
+      "created_by","requested_by","assigned_by","executor_nik","executor_snapshot",
+      "fleet_snapshot","schedule_id","schedule_snapshot","start_point",
+      "start_point_snapshot","destination","destination_snapshot","std","sta",
+      "external_executor","external_fleet","sj_number","sj_qty","sj_weight",
+      "product","product_snapshot","sj_note","odometer_start","odometer_end",
+      "requested_at","assigned_at","accepted_at","driving_at","completed_at",
+      "canceled_at","canceled_from_status","cancellation_note",
+      "external_departure_at","external_arrival_at","created_at","updated_at","arrived_at",
+    ],
+  },
+  ticketings: {
+    identifier: "transaction_id",
+    columns: [
+      "id","transaction_id","status","created_by","maintainer_user_id",
+      "maintenance_list","maintenance_snapshot","fleet_plat_number","fleet_snapshot",
+      "location","location_snapshot","created_at","accepted_at","in_progress_at",
+      "completed_at","canceled_at","canceled_from_status","cancellation_note",
+      "updated_at","maintenance_pic","requested_at",
+    ],
+  },
+  task_sj_items: {
+    identifier: "id",
+    columns: [
+      "id","task_id","sj_number","sj_qty","sj_weight","product",
+      "product_snapshot","note","created_at","updated_at",
+    ],
+  },
+  user_profiles: {
+    identifier: "username",
+    columns: [
+      "id","auth_user_id","username","email","full_name","phone_number","role",
+      "status","must_change_password","failed_login_attempts","locked_at",
+      "created_at","updated_at","hub","area","department",
+    ],
+  },
 } as const;
 
 type DatabaseKey = keyof typeof configs;
