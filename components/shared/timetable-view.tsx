@@ -834,43 +834,43 @@ export default function TimetableView({
           </div>
 
           {view !== "realized" ? (
-          <div className="schedule-control-field schedule-category-field">
-            <span className="schedule-control-label">Category</span>
-            <div className="schedule-category-buttons">
-              {categories.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={category === item ? "active" : ""}
-                  onClick={() => setCategory(item)}
-                >
-                  {item}
-                </button>
-              ))}
+            <div className="schedule-control-field schedule-category-field">
+              <span className="schedule-control-label">Category</span>
+              <div className="schedule-category-buttons">
+                {categories.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className={category === item ? "active" : ""}
+                    onClick={() => setCategory(item)}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
           ) : null}
 
           {view !== "realized" ? (
-          <div className="schedule-control-field schedule-day-field">
-            <span className="schedule-control-label">Hari</span>
-            <div className="schedule-day-row">
-              {DAYS.map((day) => (
-                <button
-                  key={day.value}
-                  type="button"
-                  disabled={false}
-                  className={selectedDay === day.value ? "active" : ""}
-                  onClick={() => {
-                    setSelectedDay(day.value);
-                    setPoint("");
-                  }}
-                >
-                  {day.label}
-                </button>
-              ))}
+            <div className="schedule-control-field schedule-day-field">
+              <span className="schedule-control-label">Hari</span>
+              <div className="schedule-day-row">
+                {DAYS.map((day) => (
+                  <button
+                    key={day.value}
+                    type="button"
+                    disabled={false}
+                    className={selectedDay === day.value ? "active" : ""}
+                    onClick={() => {
+                      setSelectedDay(day.value);
+                      setPoint("");
+                    }}
+                  >
+                    {day.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
           ) : null}
         </div>
 
@@ -905,6 +905,13 @@ export default function TimetableView({
 
         {view !== "realized" ? (
           <div className="schedule-route-tabs schedule-route-tabs-standalone">
+            <button
+              type="button"
+              className={!route ? "active" : ""}
+              onClick={() => setRoute("")}
+            >
+              Semua
+            </button>
             {routes.map((item) => (
               <button
                 key={item}
@@ -917,7 +924,7 @@ export default function TimetableView({
             ))}
           </div>
         ) : null}
-        </div>
+      </div>
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
