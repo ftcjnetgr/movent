@@ -40,6 +40,10 @@ const databases = [
     label: "List Maintenance",
     identifier: "maintenance_list",
   },
+  { key: "tasks", label: "Tasks", identifier: "transaction_id" },
+  { key: "ticketings", label: "Ticketing", identifier: "transaction_id" },
+  { key: "task_sj_items", label: "Task SJ Items", identifier: "id" },
+  { key: "user_profiles", label: "User Profiles", identifier: "username" },
 ] as const;
 
 function displayDatabaseValue(column: string, value: unknown) {
@@ -120,6 +124,33 @@ const configs = {
   locations: ["location", "grouping", "lattitude", "longitude", "status"],
   products: ["product_code", "product_detail", "status"],
   maintenance_lists: ["maintenance_code", "maintenance_list", "aging", "status"],
+  tasks: [
+    "id","transaction_id","source_type","task_type","fleet_ownership","status",
+    "created_by","requested_by","assigned_by","executor_nik","executor_snapshot",
+    "fleet_snapshot","schedule_id","schedule_snapshot","start_point",
+    "start_point_snapshot","destination","destination_snapshot","std","sta",
+    "external_executor","external_fleet","sj_number","sj_qty","sj_weight",
+    "product","product_snapshot","sj_note","odometer_start","odometer_end",
+    "requested_at","assigned_at","accepted_at","driving_at","completed_at",
+    "canceled_at","canceled_from_status","cancellation_note",
+    "external_departure_at","external_arrival_at","created_at","updated_at","arrived_at",
+  ],
+  ticketings: [
+    "id","transaction_id","status","created_by","maintainer_user_id",
+    "maintenance_list","maintenance_snapshot","fleet_plat_number","fleet_snapshot",
+    "location","location_snapshot","created_at","accepted_at","in_progress_at",
+    "completed_at","canceled_at","canceled_from_status","cancellation_note",
+    "updated_at","maintenance_pic","requested_at",
+  ],
+  task_sj_items: [
+    "id","task_id","sj_number","sj_qty","sj_weight","product",
+    "product_snapshot","note","created_at","updated_at",
+  ],
+  user_profiles: [
+    "id","auth_user_id","username","email","full_name","phone_number","role",
+    "status","must_change_password","failed_login_attempts","locked_at",
+    "created_at","updated_at","hub","area","department",
+  ],
 } as const;
 
 export default async function DatabaseManagementPage({
