@@ -26,24 +26,28 @@ const configs = {
       "std",
       "sta",
       "status",
+      "schedule_area",
     ],
   },
   executors: {
     identifier: "executor_nik",
-    columns: ["executor_nik", "full_name", "status"],
+    columns: ["executor_nik", "full_name", "phone_number", "level", "area", "status"],
   },
   fleets: {
     identifier: "plat_number",
-    columns: ["plat_number", "fleet_type", "status"],
+    columns: ["plat_number", "fleet_code", "fleet_type", "fleet_status", "status"],
   },
   locations: {
     identifier: "location",
-    columns: ["location", "grouping", "status"],
+    columns: ["location", "grouping", "lattitude", "longitude", "status"],
   },
-  products: { identifier: "product", columns: ["product", "status"] },
+  products: {
+    identifier: "product_code",
+    columns: ["product_code", "product_detail", "status"],
+  },
   maintenance_lists: {
     identifier: "maintenance_list",
-    columns: ["maintenance_list", "status"],
+    columns: ["maintenance_code", "maintenance_list", "aging", "status"],
   },
 } as const;
 
