@@ -807,11 +807,10 @@ export default function TimetableView({
       realizedBaseSchedules.filter((item) => {
         const filterPoint =
           direction === "start-point" ? item.start_point : item.destination;
-        if (route && item.route !== route) return false;
         if (point && filterPoint !== point) return false;
         return true;
       }),
-    [realizedBaseSchedules, direction, route, point],
+    [realizedBaseSchedules, direction, point],
   );
 
   const activeRows =
@@ -917,18 +916,20 @@ export default function TimetableView({
           </div>
         </div>
 
-        <div className="schedule-route-tabs schedule-route-tabs-standalone">
-          {routes.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={route === item ? "active" : ""}
-              onClick={() => setRoute(item)}
-            >
-              {routeLabels[item] ?? item}
-            </button>
-          ))}
+        {view !== "realized" ? (
+          <div className="schedule-route-tabs schedule-route-tabs-standalone">
+            {routes.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={route === item ? "active" : ""}
+                onClick={() => setRoute(item)}
+              >
+                {routeLabels[item] ?? item}
+              </button>
+            ))}
           </div>
+        ) : null}
         </div>
 
       <section className="schedule-grid-shell">
