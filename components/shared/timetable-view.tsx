@@ -198,6 +198,17 @@ export default function TimetableView({
   initialView?: "database" | "realized";
 }) {
   const view = initialView;
+
+  const defaultCategory = useMemo(() => {
+    const [year, month, day] = date.split("-").map(Number);
+    if (!year || !month || !day) return "Normal";
+
+    // Twin Date = tanggal kembar dengan bulan berjalan, selama 3 hari inclusive.
+    const twinDateStart = month;
+    const twinDateEnd = month + 2;
+    return day >= twinDateStart && day <= twinDateEnd ? "Campaign" : "Normal";
+  }, [date]);
+
   const [selectedDay, setSelectedDay] = useState(todayDay);
   const [direction, setDirection] = useState<"start-point" | "destination">(
     "start-point",
@@ -205,6 +216,12 @@ export default function TimetableView({
   const [route, setRoute] = useState("Interhub");
   const [category, setCategory] = useState("Normal");
   const [point, setPoint] = useState("");
+
+  useEffect(() => {
+    setSelectedDay(todayDay);
+    setCategory(defaultCategory);
+    setPoint("");
+  }, [todayDay, defaultCategory]);
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([]);
   const [previewMode, setPreviewMode] = useState<"schedule" | "realized">(
     "schedule",
