@@ -113,12 +113,13 @@ const configs = {
     "std",
     "sta",
     "status",
+    "schedule_area",
   ],
-  executors: ["executor_nik", "full_name", "status"],
-  fleets: ["plat_number", "fleet_type", "status"],
-  locations: ["location", "grouping", "status"],
-  products: ["product", "status"],
-  maintenance_lists: ["maintenance_list", "status"],
+  executors: ["executor_nik", "full_name", "phone_number", "level", "area", "status"],
+  fleets: ["plat_number", "fleet_code", "fleet_type", "fleet_status", "status"],
+  locations: ["location", "grouping", "lattitude", "longitude", "status"],
+  products: ["product_code", "product_detail", "status"],
+  maintenance_lists: ["maintenance_code", "maintenance_list", "aging", "status"],
 } as const;
 
 export default async function DatabaseManagementPage({
