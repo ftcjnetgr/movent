@@ -24,15 +24,34 @@ export async function getTimetableData(profile: AppProfile) {
   const admin = createAdminClient();
   const { date, day, startIso, endIso } = jakartaNow();
 
-  const [{ data: schedules }, { data: allTasks }] = await Promise.all([
-    admin
-      .from("schedules")
-      .select(
-        "schedule_id, trip, schedule_hub_id, route, category, start_point, start_point_type, destination, destination_type, schedule_day, schedule_day_name, std, sta, status",
-      )
-      .eq("status", "Active")
-      .order("schedule_day")
-      .order("std"),
+  const getAllActiveSchedules = async () => {
+    const pageSize = 1000;
+    const rows: any[] = [];
+
+    for (let from = 0; ; from += pageSize) {
+      const { data, error } = await admin
+        .from("schedules")
+        .select(
+          "schedule_id, trip, schedule_hub_id, route, category, start_point, start_point_type, destination, destination_type, schedule_day, schedule_day_name, std, sta, status",
+        )
+        .eq("status", "Active")
+        .order("schedule_day")
+        .order("std")
+        .range(from, from + pageSize - 1);
+
+      if (error) throw error;
+
+      const batch = data ?? [];
+      rows.push(...batch);
+
+      if (batch.length < pageSize) break;
+    }
+
+    return rows;
+  };
+
+  const [schedules, { data: allTasks }] = await Promise.all([
+    getAllActiveSchedules(),
     admin
       .from("tasks")
       .select(
@@ -105,7 +124,7 @@ export async function getTimetableData(profile: AppProfile) {
   return {
     date,
     todayDay: day,
-    schedules: schedules ?? [],
+    schedules,
     tasks,
     todayTasks,
     liveTasks,
