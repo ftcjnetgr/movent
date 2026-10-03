@@ -181,6 +181,7 @@ function renderScheduleDensityLegend() {
 export default function TimetableView({
   date,
   todayDay,
+  todayScheduleCategory,
   schedules,
   tasks,
   todayTasks,
@@ -190,6 +191,7 @@ export default function TimetableView({
 }: {
   date: string;
   todayDay: number;
+  todayScheduleCategory: string;
   schedules: Schedule[];
   tasks: Task[];
   todayTasks: Task[];
@@ -198,30 +200,19 @@ export default function TimetableView({
   initialView?: "database" | "realized";
 }) {
   const view = initialView;
-
-  const defaultCategory = useMemo(() => {
-    const [year, month, day] = date.split("-").map(Number);
-    if (!year || !month || !day) return "Normal";
-
-    // Twin Date = tanggal kembar dengan bulan berjalan, selama 3 hari inclusive.
-    const twinDateStart = month;
-    const twinDateEnd = month + 2;
-    return day >= twinDateStart && day <= twinDateEnd ? "Campaign" : "Normal";
-  }, [date]);
-
   const [selectedDay, setSelectedDay] = useState(todayDay);
   const [direction, setDirection] = useState<"start-point" | "destination">(
     "start-point",
   );
   const [route, setRoute] = useState("");
-  const [category, setCategory] = useState(defaultCategory);
+  const [category, setCategory] = useState(todayScheduleCategory);
   const [point, setPoint] = useState("");
 
   useEffect(() => {
     setSelectedDay(todayDay);
-    setCategory(defaultCategory);
+    setCategory(todayScheduleCategory);
     setPoint("");
-  }, [todayDay, defaultCategory]);
+  }, [todayDay, todayScheduleCategory]);
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([]);
   const [previewMode, setPreviewMode] = useState<"schedule" | "realized">(
     "schedule",
@@ -343,9 +334,9 @@ export default function TimetableView({
       schedules.filter(
         (item) =>
           item.schedule_day === todayDay &&
-          item.category === defaultCategory,
+          item.category === todayScheduleCategory,
       ),
-    [schedules, todayDay, defaultCategory],
+    [schedules, todayDay, todayScheduleCategory],
   );
 
   const routes = useMemo(() => {
