@@ -321,6 +321,31 @@ export default function TimetableView({
     );
   }, [schedules]);
 
+  const realizedCategory = useMemo(() => {
+    if (view !== "realized") return null;
+
+    const [year, month, day] = date.split("-").map(Number);
+    if (!year || !month || !day) return "Normal";
+
+    const twinDateStart = month;
+    const twinDateEnd = month + 2;
+    const isTwinDateWindow = day >= twinDateStart && day <= twinDateEnd;
+
+    return isTwinDateWindow ? "Campaign" : "Normal";
+  }, [date, view]);
+
+  const realizedBaseSchedules = useMemo(
+    () =>
+      view === "realized"
+        ? schedules.filter(
+            (item) =>
+              item.schedule_day === todayDay &&
+              item.category === realizedCategory,
+          )
+        : [],
+    [schedules, todayDay, realizedCategory, view],
+  );
+
   const routes = useMemo(() => {
     const unique = [
       ...new Set(schedules.map((item) => item.route).filter(Boolean)),
@@ -342,7 +367,8 @@ export default function TimetableView({
   );
 
   const pointOptions = useMemo(() => {
-    const source = view === "database" ? selectedPlanSchedules : schedules;
+    const source =
+      view === "database" ? selectedPlanSchedules : realizedBaseSchedules;
     const values =
       direction === "start-point"
         ? source.map((item) => item.start_point)
@@ -350,7 +376,12 @@ export default function TimetableView({
     return [...new Set(values.filter(Boolean))].sort((a, b) =>
       a.localeCompare(b),
     );
-  }, [selectedPlanSchedules, schedules, view, direction]);
+  }, [
+    selectedPlanSchedules,
+    realizedBaseSchedules,
+    view,
+    direction,
+  ]);
 
   const filteredSchedules = useMemo(
     () =>
@@ -756,14 +787,14 @@ export default function TimetableView({
 
   const filteredRealizedSchedules = useMemo(
     () =>
-      schedules.filter((item) => {
+      realizedBaseSchedules.filter((item) => {
         const filterPoint =
           direction === "start-point" ? item.start_point : item.destination;
         if (route && item.route !== route) return false;
         if (point && filterPoint !== point) return false;
         return true;
       }),
-    [schedules, direction, route, point],
+    [realizedBaseSchedules, direction, route, point],
   );
 
   const activeRows =
