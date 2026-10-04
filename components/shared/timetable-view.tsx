@@ -138,12 +138,12 @@ const routeLabels: Record<string, string> = {
 };
 
 const scheduleDensityPalette = [
-  { background: "#eff6ff", color: "#1d4ed8", border: "#bfdbfe" },
-  { background: "#dbeafe", color: "#1d4ed8", border: "#93c5fd" },
-  { background: "#bfdbfe", color: "#1e40af", border: "#60a5fa" },
-  { background: "#93c5fd", color: "#1e3a8a", border: "#3b82f6" },
-  { background: "#60a5fa", color: "#172554", border: "#2563eb" },
-  { background: "#2563eb", color: "#ffffff", border: "#1d4ed8" },
+  { background: "#e8f1ff", color: "#1d4ed8", border: "#c7dcff" },
+  { background: "#4f8fe8", color: "#ffffff", border: "#3e7fd6" },
+  { background: "#1557b0", color: "#ffffff", border: "#0f4b9d" },
+  { background: "#ffe4c2", color: "#b45309", border: "#ffd09b" },
+  { background: "#ff922b", color: "#ffffff", border: "#f07d16" },
+  { background: "#d95f00", color: "#ffffff", border: "#c65300" },
 ];
 
 function scheduleDensityStyle(total: number) {
