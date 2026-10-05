@@ -2360,8 +2360,8 @@ tbody tr:hover td {
   width: 100% !important;
   min-height: 40px !important;
   height: 40px;
-  padding: 8px 10px !important;
-  gap: 7px;
+  padding: 8px 12px !important;
+  gap: 5px;
   border: 0 !important;
   border-radius: 0 !important;
   background: #eef2f7 !important;
@@ -2500,7 +2500,7 @@ tbody tr:hover td {
   min-width: 160px;
   background: #f8fafc;
   text-align: left;
-  padding-left: 12px;
+  padding-left: 32px;
   border-left: 1px solid #dfe5ec;
 }
 
