@@ -215,12 +215,18 @@ export default function TimetableView({
   const [route, setRoute] = useState("");
   const [category, setCategory] = useState(defaultCategory);
   const [point, setPoint] = useState("");
+  const [openPointGroups, setOpenPointGroups] = useState<string[]>([]);
 
   useEffect(() => {
     setSelectedDay(todayDay);
     setCategory(defaultCategory);
     setPoint("");
+    setOpenPointGroups([]);
   }, [todayDay, defaultCategory]);
+
+  useEffect(() => {
+    setOpenPointGroups([]);
+  }, [view, direction, selectedDay, route, category]);
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([]);
   const [previewMode, setPreviewMode] = useState<"schedule" | "realized">(
     "schedule",
@@ -367,16 +373,32 @@ export default function TimetableView({
     [schedules, selectedDay],
   );
 
-  const pointOptions = useMemo(() => {
+  const pointGroups = useMemo(() => {
     const source =
       view === "database" ? selectedPlanSchedules : defaultScheduledSchedules;
-    const values =
-      direction === "start-point"
-        ? source.map((item) => item.start_point)
-        : source.map((item) => item.destination);
-    return [...new Set(values.filter(Boolean))].sort((a, b) =>
-      a.localeCompare(b),
-    );
+    const groups = new Map<string, string[]>();
+
+    source.forEach((item) => {
+      const type =
+        direction === "start-point"
+          ? item.start_point_type || "Tanpa Tipe"
+          : item.destination_type || "Tanpa Tipe";
+      const value =
+        direction === "start-point" ? item.start_point : item.destination;
+
+      if (!value) return;
+
+      const values = groups.get(type) ?? [];
+      if (!values.includes(value)) values.push(value);
+      groups.set(type, values);
+    });
+
+    return [...groups.entries()]
+      .map(([type, values]) => [
+        type,
+        values.sort((a, b) => a.localeCompare(b)),
+      ] as const)
+      .sort((a, b) => a[0].localeCompare(b[0]));
   }, [selectedPlanSchedules, defaultScheduledSchedules, view, direction]);
 
   const filteredSchedules = useMemo(
@@ -868,30 +890,60 @@ export default function TimetableView({
 
         <div className="schedule-point-detail-card">
           <div
-            className="schedule-point-tabs"
+            className="schedule-point-accordion"
             aria-label={
               direction === "start-point"
-                ? "Filter Start Point"
-                : "Filter Destination"
+                ? "Filter detail Start Point"
+                : "Filter detail Destination"
             }
           >
             <button
               type="button"
-              className={!point ? "active" : ""}
+              className={`schedule-point-all${!point ? " active" : ""}`}
               onClick={() => setPoint("")}
             >
               Semua
             </button>
-            {pointOptions.map((item) => (
-              <button
-                key={item}
-                type="button"
-                className={point === item ? "active" : ""}
-                onClick={() => setPoint(item)}
-              >
-                {item}
-              </button>
-            ))}
+
+            {pointGroups.map(([type, values]) => {
+              const open = openPointGroups.includes(type);
+
+              return (
+                <div className="schedule-point-group" key={type}>
+                  <button
+                    type="button"
+                    className="schedule-point-group-trigger"
+                    aria-expanded={open}
+                    onClick={() =>
+                      setOpenPointGroups((current) =>
+                        open
+                          ? current.filter((item) => item !== type)
+                          : [...current, type],
+                      )
+                    }
+                  >
+                    <span>{type}</span>
+                    <small>{values.length} titik</small>
+                    <b>{open ? "⌃" : "⌄"}</b>
+                  </button>
+
+                  {open ? (
+                    <div className="schedule-point-group-items">
+                      {values.map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          className={point === item ? "active" : ""}
+                          onClick={() => setPoint(item)}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         </div>
 
