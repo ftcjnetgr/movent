@@ -2343,7 +2343,49 @@ tbody tr:hover td {
   padding: 0 !important;
   border-top: 1px solid #d9e0e8;
   border-bottom: 1px solid #d9e0e8;
-  background: #f7f9fc !important;
+  background: #f1f5fb !important;
+}
+
+.schedule-type-group-value-cell {
+  min-width: 0;
+  text-align: center !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  color: #475569 !important;
+}
+
+.schedule-type-group-value-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #315c9d;
+  box-shadow: none;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.schedule-type-group-value-button:hover {
+  background: #dfeafe;
+  color: #244d8c;
+  box-shadow: none;
+  transform: none;
+}
+
+.schedule-type-group-total-cell {
+  border-left: 1px solid #d1dbe8 !important;
+  background: #e9f0fa !important;
+}
+
+.schedule-type-group-total-cell .schedule-type-group-value-button {
+  color: #284f8a;
+  font-weight: 900;
 }
 
 .schedule-type-group-button {
