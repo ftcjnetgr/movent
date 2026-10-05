@@ -16668,3 +16668,66 @@ button:not(:disabled):hover,
 .status-legend-in-progress { color: #b56b00 !important; }
 .status-legend-completed { color: #15966b !important; }
 .status-legend-canceled { color: #c53d46 !important; }
+
+
+/* FINAL CLEAN BUTTON + STATUS PRESENTATION */
+.super-dashboard .assignment-kpi-grid .super-kpi-card,
+.super-dashboard .maintenance-kpi-grid .super-kpi-card {
+  min-height: 104px !important;
+  padding: 14px !important;
+  border-radius: 13px !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: var(--shadow) !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-total-tasks {
+  border-top: 3px solid #4f46e5 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-total-tasks .super-kpi-icon {
+  background: #eef2ff !important;
+  color: #4f46e5 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-unassigned,
+.super-dashboard .maintenance-kpi-grid .status-kpi-requested {
+  border-top: 3px solid #4f46e5 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-assigned {
+  border-top: 3px solid #3f5fc6 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-confirmed,
+.super-dashboard .maintenance-kpi-grid .status-kpi-confirmed {
+  border-top: 3px solid #1a7182 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-driving,
+.super-dashboard .maintenance-kpi-grid .status-kpi-in-progress {
+  border-top: 3px solid #b56b00 !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-completed,
+.super-dashboard .maintenance-kpi-grid .status-kpi-completed {
+  border-top: 3px solid #15966b !important;
+}
+.super-dashboard .assignment-kpi-grid .status-kpi-canceled,
+.super-dashboard .maintenance-kpi-grid .status-kpi-canceled {
+  border-top: 3px solid #c53d46 !important;
+}
+
+.topbar-date-filter button {
+  width: 82px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 10px !important;
+  border-radius: 9px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+.topbar-date-filter .topbar-date-reset {
+  background: #ffffff !important;
+  color: var(--text-2) !important;
+  border: 1px solid var(--line-strong) !important;
+  box-shadow: none !important;
+}
+.topbar-date-filter .topbar-date-reset:hover {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border-color: #b8c4d1 !important;
+  box-shadow: none !important;
+}
