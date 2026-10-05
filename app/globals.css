@@ -1,86 +1,28 @@
 :root {
-  --bg: #f5f5f5;
+  --bg: #f7f7fb;
   --surface: #ffffff;
-  --surface-2: #fafafa;
-  --surface-3: #f0f0f0;
-  --line: #e1e1e1;
-  --line-strong: #c9c9c9;
-  --text: #181818;
-  --text-2: #4a4a4a;
-  --muted: #777777;
-  --primary: #1f1f1f;
-  --primary-dark: #000000;
-  --primary-soft: #eeeeee;
-  --success: #4a4a4a;
-  --success-soft: #f0f0f0;
-  --warning: #4a4a4a;
-  --warning-soft: #eeeeee;
-  --danger: #3a3a3a;
-  --danger-soft: #ededed;
-  --info-soft: #eeeeee;
+  --surface-2: #fafafc;
+  --surface-3: #f1f5f9;
+  --line: #e2e8f0;
+  --line-strong: #cbd5e1;
+  --text: #1e293b;
+  --text-2: #475569;
+  --muted: #94a3b8;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-soft: #eef2ff;
+  --success: #15966b;
+  --success-soft: #eaf8f2;
+  --warning: #b56b00;
+  --warning-soft: #fff6e6;
+  --danger: #c53d46;
+  --danger-soft: #fff0f1;
+  --info-soft: #edf7fb;
   --radius: 14px;
   --radius-sm: 10px;
-  --shadow:
-    0 1px 2px rgba(0, 0, 0, 0.03), 0 12px 32px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 16px 38px rgba(0, 0, 0, 0.1);
-  --brand-indigo: #1f1f1f;
-  --brand-indigo-dark: #000000;
-  --brand-indigo-soft: #eeeeee;
-  --slate-950: #181818;
-  --slate-900: #242424;
-  --slate-800: #333333;
-  --slate-700: #4a4a4a;
-  --slate-600: #606060;
-  --slate-500: #808080;
-  --slate-300: #c8c8c8;
-  --slate-200: #dddddd;
-  --slate-100: #efefef;
-  --slate-50: #fafafa;
-  --theme-primary: #1f1f1f;
-  --theme-primary-dark: #000000;
-  --theme-primary-soft: #eeeeee;
-  --theme-primary-soft-2: #e7e7e7;
-  --theme-slate-950: #181818;
-  --theme-slate-900: #242424;
-  --theme-slate-800: #333333;
-  --theme-slate-700: #4a4a4a;
-  --theme-slate-600: #606060;
-  --theme-slate-500: #808080;
-  --theme-slate-300: #c8c8c8;
-  --theme-slate-200: #dddddd;
-  --theme-slate-100: #efefef;
-  --theme-slate-50: #fafafa;
-  --theme-color: #1f1f1f;
-  --theme-color-dark: #000000;
-  --theme-color-mid: #3a3a3a;
-  --theme-color-soft: #eeeeee;
-  --theme-color-soft-2: #e5e5e5;
-  --theme-color-light: #c4c4c4;
-  --theme-ink: #303030;
-  --theme-muted: #606060;
-  --theme-line: #d8d8d8;
-  --status-requested: #4a4a4a;
-  --status-confirmed: #555555;
-  --status-assigned: #666666;
-  --status-driving: #3f3f3f;
-  --status-in-progress: #666666;
-  --status-completed: #1f1f1f;
-  --status-canceled: #292929;
-  --status-requested-soft: #f2f2f2;
-  --status-confirmed-soft: #ededed;
-  --status-assigned-soft: #e9e9e9;
-  --status-driving-soft: #f0f0f0;
-  --status-completed-soft: #e7e7e7;
-  --status-canceled-soft: #eeeeee;
-  --selection-purple-dark: #1f1f1f;
-  --selection-purple-light: #eeeeee;
-  --selection-purple-border: #c4c4c4;
-  --content-gap: 12px;
-  --heading-subtitle-gap: 3px;
-  --subtitle-content-gap: 24px;
-}
-
-/* MOVENT — UI/UX rebuilt from zero
+  --shadow: 0 1px 2px rgba(22, 32, 51, .03), 0 10px 28px rgba(22, 32, 51, .045);
+  --shadow-hover: 0 10px 28px rgba(22, 32, 51, .08);
+}/* MOVENT — UI/UX rebuilt from zero
    visual layer only. no business logic, data flow, auth, or database rules live here.
 */
 
@@ -16561,3 +16503,168 @@ td select:focus,
     grid-template-columns: 1fr;
   }
 }
+
+/* MOVENT OPERATIONAL COLOR SYSTEM — authoritative UI layer.
+   Intentionally excludes timetable grid value cells. */
+
+/* Primary buttons: one consistent visual language. */
+button,
+.button-link,
+.link-button {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+button:not(:disabled):hover,
+.button-link:hover,
+.link-button:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+.secondary-button {
+  background: #ffffff;
+  border-color: var(--line-strong);
+  color: var(--text-2);
+}
+.secondary-button:hover {
+  background: var(--surface-2);
+  border-color: #b8c4d1;
+  color: var(--text);
+}
+
+/* Status badges — semantic colors; timetable cell values are excluded. */
+.status-badge.status-requested,
+.status-badge.status-created {
+  background: #eef2ff !important;
+  color: #4f46e5 !important;
+}
+.status-badge.status-assigned {
+  background: #e8efff !important;
+  color: #3f5fc6 !important;
+}
+.status-badge.status-confirmed,
+.status-badge.status-accepted {
+  background: #edf7fb !important;
+  color: #1a7182 !important;
+}
+.status-badge.status-driving,
+.status-badge.status-in-progress {
+  background: #fff6e6 !important;
+  color: #b56b00 !important;
+}
+.status-badge.status-completed {
+  background: #eaf8f2 !important;
+  color: #15966b !important;
+}
+.status-badge.status-canceled {
+  background: #fff0f1 !important;
+  color: #c53d46 !important;
+}
+
+/* Dashboard KPI status icons. */
+.super-dashboard .status-kpi-unassigned .super-kpi-icon,
+.super-dashboard .status-kpi-requested .super-kpi-icon {
+  background: #eef2ff !important;
+  color: #4f46e5 !important;
+}
+.super-dashboard .status-kpi-assigned .super-kpi-icon {
+  background: #e8efff !important;
+  color: #3f5fc6 !important;
+}
+.super-dashboard .status-kpi-confirmed .super-kpi-icon {
+  background: #edf7fb !important;
+  color: #1a7182 !important;
+}
+.super-dashboard .status-kpi-driving .super-kpi-icon,
+.super-dashboard .status-kpi-in-progress .super-kpi-icon {
+  background: #fff6e6 !important;
+  color: #b56b00 !important;
+}
+.super-dashboard .status-kpi-completed .super-kpi-icon {
+  background: #eaf8f2 !important;
+  color: #15966b !important;
+}
+.super-dashboard .status-kpi-canceled .super-kpi-icon {
+  background: #fff0f1 !important;
+  color: #c53d46 !important;
+}
+
+/* Dashboard chart bars + legends. */
+.super-dashboard .legend-unassigned,
+.super-dashboard .bar-unassigned,
+.super-dashboard .legend-requested,
+.super-dashboard .bar-requested {
+  background: #4f46e5 !important;
+}
+.super-dashboard .legend-assigned,
+.super-dashboard .bar-assigned {
+  background: #3f5fc6 !important;
+}
+.super-dashboard .legend-confirmed,
+.super-dashboard .bar-confirmed {
+  background: #1a7182 !important;
+}
+.super-dashboard .legend-driving,
+.super-dashboard .bar-driving,
+.super-dashboard .legend-in-progress,
+.super-dashboard .bar-in-progress {
+  background: #b56b00 !important;
+}
+.super-dashboard .legend-completed,
+.super-dashboard .bar-completed,
+.super-dashboard .bar-maintenance-completed {
+  background: #15966b !important;
+}
+.super-dashboard .legend-canceled,
+.super-dashboard .bar-canceled {
+  background: #c53d46 !important;
+}
+
+/* Activity dots: retain semantic meaning. */
+.super-dashboard .super-activity-list .activity-dot.blue,
+.activity-dot.blue {
+  background: #4f46e5 !important;
+}
+.super-dashboard .super-activity-list .activity-dot.green,
+.activity-dot.green {
+  background: #15966b !important;
+}
+.super-dashboard .super-activity-list .activity-dot.orange,
+.activity-dot.orange {
+  background: #b56b00 !important;
+}
+.super-dashboard .super-activity-list .activity-dot.purple,
+.activity-dot.purple {
+  background: #7256d6 !important;
+}
+.super-dashboard .super-activity-list .activity-dot.red,
+.activity-dot.red {
+  background: #c53d46 !important;
+}
+
+/* Sidebar alert notification dot. */
+.sidebar .alert-nav-dot {
+  background: #c53d46 !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 3px rgba(197,61,70,.12) !important;
+}
+
+/* Alert dashboard indicators. */
+.alert-page .alert-dashboard-summary .alert-total::before {
+  background: #4f46e5 !important;
+}
+.alert-page .alert-dashboard-summary .alert-task-summary::before {
+  background: #f59e0b !important;
+}
+.alert-page .alert-dashboard-summary .alert-ticket-summary::before {
+  background: #8b5cf6 !important;
+}
+
+/* Status legend labels. */
+.status-legend-requested { color: #4f46e5 !important; }
+.status-legend-assigned { color: #3f5fc6 !important; }
+.status-legend-confirmed { color: #1a7182 !important; }
+.status-legend-driving { color: #b56b00 !important; }
+.status-legend-in-progress { color: #b56b00 !important; }
+.status-legend-completed { color: #15966b !important; }
+.status-legend-canceled { color: #c53d46 !important; }
