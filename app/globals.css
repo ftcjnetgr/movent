@@ -2341,7 +2341,7 @@ tbody tr:hover td {
   border-right: 1px solid #d7dee8 !important;
   border-left: 1px solid #d7dee8 !important;
   background: #eef2f7 !important;
-  text-align: center !important;
+  text-align: left !important;
   box-shadow: 4px 0 8px rgba(15, 23, 42, 0.04);
 }
 
@@ -2356,7 +2356,7 @@ tbody tr:hover td {
 .schedule-type-group-button {
   display: flex !important;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100% !important;
   min-height: 40px !important;
   height: 40px;
@@ -2369,7 +2369,7 @@ tbody tr:hover td {
   box-shadow: none !important;
   font-size: 10px !important;
   font-weight: 800 !important;
-  text-align: center;
+  text-align: left;
 }
 
 .schedule-type-group-button:hover,
