@@ -16664,38 +16664,43 @@ td select:focus,
 }
 
 
-/* WARM IVORY + AIRY BLUE THEME — high contrast, JPMorgan-inspired */
+/* MOVENT GLOBAL PALETTE — status/legend/grid values intentionally excluded */
 :root {
-  --bg: #f6f3ec;
-  --surface: #ffffff;
-  --surface-2: #fbfaf7;
-  --surface-3: #f2efe8;
-  --line: #dedbd3;
-  --line-strong: #c6c2b9;
-  --text: #151817;
-  --text-2: #3f4446;
-  --muted: #676d6f;
-  --primary: #1f2b2f;
-  --primary-dark: #111516;
-  --primary-soft: #e7f2f6;
-  --success: #4d625a;
-  --success-soft: #edf3ef;
-  --warning: #8a6a2f;
-  --warning-soft: #faf1dc;
-  --danger: #8a4a47;
-  --danger-soft: #f8eaea;
-  --info-soft: #e7f2f6;
-  --brand-indigo: #1f2b2f;
-  --brand-indigo-dark: #111516;
-  --brand-indigo-soft: #e7f2f6;
-  --theme-primary: #1f2b2f;
-  --theme-primary-dark: #111516;
-  --theme-primary-soft: #e7f2f6;
-  --theme-primary-soft-2: #e5eef1;
-  --theme-color: #1f2b2f;
-  --theme-color-dark: #111516;
-  --theme-color-mid: #41565d;
+  --bg: #F6F8FA;
+  --surface: #FFFFFF;
+  --surface-2: #F8FAFC;
+  --surface-3: #EEF3F6;
+  --line: #DDE4EA;
+  --line-strong: #C5D0D8;
+  --text: #17212B;
+  --text-2: #607080;
+  --muted: #8A98A6;
+  --primary: #234E70;
+  --primary-dark: #17324D;
+  --primary-soft: #DCEAF4;
+  --brand-indigo: #234E70;
+  --brand-indigo-dark: #17324D;
+  --brand-indigo-soft: #DCEAF4;
+  --theme-primary: #234E70;
+  --theme-primary-dark: #17324D;
+  --theme-primary-soft: #DCEAF4;
+  --theme-primary-soft-2: #E6EEF4;
+  --theme-color: #234E70;
+  --theme-color-dark: #17324D;
+  --theme-color-mid: #3F5261;
 }
+
+/* Status palette — LOCKED. */
+.status-requested,
+.status-assigned,
+.status-created { background: #f2f2f2 !important; color: #3f4446 !important; }
+.status-confirmed,
+.status-accepted { background: #ece9e2 !important; color: #555555 !important; }
+.status-driving,
+.status-in-progress { background: #f2efe8 !important; color: #3f3f3f !important; }
+.status-completed { background: #e5eef1 !important; color: #1f2b2f !important; }
+.status-canceled { background: #e7f2f6 !important; color: #292929 !important; }
+
 
 /* Page/workspace surfaces */
 body {
