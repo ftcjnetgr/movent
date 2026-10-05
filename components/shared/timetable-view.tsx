@@ -896,8 +896,11 @@ export default function TimetableView({
     <div className={`schedule-page schedule-view-${view}`}>
       <div className="schedule-control-compact">
         <div className="schedule-filter-top">
-          <div className="schedule-point-card">
-            <span className="schedule-control-label">Titik Filter</span>
+          <section className="schedule-filter-card schedule-filter-direction">
+            <div className="schedule-filter-card-head">
+              <span className="schedule-control-label">Titik</span>
+              <small>Pilih arah jadwal</small>
+            </div>
             <div className="schedule-direction" aria-label="Pilih titik filter">
               <button
                 type="button"
@@ -920,59 +923,93 @@ export default function TimetableView({
                 Destination
               </button>
             </div>
-          </div>
+          </section>
 
           {view !== "realized" ? (
-            <>
-              <div className="schedule-control-field schedule-day-field">
+            <section className="schedule-filter-card schedule-filter-day">
+              <div className="schedule-filter-card-head">
                 <span className="schedule-control-label">Hari</span>
-                <div className="schedule-day-row">
-                  {DAYS.map((day) => (
-                    <button
-                      key={day.value}
-                      type="button"
-                      className={selectedDay === day.value ? "active" : ""}
-                      onClick={() => {
-                        setSelectedDay(day.value);
-                        setPoint("");
-                      }}
-                    >
-                      {day.label}
-                    </button>
-                  ))}
-                </div>
+                <small>Pilih hari jadwal</small>
               </div>
-            </>
+              <div className="schedule-day-row">
+                {DAYS.map((day) => (
+                  <button
+                    key={day.value}
+                    type="button"
+                    className={selectedDay === day.value ? "active" : ""}
+                    onClick={() => {
+                      setSelectedDay(day.value);
+                      setPoint("");
+                    }}
+                  >
+                    {day.label}
+                  </button>
+                ))}
+              </div>
+            </section>
           ) : null}
         </div>
 
-        <div className="schedule-route-tabs schedule-route-tabs-standalone">
-          <button
-            type="button"
-            className={!route ? "active" : ""}
-            onClick={() => {
-              setRoute("");
-              setPoint("");
-            }}
-          >
-            Semua
-          </button>
-          {routes.map((item) => (
+        {view !== "realized" ? (
+          <section className="schedule-filter-card schedule-filter-category">
+            <div className="schedule-filter-card-head">
+              <span className="schedule-control-label">Kategori</span>
+              <small>Mode jadwal</small>
+            </div>
+            <div className="schedule-category-tabs-standalone" aria-label="Category">
+              {categories.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={category === item ? "active" : ""}
+                  onClick={() => setCategory(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        <section className="schedule-filter-card schedule-filter-route">
+          <div className="schedule-filter-card-head">
+            <span className="schedule-control-label">Rute</span>
+            <small>Saring berdasarkan jalur</small>
+          </div>
+          <div className="schedule-route-tabs schedule-route-tabs-standalone">
             <button
-              key={item}
               type="button"
-              className={route === item ? "active" : ""}
+              className={!route ? "active" : ""}
               onClick={() => {
-                setRoute(item);
+                setRoute("");
                 setPoint("");
               }}
             >
-              {routeLabels[item] ?? item}
+              Semua
             </button>
-          ))}
-        </div>
+            {routes.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={route === item ? "active" : ""}
+                onClick={() => {
+                  setRoute(item);
+                  setPoint("");
+                }}
+              >
+                {routeLabels[item] ?? item}
+              </button>
+            ))}
+          </div>
+        </section>
 
-        <div className="schedule-point-detail-card">
+        <section className="schedule-filter-card schedule-filter-point schedule-point-detail-card">
+          <div className="schedule-filter-card-head">
+            <span className="schedule-control-label">
+              {direction === "start-point" ? "Start Point" : "Destination"}
+            </span>
+            <small>Pilih titik spesifik</small>
+          </div>
           <div
             className="schedule-point-tabs"
             aria-label={
@@ -999,23 +1036,8 @@ export default function TimetableView({
               </button>
             ))}
           </div>
-        </div>
+        </section>
       </div>
-
-      {view !== "realized" ? (
-        <div className="schedule-category-tabs-standalone" aria-label="Category">
-          {categories.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={category === item ? "active" : ""}
-              onClick={() => setCategory(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-      ) : null}
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
