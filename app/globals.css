@@ -16561,3 +16561,53 @@ td select:focus,
     grid-template-columns: 1fr;
   }
 }
+
+/* CATEGORY SWITCH — clean segmented control for Normal / Campaign only */
+.schedule-category-tabs-standalone {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px !important;
+  width: fit-content !important;
+  margin-top: 14px;
+  padding: 4px !important;
+  border: 1px solid #dfe5ee;
+  border-radius: 13px;
+  background: #f7f9fc;
+}
+
+.schedule-category-tabs-standalone button {
+  width: auto !important;
+  min-width: 104px !important;
+  min-height: 38px !important;
+  padding: 8px 18px !important;
+  border: 1px solid transparent !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: #66758b !important;
+  box-shadow: none !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+
+.schedule-category-tabs-standalone button:hover {
+  background: #ffffff !important;
+  color: #394962 !important;
+  border-color: #e0e6ef !important;
+  box-shadow: 0 2px 7px rgba(44, 62, 88, 0.06) !important;
+  transform: none !important;
+}
+
+.schedule-category-tabs-standalone button.active {
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+  border-color: #4f46e5 !important;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.18) !important;
+}
+
+.schedule-category-tabs-standalone button.active:hover {
+  background: #4338ca !important;
+  border-color: #4338ca !important;
+  color: #ffffff !important;
+}
