@@ -91,7 +91,7 @@ function timeValue(value: string | null) {
 function titleCasePoint(value: string) {
   return value
     .toLowerCase()
-    .replace(/(^|[\\s,-])([a-z])/g, (_, prefix, letter) => prefix + letter.toUpperCase());
+    .replace(/(^|[\s,-])([a-z])/g, (_, prefix, letter) => prefix + letter.toUpperCase());
 }
 
 function durationValue(start: string | null, end: string | null, live = false) {
