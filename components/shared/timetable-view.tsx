@@ -564,7 +564,7 @@ export default function TimetableView({
               return (
                 <React.Fragment key={type}>
                   <tr className="schedule-type-group-row">
-                    <th colSpan={26}>
+                    <th className="schedule-type-group-pivot">
                       <button
                         type="button"
                         className="schedule-type-group-button"
@@ -577,11 +577,14 @@ export default function TimetableView({
                         }
                         aria-expanded={open}
                       >
+                        <b aria-hidden="true">{open ? "⌃" : "⌄"}</b>
                         <span>{type}</span>
                         <small>{groupItems.length} schedule</small>
-                        <b>{open ? "⌃" : "⌄"}</b>
                       </button>
                     </th>
+                    {Array.from({ length: 25 }, (_, index) => (
+                      <td key={index} aria-hidden="true" />
+                    ))}
                   </tr>
 
                   {open
