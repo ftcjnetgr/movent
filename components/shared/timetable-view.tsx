@@ -88,6 +88,12 @@ function timeValue(value: string | null) {
     : `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
 }
 
+function titleCasePoint(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/(^|[\\s,-])([a-z])/g, (_, prefix, letter) => prefix + letter.toUpperCase());
+}
+
 function durationValue(start: string | null, end: string | null, live = false) {
   if (!start) return "-";
 
@@ -475,7 +481,9 @@ export default function TimetableView({
 
     const renderRow = (row: string, rowItems: Schedule[]) => (
       <tr key={row}>
-        <th style={{ background: "#f1f5f9", color: "#617187" }}>{row}</th>
+        <th style={{ background: "#f1f5f9", color: "#617187" }}>
+          {titleCasePoint(row)}
+        </th>
         {columnTotals.map((_, hour) => {
           const cellItems = rowItems
             .filter((item) => hourValue(item.std) === hour)
@@ -582,8 +590,7 @@ export default function TimetableView({
                         aria-expanded={open}
                       >
                         <b aria-hidden="true">{open ? "⌃" : "⌄"}</b>
-                        <span>{type}</span>
-                        <small>{groupItems.length} schedule</small>
+                        <span>{titleCasePoint(type)}</span>
                       </button>
                     </th>
                     {groupHourTotals.map((hourItems, hour) => (
