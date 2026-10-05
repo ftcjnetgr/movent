@@ -2284,6 +2284,119 @@ tbody tr:hover td {
   box-shadow: none;
 }
 
+.schedule-point-accordion {
+  display: grid;
+  gap: 6px;
+}
+
+.schedule-point-all {
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #647286;
+  box-shadow: none;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.schedule-point-all:hover {
+  background: #f1f5fa;
+  border-color: #d2dbe6;
+  color: var(--text);
+}
+
+.schedule-point-all.active {
+  background: var(--primary-soft);
+  border-color: #b8d0f4;
+  color: var(--primary);
+}
+
+.schedule-point-group {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+}
+
+.schedule-point-group-trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 11px;
+  border: 0;
+  background: #f8fafc;
+  color: #4f6075;
+  box-shadow: none;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.schedule-point-group-trigger:hover {
+  background: #f1f5fa;
+  box-shadow: none;
+  transform: none;
+}
+
+.schedule-point-group-trigger span {
+  flex: 1;
+}
+
+.schedule-point-group-trigger small {
+  margin-right: 8px;
+  color: #8a98aa;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.schedule-point-group-trigger b {
+  width: 18px;
+  color: #7b8ba0;
+  font-size: 12px;
+  text-align: center;
+}
+
+.schedule-point-group-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.schedule-point-group-items button {
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #647286;
+  box-shadow: none;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.schedule-point-group-items button:hover {
+  background: #f1f5fa;
+  border-color: #d2dbe6;
+  color: var(--text);
+  box-shadow: none;
+  transform: none;
+}
+
+.schedule-point-group-items button.active {
+  background: var(--primary-soft);
+  border-color: #b8d0f4;
+  color: var(--primary);
+}
+
 .schedule-inline-label {
   margin-top: 12px;
 }
