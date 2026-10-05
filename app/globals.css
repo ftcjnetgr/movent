@@ -16562,52 +16562,73 @@ td select:focus,
   }
 }
 
-/* CATEGORY SWITCH — clean segmented control for Normal / Campaign only */
+/* CATEGORY SWITCH — accessible segmented control for Normal / Campaign */
 .schedule-category-tabs-standalone {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 5px !important;
-  width: fit-content !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 4px !important;
+  width: min(100%, 248px) !important;
+  min-height: 48px;
   margin-top: 14px;
   padding: 4px !important;
-  border: 1px solid #dfe5ee;
-  border-radius: 13px;
-  background: #f7f9fc;
+  border: 1px solid #dce3ec;
+  border-radius: 14px;
+  background: #f4f7fb;
+  box-shadow: 0 2px 8px rgba(33, 53, 79, 0.05);
 }
 
 .schedule-category-tabs-standalone button {
-  width: auto !important;
-  min-width: 104px !important;
-  min-height: 38px !important;
-  padding: 8px 18px !important;
-  border: 1px solid transparent !important;
-  border-radius: 9px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 40px !important;
+  padding: 9px 14px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
   background: transparent !important;
-  color: #66758b !important;
+  color: #66758a !important;
   box-shadow: none !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
-  line-height: 1 !important;
+  line-height: 1.1 !important;
   transform: none !important;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
 .schedule-category-tabs-standalone button:hover {
   background: #ffffff !important;
-  color: #394962 !important;
-  border-color: #e0e6ef !important;
-  box-shadow: 0 2px 7px rgba(44, 62, 88, 0.06) !important;
+  color: #3d4c62 !important;
+  box-shadow: 0 2px 7px rgba(33, 53, 79, 0.07) !important;
   transform: none !important;
+}
+
+.schedule-category-tabs-standalone button:focus-visible {
+  outline: 3px solid rgba(79, 70, 229, 0.24) !important;
+  outline-offset: 1px !important;
 }
 
 .schedule-category-tabs-standalone button.active {
   background: #4f46e5 !important;
   color: #ffffff !important;
-  border-color: #4f46e5 !important;
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.18) !important;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2) !important;
 }
 
 .schedule-category-tabs-standalone button.active:hover {
   background: #4338ca !important;
-  border-color: #4338ca !important;
   color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2) !important;
+}
+
+@media (max-width: 560px) {
+  .schedule-category-tabs-standalone {
+    width: 100% !important;
+    max-width: 320px;
+  }
+
+  .schedule-category-tabs-standalone button {
+    min-height: 42px !important;
+  }
 }
