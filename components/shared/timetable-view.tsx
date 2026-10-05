@@ -888,6 +888,32 @@ export default function TimetableView({
           ) : null}
         </div>
 
+        <div className="schedule-route-tabs schedule-route-tabs-standalone">
+          <button
+            type="button"
+            className={!route ? "active" : ""}
+            onClick={() => {
+              setRoute("");
+              setPoint("");
+            }}
+          >
+            Semua
+          </button>
+          {routes.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={route === item ? "active" : ""}
+              onClick={() => {
+                setRoute(item);
+                setPoint("");
+              }}
+            >
+              {routeLabels[item] ?? item}
+            </button>
+          ))}
+        </div>
+
         <div className="schedule-point-detail-card">
           <div
             className="schedule-point-accordion"
@@ -945,32 +971,6 @@ export default function TimetableView({
               );
             })}
           </div>
-        </div>
-
-        <div className="schedule-route-tabs schedule-route-tabs-standalone">
-          <button
-            type="button"
-            className={!route ? "active" : ""}
-            onClick={() => {
-              setRoute("");
-              setPoint("");
-            }}
-          >
-            Semua
-          </button>
-          {routes.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={route === item ? "active" : ""}
-              onClick={() => {
-                setRoute(item);
-                setPoint("");
-              }}
-            >
-              {routeLabels[item] ?? item}
-            </button>
-          ))}
         </div>
       </div>
 
