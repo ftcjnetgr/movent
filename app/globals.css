@@ -2328,6 +2328,49 @@ tbody tr:hover td {
   background: #eef2f7 !important;
 }
 
+;
+.schedule-category-tabs-standalone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: -4px;
+  overflow-x: auto;
+  padding: 0 2px 2px;
+  scrollbar-width: thin;
+}
+
+.schedule-category-tabs-standalone button {
+  flex: 0 0 auto;
+  min-height: 34px !important;
+  padding: 7px 12px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: #f8fafc !important;
+  color: #647286 !important;
+  box-shadow: none !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+
+.schedule-category-tabs-standalone button:hover,
+.schedule-category-tabs-standalone button:focus,
+.schedule-category-tabs-standalone button:active {
+  background: #f1f5fa !important;
+  border-color: #d2dbe6 !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  outline: none;
+}
+
+.schedule-category-tabs-standalone button.active {
+  background: var(--primary-soft) !important;
+  border-color: #b8d0f4 !important;
+  color: var(--primary) !important;
+  box-shadow: none !important;
+}
+
 .schedule-type-group-row th {
   position: sticky !important;
   left: 0;
@@ -2509,6 +2552,12 @@ tbody tr:hover td {
   color: #68778b;
   font-size: 9px;
   font-weight: 700;
+  text-transform: none !important;
+}
+
+.schedule-type-group-button,
+.schedule-type-group-button > span {
+  text-transform: none !important;
 }
 
 .schedule-grid-table td {
@@ -11359,7 +11408,7 @@ td select:focus,
 
 /* FINAL TIMETABLE FILTER LAYOUT — top controls + full-width point detail */
 .schedule-filter-top {
-  grid-template-columns: minmax(220px, 1.25fr) minmax(180px, 1fr) minmax(420px, 3.7fr) !important;
+  grid-template-columns: minmax(220px, 1.25fr) minmax(420px, 1fr) !important;
   align-items: stretch;
 }
 
@@ -11434,7 +11483,7 @@ td select:focus,
 
 @media (max-width: 1100px) {
   .schedule-filter-top {
-    grid-template-columns: minmax(210px, 1.2fr) minmax(180px, 1fr) !important;
+    grid-template-columns: minmax(210px, 1fr) minmax(300px, 1.35fr) !important;
   }
 
   .schedule-day-field {
