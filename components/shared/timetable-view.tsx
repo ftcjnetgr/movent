@@ -895,13 +895,7 @@ export default function TimetableView({
   return (
     <div className={`schedule-page schedule-view-${view}`}>
       <div className="schedule-control-compact">
-        <div
-          className={
-            view === "realized"
-              ? "schedule-filter-top schedule-filter-top-realized"
-              : "schedule-filter-top schedule-filter-top-planned"
-          }
-        >
+        <div className="schedule-filter-top">
           <div className="schedule-point-card">
             <span className="schedule-control-label">Titik Filter</span>
             <div className="schedule-direction" aria-label="Pilih titik filter">
@@ -930,22 +924,6 @@ export default function TimetableView({
 
           {view !== "realized" ? (
             <>
-              <div className="schedule-control-field schedule-category-field">
-                <span className="schedule-control-label">Kategori</span>
-                <div className="schedule-category-buttons">
-                  {categories.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      className={category === item ? "active" : ""}
-                      onClick={() => setCategory(item)}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               <div className="schedule-control-field schedule-day-field">
                 <span className="schedule-control-label">Hari</span>
                 <div className="schedule-day-row">
@@ -1023,6 +1001,21 @@ export default function TimetableView({
           </div>
         </div>
       </div>
+
+      {view !== "realized" ? (
+        <div className="schedule-category-tabs-standalone" aria-label="Category">
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={category === item ? "active" : ""}
+              onClick={() => setCategory(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
