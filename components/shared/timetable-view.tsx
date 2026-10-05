@@ -561,6 +561,10 @@ export default function TimetableView({
                 a[0].localeCompare(b[0]),
               );
 
+              const groupHourTotals = Array.from({ length: 24 }, (_, hour) =>
+                groupItems.filter((item) => hourValue(item.std) === hour),
+              );
+
               return (
                 <React.Fragment key={type}>
                   <tr className="schedule-type-group-row">
@@ -582,9 +586,40 @@ export default function TimetableView({
                         <small>{groupItems.length} schedule</small>
                       </button>
                     </th>
-                    {Array.from({ length: 25 }, (_, index) => (
-                      <td key={index} aria-hidden="true" />
+                    {groupHourTotals.map((hourItems, hour) => (
+                      <td key={hour} className="schedule-type-group-value-cell">
+                        {hourItems.length ? (
+                          <button
+                            type="button"
+                            className="schedule-type-group-value-button"
+                            onClick={() =>
+                              openSchedulePreview(
+                                hourItems,
+                                view === "realized" ? "realized" : "schedule",
+                              )
+                            }
+                            aria-label={`Lihat subtotal ${type} jam ${String(hour).padStart(2, "0")}: ${hourItems.length}`}
+                          >
+                            {hourItems.length}
+                          </button>
+                        ) : null}
+                      </td>
                     ))}
+                    <td className="schedule-type-group-value-cell schedule-type-group-total-cell">
+                      <button
+                        type="button"
+                        className="schedule-type-group-value-button"
+                        onClick={() =>
+                          openSchedulePreview(
+                            groupItems,
+                            view === "realized" ? "realized" : "schedule",
+                          )
+                        }
+                        aria-label={`Lihat subtotal ${type}: ${groupItems.length}`}
+                      >
+                        {groupItems.length}
+                      </button>
+                    </td>
                   </tr>
 
                   {open
