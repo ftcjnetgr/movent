@@ -2360,7 +2360,7 @@ tbody tr:hover td {
   width: 100% !important;
   min-height: 40px !important;
   height: 40px;
-  padding: 8px 12px !important;
+  padding: 8px 8px !important;
   gap: 5px;
   border: 0 !important;
   border-radius: 0 !important;
@@ -2374,7 +2374,8 @@ tbody tr:hover td {
 
 .schedule-type-group-button:hover,
 .schedule-type-group-button:focus,
-.schedule-type-group-button:active {
+.schedule-type-group-button:active,
+.schedule-type-group-button[aria-expanded="true"] {
   background: #eef2f7 !important;
   color: #34455b !important;
   box-shadow: none !important;
