@@ -7550,9 +7550,15 @@ td select:focus,
 }
 
 /* Total column: preserve its original flat styling, without borders. */
-.schedule-grid-table .schedule-total-header,
-.schedule-grid-table .schedule-total-cell {
+.schedule-grid-table .schedule-total-header {
   background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table .schedule-total-cell {
+  background: #fff !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -7586,7 +7592,7 @@ td select:focus,
   height: 38px !important;
   padding: 0 4px !important;
   vertical-align: middle !important;
-  background: var(--theme-color-soft-2) !important;
+  background: #fff !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -7601,12 +7607,12 @@ td select:focus,
   padding-right: 12px !important;
   text-align: center !important;
   font-weight: 800 !important;
-  background: var(--theme-color-soft-2) !important;
+  background: #fff !important;
 }
 
 .schedule-grid-table .schedule-grand-total,
 .schedule-grid-table .schedule-grand-total .schedule-total-button {
-  background: var(--theme-color-soft-2) !important;
+  background: #fff !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
