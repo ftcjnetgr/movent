@@ -493,6 +493,20 @@ td select:focus {
   align-items: center;
   justify-content: center;
 }
+.alert-nav-dot {
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #dc2626;
+  box-sizing: content-box;
+  z-index: 2;
+}
+
+
 .nav-icon svg {
   width: 16px;
   height: 16px;
@@ -7569,6 +7583,7 @@ td select:focus,
   padding-right: 12px !important;
   text-align: center !important;
   font-weight: 800 !important;
+  background: var(--theme-color-soft-2) !important;
 }
 
 .schedule-grid-table .schedule-grand-total,
@@ -9964,19 +9979,6 @@ td select:focus,
   .dispatcher-mobile-navbar .nav-icon-with-badge {
     position: relative;
   }
-.alert-nav-dot {
-  position: absolute;
-  top: -2px;
-  right: -3px;
-  width: 7px;
-  height: 7px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: #dc2626;
-  box-sizing: content-box;
-  z-index: 2;
-}
-
 
   .dispatcher-mobile-nav-dot {
     position: absolute;
