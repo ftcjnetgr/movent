@@ -6608,7 +6608,7 @@ html {
 }
 
 .schedule-grid-table .schedule-total-cell {
-  background: #fafbff;
+  background: #fff;
   text-align: center;
   vertical-align: middle;
   border-left: 1px solid #dbe3ec;
@@ -7162,7 +7162,7 @@ td select:focus,
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-cell {
-  background: #fafbff;
+  background: #fff;
 }
 .schedule-grid-table tfoot .schedule-total-cell {
   background: #fff;
