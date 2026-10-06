@@ -2492,6 +2492,22 @@ tbody tr:hover td {
   border-top: 1px solid #dfe5ec;
 }
 
+/* Schedule grid — full inside borders */
+.schedule-grid-table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+
+.schedule-grid-table th,
+.schedule-grid-table td {
+  border-right: 1px solid #dbe3ec !important;
+  border-bottom: 1px solid #dbe3ec !important;
+}
+
+.schedule-grid-table tr > *:last-child {
+  border-right: 0 !important;
+}
+
 .schedule-grid-table thead th:first-child,
 .schedule-grid-table tbody th {
   position: sticky;
