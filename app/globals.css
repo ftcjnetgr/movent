@@ -498,11 +498,11 @@ td select:focus {
 }
 .alert-nav-dot {
   position: absolute;
-  top: -2px;
-  right: -3px;
+  top: -1px;
+  right: 1px;
   width: 7px;
   height: 7px;
-  border: 2px solid #fff;
+  border: 0;
   border-radius: 50%;
   background: #dc2626;
   box-sizing: content-box;
@@ -7162,10 +7162,10 @@ td select:focus,
   background: #fafbff;
 }
 .schedule-grid-table tfoot .schedule-total-cell {
-  background: #f7f8ff;
+  background: #fff;
 }
 .schedule-grand-total {
-  background: var(--theme-primary-soft-2) !important;
+  background: #fff !important;
 }
 .schedule-grand-total .schedule-total-button {
   background: var(--theme-primary);
@@ -13027,7 +13027,7 @@ td select:focus,
 /* Jadwal Tambahan tabs: compact underline style */
 .extra-schedule-tabs{
   display:flex;
-  gap:12px;
+  gap:20px;
   margin:0 0 14px;
   border-bottom:1px solid #e5eaf0;
 }
@@ -13054,6 +13054,11 @@ td select:focus,
   color:#087ea4;
   background:transparent;
   border-color:transparent;
+}
+.extra-schedule-tabs button.is-active svg,
+.extra-schedule-tabs button.is-active svg *{
+  color:currentColor !important;
+  stroke:currentColor !important;
 }
 .extra-schedule-tabs button.is-active::after{
   content:"";
@@ -14700,22 +14705,29 @@ td select:focus,
 .schedule-grid-table tbody td,
 .schedule-grid-table tfoot th,
 .schedule-grid-table tfoot td {
+  box-sizing: border-box !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 4px !important;
   font-size: var(--ui-body-size) !important;
   font-weight: var(--ui-regular-weight) !important;
   line-height: 1.3 !important;
-  border-right: 1px solid #dbe3ec;
+  border-right: 1px solid #dbe3ec !important;
+  border-bottom: 1px solid #dbe3ec !important;
+  border-left: 0 !important;
+  border-top: 0 !important;
 }
 
 .schedule-grid-table thead th {
-  font-size: var(--ui-label-size) !important;
-  font-weight: var(--ui-medium-weight) !important;
+  font-size: var(--ui-body-size) !important;
+  font-weight: var(--ui-regular-weight) !important;
 }
 
-.schedule-grid-table tbody th:first-child,
-.schedule-grid-table tbody td:first-child,
 .schedule-grid-table thead th:first-child,
+.schedule-grid-table tbody th:first-child,
 .schedule-grid-table tfoot th:first-child {
-  border-right: 1px solid #c9d3df !important;
+  box-sizing: border-box !important;
+  border-right: 1px solid #dbe3ec !important;
 }
 
 .schedule-grid-table tbody .schedule-type-group-row > th,
@@ -14811,66 +14823,4 @@ td select:focus,
   opacity: 1 !important;
   fill: none !important;
   stroke: currentColor !important;
-}
-
-
-/* Scoped fixes requested for navigation tabs and timetable grid. */
-.extra-schedule-tabs {
-  gap: 20px !important;
-}
-.extra-schedule-tabs button + button {
-  border-left: 0 !important;
-}
-.extra-schedule-tabs button.is-active svg,
-.extra-schedule-tabs button.is-active svg * {
-  color: currentColor !important;
-  stroke: currentColor !important;
-}
-.alert-page .alert-hub-tab.is-active svg,
-.alert-page .alert-hub-tab.is-active svg * {
-  color: currentColor !important;
-  stroke: currentColor !important;
-}
-
-.nav-icon-with-badge {
-  position: relative;
-}
-.alert-nav-dot {
-  top: -1px !important;
-  right: 1px !important;
-  border: 0 !important;
-}
-
-.schedule-grid-table thead th,
-.schedule-grid-table tbody th,
-.schedule-grid-table tbody td,
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
-  height: 38px !important;
-  min-height: 38px !important;
-  padding: 0 4px !important;
-  font-size: 9px !important;
-  font-weight: 400 !important;
-  line-height: 1.3 !important;
-  border-right: 1px solid #dbe3ec !important;
-  border-bottom: 1px solid #dbe3ec !important;
-  border-left: 0 !important;
-  border-top: 0 !important;
-}
-.schedule-grid-table thead th:first-child,
-.schedule-grid-table tbody th:first-child,
-.schedule-grid-table tfoot th:first-child {
-  width: 160px !important;
-  min-width: 160px !important;
-  box-sizing: border-box !important;
-  border-right: 1px solid #dbe3ec !important;
-}
-.schedule-grid-table thead th {
-  font-size: 9px !important;
-  font-weight: 400 !important;
-}
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td,
-.schedule-grid-table tfoot .schedule-total-button {
-  background: #fff !important;
 }
