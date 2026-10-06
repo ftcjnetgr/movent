@@ -16559,7 +16559,7 @@ td select:focus,
 .schedule-page .schedule-filter-category .schedule-category-tabs-inline button,
 .schedule-page .schedule-filter-day .schedule-day-row button,
 .schedule-page .schedule-point-detail-card .schedule-point-tabs button {
-  font-size: 10px !important;
+  font-size: 8px !important;
   font-weight: var(--ui-medium-weight) !important;
 }
 
