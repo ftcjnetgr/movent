@@ -6597,13 +6597,13 @@ html {
   color: #4f46a5;
   text-align: center;
   font-weight: 800;
-  border-left: 2px solid #c7cdf4 !important;
+  border-left: 1px solid #dbe3ec !important;
 }
 
 .schedule-grid-table .schedule-total-label {
   background: #e8eaff !important;
   border-left: 0 !important;
-  border-top: 2px solid #c7cdf4 !important;
+  border-top: 1px solid #dbe3ec !important;
   color: #4338a0;
 }
 
@@ -6611,11 +6611,11 @@ html {
   background: #fafbff;
   text-align: center;
   vertical-align: middle;
-  border-left: 2px solid #dfe2f4;
+  border-left: 1px solid #dbe3ec;
 }
 
 .schedule-grid-table tfoot .schedule-total-cell {
-  border-top: 2px solid #c7cdf4;
+  border-top: 1px solid #dbe3ec;
   background: #f7f8ff;
 }
 
@@ -7225,7 +7225,7 @@ button:not(:disabled):hover,
 .nav-link.active svg,
 .profile-settings-nav button.active span,
 .profile-settings-nav button.active small {
-  color: #fff !important;
+  color: currentColor !important;
 }
 .eyebrow,
 .page-heading .eyebrow,
@@ -7881,7 +7881,6 @@ td select:focus,
 .dashboard-view-tabs a.active,
 .alert-view-tabs a.active,
 .nav-dashboard-button.active,
-.nav-link.active,
 .report-type-buttons .report-type-button.active,
 .report-type-buttons .report-type-button.active strong,
 .report-type-buttons .report-type-button.active small,
@@ -14751,7 +14750,7 @@ td select:focus,
 
 .schedule-grid-table.live-tracking-table th:first-child,
 .schedule-grid-table.live-tracking-table td:first-child {
-  border-right: 1px solid #c9d3df !important;
+  border-right: 1px solid #dbe3ec !important;
 }
 
 /* Keep the shared UI rhythm compact without touching page-specific business layout. */
