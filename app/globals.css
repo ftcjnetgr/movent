@@ -14748,6 +14748,7 @@ td select:focus,
   font-weight: var(--ui-regular-weight) !important;
 }
 
+.schedule-grid-table .schedule-cell-button,
 .schedule-grid-table .schedule-type-group-button,
 .schedule-grid-table .schedule-total-button,
 .schedule-grid-table .schedule-type-group-value-button {
@@ -14757,7 +14758,7 @@ td select:focus,
 
 .schedule-grid-table .schedule-total-label,
 .schedule-grid-table .schedule-total-header {
-  font-size: var(--ui-label-size) !important;
+  font-size: var(--ui-body-size) !important;
   font-weight: var(--ui-medium-weight) !important;
 }
 
