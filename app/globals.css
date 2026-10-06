@@ -16700,3 +16700,44 @@ td select:focus,
   font-size: var(--ui-body-size) !important;
   font-weight: var(--ui-regular-weight) !important;
 }
+
+/* Final timetable border rules: body inside grid only. */
+.schedule-grid-table thead th,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td {
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+  border-left: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+.schedule-grid-table tbody tr > :first-child {
+  border-left: 0 !important;
+}
+
+/* Keep the body divider beside the sticky destination column visible while scrolling. */
+.schedule-grid-table tbody > tr > th:first-child {
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 60 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.22) !important;
+}
+
+/* No grid lines in the header or total column/row. */
+.schedule-grid-table thead th,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table tbody td:last-child {
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
