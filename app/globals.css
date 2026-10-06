@@ -16792,3 +16792,31 @@ td select:focus,
 .schedule-grid-table tbody > tr > th.schedule-type-group-pivot {
   border-right-color: #dfe2f4 !important;
 }
+
+
+/* FINAL FIX — only the selected Normal/Campaign option may use the active fill */
+.schedule-filter-category .schedule-category-tabs-inline button {
+  background: #f8fafc !important;
+  border: 1px solid var(--line) !important;
+  border-color: var(--line) !important;
+  color: #647286 !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+.schedule-filter-category .schedule-category-tabs-inline button:hover {
+  background: #f1f5fa !important;
+  border-color: #d2dbe6 !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  transform: none !important;
+}
+
+.schedule-filter-category .schedule-category-tabs-inline button.active {
+  background: var(--primary) !important;
+  background-image: none !important;
+  border-color: var(--primary) !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 8px rgba(79,70,229,.16) !important;
+}
