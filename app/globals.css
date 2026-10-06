@@ -13100,7 +13100,7 @@ td select:focus,
     padding:7px 10px 8px;
   }
   .extra-schedule-tabs button + button{
-    border-left:1px solid #d9dee5;
+    border-left:2px solid #d9dee5;
   }
   .extra-schedule-tabs button.is-active::after{
     left:8px;
