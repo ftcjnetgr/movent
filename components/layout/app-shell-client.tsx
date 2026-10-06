@@ -904,8 +904,8 @@ export default function AppShellClient({
             <span>Keluar dulu</span>
           </button>
           <div className="sidebar-credit">
-            <span>Bagian dari Proyek FTC Go</span>
-            <span>Dikembangkan oleh Fleet Traffic Control</span>
+            <span>Part of FTC Go Project</span>
+            <span>Developed by Fleet Traffic Control</span>
           </div>
         </div>
       </aside>
