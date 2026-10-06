@@ -17167,26 +17167,30 @@ td select:focus,
 }
 
 
-/* Final day-button fit: all seven days stay equal and fully visible */
+/* Final day-button fit: shorter equal buttons with balanced side padding */
 .schedule-page .schedule-filter-day .schedule-day-row {
-  grid-template-columns: repeat(7, 94px) !important;
-  justify-content: space-between !important;
-  gap: 0 !important;
+  grid-template-columns: repeat(7, 86px) !important;
+  justify-content: center !important;
+  gap: 8px !important;
   width: 100% !important;
+  padding-inline: 8px !important;
+  box-sizing: border-box !important;
 }
 
 .schedule-page .schedule-filter-day .schedule-day-row button {
-  width: 94px !important;
-  min-width: 94px !important;
-  max-width: 94px !important;
-  flex: 0 0 94px !important;
+  width: 86px !important;
+  min-width: 86px !important;
+  max-width: 86px !important;
+  flex: 0 0 86px !important;
   box-sizing: border-box !important;
 }
 
 @media (max-width: 1080px) {
   .schedule-page .schedule-filter-day .schedule-day-row {
     grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    justify-content: stretch !important;
     gap: 8px !important;
+    padding-inline: 0 !important;
   }
 
   .schedule-page .schedule-filter-day .schedule-day-row button {
