@@ -14725,8 +14725,8 @@ td select:focus,
   border-left: 0 !important;
   border-top: 0 !important;
 }
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
+.schedule-grid-table tfoot > tr > th,
+.schedule-grid-table tfoot > tr > td {
   background: var(--theme-color-soft-2) !important;
 }
 
