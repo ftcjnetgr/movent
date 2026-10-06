@@ -7476,9 +7476,8 @@ td select:focus,
 }
 
 /* =========================================================
-   TIMETABLE — clean inside-grid borders
-   Header / Total row / Total column are borderless.
-   Only the scrollable body grid has inside separators.
+   TIMETABLE — inside borders only
+   Header and Total row/column are intentionally borderless.
    ========================================================= */
 
 .schedule-grid-table {
@@ -7486,111 +7485,51 @@ td select:focus,
   border-spacing: 0 !important;
 }
 
-/* Uniform row sizing. */
-.schedule-grid-table thead th,
-.schedule-grid-table tbody th,
-.schedule-grid-table tbody td,
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
-  height: 38px !important;
-  min-height: 38px !important;
-  max-height: 38px !important;
-  box-sizing: border-box !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  vertical-align: middle !important;
-}
-
-.schedule-grid-table thead th:first-child,
-.schedule-grid-table tbody th {
-  padding-left: 12px !important;
-  padding-right: 12px !important;
-  text-align: left !important;
-}
-
+/* Header: no borders. */
 .schedule-grid-table thead th {
-  padding-left: 4px !important;
-  padding-right: 4px !important;
-}
-
-/* Header: completely borderless. */
-.schedule-grid-table thead th,
-.schedule-grid-table thead th.schedule-total-header {
   border: 0 !important;
   box-shadow: none !important;
-  background: var(--theme-color) !important;
-  color: #fff !important;
 }
 
-/* Body: inside separators only. */
+/* Body grid: one-pixel lines only inside the table. */
 .schedule-grid-table tbody th,
 .schedule-grid-table tbody td {
   border: 0 !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
-  border-left: 1px solid rgba(148, 163, 184, 0.22) !important;
-  box-shadow: none !important;
+  border-right: 1px solid #cbd5e1 !important;
+  border-bottom: 1px solid #cbd5e1 !important;
 }
 
-/* No outer left edge. */
+/* No outer left/right line. */
 .schedule-grid-table tbody tr > :first-child {
   border-left: 0 !important;
 }
 
-/* Sticky first column: its inside divider stays visible during horizontal scroll. */
+.schedule-grid-table tbody tr > :last-child {
+  border-right: 0 !important;
+}
+
+/* Sticky Destination column keeps its inside divider visible while scrolling. */
 .schedule-grid-table tbody > tr > th:first-child {
   position: sticky !important;
   left: 0 !important;
   z-index: 60 !important;
-  border: 0 !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
-  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.22) !important;
+  border-right: 1px solid #cbd5e1 !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  box-shadow: none !important;
 }
 
-/* Total column: no borders at all. */
+/* Total column: no borders. */
 .schedule-grid-table tbody .schedule-total-cell {
   border: 0 !important;
   box-shadow: none !important;
-  background: var(--theme-color-soft-2) !important;
-  color: var(--theme-color-dark) !important;
 }
 
-/* Total row: no borders at all. */
+/* Total row: no borders. */
 .schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
+.schedule-grid-table tfoot td,
+.schedule-grid-table tfoot .schedule-total-button {
   border: 0 !important;
   box-shadow: none !important;
-  background: var(--theme-color-soft-2) !important;
-  color: var(--theme-color-dark) !important;
-}
-
-/* Total buttons are borderless and fill their cells. */
-.schedule-grid-table .schedule-total-button {
-  width: 100% !important;
-  min-width: 0 !important;
-  height: 38px !important;
-  min-height: 38px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  color: var(--theme-color-dark) !important;
-  box-shadow: none !important;
-}
-
-/* Schedule density cells keep their own status-colored buttons. */
-.schedule-grid-table .schedule-cell-button {
-  border: 1px solid var(--density-border) !important;
-  box-shadow: none !important;
-}
-
-/* Destination column width stays aligned with the header and sticky body. */
-.schedule-grid-table thead th:first-child,
-.schedule-grid-table tbody th:first-child,
-.schedule-grid-table tfoot th:first-child {
-  width: 200px !important;
-  min-width: 200px !important;
-  max-width: 200px !important;
 }
 
 /* User management table: give columns enough room and keep actions horizontal */
@@ -14737,45 +14676,4 @@ td select:focus,
 [class*="role-"] .super-panel-heading p {
   font-size: var(--ui-body-size) !important;
   font-weight: var(--ui-regular-weight) !important;
-}
-
-/* Final timetable border rules: body inside grid only. */
-.schedule-grid-table thead th,
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-.schedule-grid-table tbody th,
-.schedule-grid-table tbody td {
-  border-top: 0 !important;
-  border-right: 0 !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
-  border-left: 1px solid rgba(148, 163, 184, 0.22) !important;
-}
-
-.schedule-grid-table tbody tr > :first-child {
-  border-left: 0 !important;
-}
-
-/* Keep the body divider beside the sticky destination column visible while scrolling. */
-.schedule-grid-table tbody > tr > th:first-child {
-  position: sticky !important;
-  left: 0 !important;
-  z-index: 60 !important;
-  border-left: 0 !important;
-  border-right: 0 !important;
-  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.22) !important;
-}
-
-/* No grid lines in the header or total column/row. */
-.schedule-grid-table thead th,
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td,
-.schedule-grid-table tbody td:last-child {
-  border-left: 0 !important;
-  border-right: 0 !important;
-  border-bottom: 0 !important;
-  box-shadow: none !important;
 }
