@@ -164,26 +164,6 @@ function scheduleDensityStyle(total: number) {
   } as CSSProperties;
 }
 
-function renderScheduleDensityLegend() {
-  return (
-    <div
-      className="schedule-density-legend"
-      aria-label="Keterangan jumlah schedule"
-    >
-      <span className="schedule-density-legend-title">Jumlah jadwal</span>
-      {scheduleDensityPalette.map((_, index) => {
-        const count = index + 1;
-        return (
-          <span key={count} className="schedule-density-legend-item">
-            <i style={scheduleDensityStyle(count)} />
-            {count === scheduleDensityPalette.length ? "6+" : count}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
-
 export default function TimetableView({
   date,
   todayDay,
@@ -1030,7 +1010,6 @@ export default function TimetableView({
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
           <span>Jadwal</span>
-          {renderScheduleDensityLegend()}
         </div>
         {renderPlanTable(activeRows as Schedule[])}
         {!activeRows.length ? (
