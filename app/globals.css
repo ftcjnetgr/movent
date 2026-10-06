@@ -16942,33 +16942,50 @@ td select:focus,
 }
 
 
-/* ONE BUTTON WIDTH ACROSS THE ENTIRE TOP FILTER ROW */
+/* TOP FILTER — one button width, cards sized by their content */
 .schedule-page .schedule-filter-primary-row {
-  grid-template-columns: 240px 240px minmax(0, 1fr) !important;
+  display: flex !important;
+  align-items: stretch !important;
   gap: 12px !important;
 }
 
+.schedule-page .schedule-filter-primary-row .schedule-filter-card {
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+
+.schedule-page .schedule-filter-point-direction,
+.schedule-page .schedule-filter-category {
+  width: calc(2 * 108px + 8px + 24px) !important;
+}
+
+.schedule-page .schedule-filter-day {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
 .schedule-page .schedule-filter-primary-row .schedule-direction,
-.schedule-page .schedule-filter-primary-row .schedule-category-tabs-inline,
-.schedule-page .schedule-filter-primary-row .schedule-day-row {
+.schedule-page .schedule-filter-primary-row .schedule-category-tabs-inline {
   display: grid !important;
-  grid-template-columns: repeat(2, 96px) !important;
-  justify-content: center !important;
+  grid-template-columns: repeat(2, 108px) !important;
   gap: 8px !important;
 }
 
 .schedule-page .schedule-filter-primary-row .schedule-day-row {
-  grid-template-columns: repeat(7, 96px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(7, 108px) !important;
   justify-content: space-between !important;
+  gap: 8px !important;
 }
 
 .schedule-page .schedule-filter-primary-row .schedule-direction button,
 .schedule-page .schedule-filter-primary-row .schedule-category-tabs-inline button,
 .schedule-page .schedule-filter-primary-row .schedule-day-row button {
-  width: 96px !important;
-  min-width: 96px !important;
-  max-width: 96px !important;
-  flex: 0 0 96px !important;
+  box-sizing: border-box !important;
+  width: 108px !important;
+  min-width: 108px !important;
+  max-width: 108px !important;
+  flex: none !important;
   padding-left: 8px !important;
   padding-right: 8px !important;
 }
