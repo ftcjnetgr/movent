@@ -7477,7 +7477,7 @@ td select:focus,
 
 /* =========================================================
    TIMETABLE — inside borders only
-   Header and Total row/column are intentionally borderless.
+   Header and Total row/column are borderless.
    ========================================================= */
 
 .schedule-grid-table {
@@ -7485,13 +7485,12 @@ td select:focus,
   border-spacing: 0 !important;
 }
 
-/* Header: no borders. */
 .schedule-grid-table thead th {
   border: 0 !important;
   box-shadow: none !important;
 }
 
-/* Body grid: one-pixel lines only inside the table. */
+/* Body: separators only between cells. */
 .schedule-grid-table tbody th,
 .schedule-grid-table tbody td {
   border: 0 !important;
@@ -7499,7 +7498,6 @@ td select:focus,
   border-bottom: 1px solid #cbd5e1 !important;
 }
 
-/* No outer left/right line. */
 .schedule-grid-table tbody tr > :first-child {
   border-left: 0 !important;
 }
@@ -7508,7 +7506,6 @@ td select:focus,
   border-right: 0 !important;
 }
 
-/* Sticky Destination column keeps its inside divider visible while scrolling. */
 .schedule-grid-table tbody > tr > th:first-child {
   position: sticky !important;
   left: 0 !important;
@@ -7518,18 +7515,71 @@ td select:focus,
   box-shadow: none !important;
 }
 
-/* Total column: no borders. */
-.schedule-grid-table tbody .schedule-total-cell {
+/* Total column: preserve its original flat styling, without borders. */
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-cell {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
 }
 
-/* Total row: no borders. */
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td,
+.schedule-grid-table .schedule-total-cell {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.schedule-grid-table .schedule-total-cell .schedule-total-button,
 .schedule-grid-table tfoot .schedule-total-button {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+}
+
+/* Total row: preserve its original flat styling, without borders. */
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  height: 38px !important;
+  padding: 0 4px !important;
+  vertical-align: middle !important;
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
+}
+
+.schedule-grid-table tfoot th.schedule-total-label {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+}
+
+.schedule-grid-table .schedule-grand-total,
+.schedule-grid-table .schedule-grand-total .schedule-total-button {
+  background: var(--theme-color-soft-2) !important;
+  color: var(--theme-color-dark) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Login inputs must not inherit the bold label weight. */
+.login-simple-form input {
+  font-weight: 400 !important;
+}
+
+.login-simple-form input::placeholder {
+  font-weight: 400 !important;
 }
 
 /* User management table: give columns enough room and keep actions horizontal */
