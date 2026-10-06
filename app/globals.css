@@ -9254,303 +9254,81 @@ td select:focus,
   border: 0 !important;
 }
 
-/* Schedule grid: restore the vertical divider beside the fixed/total label column */
-.schedule-grid-table tbody > tr > th:first-child {
-  border-right: 1px solid var(--theme-color-light) !important;
-}
+/* =========================================================
+   TIMETABLE — clean inside-grid border system
+   Header and Total row/column stay borderless.
+   Body borders remain visible when the first column is sticky.
+   ========================================================= */
 
-.schedule-grid-table tfoot th.schedule-total-label {
-  border-right: 1px solid var(--theme-color-light) !important;
-}
-
-/* Keep the Total-label divider visible while the schedule grid scrolls horizontally */
-.schedule-grid-table tfoot th.schedule-total-label {
-  position: sticky !important;
-  left: 0 !important;
-  z-index: 20 !important;
-  box-shadow: 1px 0 0 var(--theme-color-light) !important;
-}
-
-/* Keep the Total row divider visually locked to the sticky label cell */
-.schedule-grid-table tfoot th.schedule-total-label {
-  position: sticky !important;
-  left: 0 !important;
-  z-index: 50 !important;
-  border-right: 0 !important;
-  box-shadow: none !important;
-  overflow: visible !important;
-}
-
-.schedule-grid-table tfoot th.schedule-total-label::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -1px;
-  width: 1px;
-  background: var(--theme-color-light);
-  pointer-events: none;
-  z-index: 51;
-}
-
-/* Final fix: paint the divider inside the sticky label cells so it cannot disappear under adjacent cells */
-.schedule-grid-table tbody > tr > th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  position: sticky !important;
-  left: 0 !important;
-  z-index: 60 !important;
-  border-right: 0 !important;
-  box-shadow: inset -2px 0 0 #c7d2fe !important;
-}
-
-/* Divider thickness: keep it at the same 1px weight as the grid lines */
-.schedule-grid-table tbody > tr > th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  box-shadow: inset -1px 0 0 var(--theme-color-light) !important;
-}
-
-/* Sticky divider follows the same purple as the schedule header */
-.schedule-grid-table tbody > tr > th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  box-shadow: inset -1px 0 0 var(--theme-color) !important;
-}
-.schedule-grid-table tfoot th.schedule-total-label::after {
-  background: var(--theme-color) !important;
-}
-
-/* Final schedule divider cleanup: one line only, same purple as header */
-.schedule-grid-table tbody > tr > th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  border-right: 0 !important;
-  box-shadow: inset -1px 0 0 var(--theme-color) !important;
-}
-
-.schedule-grid-table tfoot th.schedule-total-label::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* Schedule data grid borders use the same purple family as the header */
-.schedule-grid-table tbody th,
-.schedule-grid-table tbody td {
-  border-right-color: #4338ca !important;
-  border-bottom-color: #4338ca !important;
-}
-
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
-  border-right-color: #4338ca !important;
-  border-bottom-color: #4338ca !important;
-}
-
-/* Schedule grid: very light, subtle cell borders; no header grid lines */
-.schedule-grid-table tbody th,
-.schedule-grid-table tbody td,
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
-  border-right-color: rgba(148, 163, 184, 0.28) !important;
-  border-bottom-color: rgba(148, 163, 184, 0.28) !important;
-}
-
-.schedule-grid-table thead th {
-  border: 0 !important;
-  border-color: transparent !important;
-}
-
-.schedule-grid-table thead th:first-child {
-  border-left: 0 !important;
-  border-right: 0 !important;
-}
-
-.schedule-grid-table tbody > tr > th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  border-right: 0 !important;
-  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.28) !important;
-}
-
-.schedule-grid-table tfoot th.schedule-total-label::after {
-  display: none !important;
-}
-
-/* Schedule grid — inside borders only. No special divider on the sticky label column. */
 .schedule-grid-table {
   border-collapse: separate !important;
   border-spacing: 0 !important;
 }
 
-.schedule-grid-table thead th,
-.schedule-grid-table tbody th,
-.schedule-grid-table tbody td,
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Vertical lines only between columns. */
-.schedule-grid-table thead th + th,
-.schedule-grid-table tbody th + td,
-.schedule-grid-table tbody td + td,
-.schedule-grid-table tfoot th + td,
-.schedule-grid-table tfoot td + td {
-  border-left: 1px solid rgba(148, 163, 184, 0.22) !important;
-}
-
-/* Horizontal lines only between rows. */
-.schedule-grid-table tbody tr + tr > th,
-.schedule-grid-table tbody tr + tr > td,
-.schedule-grid-table tfoot tr > th,
-.schedule-grid-table tfoot tr > td {
-  border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
-}
-
-/* Keep the header clean; its background is the visual separator. */
-.schedule-grid-table thead th {
-  border-left: 0 !important;
-}
-
-.schedule-grid-table thead th + th {
-  border-left: 1px solid rgba(255, 255, 255, 0.14) !important;
-}
-
-/* Final schedule grid cleanup: one consistent, very light line system */
-.schedule-grid-table {
-  border-collapse: collapse !important;
-}
-
-.schedule-grid-table tbody th,
-.schedule-grid-table tbody td,
-.schedule-grid-table tfoot th,
-.schedule-grid-table tfoot td {
-  border-top: 0 !important;
-  border-left: 0 !important;
-  border-right: 1px solid rgba(148, 163, 184, 0.22) !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
-}
-
-.schedule-grid-table thead th {
-  border: 0 !important;
-}
-
-.schedule-grid-table tbody > tr > th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  border-right: 0 !important;
-  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.22) !important;
-}
-
-.schedule-grid-table tbody .schedule-total-cell,
-.schedule-grid-table tfoot .schedule-total-cell {
-  border-left: 0 !important;
-  border-right: 1px solid rgba(148, 163, 184, 0.22) !important;
-}
-
-/* Total column keeps horizontal row dividers just like the data grid */
-.schedule-grid-table tbody .schedule-total-cell {
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
-}
-
-.schedule-grid-table tbody .schedule-total-cell:last-child {
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
-}
-
-/* Total column: draw each horizontal divider inside the cell so it stays visible behind the full-height button */
-.schedule-grid-table tbody .schedule-total-cell {
-  box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.22) !important;
-}
-
-.schedule-grid-table tfoot .schedule-total-cell {
-  box-shadow:
-    inset 0 1px 0 rgba(148, 163, 184, 0.22),
-    inset 0 -1px 0 rgba(148, 163, 184, 0.22) !important;
-}
-
-.schedule-grid-table tbody .schedule-total-cell .schedule-total-button {
-  background: transparent !important;
-}
-
-/* FINAL: total-column row separators are painted inside each cell so the
-   full-height button cannot cover them. Keep the line subtle like the grid. */
-.schedule-grid-table tbody .schedule-total-cell {
-  position: relative !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  background: linear-gradient(
-    to bottom,
-    var(--theme-color-soft) 0,
-    var(--theme-color-soft) calc(100% - 1px),
-    rgba(148, 163, 184, 0.22) calc(100% - 1px),
-    rgba(148, 163, 184, 0.22) 100%
-  ) !important;
-}
-
-.schedule-grid-table tbody .schedule-total-cell .schedule-total-button {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Total column: force each row separator on the full-height value button */
-.schedule-grid-table tbody .schedule-total-cell .schedule-total-button,
-.schedule-grid-table tfoot .schedule-total-cell .schedule-total-button {
-  position: relative !important;
-  z-index: 2 !important;
-  display: inline-flex !important;
-  width: 100% !important;
-  height: 38px !important;
-  min-height: 38px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Total column uses the same purple as the schedule header */
-.schedule-grid-table .schedule-total-header,
-.schedule-grid-table tbody .schedule-total-cell,
-.schedule-grid-table tfoot td.schedule-total-cell {
-  background: var(--theme-color) !important;
-  color: #fff !important;
-  border-color: transparent !important;
-}
-
-.schedule-grid-table tbody .schedule-total-cell .schedule-total-button,
-.schedule-grid-table tfoot .schedule-total-cell .schedule-total-button {
-  background: transparent !important;
-  color: #fff !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Schedule header: no border, including the Total header */
+/* Header: no borders. */
 .schedule-grid-table thead th,
 .schedule-grid-table thead th.schedule-total-header {
   border: 0 !important;
-  border-color: transparent !important;
-}
-
-/* FINAL schedule palette: dark-purple header, light-purple total column + total row */
-.schedule-grid-table thead th,
-.schedule-grid-table .schedule-total-header {
+  box-shadow: none !important;
   background: var(--theme-color) !important;
   color: #fff !important;
-  border: 0 !important;
-  border-color: transparent !important;
 }
 
+/* Total column + Total row: no borders. */
 .schedule-grid-table tbody .schedule-total-cell,
 .schedule-grid-table tfoot th.schedule-total-label,
 .schedule-grid-table tfoot td.schedule-total-cell {
+  border: 0 !important;
+  box-shadow: none !important;
   background: var(--theme-color-soft) !important;
   color: var(--theme-color-dark) !important;
 }
 
 .schedule-grid-table tbody .schedule-total-cell .schedule-total-button,
 .schedule-grid-table tfoot .schedule-total-cell .schedule-total-button {
+  border: 0 !important;
+  box-shadow: none !important;
   background: transparent !important;
   color: var(--theme-color-dark) !important;
+}
+
+/* Body: only inside borders. */
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td {
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+  border-left: 1px solid rgba(148, 163, 184, 0.22) !important;
+  box-shadow: none !important;
+}
+
+/* No outside border on the left edge. */
+.schedule-grid-table tbody tr > :first-child {
+  border-left: 0 !important;
+}
+
+/* The first column is sticky. Its inside divider is painted inside the cell
+   so it cannot disappear underneath the horizontally scrolling body. */
+.schedule-grid-table tbody > tr > th:first-child {
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 60 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.22) !important;
+}
+
+/* The Total column has no vertical line. */
+.schedule-grid-table tbody .schedule-total-cell {
+  border-left: 0 !important;
+  border-right: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Total row has no horizontal or vertical lines. */
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table tfoot .schedule-total-button {
   border: 0 !important;
   box-shadow: none !important;
 }
