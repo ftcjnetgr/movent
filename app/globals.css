@@ -9372,24 +9372,45 @@ td select:focus,
   display: none !important;
 }
 
-/* Final alignment: keep the destination column locked across header, body and total */
-.schedule-grid-table thead th:first-child,
-.schedule-grid-table tbody th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  width: 200px !important;
-  min-width: 200px !important;
-  max-width: 200px !important;
-  box-sizing: border-box !important;
+/* Schedule grid — inside borders only. No special divider on the sticky label column. */
+.schedule-grid-table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
 }
 
-.schedule-grid-table thead th:first-child {
-  border-right: 1px solid rgba(255, 255, 255, 0.28) !important;
-}
-
-.schedule-grid-table tbody th:first-child,
-.schedule-grid-table tfoot th.schedule-total-label {
-  border-right: 1px solid rgba(148, 163, 184, 0.22) !important;
+.schedule-grid-table thead th,
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  border: 0 !important;
   box-shadow: none !important;
+}
+
+/* Vertical lines only between columns. */
+.schedule-grid-table thead th + th,
+.schedule-grid-table tbody th + td,
+.schedule-grid-table tbody td + td,
+.schedule-grid-table tfoot th + td,
+.schedule-grid-table tfoot td + td {
+  border-left: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+/* Horizontal lines only between rows. */
+.schedule-grid-table tbody tr + tr > th,
+.schedule-grid-table tbody tr + tr > td,
+.schedule-grid-table tfoot tr > th,
+.schedule-grid-table tfoot tr > td {
+  border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+/* Keep the header clean; its background is the visual separator. */
+.schedule-grid-table thead th {
+  border-left: 0 !important;
+}
+
+.schedule-grid-table thead th + th {
+  border-left: 1px solid rgba(255, 255, 255, 0.14) !important;
 }
 
 /* Final schedule grid cleanup: one consistent, very light line system */
