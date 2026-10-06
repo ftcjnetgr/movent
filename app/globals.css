@@ -7558,7 +7558,7 @@ td select:focus,
 }
 
 .schedule-grid-table .schedule-total-cell {
-  background: #fff !important;
+  background: var(--theme-color-soft-2) !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -7592,7 +7592,7 @@ td select:focus,
   height: 38px !important;
   padding: 0 4px !important;
   vertical-align: middle !important;
-  background: #fff !important;
+  background: var(--theme-color-soft-2) !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -7607,12 +7607,12 @@ td select:focus,
   padding-right: 12px !important;
   text-align: center !important;
   font-weight: 800 !important;
-  background: #fff !important;
+  background: var(--theme-color-soft-2) !important;
 }
 
 .schedule-grid-table .schedule-grand-total,
 .schedule-grid-table .schedule-grand-total .schedule-total-button {
-  background: #fff !important;
+  background: var(--theme-color-soft-2) !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
