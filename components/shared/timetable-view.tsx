@@ -215,29 +215,24 @@ export default function TimetableView({
   }, [date]);
 
   const [selectedDay, setSelectedDay] = useState(todayDay);
-  const [startPoint, setStartPoint] = useState("");
-  const [destinationPoint, setDestinationPoint] = useState("");
+  const [direction, setDirection] = useState<"start-point" | "destination">(
+    "start-point",
+  );
   const [route, setRoute] = useState("");
   const [category, setCategory] = useState(defaultCategory);
-  const [openFilter, setOpenFilter] = useState<
-    "start" | "destination" | "day" | "route" | "category" | null
-  >(null);
-  const [filterSearch, setFilterSearch] = useState("");
+  const [point, setPoint] = useState("");
   const [openScheduleGroups, setOpenScheduleGroups] = useState<string[]>([]);
 
   useEffect(() => {
     setSelectedDay(todayDay);
     setCategory(defaultCategory);
-    setStartPoint("");
-    setDestinationPoint("");
-    setOpenFilter(null);
-    setFilterSearch("");
+    setPoint("");
     setOpenScheduleGroups([]);
   }, [todayDay, defaultCategory]);
 
   useEffect(() => {
     setOpenScheduleGroups([]);
-  }, [view, selectedDay, route, category, startPoint, destinationPoint]);
+  }, [view, direction, selectedDay, route, category, point]);
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([]);
   const [previewMode, setPreviewMode] = useState<"schedule" | "realized">(
     "schedule",
@@ -384,81 +379,46 @@ export default function TimetableView({
     [schedules, selectedDay],
   );
 
-  const pointSourceSchedules =
-    view === "database" ? selectedPlanSchedules : defaultScheduledSchedules;
-
-  const startPointOptions = useMemo(() => {
-    const query = filterSearch.trim().toLowerCase();
-    return [
-      ...new Set(
-        pointSourceSchedules
-          .filter((item) => !route || item.route === route)
-          .filter((item) => !category || item.category === category)
-          .filter(
-            (item) =>
-              !destinationPoint || item.destination === destinationPoint,
-          )
-          .map((item) => item.start_point)
-          .filter(Boolean),
-      ),
-    ]
-      .sort((a, b) => a.localeCompare(b))
-      .filter((item) => item.toLowerCase().includes(query));
-  }, [
-    pointSourceSchedules,
-    route,
-    category,
-    destinationPoint,
-    filterSearch,
-  ]);
-
-  const destinationPointOptions = useMemo(() => {
-    const query = filterSearch.trim().toLowerCase();
-    return [
-      ...new Set(
-        pointSourceSchedules
-          .filter((item) => !route || item.route === route)
-          .filter((item) => !category || item.category === category)
-          .filter((item) => !startPoint || item.start_point === startPoint)
-          .map((item) => item.destination)
-          .filter(Boolean),
-      ),
-    ]
-      .sort((a, b) => a.localeCompare(b))
-      .filter((item) => item.toLowerCase().includes(query));
-  }, [pointSourceSchedules, route, category, startPoint, filterSearch]);
+  const pointOptions = useMemo(() => {
+    const source =
+      view === "database" ? selectedPlanSchedules : defaultScheduledSchedules;
+    const values =
+      direction === "start-point"
+        ? source.map((item) => item.start_point)
+        : source.map((item) => item.destination);
+    return [...new Set(values.filter(Boolean))].sort((a, b) =>
+      a.localeCompare(b),
+    );
+  }, [selectedPlanSchedules, defaultScheduledSchedules, view, direction]);
 
   const filteredSchedules = useMemo(
     () =>
       selectedPlanSchedules.filter((item) => {
+        const filterPoint =
+          direction === "start-point" ? item.start_point : item.destination;
         if (route && item.route !== route) return false;
         if (category && item.category !== category) return false;
-        if (startPoint && item.start_point !== startPoint) return false;
-        if (destinationPoint && item.destination !== destinationPoint) {
-          return false;
-        }
+        if (point && filterPoint !== point) return false;
         return true;
       }),
-    [selectedPlanSchedules, route, category, startPoint, destinationPoint],
+    [selectedPlanSchedules, direction, route, category, point],
   );
 
   const filteredTasks = useMemo(
     () =>
       todayTasks.filter((task) => {
+        const filterPoint =
+          direction === "start-point" ? task.start_point : task.destination;
         const schedule = task.schedule_id
           ? scheduleById.get(task.schedule_id)
           : null;
         if (route && schedule && schedule.route !== route) return false;
-        if (category && schedule && schedule.category !== category) {
+        if (category && schedule && schedule.category !== category)
           return false;
-        }
-        if (startPoint && task.start_point !== startPoint) return false;
-        if (destinationPoint && task.destination !== destinationPoint) {
-          return false;
-        }
+        if (point && filterPoint !== point) return false;
         return true;
       }),
-    [todayTasks, route, category, startPoint, destinationPoint, scheduleById],
+    [todayTasks, direction, route, category, point, scheduleById],
   );
 
   function previewStatus(item: Schedule) {
@@ -505,7 +465,7 @@ export default function TimetableView({
 
     for (const item of items) {
       const type =
-        groupBy === "destination"
+        direction === "start-point"
           ? item.destination_type || "Tanpa Tipe"
           : item.start_point_type || "Tanpa Tipe";
       groups.set(type, [...(groups.get(type) ?? []), item]);
@@ -579,7 +539,7 @@ export default function TimetableView({
           <thead>
             <tr>
               <th style={{ background: "#e7edf5", color: "#627287" }}>
-                {groupBy === "destination" ? "Destination" : "Start Point"}
+                {direction === "start-point" ? "Destination" : "Start Point"}
               </th>
               {columnTotals.map((_, hour) => (
                 <th
@@ -599,7 +559,7 @@ export default function TimetableView({
 
               groupItems.forEach((item) => {
                 const row =
-                  groupBy === "destination"
+                  direction === "start-point"
                     ? item.destination
                     : item.start_point;
                 rows.set(row, [...(rows.get(row) ?? []), item]);
@@ -920,265 +880,142 @@ export default function TimetableView({
   const filteredRealizedSchedules = useMemo(
     () =>
       defaultScheduledSchedules.filter((item) => {
+        const filterPoint =
+          direction === "start-point" ? item.start_point : item.destination;
         if (route && item.route !== route) return false;
-        if (startPoint && item.start_point !== startPoint) return false;
-        if (destinationPoint && item.destination !== destinationPoint) {
-          return false;
-        }
+        if (point && filterPoint !== point) return false;
         return true;
       }),
-    [defaultScheduledSchedules, route, startPoint, destinationPoint],
+    [defaultScheduledSchedules, direction, route, point],
   );
 
   const activeRows =
     view === "realized" ? filteredRealizedSchedules : filteredSchedules;
 
-  const activeDayLabel =
-    DAYS.find((day) => day.value === selectedDay)?.label ?? "Hari";
-  const activeRouteLabel = route ? routeLabels[route] ?? route : "Semua jalur";
-  const startLabel = startPoint || "Semua";
-  const destinationLabel = destinationPoint || "Semua";
-
-  function closeFilter() {
-    setOpenFilter(null);
-    setFilterSearch("");
-  }
-
-  function resetFilters() {
-    setSelectedDay(todayDay);
-    setStartPoint("");
-    setDestinationPoint("");
-    setRoute("");
-    setCategory(defaultCategory);
-    closeFilter();
-  }
-
-  const groupBy =
-    startPoint && !destinationPoint
-      ? "destination"
-      : destinationPoint && !startPoint
-        ? "start-point"
-        : "destination";
-
   return (
     <div className={`schedule-page schedule-view-${view}`}>
-      <div className="schedule-smart-filter">
-        <div className="schedule-smart-filter-label" aria-hidden="true">
-          <span className="schedule-smart-filter-icon">⌗</span>
-          <span>Perjalanan</span>
-        </div>
-
-        <div className={`schedule-smart-filter-item ${openFilter === "start" ? "is-open" : ""}`}>
-          <button type="button" className="schedule-smart-trigger" aria-expanded={openFilter === "start"}
-            onClick={() => {
-              setFilterSearch("");
-              setOpenFilter(openFilter === "start" ? null : "start");
-            }}>
-            <span className="schedule-smart-trigger-copy">
-              <small>Start Point</small>
-              <strong>{startLabel}</strong>
-            </span>
-            <span className="schedule-smart-chevron">⌄</span>
-          </button>
-          {openFilter === "start" ? (
-            <div className="schedule-smart-popover">
-              <div className="schedule-smart-popover-head">
-                <strong>Start Point</strong>
-                <button type="button" onClick={closeFilter} aria-label="Tutup">×</button>
-              </div>
-              <input autoFocus value={filterSearch}
-                onChange={(event) => setFilterSearch(event.target.value)}
-                placeholder="Cari titik..." className="schedule-smart-search" />
-              <div className="schedule-smart-options">
-                <button type="button" className={!startPoint ? "is-selected" : ""}
-                  onClick={() => { setStartPoint(""); closeFilter(); }}>
-                  Semua titik
-                </button>
-                {startPointOptions.map((item) => (
-                  <button key={item} type="button" className={startPoint === item ? "is-selected" : ""}
-                    onClick={() => { setStartPoint(item); closeFilter(); }}>
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        <span className="schedule-smart-arrow" aria-hidden="true">→</span>
-
-        <div className={`schedule-smart-filter-item ${openFilter === "destination" ? "is-open" : ""}`}>
-          <button type="button" className="schedule-smart-trigger" aria-expanded={openFilter === "destination"}
-            onClick={() => {
-              setFilterSearch("");
-              setOpenFilter(openFilter === "destination" ? null : "destination");
-            }}>
-            <span className="schedule-smart-trigger-copy">
-              <small>Destination</small>
-              <strong>{destinationLabel}</strong>
-            </span>
-            <span className="schedule-smart-chevron">⌄</span>
-          </button>
-          {openFilter === "destination" ? (
-            <div className="schedule-smart-popover">
-              <div className="schedule-smart-popover-head">
-                <strong>Destination</strong>
-                <button type="button" onClick={closeFilter} aria-label="Tutup">×</button>
-              </div>
-              <input autoFocus value={filterSearch}
-                onChange={(event) => setFilterSearch(event.target.value)}
-                placeholder="Cari tujuan..." className="schedule-smart-search" />
-              <div className="schedule-smart-options">
-                <button type="button" className={!destinationPoint ? "is-selected" : ""}
-                  onClick={() => { setDestinationPoint(""); closeFilter(); }}>
-                  Semua tujuan
-                </button>
-                {destinationPointOptions.map((item) => (
-                  <button key={item} type="button" className={destinationPoint === item ? "is-selected" : ""}
-                    onClick={() => { setDestinationPoint(item); closeFilter(); }}>
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        {view !== "realized" ? (
-          <>
-            <div className="schedule-smart-divider" />
-            <div className={`schedule-smart-filter-item ${openFilter === "day" ? "is-open" : ""}`}>
-              <button type="button" className="schedule-smart-trigger schedule-smart-trigger-compact"
-                aria-expanded={openFilter === "day"}
+      <div className="schedule-control-compact">
+        <div className="schedule-filter-top">
+          <div className="schedule-point-card">
+            <span className="schedule-control-label">Titik Filter</span>
+            <div className="schedule-direction" aria-label="Pilih titik filter">
+              <button
+                type="button"
+                className={direction === "start-point" ? "active" : ""}
                 onClick={() => {
-                  setFilterSearch("");
-                  setOpenFilter(openFilter === "day" ? null : "day");
-                }}>
-                <span className="schedule-smart-trigger-copy">
-                  <small>Hari</small>
-                  <strong>{activeDayLabel}</strong>
-                </span>
-                <span className="schedule-smart-chevron">⌄</span>
+                  setDirection("start-point");
+                  setPoint("");
+                }}
+              >
+                Start Point
               </button>
-              {openFilter === "day" ? (
-                <div className="schedule-smart-popover">
-                  <div className="schedule-smart-popover-head">
-                    <strong>Pilih hari</strong>
-                    <button type="button" onClick={closeFilter} aria-label="Tutup">×</button>
-                  </div>
-                  <div className="schedule-smart-day-options">
-                    {DAYS.map((day) => (
-                      <button key={day.value} type="button" className={selectedDay === day.value ? "is-selected" : ""}
-                        onClick={() => {
-                          setSelectedDay(day.value);
-                          setStartPoint("");
-                          setDestinationPoint("");
-                          closeFilter();
-                        }}>
-                        {day.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
-            <div className={`schedule-smart-filter-item ${openFilter === "route" ? "is-open" : ""}`}>
-              <button type="button" className="schedule-smart-trigger schedule-smart-trigger-compact"
-                aria-expanded={openFilter === "route"}
+              <button
+                type="button"
+                className={direction === "destination" ? "active" : ""}
                 onClick={() => {
-                  setFilterSearch("");
-                  setOpenFilter(openFilter === "route" ? null : "route");
-                }}>
-                <span className="schedule-smart-trigger-copy">
-                  <small>Jalur</small>
-                  <strong>{activeRouteLabel}</strong>
-                </span>
-                <span className="schedule-smart-chevron">⌄</span>
+                  setDirection("destination");
+                  setPoint("");
+                }}
+              >
+                Destination
               </button>
-              {openFilter === "route" ? (
-                <div className="schedule-smart-popover">
-                  <div className="schedule-smart-popover-head">
-                    <strong>Kategori jalur</strong>
-                    <button type="button" onClick={closeFilter} aria-label="Tutup">×</button>
-                  </div>
-                  <div className="schedule-smart-options">
-                    <button type="button" className={!route ? "is-selected" : ""}
+            </div>
+          </div>
+
+          {view !== "realized" ? (
+            <>
+              <div className="schedule-control-field schedule-day-field">
+                <span className="schedule-control-label">Hari</span>
+                <div className="schedule-day-row">
+                  {DAYS.map((day) => (
+                    <button
+                      key={day.value}
+                      type="button"
+                      className={selectedDay === day.value ? "active" : ""}
                       onClick={() => {
-                        setRoute("");
-                        setStartPoint("");
-                        setDestinationPoint("");
-                        closeFilter();
-                      }}>
-                      Semua jalur
+                        setSelectedDay(day.value);
+                        setPoint("");
+                      }}
+                    >
+                      {day.label}
                     </button>
-                    {routes.map((item) => (
-                      <button key={item} type="button" className={route === item ? "is-selected" : ""}
-                        onClick={() => {
-                          setRoute(item);
-                          setStartPoint("");
-                          setDestinationPoint("");
-                          closeFilter();
-                        }}>
-                        {routeLabels[item] ?? item}
-                      </button>
-                    ))}
-                  </div>
+                  ))}
                 </div>
-              ) : null}
-            </div>
+              </div>
+            </>
+          ) : null}
+        </div>
 
-            <div className={`schedule-smart-filter-item ${openFilter === "category" ? "is-open" : ""}`}>
-              <button type="button" className="schedule-smart-trigger schedule-smart-trigger-compact"
-                aria-expanded={openFilter === "category"}
-                onClick={() => {
-                  setFilterSearch("");
-                  setOpenFilter(openFilter === "category" ? null : "category");
-                }}>
-                <span className="schedule-smart-trigger-copy">
-                  <small>Mode</small>
-                  <strong>{category || "Normal"}</strong>
-                </span>
-                <span className="schedule-smart-chevron">⌄</span>
+        <div className="schedule-route-tabs schedule-route-tabs-standalone">
+          <button
+            type="button"
+            className={!route ? "active" : ""}
+            onClick={() => {
+              setRoute("");
+              setPoint("");
+            }}
+          >
+            Semua
+          </button>
+          {routes.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={route === item ? "active" : ""}
+              onClick={() => {
+                setRoute(item);
+                setPoint("");
+              }}
+            >
+              {routeLabels[item] ?? item}
+            </button>
+          ))}
+        </div>
+
+        <div className="schedule-point-detail-card">
+          <div
+            className="schedule-point-tabs"
+            aria-label={
+              direction === "start-point"
+                ? "Filter Start Point"
+                : "Filter Destination"
+            }
+          >
+            <button
+              type="button"
+              className={!point ? "active" : ""}
+              onClick={() => setPoint("")}
+            >
+              Semua
+            </button>
+            {pointOptions.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={point === item ? "active" : ""}
+                onClick={() => setPoint(item)}
+              >
+                {item}
               </button>
-              {openFilter === "category" ? (
-                <div className="schedule-smart-popover">
-                  <div className="schedule-smart-popover-head">
-                    <strong>Mode jadwal</strong>
-                    <button type="button" onClick={closeFilter} aria-label="Tutup">×</button>
-                  </div>
-                  <div className="schedule-smart-options">
-                    {categories.map((item) => (
-                      <button key={item} type="button" className={category === item ? "is-selected" : ""}
-                        onClick={() => {
-                          setCategory(item);
-                          setStartPoint("");
-                          setDestinationPoint("");
-                          closeFilter();
-                        }}>
-                        {item}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </>
-        ) : null}
-
-        <button type="button" className="schedule-smart-reset" onClick={resetFilters}>
-          Reset
-        </button>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="schedule-smart-active" aria-live="polite">
-        <span className="schedule-smart-active-label">Filter aktif</span>
-        <span className="schedule-smart-chip">{activeDayLabel}</span>
-        {startPoint ? <span className="schedule-smart-chip">Start: {startPoint}</span> : null}
-        {destinationPoint ? <span className="schedule-smart-chip">Tujuan: {destinationPoint}</span> : null}
-        {route ? <span className="schedule-smart-chip">{activeRouteLabel}</span> : null}
-        {view !== "realized" && category ? <span className="schedule-smart-chip">{category}</span> : null}
-      </div>
+      {view !== "realized" ? (
+        <div className="schedule-category-tabs-standalone" aria-label="Category">
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={category === item ? "active" : ""}
+              onClick={() => setCategory(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
