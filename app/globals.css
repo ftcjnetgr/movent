@@ -9372,6 +9372,26 @@ td select:focus,
   display: none !important;
 }
 
+/* Final alignment: keep the destination column locked across header, body and total */
+.schedule-grid-table thead th:first-child,
+.schedule-grid-table tbody th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+  box-sizing: border-box !important;
+}
+
+.schedule-grid-table thead th:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.28) !important;
+}
+
+.schedule-grid-table tbody th:first-child,
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right: 1px solid rgba(148, 163, 184, 0.22) !important;
+  box-shadow: none !important;
+}
+
 /* Final schedule grid cleanup: one consistent, very light line system */
 .schedule-grid-table {
   border-collapse: collapse !important;
