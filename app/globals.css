@@ -16619,3 +16619,166 @@ td select:focus,
     min-width: 0;
   }
 }
+
+
+/* Cek Jadwal filter hierarchy */
+.schedule-page .schedule-control-compact {
+  gap: 10px !important;
+  padding: 12px !important;
+}
+
+.schedule-filter-primary-row {
+  display: grid;
+  grid-template-columns: minmax(270px, 1.1fr) minmax(190px, .8fr) minmax(420px, 1.8fr);
+  align-items: end;
+  gap: 10px;
+}
+
+.schedule-filter-primary-row .schedule-point-card,
+.schedule-filter-primary-row .schedule-category-inline,
+.schedule-filter-primary-row .schedule-day-inline {
+  min-width: 0;
+}
+
+.schedule-filter-primary-row .schedule-control-label {
+  margin-bottom: 6px;
+}
+
+.schedule-filter-primary-row .schedule-direction {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.schedule-filter-primary-row .schedule-direction button {
+  width: 100%;
+}
+
+.schedule-category-inline,
+.schedule-day-inline {
+  min-width: 0;
+}
+
+.schedule-category-tabs-inline {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.schedule-category-tabs-inline button {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #647286;
+  box-shadow: none;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.schedule-category-tabs-inline button:hover {
+  background: #f1f5fa;
+  border-color: #d2dbe6;
+  color: var(--text);
+  transform: none;
+}
+
+.schedule-category-tabs-inline button.active {
+  background: var(--primary-soft);
+  border-color: #b8d0f4;
+  color: var(--primary);
+  box-shadow: none;
+}
+
+.schedule-filter-primary-row .schedule-day-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.schedule-filter-primary-row .schedule-day-row button {
+  min-width: 0;
+  width: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.schedule-route-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 4px 2px 0;
+}
+
+.schedule-route-row > .schedule-control-label {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.schedule-route-row .schedule-route-tabs-standalone {
+  display: flex;
+  align-items: center;
+  gap: 6px !important;
+  margin: 0 !important;
+}
+
+.schedule-route-row .schedule-route-tabs-standalone button {
+  min-height: 32px !important;
+  padding: 6px 13px !important;
+}
+
+.schedule-page .schedule-point-detail-card {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 1100px) {
+  .schedule-filter-primary-row {
+    grid-template-columns: minmax(240px, 1fr) minmax(180px, .8fr);
+  }
+
+  .schedule-day-inline {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 700px) {
+  .schedule-filter-primary-row {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-day-inline {
+    grid-column: auto;
+  }
+
+  .schedule-filter-primary-row .schedule-day-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .schedule-route-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* Timetable column divider: match the Total separator */
+.schedule-grid-table thead th:first-child,
+.schedule-grid-table tbody > tr > th:not(.schedule-type-group-pivot),
+.schedule-grid-table tbody > tr > th.schedule-type-group-pivot,
+.schedule-grid-table tfoot th.schedule-total-label {
+  border-right: 2px solid #dfe2f4 !important;
+}
+
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table tbody .schedule-total-cell,
+.schedule-grid-table tfoot td.schedule-total-cell {
+  border-left: 2px solid #dfe2f4 !important;
+}
+
+.schedule-grid-table tbody > tr > th.schedule-type-group-pivot {
+  border-right-color: #dfe2f4 !important;
+}
