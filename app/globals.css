@@ -5547,7 +5547,7 @@ small {
   gap: 3px;
   padding: 9px 13px 8px;
   border: 0;
-  border-bottom: 1px solid transparent;
+  border-bottom: 2px solid transparent;
   border-radius: 7px 7px 0 0;
   background: #f4f7fb;
   color: #59687c;
@@ -7963,7 +7963,7 @@ td select:focus,
 }
 
 .schedule-route-tabs-standalone button.active {
-  border-bottom: 1px solid var(--theme-color) !important;
+  border-bottom: 2px solid var(--theme-color) !important;
 }
 
 .dashboard-view-tabs a.active::after,
@@ -8016,11 +8016,11 @@ td select:focus,
 }
 
 .schedule-route-tabs button.active {
-  border-bottom: 1px solid var(--theme-color) !important;
+  border-bottom: 2px solid var(--theme-color) !important;
 }
 
 .schedule-route-tabs-standalone button.active {
-  border-bottom: 1px solid var(--theme-color) !important;
+  border-bottom: 2px solid var(--theme-color) !important;
 }
 
 /* Profile & Security cards: give each option breathing room */
@@ -10009,7 +10009,7 @@ td select:focus,
     right: -3px;
     width: 7px;
     height: 7px;
-    border: 1px solid #fff;
+    border: 2px solid #fff;
     border-radius: 50%;
     background: #dc2626;
   }
@@ -13056,7 +13056,7 @@ td select:focus,
   cursor:pointer;
 }
 .extra-schedule-tabs button + button{
-  border-left:1px solid #d9dee5;
+  border-left:2px solid #d9dee5;
 }
 .extra-schedule-tabs button.is-active{
   color:#087ea4;
@@ -14513,7 +14513,7 @@ td select:focus,
   min-height: 32px !important;
   padding: 5px 0 !important;
   border: 0 !important;
-  border-bottom: 1px solid transparent !important;
+  border-bottom: 2px solid transparent !important;
   border-radius: 0 !important;
   background: transparent !important;
   color: #1f2d40 !important;
