@@ -16228,6 +16228,7 @@ td select:focus,
 }
 
 
+
 /* Cek Jadwal — canonical filter UI */
 .schedule-page .schedule-control-compact {
   display: grid !important;
@@ -16241,7 +16242,7 @@ td select:focus,
 
 .schedule-page .schedule-filter-primary-row {
   display: grid !important;
-  grid-template-columns: 236px 236px minmax(0, 1fr) !important;
+  grid-template-columns: 208px 208px minmax(0, 1fr) !important;
   align-items: stretch !important;
   gap: 12px !important;
   min-width: 0 !important;
@@ -16266,7 +16267,7 @@ td select:focus,
 .schedule-page .schedule-filter-point-direction .schedule-direction,
 .schedule-page .schedule-filter-category .schedule-category-tabs-inline {
   display: grid !important;
-  grid-template-columns: repeat(2, 100px) !important;
+  grid-template-columns: repeat(2, 88px) !important;
   justify-content: center !important;
   gap: 8px !important;
   width: 100% !important;
@@ -16275,13 +16276,13 @@ td select:focus,
 .schedule-page .schedule-filter-point-direction .schedule-direction button,
 .schedule-page .schedule-filter-category .schedule-category-tabs-inline button {
   box-sizing: border-box !important;
-  width: 100px !important;
-  min-width: 100px !important;
-  max-width: 100px !important;
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
   height: 36px !important;
   min-height: 36px !important;
   margin: 0 !important;
-  padding: 0 8px !important;
+  padding: 0 7px !important;
 }
 
 .schedule-page .schedule-filter-category .schedule-category-tabs-inline button {
@@ -16313,7 +16314,7 @@ td select:focus,
 
 .schedule-page .schedule-filter-day .schedule-day-row {
   display: grid !important;
-  grid-template-columns: repeat(7, 100px) !important;
+  grid-template-columns: repeat(7, 88px) !important;
   justify-content: space-between !important;
   align-items: center !important;
   gap: 0 !important;
@@ -16325,13 +16326,13 @@ td select:focus,
 
 .schedule-page .schedule-filter-day .schedule-day-row button {
   box-sizing: border-box !important;
-  width: 100px !important;
-  min-width: 100px !important;
-  max-width: 100px !important;
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
   height: 36px !important;
   min-height: 36px !important;
   margin: 0 !important;
-  padding: 0 8px !important;
+  padding: 0 7px !important;
 }
 
 .schedule-page .schedule-point-detail-card {
