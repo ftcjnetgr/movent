@@ -7153,9 +7153,12 @@ td select:focus,
   background: var(--theme-primary-soft-2) !important;
   color: #4c4f7a !important;
 }
-.schedule-grid-table .schedule-total-header,
-.schedule-grid-table .schedule-total-label {
+.schedule-grid-table .schedule-total-header {
   background: var(--theme-primary-soft) !important;
+  color: #4f46a5;
+}
+.schedule-grid-table .schedule-total-label {
+  background: #fff !important;
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-cell {
@@ -14715,6 +14718,10 @@ td select:focus,
   border-bottom: 1px solid #dbe3ec !important;
   border-left: 0 !important;
   border-top: 0 !important;
+}
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  background: #fff !important;
 }
 
 .schedule-grid-table thead th {
