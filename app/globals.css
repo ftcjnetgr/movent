@@ -5547,7 +5547,7 @@ small {
   gap: 3px;
   padding: 9px 13px 8px;
   border: 0;
-  border-bottom: 2px solid transparent;
+  border-bottom: 1px solid transparent;
   border-radius: 7px 7px 0 0;
   background: #f4f7fb;
   color: #59687c;
@@ -6608,7 +6608,7 @@ html {
 }
 
 .schedule-grid-table .schedule-total-cell {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   text-align: center;
   vertical-align: middle;
   border-left: 1px solid #dbe3ec;
@@ -6616,7 +6616,7 @@ html {
 
 .schedule-grid-table tfoot .schedule-total-cell {
   border-top: 1px solid #dbe3ec;
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
 }
 
 .schedule-cell-button,
@@ -6878,7 +6878,7 @@ th {
   color: var(--slate-600);
 }
 .schedule-grid-table thead th {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: #4c4f7a !important;
 }
 
@@ -7150,25 +7150,25 @@ td select:focus,
   --schedule-indigo-soft: var(--theme-primary-soft);
 }
 .schedule-grid-table thead th {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: #4c4f7a !important;
 }
 .schedule-grid-table .schedule-total-header {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-label {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-cell {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
 }
 .schedule-grid-table tfoot .schedule-total-cell {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
 }
 .schedule-grand-total {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
 }
 .schedule-grand-total .schedule-total-button {
   background: var(--theme-primary);
@@ -7329,7 +7329,7 @@ td select:focus,
   --schedule-indigo-soft: var(--theme-color-soft);
 }
 .schedule-grid-table thead th {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: var(--theme-color-dark) !important;
 }
 .schedule-grid-table tbody th {
@@ -7338,13 +7338,13 @@ td select:focus,
 }
 .schedule-grid-table .schedule-total-header,
 .schedule-grid-table .schedule-total-label {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: var(--theme-color-dark) !important;
   border-color: var(--theme-color-light) !important;
 }
 .schedule-grid-table .schedule-total-cell,
 .schedule-grid-table tfoot .schedule-total-cell {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   border-color: #d8def0 !important;
 }
 .schedule-total-button {
@@ -7358,7 +7358,7 @@ td select:focus,
   color: var(--theme-color-dark) !important;
 }
 .schedule-grand-total {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   border-left-color: var(--theme-color-mid) !important;
 }
 .schedule-grand-total .schedule-total-button {
@@ -7551,14 +7551,14 @@ td select:focus,
 
 /* Total column: preserve its original flat styling, without borders. */
 .schedule-grid-table .schedule-total-header {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
 }
 
 .schedule-grid-table .schedule-total-cell {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -7592,7 +7592,7 @@ td select:focus,
   height: 38px !important;
   padding: 0 4px !important;
   vertical-align: middle !important;
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -7607,12 +7607,12 @@ td select:focus,
   padding-right: 12px !important;
   text-align: center !important;
   font-weight: 800 !important;
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
 }
 
 .schedule-grid-table .schedule-grand-total,
 .schedule-grid-table .schedule-grand-total .schedule-total-button {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
   color: var(--theme-color-dark) !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -7963,7 +7963,7 @@ td select:focus,
 }
 
 .schedule-route-tabs-standalone button.active {
-  border-bottom: 2px solid var(--theme-color) !important;
+  border-bottom: 1px solid var(--theme-color) !important;
 }
 
 .dashboard-view-tabs a.active::after,
@@ -8016,11 +8016,11 @@ td select:focus,
 }
 
 .schedule-route-tabs button.active {
-  border-bottom: 2px solid var(--theme-color) !important;
+  border-bottom: 1px solid var(--theme-color) !important;
 }
 
 .schedule-route-tabs-standalone button.active {
-  border-bottom: 2px solid var(--theme-color) !important;
+  border-bottom: 1px solid var(--theme-color) !important;
 }
 
 /* Profile & Security cards: give each option breathing room */
@@ -10009,7 +10009,7 @@ td select:focus,
     right: -3px;
     width: 7px;
     height: 7px;
-    border: 2px solid #fff;
+    border: 1px solid #fff;
     border-radius: 50%;
     background: #dc2626;
   }
@@ -13056,7 +13056,7 @@ td select:focus,
   cursor:pointer;
 }
 .extra-schedule-tabs button + button{
-  border-left:2px solid #d9dee5;
+  border-left:1px solid #d9dee5;
 }
 .extra-schedule-tabs button.is-active{
   color:#087ea4;
@@ -13100,7 +13100,7 @@ td select:focus,
     padding:7px 10px 8px;
   }
   .extra-schedule-tabs button + button{
-    border-left:2px solid #d9dee5;
+    border-left:1px solid #d9dee5;
   }
   .extra-schedule-tabs button.is-active::after{
     left:8px;
@@ -14513,7 +14513,7 @@ td select:focus,
   min-height: 32px !important;
   padding: 5px 0 !important;
   border: 0 !important;
-  border-bottom: 2px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
   border-radius: 0 !important;
   background: transparent !important;
   color: #1f2d40 !important;
@@ -14727,7 +14727,7 @@ td select:focus,
 }
 .schedule-grid-table tfoot > tr > th,
 .schedule-grid-table tfoot > tr > td {
-  background: #e0e7ff !important;
+  background: #e7edf5 !important;
 }
 
 .schedule-grid-table thead th {
@@ -14748,18 +14748,18 @@ td select:focus,
   font-weight: var(--ui-regular-weight) !important;
 }
 
-.schedule-grid-table .schedule-cell-button,
-.schedule-grid-table .schedule-type-group-button,
-.schedule-grid-table .schedule-total-button,
-.schedule-grid-table .schedule-type-group-value-button {
-  font-size: var(--ui-body-size) !important;
+.schedule-grid-table .schedule-cell-button {
+  font-size: 8px !important;
   font-weight: var(--ui-regular-weight) !important;
 }
 
+.schedule-grid-table .schedule-type-group-button,
+.schedule-grid-table .schedule-total-button,
+.schedule-grid-table .schedule-type-group-value-button,
 .schedule-grid-table .schedule-total-label,
 .schedule-grid-table .schedule-total-header {
-  font-size: var(--ui-body-size) !important;
-  font-weight: var(--ui-medium-weight) !important;
+  font-size: 9px !important;
+  font-weight: var(--ui-regular-weight) !important;
 }
 
 .schedule-grid-table.live-tracking-table th:first-child,
