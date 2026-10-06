@@ -14812,3 +14812,65 @@ td select:focus,
   fill: none !important;
   stroke: currentColor !important;
 }
+
+
+/* Scoped fixes requested for navigation tabs and timetable grid. */
+.extra-schedule-tabs {
+  gap: 20px !important;
+}
+.extra-schedule-tabs button + button {
+  border-left: 0 !important;
+}
+.extra-schedule-tabs button.is-active svg,
+.extra-schedule-tabs button.is-active svg * {
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+.alert-page .alert-hub-tab.is-active svg,
+.alert-page .alert-hub-tab.is-active svg * {
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.nav-icon-with-badge {
+  position: relative;
+}
+.alert-nav-dot {
+  top: -1px !important;
+  right: 1px !important;
+  border: 0 !important;
+}
+
+.schedule-grid-table thead th,
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 4px !important;
+  font-size: 9px !important;
+  font-weight: 400 !important;
+  line-height: 1.3 !important;
+  border-right: 1px solid #dbe3ec !important;
+  border-bottom: 1px solid #dbe3ec !important;
+  border-left: 0 !important;
+  border-top: 0 !important;
+}
+.schedule-grid-table thead th:first-child,
+.schedule-grid-table tbody th:first-child,
+.schedule-grid-table tfoot th:first-child {
+  width: 160px !important;
+  min-width: 160px !important;
+  box-sizing: border-box !important;
+  border-right: 1px solid #dbe3ec !important;
+}
+.schedule-grid-table thead th {
+  font-size: 9px !important;
+  font-weight: 400 !important;
+}
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table tfoot .schedule-total-button {
+  background: #fff !important;
+}
