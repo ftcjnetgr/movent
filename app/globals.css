@@ -16629,7 +16629,7 @@ td select:focus,
 
 .schedule-filter-primary-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr);
   align-items: stretch;
   gap: 10px;
 }
@@ -16846,4 +16846,25 @@ td select:focus,
   border-color: var(--primary) !important;
   color: #ffffff !important;
   box-shadow: 0 3px 8px rgba(79,70,229,.16) !important;
+}
+
+
+/* Balance the seven day controls across the wider day card */
+.schedule-filter-day .schedule-day-row {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+
+.schedule-filter-day .schedule-day-row button {
+  width: 100% !important;
+  min-width: 0 !important;
+  padding-left: 7px !important;
+  padding-right: 7px !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 700px) {
+  .schedule-filter-primary-row {
+    grid-template-columns: 1fr !important;
+  }
 }
