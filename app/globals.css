@@ -7974,7 +7974,7 @@ td select:focus,
 
 /* schedule density — six clearly separated colors */
 .schedule-density-legend-item:nth-of-type(2) i,
-.schedule-grid-table .schedule-cell-button 
+.schedule-grid-table .schedule-cell-button
 
 /* the cell palette is injected by timetable-view; these variables are
    intentionally distinct from neighboring density levels. */
@@ -15067,7 +15067,6 @@ td select:focus,
   }
 }
 
-
 /* =========================================================
    CONTROLLER DASHBOARD — FINAL KPI + PERFORMANCE CARD PASS
    ========================================================= */
@@ -15148,7 +15147,6 @@ td select:focus,
     grid-template-columns: 1fr !important;
   }
 }
-
 
 /* CONTROLLER DASHBOARD — CLICKABLE PREVIEW */
 .dashboard-preview-activity-row {
@@ -15302,7 +15300,6 @@ td select:focus,
 .super-dashboard .super-chart-panel .super-chart { min-height: 0 !important; height: 340px !important; }
 .super-dashboard .super-activity-panel { height: 100% !important; align-self: stretch !important; }
 
-
 /* CONTROLLER DASHBOARD — CHART LABEL + 5 : 2 GRID */
 .super-dashboard .super-dashboard-main-grid {
   grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) !important;
@@ -15331,7 +15328,6 @@ td select:focus,
     grid-template-columns: 1fr !important;
   }
 }
-
 
 /* CONTROLLER DASHBOARD — FIX PREVIEW BUTTON THEME + DESKTOP SPLIT */
 .super-dashboard .dashboard-preview-kpi {
@@ -15381,7 +15377,6 @@ td select:focus,
   }
 }
 
-
 /* CONTROLLER DASHBOARD — FINAL PREVIEW + TWO-COLUMN FIX */
 .super-dashboard .super-dashboard-main-grid {
   display: grid !important;
@@ -15427,7 +15422,6 @@ td select:focus,
   }
 }
 
-
 /* CONTROLLER PENUGASAN — MATCH KPI CARD WIDTHS EXACTLY */
 .super-dashboard .super-dashboard-main-grid {
   display: grid !important;
@@ -15455,7 +15449,6 @@ td select:focus,
     grid-column: auto !important;
   }
 }
-
 
 /* CONTROLLER PERBAIKAN — MATCH SUMMARY CARD WIDTHS */
 .super-dashboard .maintenance-dashboard-main-grid {
@@ -15485,7 +15478,6 @@ td select:focus,
   }
 }
 
-
 /* CONTROLLER PERBAIKAN — SAMAKAN TINGGI PANEL */
 .super-dashboard .maintenance-dashboard-main-grid .super-chart-panel,
 .super-dashboard .maintenance-dashboard-main-grid .super-activity-panel {
@@ -15508,7 +15500,6 @@ td select:focus,
     min-height: 260px !important;
   }
 }
-
 
 /* CONTROLLER PERBAIKAN — PERCENTAGE DI KETEPATAN */
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row,
@@ -15542,7 +15533,6 @@ td select:focus,
   margin-top: 2px;
 }
 
-
 /* CONTROLLER PENUGASAN — RAPATKAN TYPO SUMMARY CARD */
 .super-dashboard .assignment-kpi-grid .dashboard-preview-kpi .super-kpi-content > span {
   font-size: 8px !important;
@@ -15554,7 +15544,6 @@ td select:focus,
   font-size: 8px !important;
   font-weight: 400 !important;
 }
-
 
 /* CONTROLLER DASHBOARD — STATUS PALETTE FINAL */
 .super-dashboard .assignment-kpi-grid .kpi-purple {
@@ -15665,7 +15654,6 @@ td select:focus,
   background: #94a3b8 !important;
 }
 
-
 /* CONTROLLER DASHBOARD — ACTIVITY ROW ALIGNMENT FINAL */
 .super-dashboard .dashboard-preview-activity-row {
   grid-template-columns: 8px minmax(0, 1fr) 38px 34px !important;
@@ -15705,7 +15693,6 @@ td select:focus,
 .super-dashboard .dashboard-preview-activity-row time {
   display: none !important;
 }
-
 
 /* CONTROLLER DASHBOARD — FINAL STATUS COLORS + ACTIVITY ALIGNMENT */
 .super-dashboard .assignment-kpi-grid .status-kpi-total-tasks,
@@ -16033,7 +16020,6 @@ td select:focus,
   .dashboard-preview-table.is-maintenance td:nth-child(1) { min-width: 130px !important; }
 }
 
-
 /* Realized view controls only */
 .schedule-view-realized .schedule-direction,
 .schedule-view-realized .schedule-point-tabs,
@@ -16227,8 +16213,6 @@ td select:focus,
     grid-template-columns: 1fr;
   }
 }
-
-
 
 /* Cek Jadwal — canonical filter UI */
 .schedule-page .schedule-control-compact {
@@ -16469,4 +16453,193 @@ td select:focus,
   .schedule-page .schedule-filter-day .schedule-day-row {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
+}
+
+
+/* =========================================================
+   MOVENT — canonical typography, spacing and timetable rules
+   ========================================================= */
+:root {
+  --ui-title-size: 24px;
+  --ui-section-title-size: 15px;
+  --ui-card-title-size: 14px;
+  --ui-body-size: 11px;
+  --ui-label-size: 10px;
+  --ui-caption-size: 9px;
+  --ui-title-weight: 600;
+  --ui-regular-weight: 400;
+  --ui-medium-weight: 500;
+  --ui-control-gap: 12px;
+  --ui-section-gap: 20px;
+  --ui-heading-gap: 4px;
+  --ui-content-gap: 16px;
+}
+
+.page-heading h1,
+.super-dashboard-heading h1,
+.alert-hero h1 {
+  font-size: var(--ui-title-size) !important;
+  font-weight: var(--ui-title-weight) !important;
+  line-height: 1.2 !important;
+}
+
+.page-heading p,
+.super-dashboard-heading p,
+.alert-hero p,
+.section-heading p,
+.super-panel-heading p {
+  font-size: var(--ui-body-size) !important;
+  font-weight: var(--ui-regular-weight) !important;
+  line-height: 1.5 !important;
+}
+
+.section-heading h2,
+.super-panel-heading h2,
+.alert-panel-heading h2,
+.profile-settings-section-heading h2,
+.report-filter-heading h2,
+.database-action-modal-heading h2 {
+  font-size: var(--ui-section-title-size) !important;
+  font-weight: var(--ui-title-weight) !important;
+  line-height: 1.3 !important;
+}
+
+.task-card h2,
+.form-section-title,
+.alert-item-title,
+.schedule-preview-heading h2 {
+  font-size: var(--ui-card-title-size) !important;
+  font-weight: var(--ui-title-weight) !important;
+}
+
+.page-heading,
+.section-heading {
+  gap: var(--ui-control-gap) !important;
+}
+
+.page-heading {
+  margin-bottom: var(--ui-section-gap) !important;
+}
+
+.section-block {
+  margin-top: var(--ui-section-gap) !important;
+}
+
+.section-heading {
+  margin-bottom: var(--ui-control-gap) !important;
+}
+
+.metric-grid,
+.dashboard-main-grid,
+.section-grid,
+.task-summary-grid,
+.alert-overview-grid {
+  gap: var(--ui-control-gap) !important;
+}
+
+.metric-card,
+.data-table-card,
+.dashboard-form-card,
+.report-card,
+.task-card {
+  padding: 16px !important;
+}
+
+.schedule-page .schedule-control-compact {
+  gap: 10px !important;
+  padding: 0 !important;
+}
+
+.schedule-page .schedule-filter-card,
+.schedule-page .schedule-point-detail-card {
+  padding: 10px 12px !important;
+}
+
+.schedule-page .schedule-filter-point-direction .schedule-direction button,
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button,
+.schedule-page .schedule-filter-day .schedule-day-row button,
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button {
+  font-size: 10px !important;
+  font-weight: var(--ui-medium-weight) !important;
+}
+
+.schedule-page .schedule-filter-point-direction .schedule-direction button.active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 8px rgba(79, 70, 229, 0.16) !important;
+}
+
+.schedule-page .schedule-filter-point-direction .schedule-direction button:not(.active),
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button:not(.active),
+.schedule-page .schedule-filter-day .schedule-day-row button:not(.active),
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button:not(.active) {
+  color: #405067 !important;
+}
+
+.schedule-grid-table thead th,
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  font-size: var(--ui-body-size) !important;
+  font-weight: var(--ui-regular-weight) !important;
+  line-height: 1.3 !important;
+  border-right: 1px solid #dbe3ec;
+}
+
+.schedule-grid-table thead th {
+  font-size: var(--ui-label-size) !important;
+  font-weight: var(--ui-medium-weight) !important;
+}
+
+.schedule-grid-table tbody th:first-child,
+.schedule-grid-table tbody td:first-child,
+.schedule-grid-table thead th:first-child,
+.schedule-grid-table tfoot th:first-child {
+  border-right: 1px solid #c9d3df !important;
+}
+
+.schedule-grid-table tbody .schedule-type-group-row > th,
+.schedule-grid-table tbody .schedule-type-group-row > td {
+  font-size: var(--ui-body-size) !important;
+  font-weight: var(--ui-regular-weight) !important;
+}
+
+.schedule-grid-table .schedule-type-group-button,
+.schedule-grid-table .schedule-total-button,
+.schedule-grid-table .schedule-type-group-value-button {
+  font-size: var(--ui-body-size) !important;
+  font-weight: var(--ui-regular-weight) !important;
+}
+
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-header {
+  font-size: var(--ui-label-size) !important;
+  font-weight: var(--ui-medium-weight) !important;
+}
+
+.schedule-grid-table.live-tracking-table th:first-child,
+.schedule-grid-table.live-tracking-table td:first-child {
+  border-right: 1px solid #c9d3df !important;
+}
+
+/* Keep the shared UI rhythm compact without touching page-specific business layout. */
+[class*="role-"] .page-heading,
+[class*="role-"] .section-heading {
+  gap: var(--ui-control-gap) !important;
+}
+
+[class*="role-"] .page-heading h1,
+[class*="role-"] .super-dashboard-heading h1,
+[class*="role-"] .alert-hero h1 {
+  font-size: var(--ui-title-size) !important;
+  font-weight: var(--ui-title-weight) !important;
+}
+
+[class*="role-"] .page-heading p,
+[class*="role-"] .section-heading p,
+[class*="role-"] .super-panel-heading p {
+  font-size: var(--ui-body-size) !important;
+  font-weight: var(--ui-regular-weight) !important;
 }
