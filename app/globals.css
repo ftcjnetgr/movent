@@ -2251,8 +2251,6 @@ tbody tr:hover td {
 
 .schedule-day-row button:hover,
 .schedule-direction button:hover,
-.schedule-category-buttons button:hover,
-.schedule-route-tabs button:hover,
 .schedule-point-tabs button:hover {
   background: #f1f5fa;
   border-color: #d2dbe6;
@@ -2263,8 +2261,6 @@ tbody tr:hover td {
 
 .schedule-day-row button.active,
 .schedule-direction button.active,
-.schedule-category-buttons button.active,
-.schedule-route-tabs button.active,
 .schedule-point-tabs button.active {
   background: var(--primary-soft);
   border-color: #b8d0f4;
@@ -4618,9 +4614,6 @@ small {
 
 .schedule-day-row button:hover,
 .schedule-direction button:hover,
-.schedule-category-buttons button:hover,
-.schedule-route-tabs button:hover,
-.schedule-point-tabs button:hover,
 .schedule-summary-inline button:hover {
   background: #f1f5f9 !important;
   color: #1f3048 !important;
@@ -4629,9 +4622,6 @@ small {
 
 .schedule-day-row button.active,
 .schedule-direction button.active,
-.schedule-category-buttons button.active,
-.schedule-route-tabs button.active,
-.schedule-point-tabs button.active,
 .schedule-summary-inline button.active {
   background: #eaf2ff !important;
   color: #1557b0 !important;
@@ -9723,12 +9713,6 @@ td select:focus,
 /* Unified selection treatment across page controls */
 .schedule-day-row button.active,
 .schedule-direction button.active,
-.schedule-category-buttons button.active,
-.schedule-route-tabs button.active,
-.schedule-point-tabs button.active,
-.schedule-summary-inline button.active,
-.schedule-route-tabs-standalone button.active,
-.nav-dashboard-button.active,
 .profile-settings-nav button.active {
   background: var(--theme-color-dark) !important;
   color: #fff !important;
@@ -9738,11 +9722,6 @@ td select:focus,
 
 .schedule-day-row button:not(.active),
 .schedule-direction button:not(.active),
-.schedule-category-buttons button:not(.active),
-.schedule-route-tabs button:not(.active),
-.schedule-point-tabs button:not(.active),
-.schedule-summary-inline button:not(.active),
-.nav-dashboard-button:not(.active),
 .profile-settings-nav button:not(.active) {
   background: var(--theme-color-soft) !important;
   color: var(--theme-color-dark) !important;
@@ -9780,16 +9759,6 @@ td select:focus,
 /* Active / selected / pre-selected */
 .schedule-day-row button.active,
 .schedule-direction button.active,
-.schedule-category-buttons button.active,
-.schedule-route-tabs button.active,
-.schedule-point-tabs button.active,
-.schedule-summary-inline button.active,
-.schedule-route-tabs-standalone button.active,
-.dashboard-view-tabs a.active,
-.alert-view-tabs a.active,
-.nav-dashboard-button.active,
-.profile-settings-nav button.active,
-.nav-link.active,
 .report-type-buttons .report-type-button.active {
   background: var(--selection-purple-dark) !important;
   color: #fff !important;
@@ -9813,15 +9782,6 @@ td select:focus,
 /* Inactive controls */
 .schedule-day-row button:not(.active),
 .schedule-direction button:not(.active),
-.schedule-category-buttons button:not(.active),
-.schedule-route-tabs button:not(.active),
-.schedule-point-tabs button:not(.active),
-.schedule-summary-inline button:not(.active),
-.schedule-route-tabs-standalone button:not(.active),
-.dashboard-view-tabs a:not(.active),
-.alert-view-tabs a:not(.active),
-.nav-dashboard-button:not(.active),
-.profile-settings-nav button:not(.active),
 .report-type-buttons .report-type-button:not(.active) {
   background: var(--selection-purple-light) !important;
   color: var(--selection-purple-dark) !important;
@@ -9897,11 +9857,6 @@ td select:focus,
 /* Use one purple for filled active controls: match the MOVENT header purple */
 .schedule-day-row button.active,
 .schedule-direction button.active,
-.schedule-category-buttons button.active,
-.schedule-point-tabs button.active,
-.schedule-summary-inline button.active,
-.nav-dashboard-button.active,
-.profile-settings-nav button.active,
 .report-type-buttons .report-type-button.active {
   background: var(--theme-color) !important;
   color: #fff !important;
@@ -9911,11 +9866,6 @@ td select:focus,
 /* Matching light-purple inactive state */
 .schedule-day-row button:not(.active),
 .schedule-direction button:not(.active),
-.schedule-category-buttons button:not(.active),
-.schedule-point-tabs button:not(.active),
-.schedule-summary-inline button:not(.active),
-.nav-dashboard-button:not(.active),
-.profile-settings-nav button:not(.active),
 .report-type-buttons .report-type-button:not(.active) {
   background: var(--theme-color-soft) !important;
   color: var(--theme-color-dark) !important;
@@ -10863,9 +10813,6 @@ td select:focus,
 .alert-view-tabs a:not(.active),
 .schedule-day-row button:not(.active),
 .schedule-direction button:not(.active),
-.schedule-category-buttons button:not(.active),
-.schedule-point-tabs button:not(.active),
-.schedule-summary-inline button:not(.active),
 .profile-settings-nav button:not(.active) {
   color: #718095 !important;
 }
