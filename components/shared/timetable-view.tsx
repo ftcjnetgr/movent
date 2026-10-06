@@ -896,8 +896,8 @@ export default function TimetableView({
     <div className={`schedule-page schedule-view-${view}`}>
       <div className="schedule-control-compact">
         <div className="schedule-filter-primary-row">
-          <div className="schedule-point-card">
-            <span className="schedule-control-label">Titik</span>
+          <div className="schedule-filter-card schedule-filter-point-direction">
+            <span className="schedule-control-label">Titik Filter</span>
             <div className="schedule-direction" aria-label="Pilih titik filter">
               <button
                 type="button"
@@ -923,8 +923,8 @@ export default function TimetableView({
           </div>
 
           {view !== "realized" ? (
-            <div className="schedule-category-inline">
-              <span className="schedule-control-label">Mode</span>
+            <div className="schedule-filter-card schedule-filter-category">
+              <span className="schedule-control-label">Mode Jadwal</span>
               <div
                 className="schedule-category-tabs-inline"
                 aria-label="Category"
@@ -944,7 +944,7 @@ export default function TimetableView({
           ) : null}
 
           {view !== "realized" ? (
-            <div className="schedule-day-inline">
+            <div className="schedule-filter-card schedule-filter-day">
               <span className="schedule-control-label">Hari</span>
               <div className="schedule-day-row">
                 {DAYS.map((day) => (
@@ -963,6 +963,38 @@ export default function TimetableView({
               </div>
             </div>
           ) : null}
+        </div>
+
+        <div className="schedule-point-detail-card">
+          <span className="schedule-control-label">
+            {direction === "start-point" ? "Start Point" : "Destination"}
+          </span>
+          <div
+            className="schedule-point-tabs"
+            aria-label={
+              direction === "start-point"
+                ? "Filter Start Point"
+                : "Filter Destination"
+            }
+          >
+            <button
+              type="button"
+              className={!point ? "active" : ""}
+              onClick={() => setPoint("")}
+            >
+              Semua
+            </button>
+            {pointOptions.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={point === item ? "active" : ""}
+                onClick={() => setPoint(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="schedule-route-row">
@@ -989,35 +1021,6 @@ export default function TimetableView({
                 }}
               >
                 {routeLabels[item] ?? item}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="schedule-point-detail-card">
-          <div
-            className="schedule-point-tabs"
-            aria-label={
-              direction === "start-point"
-                ? "Filter Start Point"
-                : "Filter Destination"
-            }
-          >
-            <button
-              type="button"
-              className={!point ? "active" : ""}
-              onClick={() => setPoint("")}
-            >
-              Semua
-            </button>
-            {pointOptions.map((item) => (
-              <button
-                key={item}
-                type="button"
-                className={point === item ? "active" : ""}
-                onClick={() => setPoint(item)}
-              >
-                {item}
               </button>
             ))}
           </div>
