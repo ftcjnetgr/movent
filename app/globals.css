@@ -16940,3 +16940,82 @@ td select:focus,
     min-width: 0 !important;
   }
 }
+
+
+/* ONE BUTTON WIDTH ACROSS THE ENTIRE TOP FILTER ROW */
+.schedule-page .schedule-filter-primary-row {
+  grid-template-columns: 240px 240px minmax(0, 1fr) !important;
+  gap: 12px !important;
+}
+
+.schedule-page .schedule-filter-primary-row .schedule-direction,
+.schedule-page .schedule-filter-primary-row .schedule-category-tabs-inline,
+.schedule-page .schedule-filter-primary-row .schedule-day-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, 96px) !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.schedule-page .schedule-filter-primary-row .schedule-day-row {
+  grid-template-columns: repeat(7, 96px) !important;
+  justify-content: space-between !important;
+}
+
+.schedule-page .schedule-filter-primary-row .schedule-direction button,
+.schedule-page .schedule-filter-primary-row .schedule-category-tabs-inline button,
+.schedule-page .schedule-filter-primary-row .schedule-day-row button {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+  flex: 0 0 96px !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+@media (max-width: 1080px) {
+  .schedule-page .schedule-filter-primary-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .schedule-page .schedule-filter-day {
+    grid-column: 1 / -1 !important;
+  }
+
+  .schedule-page .schedule-filter-primary-row .schedule-day-row {
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  }
+
+  .schedule-page .schedule-filter-primary-row .schedule-day-row button {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: 1 1 0 !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .schedule-page .schedule-filter-primary-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .schedule-page .schedule-filter-day {
+    grid-column: auto !important;
+  }
+
+  .schedule-page .schedule-filter-primary-row .schedule-direction,
+  .schedule-page .schedule-filter-primary-row .schedule-category-tabs-inline {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .schedule-page .schedule-filter-primary-row .schedule-direction button,
+  .schedule-page .schedule-filter-primary-row .schedule-category-tabs-inline button {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .schedule-page .schedule-filter-primary-row .schedule-day-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
