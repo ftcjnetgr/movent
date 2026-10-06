@@ -895,9 +895,9 @@ export default function TimetableView({
   return (
     <div className={`schedule-page schedule-view-${view}`}>
       <div className="schedule-control-compact">
-        <div className="schedule-filter-top">
+        <div className="schedule-filter-primary-row">
           <div className="schedule-point-card">
-            <span className="schedule-control-label">Titik Filter</span>
+            <span className="schedule-control-label">Titik</span>
             <div className="schedule-direction" aria-label="Pilih titik filter">
               <button
                 type="button"
@@ -923,53 +923,75 @@ export default function TimetableView({
           </div>
 
           {view !== "realized" ? (
-            <>
-              <div className="schedule-control-field schedule-day-field">
-                <span className="schedule-control-label">Hari</span>
-                <div className="schedule-day-row">
-                  {DAYS.map((day) => (
-                    <button
-                      key={day.value}
-                      type="button"
-                      className={selectedDay === day.value ? "active" : ""}
-                      onClick={() => {
-                        setSelectedDay(day.value);
-                        setPoint("");
-                      }}
-                    >
-                      {day.label}
-                    </button>
-                  ))}
-                </div>
+            <div className="schedule-category-inline">
+              <span className="schedule-control-label">Mode</span>
+              <div
+                className="schedule-category-tabs-inline"
+                aria-label="Category"
+              >
+                {categories.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className={category === item ? "active" : ""}
+                    onClick={() => setCategory(item)}
+                  >
+                    {item}
+                  </button>
+                ))}
               </div>
-            </>
+            </div>
+          ) : null}
+
+          {view !== "realized" ? (
+            <div className="schedule-day-inline">
+              <span className="schedule-control-label">Hari</span>
+              <div className="schedule-day-row">
+                {DAYS.map((day) => (
+                  <button
+                    key={day.value}
+                    type="button"
+                    className={selectedDay === day.value ? "active" : ""}
+                    onClick={() => {
+                      setSelectedDay(day.value);
+                      setPoint("");
+                    }}
+                  >
+                    {day.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : null}
         </div>
 
-        <div className="schedule-route-tabs schedule-route-tabs-standalone">
-          <button
-            type="button"
-            className={!route ? "active" : ""}
-            onClick={() => {
-              setRoute("");
-              setPoint("");
-            }}
-          >
-            Semua
-          </button>
-          {routes.map((item) => (
+        <div className="schedule-route-row">
+          <span className="schedule-control-label">Rute</span>
+          <div className="schedule-route-tabs schedule-route-tabs-standalone">
             <button
-              key={item}
               type="button"
-              className={route === item ? "active" : ""}
+              className={!route ? "active" : ""}
               onClick={() => {
-                setRoute(item);
+                setRoute("");
                 setPoint("");
               }}
             >
-              {routeLabels[item] ?? item}
+              Semua
             </button>
-          ))}
+            {routes.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className={route === item ? "active" : ""}
+                onClick={() => {
+                  setRoute(item);
+                  setPoint("");
+                }}
+              >
+                {routeLabels[item] ?? item}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="schedule-point-detail-card">
@@ -1001,21 +1023,6 @@ export default function TimetableView({
           </div>
         </div>
       </div>
-
-      {view !== "realized" ? (
-        <div className="schedule-category-tabs-standalone" aria-label="Category">
-          {categories.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={category === item ? "active" : ""}
-              onClick={() => setCategory(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-      ) : null}
 
       <section className="schedule-grid-shell">
         <div className="schedule-grid-header">
