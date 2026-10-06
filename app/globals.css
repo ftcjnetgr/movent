@@ -6608,7 +6608,7 @@ html {
 }
 
 .schedule-grid-table .schedule-total-cell {
-  background: #fff;
+  background: #e0e7ff !important;
   text-align: center;
   vertical-align: middle;
   border-left: 1px solid #dbe3ec;
@@ -6878,7 +6878,7 @@ th {
   color: var(--slate-600);
 }
 .schedule-grid-table thead th {
-  background: #e9eafc !important;
+  background: #e0e7ff !important;
   color: #4c4f7a !important;
 }
 
@@ -7158,17 +7158,17 @@ td select:focus,
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-label {
-  background: #fff !important;
+  background: #e0e7ff !important;
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-cell {
   background: #fff;
 }
 .schedule-grid-table tfoot .schedule-total-cell {
-  background: #fff;
+  background: #e0e7ff !important;
 }
 .schedule-grand-total {
-  background: #fff !important;
+  background: #e0e7ff !important;
 }
 .schedule-grand-total .schedule-total-button {
   background: var(--theme-primary);
@@ -7329,7 +7329,7 @@ td select:focus,
   --schedule-indigo-soft: var(--theme-color-soft);
 }
 .schedule-grid-table thead th {
-  background: var(--theme-color-soft-2) !important;
+  background: #e0e7ff !important;
   color: var(--theme-color-dark) !important;
 }
 .schedule-grid-table tbody th {
@@ -7338,13 +7338,13 @@ td select:focus,
 }
 .schedule-grid-table .schedule-total-header,
 .schedule-grid-table .schedule-total-label {
-  background: var(--theme-color-soft) !important;
+  background: #e0e7ff !important;
   color: var(--theme-color-dark) !important;
   border-color: var(--theme-color-light) !important;
 }
 .schedule-grid-table .schedule-total-cell,
 .schedule-grid-table tfoot .schedule-total-cell {
-  background: #f8faff !important;
+  background: #e0e7ff !important;
   border-color: #d8def0 !important;
 }
 .schedule-total-button {
@@ -7358,7 +7358,7 @@ td select:focus,
   color: var(--theme-color-dark) !important;
 }
 .schedule-grand-total {
-  background: var(--theme-color-soft-2) !important;
+  background: #e0e7ff !important;
   border-left-color: var(--theme-color-mid) !important;
 }
 .schedule-grand-total .schedule-total-button {
