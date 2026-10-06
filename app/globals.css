@@ -16868,3 +16868,72 @@ td select:focus,
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* FINAL TOP FILTER PROPORTION — compact left groups, wider day selector */
+.schedule-page .schedule-filter-primary-row {
+  grid-template-columns: minmax(250px, 0.85fr) minmax(250px, 0.85fr) minmax(560px, 1.65fr) !important;
+  gap: 12px !important;
+}
+
+.schedule-page .schedule-filter-point-direction,
+.schedule-page .schedule-filter-category,
+.schedule-page .schedule-filter-day {
+  min-width: 0 !important;
+}
+
+.schedule-page .schedule-filter-point-direction .schedule-direction,
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline {
+  gap: 6px !important;
+}
+
+.schedule-page .schedule-filter-point-direction .schedule-direction button,
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.schedule-page .schedule-filter-day .schedule-day-row {
+  grid-template-columns: repeat(7, minmax(78px, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.schedule-page .schedule-filter-day .schedule-day-row button {
+  width: 100% !important;
+  min-width: 78px !important;
+  height: 36px !important;
+  padding: 0 9px !important;
+  border-radius: 9px !important;
+}
+
+@media (max-width: 1240px) {
+  .schedule-page .schedule-filter-primary-row {
+    grid-template-columns: minmax(230px, 0.9fr) minmax(230px, 0.9fr) minmax(520px, 1.4fr) !important;
+  }
+
+  .schedule-page .schedule-filter-day .schedule-day-row {
+    grid-template-columns: repeat(7, minmax(70px, 1fr)) !important;
+  }
+
+  .schedule-page .schedule-filter-day .schedule-day-row button {
+    min-width: 70px !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .schedule-page .schedule-filter-primary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .schedule-page .schedule-filter-day {
+    grid-column: 1 / -1 !important;
+  }
+
+  .schedule-page .schedule-filter-day .schedule-day-row {
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  }
+
+  .schedule-page .schedule-filter-day .schedule-day-row button {
+    min-width: 0 !important;
+  }
+}
