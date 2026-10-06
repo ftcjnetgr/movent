@@ -17019,3 +17019,14 @@ td select:focus,
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 }
+
+
+/* Prevent equal-width top filter buttons from overflowing their cards */
+.schedule-page .schedule-filter-primary-row
+  .schedule-direction button,
+.schedule-page .schedule-filter-primary-row
+  .schedule-category-tabs-inline button,
+.schedule-page .schedule-filter-primary-row
+  .schedule-day-row button {
+  box-sizing: border-box !important;
+}
