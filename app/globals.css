@@ -14727,7 +14727,7 @@ td select:focus,
 }
 .schedule-grid-table tfoot th,
 .schedule-grid-table tfoot td {
-  background: #fff !important;
+  background: var(--theme-color-soft-2) !important;
 }
 
 .schedule-grid-table thead th {
