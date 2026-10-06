@@ -16872,7 +16872,7 @@ td select:focus,
 
 /* FINAL TOP FILTER PROPORTION — compact left groups, wider day selector */
 .schedule-page .schedule-filter-primary-row {
-  grid-template-columns: minmax(250px, 0.85fr) minmax(250px, 0.85fr) minmax(560px, 1.65fr) !important;
+  grid-template-columns: 280px 280px minmax(0, 1fr) !important;
   gap: 12px !important;
 }
 
@@ -16891,32 +16891,35 @@ td select:focus,
 .schedule-page .schedule-filter-category .schedule-category-tabs-inline button {
   min-width: 0 !important;
   width: 100% !important;
+  padding-inline: 8px !important;
 }
 
 .schedule-page .schedule-filter-day .schedule-day-row {
-  grid-template-columns: repeat(7, minmax(78px, 1fr)) !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
   gap: 7px !important;
 }
 
 .schedule-page .schedule-filter-day .schedule-day-row button {
   width: 100% !important;
-  min-width: 78px !important;
+  min-width: 0 !important;
   height: 36px !important;
-  padding: 0 9px !important;
+  padding: 0 7px !important;
   border-radius: 9px !important;
 }
 
 @media (max-width: 1240px) {
   .schedule-page .schedule-filter-primary-row {
-    grid-template-columns: minmax(230px, 0.9fr) minmax(230px, 0.9fr) minmax(520px, 1.4fr) !important;
+    grid-template-columns: 250px 250px minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .schedule-page .schedule-filter-primary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
-  .schedule-page .schedule-filter-day .schedule-day-row {
-    grid-template-columns: repeat(7, minmax(70px, 1fr)) !important;
-  }
-
-  .schedule-page .schedule-filter-day .schedule-day-row button {
-    min-width: 70px !important;
+  .schedule-page .schedule-filter-day {
+    grid-column: 1 / -1 !important;
   }
 }
 
