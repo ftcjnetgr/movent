@@ -11209,7 +11209,8 @@ td select:focus,
 
 .schedule-page .schedule-point-detail-card .schedule-point-tabs {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)) !important;
+  grid-template-columns: repeat(12, 88px) !important;
+  justify-content: space-between !important;
   gap: 6px !important;
   width: 100% !important;
   overflow: visible !important;
@@ -16233,7 +16234,7 @@ td select:focus,
 .schedule-page .schedule-control-compact {
   display: grid !important;
   gap: 10px !important;
-  padding: 12px !important;
+  padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -16251,7 +16252,7 @@ td select:focus,
 .schedule-page .schedule-filter-card {
   width: 100% !important;
   min-width: 0 !important;
-  padding: 12px !important;
+  padding: 10px 12px !important;
   box-sizing: border-box !important;
   border: 1px solid var(--line) !important;
   border-radius: 12px !important;
@@ -16259,9 +16260,10 @@ td select:focus,
   box-shadow: none !important;
 }
 
-.schedule-page .schedule-filter-card .schedule-control-label {
-  display: block !important;
-  margin-bottom: 7px !important;
+.schedule-page .schedule-filter-card .schedule-control-label,
+.schedule-page .schedule-point-detail-card > .schedule-control-label,
+.schedule-page .schedule-route-row > .schedule-control-label {
+  display: none !important;
 }
 
 .schedule-page .schedule-filter-point-direction .schedule-direction,
@@ -16320,7 +16322,7 @@ td select:focus,
   gap: 0 !important;
   width: 100% !important;
   min-width: 0 !important;
-  padding: 0 8px !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
 }
 
@@ -16338,7 +16340,7 @@ td select:focus,
 .schedule-page .schedule-point-detail-card {
   width: 100% !important;
   margin-top: 0 !important;
-  padding: 12px !important;
+  padding: 10px 12px !important;
   box-sizing: border-box !important;
   border: 1px solid var(--line) !important;
   border-radius: 12px !important;
@@ -16361,10 +16363,12 @@ td select:focus,
 }
 
 .schedule-page .schedule-point-detail-card .schedule-point-tabs button {
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 34px !important;
-  padding: 7px 8px !important;
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0 7px !important;
   box-sizing: border-box !important;
   white-space: nowrap !important;
 }
