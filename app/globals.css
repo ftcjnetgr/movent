@@ -14837,3 +14837,38 @@ td select:focus,
   fill: none !important;
   stroke: currentColor !important;
 }
+
+
+/* MOVENT — final timetable correction: requested 4 points */
+.schedule-grid-table thead th,
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  box-sizing: border-box !important;
+  font-size: 9px !important;
+  border-right-width: 1px !important;
+  border-bottom-width: 1px !important;
+}
+
+.schedule-grid-table thead th,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-cell,
+.schedule-grid-table tfoot > tr > th,
+.schedule-grid-table tfoot > tr > td,
+.schedule-grid-table .schedule-grand-total {
+  background: #e7edf5 !important;
+}
+
+.schedule-grid-table .schedule-type-group-button,
+.schedule-grid-table .schedule-type-group-value-button,
+.schedule-grid-table .schedule-total-button,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label {
+  font-size: 9px !important;
+}
+
+.schedule-grid-table .schedule-cell-button {
+  font-size: 8px !important;
+}
