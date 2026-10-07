@@ -14693,3 +14693,28 @@ td select:focus,
 .schedule-grid-table .schedule-total-button {
   font-weight: 800 !important;
 }
+
+
+/* MOVENT — total row values without pills */
+.schedule-grid-table tfoot .schedule-total-button,
+.schedule-grid-table tfoot .schedule-grand-total .schedule-total-button {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table tfoot .schedule-total-button:hover,
+.schedule-grid-table tfoot .schedule-grand-total .schedule-total-button:hover {
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
