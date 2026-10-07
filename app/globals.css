@@ -14961,3 +14961,13 @@ td select:focus,
   color: #111827 !important;
   border-color: #dbe3ec !important;
 }
+
+
+/* MOVENT — Cek Jadwal category buttons use one inactive style */
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button.normal:not(.active),
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button.campaign:not(.active) {
+  background: #eef2ff !important;
+  color: #111827 !important;
+  border-color: #c7d2fe !important;
+  box-shadow: none !important;
+}
