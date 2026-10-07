@@ -14886,3 +14886,11 @@ td select:focus,
 .schedule-grid-table tfoot > tr > td {
   background: #eef2ff !important;
 }
+
+
+/* MOVENT — light purple timetable total column */
+.schedule-grid-table .schedule-total-cell,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label {
+  background: #eef2ff !important;
+}
