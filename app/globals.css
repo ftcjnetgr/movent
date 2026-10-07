@@ -15033,3 +15033,11 @@ td select:focus,
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+
+/* MOVENT — dashboard view tab spacing */
+.dashboard-page-heading .dashboard-view-tabs {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
