@@ -64,6 +64,7 @@ type TicketDurationRow = {
 
 type TaskAlert = {
   kind: "unassigned" | "assigned";
+  trigger: "std" | "sta";
   scheduleId: string;
   transactionId?: string;
   status?: string;
@@ -209,62 +210,82 @@ export async function getDashboardData(
     ]),
   );
 
-  const usedScheduleIds = new Set(
-    scopedTasks
-      .filter((task) => task.status !== "Canceled")
-      .map((task) => task.schedule_id)
-      .filter((scheduleId): scheduleId is string => Boolean(scheduleId)),
+  // Resolve today's latest task per schedule so historical transactions do not
+  // suppress today's unassigned schedule alerts. Canceled tasks still reserve the
+  // schedule for today, so they do not fall through as "unassigned".
+  const todaysScheduleTasks = scopedTasks.filter(
+    (task) =>
+      Boolean(task.schedule_id) &&
+      Boolean(task.std) &&
+      jakartaDate(new Date(task.std as string)) === date,
   );
+  const latestTaskByScheduleId = new Map<string, TaskRow>();
+  for (const task of todaysScheduleTasks) {
+    if (!latestTaskByScheduleId.has(task.schedule_id as string)) {
+      latestTaskByScheduleId.set(task.schedule_id as string, task);
+    }
+  }
 
   const unassignedAlerts: TaskAlert[] = alertSchedules
-    .filter(
-      (schedule) =>
-        !usedScheduleIds.has(schedule.schedule_id),
-    )
+    .filter((schedule) => !latestTaskByScheduleId.has(schedule.schedule_id))
     .map((schedule) => ({
       kind: "unassigned" as const,
+      trigger: "std" as const,
       scheduleId: schedule.schedule_id,
       startPoint: schedule.start_point,
       destination: schedule.destination,
       std: schedule.std,
       sta: schedule.sta,
       targetAt: scheduleTimestamp(date, schedule.std),
+      status: "Unassigned",
       driverName: null,
       fleetPlat: null,
       scheduleHubId: schedule.schedule_hub_id as string | null,
     }))
-    .filter((alert) => {
-      const diff = now.getTime() - alert.targetAt.getTime();
-      return diff >= -30 * 60 * 1000 && diff <= 30 * 60 * 1000;
-    });
+    .filter(
+      (alert) =>
+        now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000,
+    );
 
-  const assignedAlerts: TaskAlert[] = scopedTasks
+  const assignedAlerts: TaskAlert[] = [...latestTaskByScheduleId.values()]
     .filter(
       (task) =>
         task.schedule_id &&
         ["Assigned", "Confirmed", "Driving"].includes(task.status) &&
-        task.sta &&
         alertSchedules.some(
           (schedule) => schedule.schedule_id === task.schedule_id,
-        ),
+        ) &&
+        ((task.status === "Driving" && task.sta) ||
+          (["Assigned", "Confirmed"].includes(task.status) && task.std)),
     )
-    .map((task) => ({
-      kind: "assigned" as const,
-      transactionId: task.transaction_id,
-      scheduleId: task.schedule_id as string,
-      startPoint: task.start_point,
-      destination: task.destination,
-      std: task.std,
-      sta: task.sta,
-      targetAt: new Date(task.sta as string),
-      status: task.status,
-      driverName: task.executor_snapshot?.full_name ?? null,
-      fleetPlat: task.fleet_snapshot?.plat_number ?? null,
-      scheduleHubId: scheduleHubById.get(task.schedule_id as string) ?? null,
-    }))
-    .filter(
-      (alert) => now.getTime() >= alert.targetAt.getTime() - 10 * 60 * 1000,
-    );
+    .map((task) => {
+      const trigger = task.status === "Driving" ? "sta" : "std";
+      const targetAt =
+        trigger === "sta"
+          ? new Date(task.sta as string)
+          : new Date(task.std as string);
+      return {
+        kind: "assigned" as const,
+        trigger,
+        transactionId: task.transaction_id,
+        scheduleId: task.schedule_id as string,
+        startPoint: task.start_point,
+        destination: task.destination,
+        std: task.std,
+        sta: task.sta,
+        targetAt,
+        status: task.status,
+        driverName: task.executor_snapshot?.full_name ?? null,
+        fleetPlat: task.fleet_snapshot?.plat_number ?? null,
+        scheduleHubId:
+          scheduleHubById.get(task.schedule_id as string) ?? null,
+      };
+    })
+    .filter((alert) => {
+      const threshold =
+        alert.trigger === "std" ? 30 * 60 * 1000 : 10 * 60 * 1000;
+      return now.getTime() >= alert.targetAt.getTime() - threshold;
+    });
 
   const taskAlertHubs = [
     ...new Set(
