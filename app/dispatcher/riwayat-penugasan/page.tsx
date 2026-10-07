@@ -13,21 +13,24 @@ export default async function DispatcherAssignmentHistoryPage() {
   const profile = await getCurrentProfile();
   if (!["Dispatcher", "Super User"].includes(profile.role)) notFound();
   const admin = createAdminClient();
-  const { data: tasks } = await admin
-    .from("tasks")
-    .select(
-      "transaction_id, task_type, status, fleet_ownership, created_by, start_point, destination, std, sta, created_at, executor_snapshot, fleet_snapshot, external_executor, external_fleet",
-    )
-    .order("created_at", { ascending: false });
+  const tasks = await fetchAllRows((from, to) =>
+    admin
+      .from("tasks")
+      .select(
+        "transaction_id, task_type, status, fleet_ownership, created_by, start_point, destination, std, sta, created_at, executor_snapshot, fleet_snapshot, external_executor, external_fleet",
+      )
+      .order("created_at", { ascending: false })
+      .range(from, to),
+  );
 
   const visible =
     profile.role === "Dispatcher"
-      ? (tasks ?? []).filter(
+      ? tasks.filter(
           (task) =>
             task.created_by === profile.id ||
             task.fleet_ownership === "Non-TGR",
         )
-      : (tasks ?? []);
+      : tasks;
 
   return (
     <>
