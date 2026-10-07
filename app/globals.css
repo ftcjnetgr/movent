@@ -5762,11 +5762,6 @@ html {
   color: #fff !important;
 }
 
-.alert-page .alert-hub-tab.is-active span,
-.alert-page .alert-hub-tab.is-active small {
-  color: #fff !important;
-}
-
 .alert-page .alert-hub-summary {
   flex: 0 0 auto;
 }
@@ -5856,11 +5851,6 @@ html {
 .alert-page .alert-hub-tab.is-active:hover,
 .alert-page .alert-hub-tab.is-active:active {
   background: #4f46e5 !important;
-  color: #fff !important;
-}
-
-.alert-page .alert-hub-tab.is-active span,
-.alert-page .alert-hub-tab.is-active small {
   color: #fff !important;
 }
 
