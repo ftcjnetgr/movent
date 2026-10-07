@@ -128,7 +128,7 @@ export async function loginAction(
 
   const cookieStore = await cookies();
   cookieStore.set(SESSION_ACTIVITY_COOKIE, String(Date.now()), {
-    httpOnly: false,
+    httpOnly: true,
     maxAge: SESSION_ACTIVITY_MAX_AGE_SECONDS,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
