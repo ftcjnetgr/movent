@@ -15024,7 +15024,7 @@ td select:focus,
 }
 
 .schedule-preview-item.is-realized-preview {
-  grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(9, minmax(0, 1fr)) !important;
 }
 
 @media (max-width: 760px) {
