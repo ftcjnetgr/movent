@@ -404,23 +404,6 @@ export default function TimetableView({
     [selectedPlanSchedules, direction, route, category, point],
   );
 
-  const filteredTasks = useMemo(
-    () =>
-      todayTasks.filter((task) => {
-        const filterPoint =
-          direction === "start-point" ? task.start_point : task.destination;
-        const schedule = task.schedule_id
-          ? scheduleById.get(task.schedule_id)
-          : null;
-        if (route && schedule && schedule.route !== route) return false;
-        if (category && schedule && schedule.category !== category)
-          return false;
-        if (point && filterPoint !== point) return false;
-        return true;
-      }),
-    [todayTasks, direction, route, category, point, scheduleById],
-  );
-
   function previewStatus(item: Schedule) {
     const task = taskBySchedule[item.schedule_id];
     if (task?.status) return task.status;
