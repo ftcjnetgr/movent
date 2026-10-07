@@ -2529,12 +2529,7 @@ tbody tr:hover td {
 
 .schedule-grid-table th,
 .schedule-grid-table td {
-  border-right: 1px solid #dbe3ec !important;
-  border-bottom: 1px solid #dbe3ec !important;
-}
-
-.schedule-grid-table tr > *:last-child {
-  border-right: 0 !important;
+  border: 1px solid #dbe3ec !important;
 }
 
 .schedule-grid-table thead th:first-child,
