@@ -14894,3 +14894,14 @@ td select:focus,
 .schedule-grid-table .schedule-total-label {
   background: #eef2ff !important;
 }
+
+
+/* MOVENT — unify timetable header subtotal and total font size */
+.schedule-grid-table thead th,
+.schedule-grid-table .schedule-type-group-button,
+.schedule-grid-table .schedule-type-group-value-button,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-button {
+  font-size: 9px !important;
+}
