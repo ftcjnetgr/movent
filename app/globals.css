@@ -15249,3 +15249,12 @@ td select:focus,
   grid-row: auto !important;
   justify-self: start !important;
 }
+
+
+/* MOVENT — align status dots with activity labels */
+.super-dashboard .dashboard-preview-activity-row .activity-dot {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  align-self: center !important;
+  justify-self: start !important;
+}
