@@ -15,6 +15,8 @@ function roleLabel(role: string) {
     Dispatcher: "Dispatcher",
     Operation: "Operasional",
     Executor: "Executor",
+    Pickup: "Pickup",
+    Delivery: "Delivery",
     Maintainer: "Maintainer",
     "Super User": "Super User",
   };
@@ -130,6 +132,8 @@ export default async function UserManagementPage() {
                   "Dispatcher",
                   "Operation",
                   "Executor",
+                  "Pickup",
+                  "Delivery",
                   "Maintainer",
                   "Super User",
                 ].map((role) => (
