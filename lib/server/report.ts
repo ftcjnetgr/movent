@@ -120,20 +120,22 @@ export async function queryOperationalReport(filters: ReportFilters) {
   const fromIso = filters.from + "T00:00:00+07:00";
   const toIso = endExclusiveIso(filters.to);
 
-  const dateFilters = (query: ReturnType<typeof admin.from>) => {
-    let next = query.gte(dateField, fromIso).lt(dateField, toIso);
-    if (filters.startPoint) next = next.eq("start_point", filters.startPoint);
-    if (filters.destination) next = next.eq("destination", filters.destination);
-    if (filters.executorNik) next = next.eq("executor_nik", filters.executorNik);
-    if (filters.type === "CANCELED") next = next.eq("status", "Canceled");
-    return next.order(dateField, { ascending: true });
-  };
+  const data = await fetchAllRows<Record<string, unknown>>((from, to) => {
+    let query = admin
+      .from("tasks")
+      .select("*")
+      .gte(dateField, fromIso)
+      .lt(dateField, toIso)
+      .order(dateField, { ascending: true })
+      .range(from, to);
 
-  const data = await fetchAllRows<Record<string, unknown>>((from, to) =>
-    dateFilters(
-      admin.from("tasks").select("*"),
-    ).range(from, to),
-  );
+    if (filters.startPoint) query = query.eq("start_point", filters.startPoint);
+    if (filters.destination) query = query.eq("destination", filters.destination);
+    if (filters.executorNik) query = query.eq("executor_nik", filters.executorNik);
+    if (filters.type === "CANCELED") query = query.eq("status", "Canceled");
+
+    return query;
+  });
 
   const rows = data.map(
     (task) => {
