@@ -14905,3 +14905,9 @@ td select:focus,
 .schedule-grid-table .schedule-total-button {
   font-size: 9px !important;
 }
+
+
+/* MOVENT — timetable grid detail pill one size below subtotal */
+.schedule-grid-table .schedule-cell-button {
+  font-size: 8px !important;
+}
