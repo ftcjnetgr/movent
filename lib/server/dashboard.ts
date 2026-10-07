@@ -110,33 +110,73 @@ function canceledFromTimestamp(task: TaskRow) {
   return task.driving_at ?? task.accepted_at ?? task.assigned_at;
 }
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => Promise<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+  let from = 0;
+
+  while (true) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+    const page = data ?? [];
+    rows.push(...page);
+    if (page.length < pageSize) break;
+    from += pageSize;
+  }
+
+  return rows;
+}
+
 export async function getDashboardData(
   profile: AppProfile,
   dateFrom?: string,
   dateTo?: string,
 ) {
   const admin = createAdminClient();
-  const [{ data: allTasks }, { data: schedules }, { data: ticketings }] =
-    await Promise.all([
+  const [allTasks, schedules, ticketings] = await Promise.all([
+    fetchAllRows<TaskRow>((from, to) =>
       admin
         .from("tasks")
         .select(
           "transaction_id, created_at, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at, executor_snapshot, fleet_snapshot",
         )
-        .order("created_at", { ascending: false }),
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
+    fetchAllRows<{
+      schedule_id: string;
+      schedule_day: number;
+      category: string;
+      schedule_hub_id: string | null;
+      start_point: string | null;
+      destination: string | null;
+      std: string;
+      sta: string;
+      status: string;
+    }>((from, to) =>
       admin
         .from("schedules")
         .select(
           "schedule_id, schedule_day, category, schedule_hub_id, start_point, destination, std, sta, status",
         )
-        .eq("status", "Active"),
+        .eq("status", "Active")
+        .range(from, to),
+    ),
+    fetchAllRows<TicketRow>((from, to) =>
       admin
         .from("ticketings")
         .select(
           "transaction_id, status, created_at, accepted_at, in_progress_at, completed_at, canceled_at, location, maintenance_list",
         )
-        .order("created_at", { ascending: false }),
-    ]);
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
+  ]);
 
   const all = (allTasks ?? []) as TaskRow[];
   const scopedTasks =
