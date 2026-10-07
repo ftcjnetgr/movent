@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
-
 import { fetchAllRows } from "@/lib/server/fetch-all";
 import { getCurrentProfile } from "@/lib/server/profile";
 
@@ -16,33 +15,50 @@ function formatDateTime(value: string | null) {
 export default async function ExecutorHistoryPage() {
   const profile = await getCurrentProfile();
   if (!["Executor", "Delivery", "Pickup", "Super User"].includes(profile.role)) notFound();
+
   const admin = createAdminClient();
-  const fetchTasksPage = (from: number, to: number) => {
+  const activities = await fetchAllRows((from, to) => {
     let query = admin
-      .from("tasks")
+      .from("pickup_delivery_activities")
       .select(
-        "id, transaction_id, task_type, status, start_point, destination, created_at, assigned_at, accepted_at, driving_at, completed_at, executor_snapshot, fleet_snapshot",
+        "id, transaction_id, activity_type, status, start_point, destination, created_at, started_at, completed_at, executor_snapshot, fleet_snapshot",
       )
       .eq("status", "Completed")
       .order("completed_at", { ascending: false })
       .range(from, to);
 
-    if (["Executor", "Delivery", "Pickup"].includes(profile.role)) {
+    if (["Delivery", "Pickup"].includes(profile.role)) {
       query = query.eq("executor_nik", profile.username);
     }
 
     return query;
-  };
+  });
 
-  const tasks = await fetchAllRows(fetchTasksPage);
+  const activityIds = activities.map((activity) => activity.id);
+  const stops = activityIds.length
+    ? await fetchAllRows((from, to) =>
+        admin
+          .from("pickup_delivery_stops")
+          .select("activity_id, sequence_no, checkin_at")
+          .in("activity_id", activityIds)
+          .order("sequence_no")
+          .range(from, to),
+      )
+    : [];
 
+  const stopsByActivity = new Map<string, typeof stops>();
+  for (const stop of stops) {
+    const list = stopsByActivity.get(stop.activity_id) ?? [];
+    list.push(stop);
+    stopsByActivity.set(stop.activity_id, list);
+  }
 
   return (
     <>
       <div className="page-heading">
         <div>
-          <h1>Tugas yang udah selesai</h1>
-          <p>Semua tugas yang udah selesai ada di sini.</p>
+          <h1>Aktivitas yang udah selesai</h1>
+          <p>Semua aktivitas Pickup & Delivery yang udah selesai ada di sini.</p>
         </div>
       </div>
 
@@ -51,33 +67,39 @@ export default async function ExecutorHistoryPage() {
           <table>
             <thead>
               <tr>
-                <th>ID transaksi</th>
+                <th>ID Aktivitas</th>
                 <th>Jenis</th>
                 <th>Rute</th>
                 <th>Armada</th>
-                <th>Mulai</th>\n                <th>Check-in titik</th>\n                <th>Selesai</th>
+                <th>Mulai</th>
+                <th>Check-in titik</th>
+                <th>Selesai</th>
               </tr>
             </thead>
             <tbody>
-              {tasks.map((task) => (
-                <tr key={task.transaction_id}>
+              {activities.map((activity) => (
+                <tr key={activity.transaction_id}>
+                  <td><strong>{activity.transaction_id}</strong></td>
+                  <td>{activity.activity_type}</td>
+                  <td>{activity.start_point ?? "-"} → {activity.destination ?? "-"}</td>
+                  <td>{activity.fleet_snapshot?.plat_number ?? "-"}</td>
+                  <td>{formatDateTime(activity.started_at)}</td>
                   <td>
-                    <strong>{task.transaction_id}</strong>
+                    {(stopsByActivity.get(activity.id) ?? []).length
+                      ? (stopsByActivity.get(activity.id) ?? []).map((stop) => (
+                          <div key={stop.sequence_no}>
+                            Titik {stop.sequence_no}: {formatDateTime(stop.checkin_at)}
+                          </div>
+                        ))
+                      : "-"}
                   </td>
-                  <td>{task.task_type}</td>
-                  <td>
-                    {task.start_point} → {task.destination}
-                  </td>
-                  <td>{task.fleet_snapshot?.plat_number ?? "-"}</td>
-                  <td>{formatDateTime(task.driving_at)}</td>\n                  <td>\n                    {(stopsByTask.get(task.id) ?? []).length\n                      ? (stopsByTask.get(task.id) ?? []).map((stop) => (\n                          <div key={stop.sequence_no}>\n                            Titik {stop.sequence_no}: {formatDateTime(stop.checkin_at)}\n                          </div>\n                        ))\n                      : "-"}\n                  </td>\n                  <td>{formatDateTime(task.completed_at)}</td>
+                  <td>{formatDateTime(activity.completed_at)}</td>
                 </tr>
               ))}
-              {tasks.length === 0 ? (
+              {activities.length === 0 ? (
                 <tr>
                   <td colSpan={7}>
-                    <div className="empty-state">
-                      Belum ada tugas yang selesai.
-                    </div>
+                    <div className="empty-state">Belum ada aktivitas yang selesai.</div>
                   </td>
                 </tr>
               ) : null}
