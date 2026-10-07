@@ -14763,3 +14763,14 @@ td select:focus,
 .schedule-grid-table tbody tr:not(.schedule-type-group-row) > th {
   font-size: 9px !important;
 }
+
+
+/* MOVENT — preselected timetable group visibility */
+.schedule-grid-table tbody tr.schedule-type-group-row,
+.schedule-grid-table tbody tr.schedule-type-group-row > th,
+.schedule-grid-table tbody tr.schedule-type-group-row > td,
+.schedule-grid-table tbody tr.schedule-type-group-row > th.schedule-type-group-pivot,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-value-cell {
+  background: #e7edf5 !important;
+}
