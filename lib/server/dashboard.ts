@@ -132,6 +132,105 @@ async function fetchAllRows<T>(
   return rows;
 }
 
+
+export async function getAlertCounts(profile: AppProfile) {
+  const admin = createAdminClient();
+  const now = new Date();
+  const date = jakartaDate(now);
+  const day = ((new Date(date + "T12:00:00+07:00").getUTCDay() + 6) % 7) + 1;
+  const dayOfMonth = new Date(date + "T12:00:00+07:00").getUTCDate();
+  const allowedCategory = dayOfMonth <= 3 ? "Campaign" : "Normal";
+
+  const rangeStart = new Date(${date}T00:00:00+07:00).toISOString();
+  const rangeEnd = new Date(
+    new Date(${date}T00:00:00+07:00).getTime() + 86400000,
+  ).toISOString();
+
+  const [schedulesResult, tasks, ticketAlerts] = await Promise.all([
+    admin
+      .from("schedules")
+      .select("schedule_id, schedule_hub_id, std, sta, start_point, destination")
+      .eq("status", "Active")
+      .eq("schedule_day", day)
+      .eq("category", allowedCategory),
+    fetchAllRows<TaskRow>((from, to) =>
+      admin
+        .from("tasks")
+        .select(
+          "transaction_id, created_at, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at, executor_snapshot, fleet_snapshot",
+        )
+        .gte("std", rangeStart)
+        .lt("std", rangeEnd)
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
+    admin
+      .from("ticketings")
+      .select(
+        "transaction_id, status, created_at, accepted_at, in_progress_at, location, maintenance_list",
+      )
+      .in("status", ["Requested", "Confirmed", "In Progress"])
+      .order("created_at", { ascending: false }),
+  ]);
+
+  if (schedulesResult.error) throw schedulesResult.error;
+  const alertSchedules = schedulesResult.data ?? [];
+  const scopedTasks =
+    profile.role === "Dispatcher"
+      ? tasks.filter(
+          (task) =>
+            task.created_by === profile.id ||
+            task.fleet_ownership === "Non-TGR",
+        )
+      : tasks;
+
+  const latestTaskByScheduleId = new Map<string, TaskRow>();
+  for (const task of scopedTasks) {
+    if (!task.schedule_id || latestTaskByScheduleId.has(task.schedule_id)) continue;
+    latestTaskByScheduleId.set(task.schedule_id, task);
+  }
+
+  let taskCount = 0;
+
+  for (const schedule of alertSchedules) {
+    const task = latestTaskByScheduleId.get(schedule.schedule_id);
+    const status = task?.status ?? "Unassigned";
+    if (
+      status !== "Unassigned" &&
+      !["Assigned", "Confirmed", "Driving"].includes(status)
+    ) {
+      continue;
+    }
+
+    const targetAt =
+      status === "Driving"
+        ? new Date(`${date}T${schedule.sta}+07:00`)
+        : new Date(`${date}T${schedule.std}+07:00`);
+    const lead = status === "Driving" ? 10 * 60 * 1000 : 30 * 60 * 1000;
+
+    if (now.getTime() >= targetAt.getTime() - lead) {
+      taskCount += 1;
+    }
+  }
+
+  const ticketCount = ticketAlerts.filter((ticket) => {
+    const base =
+      ticket.status === "Confirmed"
+        ? ticket.accepted_at ?? ticket.created_at
+        : ticket.status === "In Progress"
+          ? ticket.in_progress_at ?? ticket.created_at
+          : ticket.created_at;
+    const elapsed = now.getTime() - new Date(base).getTime();
+    if (ticket.status === "Requested") return elapsed >= 60 * 60 * 1000;
+    return elapsed >= 24 * 60 * 60 * 1000;
+  }).length;
+
+  return {
+    task: taskCount,
+    maintenance: ticketCount,
+  };
+}
+
 export async function getDashboardData(
   profile: AppProfile,
   dateFrom?: string,
