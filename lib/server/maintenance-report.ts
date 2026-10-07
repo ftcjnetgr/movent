@@ -1,5 +1,27 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const batch = data ?? [];
+    rows.push(...batch);
+
+    if (batch.length < pageSize) break;
+    }
+  return rows;
+}
+
+
 function escapeCsv(value: unknown) {
   const raw = String(value ?? "");
   return '"' + raw.replaceAll('"', '""') + '"';
@@ -82,16 +104,17 @@ export async function queryMaintenanceReport({
   to: string;
 }) {
   const admin = createAdminClient();
-  const { data, error } = await admin
-    .from("ticketings")
-    .select("*")
-    .gte("created_at", from + "T00:00:00+07:00")
-    .lt("created_at", endExclusiveIso(to))
-    .order("created_at", { ascending: true });
+  const data = await fetchAllRows<Record<string, unknown>>((fromIndex, toIndex) =>
+    admin
+      .from("ticketings")
+      .select("*")
+      .gte("created_at", from + "T00:00:00+07:00")
+      .lt("created_at", endExclusiveIso(to))
+      .order("created_at", { ascending: true })
+      .range(fromIndex, toIndex),
+  );
 
-  if (error) throw new Error("Maintenance report query failed");
-
-  const rows = ((data ?? []) as unknown as Record<string, unknown>[]).map(
+  const rows = data.map(
     (ticket) => {
       const row: Record<string, string> = {};
       for (const column of maintenanceReportColumns) {
