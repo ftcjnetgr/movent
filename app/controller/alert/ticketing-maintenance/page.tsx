@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function ControllerMaintenanceAlertRedirect() {
+export default function ControllerAlertLegacyRoute() {
   redirect("/controller/alert?view=maintenance");
 }
