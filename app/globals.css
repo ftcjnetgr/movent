@@ -15240,3 +15240,12 @@ td select:focus,
   visibility: visible !important;
   opacity: 1 !important;
 }
+
+
+/* MOVENT — isolate maintenance activity metric internals */
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-metric > span,
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-metric > strong {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  justify-self: start !important;
+}
