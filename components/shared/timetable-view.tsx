@@ -933,7 +933,7 @@ export default function TimetableView({
                   <button
                     key={item}
                     type="button"
-                    className={category === item ? "active" : ""}
+                    className={`${category === item ? "active" : ""} ${item === "Campaign" ? "campaign" : "normal"}`.trim()}
                     onClick={() => setCategory(item)}
                   >
                     {item}
