@@ -24,8 +24,7 @@ export default function ProfilePage({
 }) {
   const [section, setSection] = useState<"profile" | "security">("profile");
 
-  const initials = useMemo(() => {
-    const parts = profile.full_name.trim().split(/\s+/).filter(Boolean);
+  const parts = profile.full_name.trim().split(/\s+/).filter(Boolean);
     return (
       parts
         .slice(0, 2)
