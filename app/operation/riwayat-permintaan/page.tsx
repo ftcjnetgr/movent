@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import OperationExtraScheduleAlert from "@/components/operation/extra-schedule-alert";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
+import { fetchAllRows } from "@/lib/server/fetch-all";
 import { cancelExtraScheduleAction } from "../request-extra-schedule/actions";
 import StatusBadge from "@/components/shared/status-badge";
 import { STATUS_LABELS } from "@/components/shared/status-config";
@@ -27,16 +28,19 @@ export default async function OperasionalHistoryPage() {
   const profile = await getCurrentProfile();
   if (!["Operation", "Super User"].includes(profile.role)) notFound();
   const admin = createAdminClient();
-  const { data: requests } = await admin
-    .from("tasks")
-    .select(
-      "transaction_id, status, start_point, destination, std, sta, created_at, canceled_at, cancellation_note, executor_snapshot, fleet_snapshot",
-    )
-    .eq("source_type", "Extra Schedule")
-    .eq("requested_by", profile.id)
-    .order("created_at", { ascending: false });
+  const requests = await fetchAllRows((from, to) =>
+    admin
+      .from("tasks")
+      .select(
+        "transaction_id, status, start_point, destination, std, sta, created_at, canceled_at, cancellation_note, executor_snapshot, fleet_snapshot",
+      )
+      .eq("source_type", "Extra Schedule")
+      .eq("requested_by", profile.id)
+      .order("created_at", { ascending: false })
+      .range(from, to),
+  );
 
-  const alertRequests = (requests ?? [])
+  const alertRequests = requests
     .filter((request) => request.status === "Requested")
     .map((request) => ({
       transaction_id: request.transaction_id,
