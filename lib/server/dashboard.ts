@@ -313,33 +313,26 @@ export async function getDashboardData(
   dateTo?: string,
 ) {
   const admin = createAdminClient();
-  const [allTasks, schedules, ticketings] = await Promise.all([
+  const date = jakartaDate(new Date());
+  const rangeFrom = dateFrom ?? date;
+  const rangeTo = dateTo ?? rangeFrom;
+  const rangeStartIso = new Date(
+    `${rangeFrom}T00:00:00+07:00`,
+  ).toISOString();
+  const rangeEndIso = new Date(
+    new Date(`${rangeTo}T00:00:00+07:00`).getTime() + 86400000,
+  ).toISOString();
+
+  const [allTasks, ticketRows, alerts] = await Promise.all([
     fetchAllRows<TaskRow>((from, to) =>
       admin
         .from("tasks")
         .select(
           "transaction_id, created_at, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, assigned_at, accepted_at, driving_at, completed_at, external_departure_at, external_arrival_at, canceled_at, executor_snapshot, fleet_snapshot",
         )
+        .gte("created_at", rangeStartIso)
+        .lt("created_at", rangeEndIso)
         .order("created_at", { ascending: false })
-        .range(from, to),
-    ),
-    fetchAllRows<{
-      schedule_id: string;
-      schedule_day: number;
-      category: string;
-      schedule_hub_id: string | null;
-      start_point: string | null;
-      destination: string | null;
-      std: string;
-      sta: string;
-      status: string;
-    }>((from, to) =>
-      admin
-        .from("schedules")
-        .select(
-          "schedule_id, schedule_day, category, schedule_hub_id, start_point, destination, std, sta, status",
-        )
-        .eq("status", "Active")
         .range(from, to),
     ),
     fetchAllRows<TicketRow>((from, to) =>
@@ -348,12 +341,15 @@ export async function getDashboardData(
         .select(
           "transaction_id, status, created_at, accepted_at, in_progress_at, completed_at, canceled_at, location, maintenance_list",
         )
+        .gte("created_at", rangeStartIso)
+        .lt("created_at", rangeEndIso)
         .order("created_at", { ascending: false })
         .range(from, to),
     ),
+    getOperationalAlerts(profile),
   ]);
 
-  const all = (allTasks ?? []) as TaskRow[];
+  const all = allTasks;
   const scopedTasks =
     profile.role === "Dispatcher"
       ? all.filter(
@@ -362,181 +358,9 @@ export async function getDashboardData(
             task.fleet_ownership === "Non-TGR",
         )
       : all;
-
-  const date = jakartaDate(new Date());
-  const rangeFrom = dateFrom ?? date;
-  const rangeTo = dateTo ?? rangeFrom;
-  const rangeStart = new Date(`${rangeFrom}T00:00:00+07:00`).getTime();
-  const rangeEndExclusive =
-    new Date(`${rangeTo}T00:00:00+07:00`).getTime() + 86400000;
-  const inRange = (value: string | null) => {
-    if (!value) return false;
-    const time = new Date(value).getTime();
-    return time >= rangeStart && time < rangeEndExclusive;
-  };
-  const tasks = scopedTasks.filter((task) => inRange(task.created_at));
-  const day = ((new Date(date + "T12:00:00+07:00").getUTCDay() + 6) % 7) + 1;
-  const now = new Date();
-
-  // Keep alert schedule filtering identical to the Dispatcher assignment picker:
-  // current schedule day + Normal/Campaign category for the current Twindate window.
-  const calendarParts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Jakarta",
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  }).formatToParts(now);
-  const calendarYear = Number(
-    calendarParts.find((item) => item.type === "year")?.value ?? 0,
-  );
-  const calendarMonth = Number(
-    calendarParts.find((item) => item.type === "month")?.value ?? 0,
-  );
-  const calendarDay = Number(
-    calendarParts.find((item) => item.type === "day")?.value ?? 0,
-  );
-  const todayKey = Date.UTC(
-    calendarYear,
-    calendarMonth - 1,
-    calendarDay,
-  );
-  const twindateStartKey = Date.UTC(
-    calendarYear,
-    calendarMonth - 1,
-    1,
-  );
-  const twindateEnd = new Date(twindateStartKey);
-  twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 2);
-  const isTwindateWindow =
-    todayKey >= twindateStartKey &&
-    todayKey <= twindateEnd.getTime();
-  const allowedCategory = isTwindateWindow ? "Campaign" : "Normal";
-
-  const alertSchedules = (schedules ?? []).filter(
-    (schedule) =>
-      schedule.schedule_day === day &&
-      schedule.category === allowedCategory,
-  );
-
-  const scheduleHubById = new Map(
-    (schedules ?? []).map((schedule) => [
-      schedule.schedule_id,
-      schedule.schedule_hub_id as string | null,
-    ]),
-  );
-
-  // Resolve today's latest task per schedule so historical transactions do not
-  // suppress today's unassigned schedule alerts. Canceled tasks still reserve the
-  // schedule for today, so they do not fall through as "unassigned".
-  const todaysScheduleTasks = scopedTasks.filter(
-    (task) =>
-      Boolean(task.schedule_id) &&
-      Boolean(task.std) &&
-      jakartaDate(new Date(task.std as string)) === date,
-  );
-  const latestTaskByScheduleId = new Map<string, TaskRow>();
-  for (const task of todaysScheduleTasks) {
-    if (!latestTaskByScheduleId.has(task.schedule_id as string)) {
-      latestTaskByScheduleId.set(task.schedule_id as string, task);
-    }
-  }
-
-  const unassignedAlerts: TaskAlert[] = alertSchedules
-    .filter((schedule) => !latestTaskByScheduleId.has(schedule.schedule_id))
-    .map((schedule) => ({
-      kind: "unassigned" as const,
-      trigger: "std" as const,
-      scheduleId: schedule.schedule_id,
-      startPoint: schedule.start_point,
-      destination: schedule.destination,
-      std: schedule.std,
-      sta: schedule.sta,
-      targetAt: scheduleTimestamp(date, schedule.std),
-      status: "Unassigned",
-      driverName: null,
-      fleetPlat: null,
-      scheduleHubId: schedule.schedule_hub_id as string | null,
-    }))
-    .filter(
-      (alert) =>
-        now.getTime() >= alert.targetAt.getTime() - 30 * 60 * 1000,
-    );
-
-  const assignedAlerts: TaskAlert[] = [...latestTaskByScheduleId.values()]
-    .filter(
-      (task) =>
-        task.schedule_id &&
-        ["Assigned", "Confirmed", "Driving"].includes(task.status) &&
-        alertSchedules.some(
-          (schedule) => schedule.schedule_id === task.schedule_id,
-        ) &&
-        ((task.status === "Driving" && task.sta) ||
-          (["Assigned", "Confirmed"].includes(task.status) && task.std)),
-    )
-    .map((task) => {
-      const trigger: TaskAlert["trigger"] =
-        task.status === "Driving" ? "sta" : "std";
-      const targetAt =
-        trigger === "sta"
-          ? new Date(task.sta as string)
-          : new Date(task.std as string);
-      return {
-        kind: "assigned" as const,
-        trigger,
-        transactionId: task.transaction_id,
-        scheduleId: task.schedule_id as string,
-        startPoint: task.start_point,
-        destination: task.destination,
-        std: task.std,
-        sta: task.sta,
-        targetAt,
-        status: task.status,
-        driverName: task.executor_snapshot?.full_name ?? null,
-        fleetPlat: task.fleet_snapshot?.plat_number ?? null,
-        scheduleHubId:
-          scheduleHubById.get(task.schedule_id as string) ?? null,
-      };
-    })
-    .filter((alert) => {
-      const threshold =
-        alert.trigger === "std" ? 30 * 60 * 1000 : 10 * 60 * 1000;
-      return now.getTime() >= alert.targetAt.getTime() - threshold;
-    });
-
-  const taskAlerts = [...unassignedAlerts, ...assignedAlerts];
-  const taskAlertHubs = [
-    ...new Set(
-      taskAlerts
-        .map((alert) => alert.scheduleHubId)
-        .filter((hub): hub is string => Boolean(hub)),
-    ),
-  ];
-  const allTicketRows = (ticketings ?? []) as TicketRow[];
-  const ticketRows = allTicketRows.filter((ticket) =>
-    inRange(ticket.created_at),
-  );
-
-  // Alerts are operational and must stay independent from the Dashboard date filter.
-  const ticketAlerts = allTicketRows.filter((ticket) =>
-    ["Requested", "Confirmed", "In Progress"].includes(ticket.status),
-  );
-  const ticketAlertCount = ticketAlerts.filter((ticket) => {
-    const elapsed =
-      now.getTime() -
-      new Date(
-        ticket.status === "Confirmed"
-          ? (ticket.accepted_at ?? ticket.created_at)
-          : ticket.status === "In Progress"
-            ? (ticket.in_progress_at ?? ticket.created_at)
-            : ticket.created_at,
-      ).getTime();
-    if (ticket.status === "Requested") return elapsed >= 1 * 60 * 60 * 1000;
-    if (ticket.status === "Confirmed") return elapsed >= 24 * 60 * 60 * 1000;
-    if (ticket.status === "In Progress")
-      return elapsed >= 1 * 24 * 60 * 60 * 1000;
-    return false;
-  }).length;
-
+  const tasks = scopedTasks;
+  const { taskAlerts, taskAlertHubs, ticketAlerts, ticketAlertCount } =
+    alerts;
   const taskDurations: TaskDurationRow[] = tasks.map((task) => ({
     transactionId: task.transaction_id,
     taskType: task.task_type,
