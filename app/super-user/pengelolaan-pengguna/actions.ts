@@ -145,7 +145,7 @@ export async function updateUserProfileAction(
   return { success: "Data pengguna berhasil disimpan." };
 }
 
-const allowedRoles = USER_ROLES;
+const allowedRoles: readonly string[] = USER_ROLES;
 const allowedStatuses = ["Active", "Locked"];
 
 function fieldText(formData: FormData, key: string) {
