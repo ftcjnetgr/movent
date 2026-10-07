@@ -35,7 +35,7 @@ export async function startPickupDeliveryAssignmentAction(
 
   if (!platNumber) return { error: "Nomor plat armada perlu diisi dulu, ya." };
   if (!rawStops.length) return { error: "Minimal isi 1 titik tugas, ya." };
-  if (rawStops.length > 100) return { error: "Maksimal 100 titik tugas dalam satu penugasan, ya." };
+  if (rawStops.length > 100) return { error: "Maksimal 100 titik tugas dalam satu tugas, ya." };
 
   const admin = createAdminClient();
   const { data: fleet } = await admin
@@ -55,13 +55,13 @@ export async function startPickupDeliveryAssignmentAction(
     .maybeSingle();
 
   if (activeTask)
-    return { error: "Masih ada penugasan yang belum selesai. Selesaikan dulu, ya." };
+    return { error: "Masih ada tugas yang belum selesai. Selesaikan dulu, ya." };
 
   const { data: transactionId, error: transactionError } = await admin.rpc(
     "movent_next_transaction_id",
   );
   if (transactionError || !transactionId)
-    return { error: "ID penugasan belum berhasil dibuat. Coba lagi, ya." };
+    return { error: "ID Aktivitas belum berhasil dibuat. Coba lagi, ya." };
 
   const startPoint = rawStops[0];
   const destination = rawStops[rawStops.length - 1];
@@ -106,7 +106,7 @@ export async function startPickupDeliveryAssignmentAction(
   }
 
   revalidatePickupDeliveryPaths();
-  return { success: `Penugasan ${transactionId} sudah dibuat. Siap jalan, ya.` };
+  return { success: `ID Aktivitas ${transactionId} sudah dibuat. Siap mulai tugas, ya.` };
 }
 
 export async function startPickupDeliveryTripAction(
