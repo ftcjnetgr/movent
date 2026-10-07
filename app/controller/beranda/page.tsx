@@ -119,7 +119,7 @@ export default async function ControllerPenugasanDashboardPage({
     todayParts.find((part) => part.type === "year")?.value ?? now.getFullYear(),
   );
 
-  const twinDateStart = Date.UTC(todayYear, todayMonth - 1, todayMonth);
+  const twinDateStart = Date.UTC(todayYear, todayMonth - 1, todayDate);
   const twinDateEnd = new Date(twinDateStart);
   twinDateEnd.setUTCDate(twinDateEnd.getUTCDate() + 2);
   const todayKey = Date.UTC(todayYear, todayMonth - 1, todayDate);
