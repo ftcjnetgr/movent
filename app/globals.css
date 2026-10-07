@@ -15067,3 +15067,21 @@ td select:focus,
   text-align: left !important;
   min-width: 0 !important;
 }
+
+
+/* MOVENT — final activity metric column positioning */
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row,
+.super-dashboard:not(:has(.maintenance-dashboard-main-grid)) .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) 70px 70px !important;
+  column-gap: 4px !important;
+}
+
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-meta,
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-values,
+.super-dashboard:not(:has(.maintenance-dashboard-main-grid)) .dashboard-preview-activity-row .activity-meta,
+.super-dashboard:not(:has(.maintenance-dashboard-main-grid)) .dashboard-preview-activity-row .activity-values {
+  grid-column: auto !important;
+  justify-self: start !important;
+  text-align: left !important;
+  min-width: 0 !important;
+}
