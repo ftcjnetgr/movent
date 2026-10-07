@@ -14800,3 +14800,15 @@ td select:focus,
 .schedule-grid-table .schedule-total-cell {
   background: #eef2ff !important;
 }
+
+
+/* MOVENT — timetable header and total alignment */
+.schedule-grid-table thead th,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-cell {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
