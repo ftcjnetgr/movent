@@ -17,7 +17,8 @@ async function fetchAllRows<T>(
     rows.push(...batch);
 
     if (batch.length < pageSize) break;
-    }
+  }
+
   return rows;
 }
 
