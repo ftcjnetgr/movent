@@ -1,4 +1,3 @@
-import { cache } from "react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { AppProfile } from "@/lib/server/profile";
 
