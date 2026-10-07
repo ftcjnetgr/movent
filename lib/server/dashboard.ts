@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { fetchAllRows } from "@/lib/server/fetch-all";
 import type { AppProfile } from "@/lib/server/profile";
