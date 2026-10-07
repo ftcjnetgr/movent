@@ -14774,3 +14774,18 @@ td select:focus,
 .schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-value-cell {
   background: #e7edf5 !important;
 }
+
+
+/* MOVENT — selected timetable group text emphasis */
+.schedule-grid-table .schedule-type-group-button[aria-expanded="true"] {
+  color: var(--theme-color-dark) !important;
+  font-weight: 500 !important;
+}
+
+.schedule-grid-table .schedule-type-group-button[aria-expanded="true"] > b {
+  color: var(--theme-color) !important;
+}
+
+.schedule-grid-table .schedule-type-group-button[aria-expanded="true"] > span {
+  color: var(--theme-color-dark) !important;
+}
