@@ -141,9 +141,11 @@ export async function getAlertCounts(profile: AppProfile) {
   const dayOfMonth = new Date(date + "T12:00:00+07:00").getUTCDate();
   const allowedCategory = dayOfMonth <= 3 ? "Campaign" : "Normal";
 
-  const rangeStart = new Date(${date}T00:00:00+07:00).toISOString();
+  const rangeStart = new Date(
+    date + "T00:00:00+07:00",
+  ).toISOString();
   const rangeEnd = new Date(
-    new Date(${date}T00:00:00+07:00).getTime() + 86400000,
+    new Date(date + "T00:00:00+07:00").getTime() + 86400000,
   ).toISOString();
 
   const [schedulesResult, tasks, ticketAlerts] = await Promise.all([
@@ -204,8 +206,8 @@ export async function getAlertCounts(profile: AppProfile) {
 
     const targetAt =
       status === "Driving"
-        ? new Date(`${date}T${schedule.sta}+07:00`)
-        : new Date(`${date}T${schedule.std}+07:00`);
+        ? new Date(date + "T" + schedule.sta + "+07:00")
+        : new Date(date + "T" + schedule.std + "+07:00");
     const lead = status === "Driving" ? 10 * 60 * 1000 : 30 * 60 * 1000;
 
     if (now.getTime() >= targetAt.getTime() - lead) {
