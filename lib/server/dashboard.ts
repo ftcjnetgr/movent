@@ -303,10 +303,104 @@ const getOperationalAlerts = cache(async function getOperationalAlerts(
 });
 
 export async function getAlertCounts(profile: AppProfile) {
-  const alerts = await getOperationalAlerts(profile);
+  const admin = createAdminClient();
+  const now = new Date();
+  const date = jakartaDate(now);
+  const day =
+    ((new Date(date + "T12:00:00+07:00").getUTCDay() + 6) % 7) + 1;
+  const dayOfMonth = new Date(date + "T12:00:00+07:00").getUTCDate();
+  const allowedCategory = dayOfMonth <= 3 ? "Campaign" : "Normal";
+  const rangeStart = new Date(
+    date + "T00:00:00+07:00",
+  ).toISOString();
+  const rangeEnd = new Date(
+    new Date(date + "T00:00:00+07:00").getTime() + 86400000,
+  ).toISOString();
+
+  const [scheduleRows, taskRows, ticketCountResult] = await Promise.all([
+    fetchAllRows<Pick<AlertScheduleRow, "schedule_id" | "std" | "sta">>(
+      (from, to) =>
+        admin
+          .from("schedules")
+          .select("schedule_id, std, sta")
+          .eq("status", "Active")
+          .eq("schedule_day", day)
+          .eq("category", allowedCategory)
+          .range(from, to),
+    ),
+    fetchAllRows<{
+      schedule_id: string | null;
+      status: string;
+      std: string | null;
+      sta: string | null;
+      created_at: string;
+      created_by: string;
+      fleet_ownership: string | null;
+    }>((from, to) =>
+      admin
+        .from("tasks")
+        .select(
+          "schedule_id, status, std, sta, created_at, created_by, fleet_ownership",
+        )
+        .gte("std", rangeStart)
+        .lt("std", rangeEnd)
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
+    admin
+      .from("ticketings")
+      .select("transaction_id", { count: "exact", head: true })
+      .in("status", ["Requested", "Confirmed", "In Progress"]),
+  ]);
+
+  if (ticketCountResult.error) throw ticketCountResult.error;
+
+  const scopedTasks =
+    profile.role === "Dispatcher"
+      ? taskRows.filter(
+          (task) =>
+            task.created_by === profile.id ||
+            task.fleet_ownership === "Non-TGR",
+        )
+      : taskRows;
+
+  const latestTaskByScheduleId = new Map<
+    string,
+    (typeof scopedTasks)[number]
+  >();
+  for (const task of scopedTasks) {
+    if (!task.schedule_id || latestTaskByScheduleId.has(task.schedule_id)) {
+      continue;
+    }
+    latestTaskByScheduleId.set(task.schedule_id, task);
+  }
+
+  let taskCount = 0;
+
+  for (const schedule of scheduleRows) {
+    const task = latestTaskByScheduleId.get(schedule.schedule_id);
+    const status = task?.status ?? "Unassigned";
+    if (
+      status !== "Unassigned" &&
+      !["Assigned", "Confirmed", "Driving"].includes(status)
+    ) {
+      continue;
+    }
+
+    const targetAt =
+      status === "Driving"
+        ? scheduleTimestamp(date, schedule.sta)
+        : scheduleTimestamp(date, schedule.std);
+    const lead = status === "Driving" ? 10 * 60 * 1000 : 30 * 60 * 1000;
+
+    if (now.getTime() >= targetAt.getTime() - lead) {
+      taskCount += 1;
+    }
+  }
+
   return {
-    task: alerts.taskAlerts.length,
-    maintenance: alerts.ticketAlerts.length,
+    task: taskCount,
+    maintenance: ticketCountResult.count ?? 0,
   };
 }
 
