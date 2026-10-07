@@ -14930,3 +14930,14 @@ td select:focus,
 .schedule-grid-table tfoot th:first-child {
   border: 1px solid #dbe3ec !important;
 }
+
+
+/* MOVENT — final timetable visual border cleanup */
+.schedule-grid-table .schedule-type-group-row > th.schedule-type-group-pivot,
+.schedule-grid-table tbody > tr > th:first-child {
+  box-shadow: none !important;
+}
+
+.schedule-grid-shell {
+  border-color: #dbe3ec !important;
+}
