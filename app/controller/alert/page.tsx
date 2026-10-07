@@ -57,6 +57,7 @@ export default async function AlertPage({
           ...alert,
           targetAt: alert.targetAt.toISOString(),
         }))}
+        taskAlertHubs={data.taskAlertHubs}
         ticketAlerts={data.ticketAlerts}
         embedded
       />
