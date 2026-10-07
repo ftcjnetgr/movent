@@ -15053,3 +15053,17 @@ td select:focus,
   margin-bottom: 0 !important;
   gap: 20px !important;
 }
+
+
+/* MOVENT — activity total/ratio columns reserve room for four digits */
+.super-dashboard .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) 52px 52px !important;
+  column-gap: 6px !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-meta,
+.super-dashboard .dashboard-preview-activity-row .activity-values {
+  justify-self: start !important;
+  text-align: left !important;
+  min-width: 0 !important;
+}
