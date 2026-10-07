@@ -15126,3 +15126,10 @@ td select:focus,
   font-weight: 700 !important;
   line-height: 1.2 !important;
 }
+
+
+/* MOVENT — align activity description with metric labels */
+.super-dashboard .dashboard-preview-activity-row > span:nth-child(2) {
+  align-self: start !important;
+  line-height: 1.2 !important;
+}
