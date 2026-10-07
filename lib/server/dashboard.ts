@@ -148,7 +148,7 @@ export async function getAlertCounts(profile: AppProfile) {
     new Date(date + "T00:00:00+07:00").getTime() + 86400000,
   ).toISOString();
 
-  const [schedulesResult, tasks, ticketAlerts] = await Promise.all([
+  const [schedulesResult, tasks, ticketAlertsResult] = await Promise.all([
     admin
       .from("schedules")
       .select("schedule_id, schedule_hub_id, std, sta, start_point, destination")
@@ -176,7 +176,9 @@ export async function getAlertCounts(profile: AppProfile) {
   ]);
 
   if (schedulesResult.error) throw schedulesResult.error;
+  if (ticketAlertsResult.error) throw ticketAlertsResult.error;
   const alertSchedules = schedulesResult.data ?? [];
+  const ticketAlerts = ticketAlertsResult.data ?? [];
   const scopedTasks =
     profile.role === "Dispatcher"
       ? tasks.filter(
