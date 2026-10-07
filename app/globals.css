@@ -15073,7 +15073,7 @@ td select:focus,
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row,
 .super-dashboard:not(:has(.maintenance-dashboard-main-grid)) .dashboard-preview-activity-row {
   grid-template-columns: 8px minmax(0, 1fr) 44px 42px !important;
-  column-gap: 1px !important;
+  column-gap: 2px !important;
 }
 
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-meta,
