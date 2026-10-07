@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState, useTransition } from "react";
+import { FormEvent, useMemo, useState, useTransition } from "react";
 import {
   checkInPickupDeliveryStopAction,
   completePickupDeliveryAssignmentAction,
@@ -34,6 +34,7 @@ export default function PickupDeliveryTaskFlow({
 }) {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
+  const [stopCount, setStopCount] = useState(1);
 
   function submit(
     action: (formData: FormData) => Promise<{ error?: string; success?: string }>,
@@ -67,6 +68,7 @@ export default function PickupDeliveryTaskFlow({
     submit(completePickupDeliveryAssignmentAction, event.currentTarget);
   }
 
+  const stopInputs = useMemo(() => Array.from({ length: stopCount }, (_, index) => index + 1), [stopCount]);
   const currentStop = stops.find((stop) => stop.status === "Pending") ?? null;
   const allChecked = stops.length > 0 && stops.every((stop) => stop.status === "Checked In");
 
@@ -96,21 +98,20 @@ export default function PickupDeliveryTaskFlow({
                   type="number"
                   min="1"
                   max="100"
-                  defaultValue="1"
+                  value={stopCount}
+                  onChange={(event) => setStopCount(Math.min(100, Math.max(1, Number(event.target.value) || 1)))}
                   required
                 />
               </label>
 
-              <div className="form-row">
-                <label>Titik Tugas</label>
-                <div>
-                  <input name="stops" placeholder="Titik tugas 1" required />
-                </div>
+              <div className="data-form">
+                {stopInputs.map((number) => (
+                  <label key={number}>
+                    Titik Tugas {number}
+                    <input name="stops" placeholder={`Titik tugas ${number}`} required />
+                  </label>
+                ))}
               </div>
-
-              <p className="form-hint">
-                Tambahkan titik lain sesuai jumlah titik tugas yang dibutuhkan.
-              </p>
 
               <button type="submit" disabled={isPending}>
                 Mulai Penugasan
