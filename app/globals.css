@@ -14870,3 +14870,9 @@ td select:focus,
   align-items: center !important;
   gap: 20px !important;
 }
+
+
+/* MOVENT — selected detail point uses white text */
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button.active {
+  color: #fff !important;
+}
