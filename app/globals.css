@@ -14755,3 +14755,11 @@ td select:focus,
 .schedule-grid-table .schedule-total-button {
   font-size: var(--ui-body-size) !important;
 }
+
+
+/* MOVENT — timetable group and detail labels share detail font size */
+.schedule-grid-table .schedule-type-group-button,
+.schedule-grid-table .schedule-type-group-button > span,
+.schedule-grid-table tbody tr:not(.schedule-type-group-row) > th {
+  font-size: 9px !important;
+}
