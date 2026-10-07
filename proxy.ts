@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import {
   SESSION_ACTIVITY_COOKIE,
   SESSION_ACTIVITY_MAX_AGE_MS,
+  SESSION_ACTIVITY_MAX_AGE_SECONDS,
 } from "@/lib/auth/session-activity";
 
 export async function proxy(request: NextRequest) {
@@ -24,9 +25,9 @@ export async function proxy(request: NextRequest) {
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options),
           );
-          Object.entries(headers).forEach(([key, value]) =>
-            response.headers.set(key, value),
-          );
+          Object.entries(headers).forEach(([key, value]) => {
+            response.headers.set(key, value);
+          });
         },
       },
     },
@@ -47,6 +48,7 @@ export async function proxy(request: NextRequest) {
 
   if (!user || (!isPublicAuthPath && activityExpired)) {
     response.cookies.set(SESSION_ACTIVITY_COOKIE, "", {
+      httpOnly: true,
       maxAge: 0,
       path: "/",
     });
@@ -57,6 +59,14 @@ export async function proxy(request: NextRequest) {
       url.search = "";
       return NextResponse.redirect(url);
     }
+  } else if (user && !isPublicAuthPath) {
+    response.cookies.set(SESSION_ACTIVITY_COOKIE, String(Date.now()), {
+      httpOnly: true,
+      maxAge: SESSION_ACTIVITY_MAX_AGE_SECONDS,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    });
   }
 
   return response;
@@ -64,6 +74,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
