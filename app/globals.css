@@ -14991,3 +14991,21 @@ td select:focus,
 .schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-value-cell {
   background: #f1f5f9 !important;
 }
+
+
+/* MOVENT — truly center timetable pills inside grid cells */
+.schedule-grid-table tbody td:not(.schedule-type-group-value-cell),
+.schedule-grid-table tbody td.schedule-cell-button-cell {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.schedule-grid-table .schedule-cell-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 34px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
