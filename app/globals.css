@@ -15181,3 +15181,11 @@ td select:focus,
 .super-dashboard .dashboard-preview-activity-row .activity-metric > strong {
   align-self: center !important;
 }
+
+
+/* MOVENT — restore activity metric values */
+.super-dashboard .dashboard-preview-activity-row .activity-metric > strong {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
