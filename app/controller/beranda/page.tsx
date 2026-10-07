@@ -174,8 +174,6 @@ export default async function ControllerPenugasanDashboardPage({
   const activities = activityResult.data ?? [];
   const tasks = sortByStatusAndTime(rawTasks);
 
-  const totalTasks = activities.length;
-
   const departureMetrics = activities.reduce(
     (acc, task) => {
       if (!task.std || !task.driving_at) return acc;
@@ -285,13 +283,6 @@ export default async function ControllerPenugasanDashboardPage({
     }
   }
 
-
-  const activeTasks =
-    taskStatusCounts.Assigned +
-    taskStatusCounts.Confirmed +
-    taskStatusCounts.Driving;
-
-  const completedTasks = taskStatusCounts.Completed;
 
   function buildPreviewItem(
     schedule: {
