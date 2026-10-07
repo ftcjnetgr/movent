@@ -15072,8 +15072,8 @@ td select:focus,
 /* MOVENT — final activity metric column positioning */
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row,
 .super-dashboard:not(:has(.maintenance-dashboard-main-grid)) .dashboard-preview-activity-row {
-  grid-template-columns: 8px minmax(0, 1fr) 70px 70px !important;
-  column-gap: 4px !important;
+  grid-template-columns: 8px minmax(0, 1fr) 44px 42px !important;
+  column-gap: 6px !important;
 }
 
 .super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-meta,
