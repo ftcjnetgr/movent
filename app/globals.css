@@ -14812,3 +14812,20 @@ td select:focus,
   text-align: center !important;
   vertical-align: middle !important;
 }
+
+
+/* MOVENT — align entire timetable total row */
+.schedule-grid-table tfoot > tr > th,
+.schedule-grid-table tfoot > tr > td {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.schedule-grid-table tfoot > tr > th > button,
+.schedule-grid-table tfoot > tr > td > button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+}
