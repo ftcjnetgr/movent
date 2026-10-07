@@ -110,6 +110,8 @@ export async function updateUserProfileAction(
       "Dispatcher",
       "Operation",
       "Executor",
+      "Pickup",
+      "Delivery",
       "Maintainer",
       "Super User",
     ].includes(role)
@@ -158,6 +160,8 @@ const allowedRoles = [
   "Dispatcher",
   "Operation",
   "Executor",
+  "Pickup",
+  "Delivery",
   "Maintainer",
   "Super User",
 ];
