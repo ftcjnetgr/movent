@@ -15141,3 +15141,43 @@ td select:focus,
   line-height: 1.2 !important;
   padding-bottom: 0 !important;
 }
+
+
+/* MOVENT — final activity row two-line alignment */
+.super-dashboard .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) 54px 54px !important;
+  grid-template-rows: 16px 18px !important;
+  column-gap: 6px !important;
+  row-gap: 0 !important;
+  align-items: center !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-dot {
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row > span:nth-child(2) {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  align-self: center !important;
+  line-height: 1.2 !important;
+  padding: 0 !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-metric {
+  grid-row: 1 / span 2 !important;
+  grid-template-rows: 16px 18px !important;
+  row-gap: 0 !important;
+  align-self: stretch !important;
+  justify-self: start !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-metric > span {
+  align-self: center !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-metric > strong {
+  align-self: center !important;
+}
