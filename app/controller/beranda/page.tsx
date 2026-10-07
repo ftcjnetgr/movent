@@ -59,15 +59,6 @@ function timeLabel(value: string | null) {
   });
 }
 
-function shortTime(value: string | null) {
-  if (!value) return "-";
-  return new Date(value).toLocaleTimeString("id-ID", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Jakarta",
-  });
-}
-
 export default async function ControllerPenugasanDashboardPage({
   searchParams,
 }: {
