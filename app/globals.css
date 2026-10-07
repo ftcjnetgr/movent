@@ -14743,3 +14743,15 @@ td select:focus,
   box-shadow: none !important;
   transform: none !important;
 }
+
+
+/* MOVENT — timetable header, total column and total row use header font size */
+.schedule-grid-table thead th,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-cell,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table .schedule-total-button {
+  font-size: var(--ui-body-size) !important;
+}
