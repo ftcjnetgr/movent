@@ -14681,3 +14681,15 @@ td select:focus,
   fill: none !important;
   stroke: currentColor !important;
 }
+
+
+/* MOVENT — timetable header and total emphasis */
+.schedule-grid-table thead th,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-cell,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table .schedule-total-button {
+  font-weight: 800 !important;
+}
