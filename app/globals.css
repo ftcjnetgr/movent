@@ -15016,3 +15016,20 @@ td select:focus,
   border-radius: 0 !important;
   border-bottom: 2px solid var(--theme-color) !important;
 }
+
+
+/* MOVENT — preview cards fill full width proportionally */
+.schedule-preview-item.is-scheduled-preview {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+}
+
+.schedule-preview-item.is-realized-preview {
+  grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 760px) {
+  .schedule-preview-item.is-scheduled-preview,
+  .schedule-preview-item.is-realized-preview {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
