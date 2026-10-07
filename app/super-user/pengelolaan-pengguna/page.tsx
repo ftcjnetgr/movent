@@ -9,6 +9,7 @@ import {
 } from "./actions";
 import DatabaseActionPreview from "@/components/shared/database/action-preview";
 import DatabaseUbahPreview from "@/components/shared/database/edit-preview";
+import { USER_ROLES } from "@/lib/server/user-roles";
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
     Controller: "Controller",
@@ -127,16 +128,7 @@ export default async function UserManagementPage() {
             <label>
               Role
               <select name="role" defaultValue="Controller" required>
-                {[
-                  "Controller",
-                  "Dispatcher",
-                  "Operation",
-                  "Executor",
-                  "Pickup",
-                  "Delivery",
-                  "Maintainer",
-                  "Super User",
-                ].map((role) => (
+                {USER_ROLES.map((role) => (
                   <option key={role} value={role}>
                     {role}
                   </option>
@@ -244,14 +236,7 @@ export default async function UserManagementPage() {
                               defaultValue={user.role}
                               required
                             >
-                              {[
-                                "Controller",
-                                "Dispatcher",
-                                "Operation",
-                                "Executor",
-                                "Maintainer",
-                                "Super User",
-                              ].map((role) => (
+                              {USER_ROLES.map((role) => (
                                 <option key={role}>{role}</option>
                               ))}
                             </select>
