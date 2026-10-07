@@ -2351,10 +2351,10 @@ tbody tr:hover td {
   min-width: 160px !important;
   height: 40px !important;
   padding: 0 !important;
-  border-top: 1px solid #d7dee8 !important;
-  border-bottom: 1px solid #d7dee8 !important;
-  border-left: 1px solid #d7dee8 !important;
-  border-right: 1px solid #d7dee8 !important;
+  border-top: 1px solid #dbe3ec !important;
+  border-bottom: 1px solid #dbe3ec !important;
+  border-left: 1px solid #dbe3ec !important;
+  border-right: 1px solid #dbe3ec !important;
   background: #eef2f7 !important;
   text-align: left !important;
   box-shadow: 4px 0 8px rgba(15, 23, 42, 0.04);
@@ -2363,8 +2363,8 @@ tbody tr:hover td {
 .schedule-type-group-row > td {
   height: 40px !important;
   padding: 0 4px !important;
-  border-top: 1px solid #d7dee8 !important;
-  border-bottom: 1px solid #d7dee8 !important;
+  border-top: 1px solid #dbe3ec !important;
+  border-bottom: 1px solid #dbe3ec !important;
   background: #eef2f7 !important;
 }
 
@@ -2464,7 +2464,7 @@ tbody tr:hover td {
 }
 
 .schedule-type-group-total-cell {
-  border-left: 1px solid #d7dee8 !important;
+  border-left: 1px solid #dbe3ec !important;
   background: #eef2f7 !important;
 }
 
@@ -2507,8 +2507,8 @@ tbody tr:hover td {
   padding: 7px 4px;
   font-size: 9px;
   text-align: center;
-  border-right: 1px solid #dfe5ec;
-  border-bottom: 1px solid #dfe5ec;
+  border-right: 1px solid #dbe3ec;
+  border-bottom: 1px solid #dbe3ec;
 }
 
 .schedule-grid-table thead th {
@@ -2518,7 +2518,7 @@ tbody tr:hover td {
   background: #f5f8fc;
   color: #8995a6;
   font-weight: 800;
-  border-top: 1px solid #dfe5ec;
+  border-top: 1px solid #dbe3ec;
 }
 
 /* Schedule grid — full inside borders */
@@ -2542,7 +2542,7 @@ tbody tr:hover td {
   background: #f8fafc;
   text-align: left;
   padding-left: 32px;
-  border-left: 1px solid #dfe5ec;
+  border-left: 1px solid #dbe3ec;
 }
 
 .schedule-grid-table tbody th {
