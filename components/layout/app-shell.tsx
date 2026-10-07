@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { AppProfile } from "@/lib/server/profile";
 import { getCurrentProfile } from "@/lib/server/profile";
-import { getDashboardData } from "@/lib/server/dashboard";
+import { getAlertCounts } from "@/lib/server/dashboard";
 import AppShellClient from "./app-shell-client";
 
 export default async function AppShell({
@@ -14,7 +14,7 @@ export default async function AppShell({
 }) {
   if (providedProfile) {
     const currentProfile = await getCurrentProfile();
-    const alertData = await getDashboardData(currentProfile);
+    const alertData = await getAlertCounts(currentProfile);
     return (
       <AppShellClient
         profile={providedProfile}
@@ -50,7 +50,7 @@ export default async function AppShell({
   }
 
   const currentProfile = await getCurrentProfile();
-  const alertData = await getDashboardData(currentProfile);
+  const alertData = await getAlertCounts(currentProfile);
   return (
     <AppShellClient
       profile={profile}
