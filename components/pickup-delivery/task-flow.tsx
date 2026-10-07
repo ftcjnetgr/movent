@@ -78,13 +78,13 @@ export default function PickupDeliveryTaskFlow({
         <div className="page-heading">
           <div>
             <h1>{role}</h1>
-            <p>Mulai penugasan baru dan jalankan semua titik sampai selesai.</p>
+            <p>Isi armada dan semua titik, lalu mulai tugas.</p>
           </div>
         </div>
 
         <section className="section-block">
           <div className="metric-card">
-            <h2>Mulai Penugasan</h2>
+            <h2>Mulai Tugas</h2>
             <form onSubmit={handleCreate} className="data-form">
               <label>
                 Nomor Plat Armada
@@ -114,7 +114,7 @@ export default function PickupDeliveryTaskFlow({
               </div>
 
               <button type="submit" disabled={isPending}>
-                Mulai Penugasan
+                Mulai Tugas
               </button>
             </form>
           </div>
@@ -134,7 +134,7 @@ export default function PickupDeliveryTaskFlow({
 
       <section className="section-block">
         <div className="metric-grid">
-          <div className="metric-card"><span>Penugasan</span><strong>{activeTask.transaction_id}</strong></div>
+          <div className="metric-card"><span>ID Aktivitas</span><strong>{activeTask.transaction_id}</strong></div>
           <div className="metric-card"><span>Armada</span><strong>{activeTask.fleet_snapshot?.plat_number ?? "-"}</strong></div>
           <div className="metric-card"><span>Total Titik</span><strong>{stops.length}</strong></div>
           <div className="metric-card"><span>Selesai</span><strong>{stops.filter((stop) => stop.status === "Checked In").length}</strong></div>
