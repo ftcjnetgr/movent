@@ -15281,3 +15281,24 @@ td select:focus,
   align-items: center !important;
   gap: 4px !important;
 }
+
+
+/* MOVENT — notification tab badges */
+.alert-view-tabs .alert-tab-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 16px !important;
+  height: 16px !important;
+  padding: 0 4px !important;
+  margin-left: 4px !important;
+  box-sizing: border-box !important;
+  border-radius: 999px !important;
+  background: #dc2626 !important;
+  color: #fff !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  vertical-align: middle !important;
+}
