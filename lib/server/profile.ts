@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export type AppProfile = {
   id: string;
+  auth_user_id: string;
   username: string;
   full_name: string;
   role: string;
@@ -39,6 +40,7 @@ export const getCurrentProfile = cache(async (): Promise<AppProfile> => {
 
   return {
     ...profile,
+    auth_user_id: userId,
     email: profile.email ?? userData.user?.email ?? null,
     phone_number: profile.phone_number ?? null,
     password_changed_at: userData.user?.updated_at ?? null,
