@@ -2,24 +2,51 @@ import ExecutorTaskCard from "@/components/executor/task-card";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const batch = data ?? [];
+    rows.push(...batch);
+
+    if (batch.length < pageSize) break;
+  }
+
+  return rows;
+}
+
 export default async function ExecutorTugasSayaPage() {
   const profile = await getCurrentProfile();
   const admin = createAdminClient();
 
-  let taskQuery = admin
-    .from("tasks")
-    .select(
-      "id, transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end, arrived_at, executor_snapshot, fleet_snapshot, executor_nik",
-    )
-    .not("status", "in", "(Completed,Canceled)")
-    .order("created_at", { ascending: false });
+  const fetchTasksPage = (from: number, to: number) => {
+    let query = admin
+      .from("tasks")
+      .select(
+        "id, transaction_id, task_type, status, fleet_ownership, start_point, destination, std, sta, sj_number, sj_qty, sj_weight, product, sj_note, odometer_start, odometer_end, arrived_at, executor_snapshot, fleet_snapshot, executor_nik",
+      )
+      .not("status", "in", "(Completed,Canceled)")
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-  if (["Executor", "Delivery", "Pickup"].includes(profile.role)) {
-    taskQuery = taskQuery.eq("executor_nik", profile.username);
-  }
+    if (["Executor", "Delivery", "Pickup"].includes(profile.role)) {
+      query = query.eq("executor_nik", profile.username);
+    }
 
-  const [{ data: tasks }, { data: products }] = await Promise.all([
-    taskQuery,
+    return query;
+  };
+
+  const [tasks, products] = await Promise.all([
+    fetchAllRows(fetchTasksPage),
     admin
       .from("products")
       .select("product")
@@ -27,24 +54,29 @@ export default async function ExecutorTugasSayaPage() {
       .order("product"),
   ]);
 
+
   const taskIds = (tasks ?? []).map((task) => task.id);
-  const { data: sjItems } = taskIds.length
-    ? await admin
-        .from("task_sj_items")
-        .select("task_id, sj_number, sj_qty, sj_weight, product, note")
-        .in("task_id", taskIds)
-        .order("created_at")
-    : { data: [] as any[] };
+  const sjItems = taskIds.length
+    ? await fetchAllRows((from, to) =>
+        admin
+          .from("task_sj_items")
+          .select("task_id, sj_number, sj_qty, sj_weight, product, note")
+          .in("task_id", taskIds)
+          .order("created_at")
+          .range(from, to),
+      )
+    : [];
+
   const sjByTask = new Map<string, any[]>();
-  for (const item of sjItems ?? []) {
+  for (const item of sjItems) {
     const list = sjByTask.get(item.task_id) ?? [];
     list.push(item);
     sjByTask.set(item.task_id, list);
   }
 
-  const activeCount = tasks?.length ?? 0;
-  const waitingCount = (tasks ?? []).filter((task) => task.status === "Assigned").length;
-  const drivingCount = (tasks ?? []).filter((task) => task.status === "Driving").length;
+  const activeCount = tasks.length;
+  const waitingCount = tasks.filter((task) => task.status === "Assigned").length;
+  const drivingCount = tasks.filter((task) => task.status === "Driving").length;
 
   return (
     <div className="role-page">
