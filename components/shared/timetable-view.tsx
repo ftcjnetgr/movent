@@ -460,6 +460,13 @@ export default function TimetableView({
     setPreviewSchedules([]);
   }
 
+  function realizedCount(items: Schedule[]) {
+    return items.reduce(
+      (count, item) => count + (actualTaskBySchedule.has(item.schedule_id) ? 1 : 0),
+      0,
+    );
+  }
+
   function renderPlanTable(items: Schedule[]) {
     const groups = new Map<string, Schedule[]>();
 
@@ -527,7 +534,9 @@ export default function TimetableView({
               )
             }
           >
-            {rowItems.length}
+            {view === "realized"
+              ? `${rowItems.length} | ${realizedCount(rowItems)}`
+              : rowItems.length}
           </button>
         </td>
       </tr>
@@ -605,9 +614,11 @@ export default function TimetableView({
                                 view === "realized" ? "realized" : "schedule",
                               )
                             }
-                            aria-label={`Lihat subtotal ${type} jam ${String(hour).padStart(2, "0")}: ${hourItems.length}`}
+                            aria-label={`Lihat subtotal ${type} jam ${String(hour).padStart(2, "0")}: ${hourItems.length} terjadwal, ${realizedCount(hourItems)} terealisasi`}
                           >
-                            {hourItems.length}
+                            {view === "realized"
+                              ? `${hourItems.length} | ${realizedCount(hourItems)}`
+                              : hourItems.length}
                           </button>
                         ) : null}
                       </td>
@@ -622,9 +633,11 @@ export default function TimetableView({
                             view === "realized" ? "realized" : "schedule",
                           )
                         }
-                        aria-label={`Lihat subtotal ${type}: ${groupItems.length}`}
+                        aria-label={`Lihat subtotal ${type}: ${groupItems.length} terjadwal, ${realizedCount(groupItems)} terealisasi`}
                       >
-                        {groupItems.length}
+                        {view === "realized"
+                          ? `${groupItems.length} | ${realizedCount(groupItems)}`
+                          : groupItems.length}
                       </button>
                     </td>
                   </tr>
@@ -652,9 +665,11 @@ export default function TimetableView({
                         view === "realized" ? "realized" : "schedule",
                       )
                     }
-                    aria-label={`Lihat total schedule jam ${String(hour).padStart(2, "0")}: ${hourItems.length}`}
+                    aria-label={`Lihat total schedule jam ${String(hour).padStart(2, "0")}: ${hourItems.length} terjadwal, ${realizedCount(hourItems)} terealisasi`}
                   >
-                    {hourItems.length}
+                    {view === "realized"
+                      ? `${hourItems.length} | ${realizedCount(hourItems)}`
+                      : hourItems.length}
                   </button>
                 </td>
               ))}
@@ -669,7 +684,9 @@ export default function TimetableView({
                     )
                   }
                 >
-                  {items.length}
+                  {view === "realized"
+                    ? `${items.length} | ${realizedCount(items)}`
+                    : items.length}
                 </button>
               </td>
             </tr>
