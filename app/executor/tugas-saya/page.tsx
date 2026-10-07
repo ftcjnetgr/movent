@@ -24,7 +24,7 @@ export default async function ExecutorTugasSayaPage() {
     return query;
   };
 
-  const [tasks, products] = await Promise.all([
+  const [tasks, productsResult] = await Promise.all([
     fetchAllRows(fetchTasksPage),
     admin
       .from("products")
@@ -32,6 +32,7 @@ export default async function ExecutorTugasSayaPage() {
       .eq("status", "Active")
       .order("product"),
   ]);
+  const products = productsResult.data ?? [];
 
 
   const taskIds = (tasks ?? []).map((task) => task.id);
@@ -80,7 +81,7 @@ export default async function ExecutorTugasSayaPage() {
         </div>
         <section className="task-list">
           {(tasks ?? []).map((task) => (
-            <ExecutorTaskCard key={task.transaction_id} task={task} products={(products ?? []).map((item) => item.product)} sjItems={sjByTask.get(task.id) ?? []} />
+            <ExecutorTaskCard key={task.transaction_id} task={task} products.map((item) => item.product)} sjItems={sjByTask.get(task.id) ?? []} />
           ))}
           {!tasks?.length ? (
             <div className="metric-card">
