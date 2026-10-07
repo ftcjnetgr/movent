@@ -15009,3 +15009,10 @@ td select:focus,
   margin: 0 auto !important;
   text-align: center !important;
 }
+
+
+/* MOVENT — straight underline for timetable route tabs */
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button.active {
+  border-radius: 0 !important;
+  border-bottom: 2px solid var(--theme-color) !important;
+}
