@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { fetchAllRows } from "@/lib/server/fetch-all";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { cancelDispatcherTaskAction } from "@/app/dispatcher/beranda/actions";
 import StatusBadge from "@/components/shared/status-badge";
