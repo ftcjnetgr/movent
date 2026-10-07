@@ -1,5 +1,27 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const batch = data ?? [];
+    rows.push(...batch);
+
+    if (batch.length < pageSize) break;
+  }
+
+  return rows;
+}
+
 export type ReportFilters = {
   type: "STD" | "STA" | "CANCELED";
   from: string;
@@ -119,31 +141,22 @@ export async function queryOperationalReport(filters: ReportFilters) {
   const fromIso = filters.from + "T00:00:00+07:00";
   const toIso = endExclusiveIso(filters.to);
 
-  let query = admin
-    .from("tasks")
-    .select("*")
-    .gte(dateField, fromIso)
-    .lt(dateField, toIso)
-    .order(dateField, { ascending: true });
+  const dateFilters = (query: ReturnType<typeof admin.from>) => {
+    let next = query.gte(dateField, fromIso).lt(dateField, toIso);
+    if (filters.startPoint) next = next.eq("start_point", filters.startPoint);
+    if (filters.destination) next = next.eq("destination", filters.destination);
+    if (filters.executorNik) next = next.eq("executor_nik", filters.executorNik);
+    if (filters.type === "CANCELED") next = next.eq("status", "Canceled");
+    return next.order(dateField, { ascending: true });
+  };
 
-  if (filters.startPoint) query = query.eq("start_point", filters.startPoint);
-  if (filters.destination) query = query.eq("destination", filters.destination);
-  if (filters.executorNik)
-    query = query.eq("executor_nik", filters.executorNik);
-  if (filters.type === "CANCELED") query = query.eq("status", "Canceled");
+  const data = await fetchAllRows<Record<string, unknown>>((from, to) =>
+    dateFilters(
+      admin.from("tasks").select("*"),
+    ).range(from, to),
+  );
 
-  const { data, error } = await query;
-  if (error) {
-    console.error("[report] operational query failed", {
-      type: filters.type,
-      from: filters.from,
-      to: filters.to,
-      message: error.message,
-    });
-    throw new Error("Operational report query failed");
-  }
-
-  const rows = ((data ?? []) as unknown as Record<string, unknown>[]).map(
+  const rows = data.map(
     (task) => {
       const row: Record<string, string> = {};
       for (const column of operationalReportColumns) {
