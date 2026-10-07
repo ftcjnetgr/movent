@@ -178,13 +178,13 @@ export default function DashboardPreviewButton({
           <>
             <span className={`activity-dot ${dotClass}`} />
             <span>{label}</span>
-            <span className="activity-meta">
+            <span className="activity-metric">
               <span>total</span>
-              <span>rasio</span>
+              <strong>{valueLabel(value)}</strong>
             </span>
-            <span className="activity-values">
-              <span>{valueLabel(value)}</span>
-              <span>{subtitle ?? "0%"}</span>
+            <span className="activity-metric">
+              <span>rasio</span>
+              <strong>{subtitle ?? "0%"}</strong>
             </span>
           </>
         ) : (
