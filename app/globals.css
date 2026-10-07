@@ -14953,3 +14953,11 @@ td select:focus,
   color: var(--theme-color) !important;
   border-bottom: 2px solid var(--theme-color) !important;
 }
+
+
+/* MOVENT — soften inactive campaign button */
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button.campaign:not(.active) {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #dbe3ec !important;
+}
