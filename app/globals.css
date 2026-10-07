@@ -15258,3 +15258,12 @@ td select:focus,
   align-self: center !important;
   justify-self: start !important;
 }
+
+
+/* MOVENT — maintenance accuracy dot aligned with label */
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-dot {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  align-self: center !important;
+  justify-self: start !important;
+}
