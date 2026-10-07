@@ -19,6 +19,8 @@ const roleHome: Record<string, string> = {
   Dispatcher: "/dispatcher/beranda",
   Operation: "/operation/beranda",
   Executor: "/executor/tugas-saya",
+  Pickup: "/pickup/tugas-saya",
+  Delivery: "/delivery/tugas-saya",
   Maintainer: "/maintainer/beranda",
   "Super User": "/controller/beranda",
 };
