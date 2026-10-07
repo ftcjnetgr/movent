@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import ChangePasswordForm from "@/components/shared/change-password-form";
 
 type ProfileData = {
@@ -23,15 +23,6 @@ export default function ProfilePage({
   profile: ProfileData;
 }) {
   const [section, setSection] = useState<"profile" | "security">("profile");
-
-  const parts = profile.full_name.trim().split(/\s+/).filter(Boolean);
-    return (
-      parts
-        .slice(0, 2)
-        .map((part) => part[0]?.toUpperCase())
-        .join("") || "U"
-    );
-  }, [profile.full_name]);
 
   const formatDateTime = (value: string | null | undefined) =>
     value
