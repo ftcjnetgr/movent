@@ -15093,3 +15093,36 @@ td select:focus,
   justify-self: end !important;
   text-align: right !important;
 }
+
+
+/* MOVENT — activity metrics as compact label/value columns */
+.super-dashboard .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) 54px 54px !important;
+  column-gap: 6px !important;
+  align-items: center !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-metric {
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  row-gap: 1px !important;
+  align-self: center !important;
+  justify-self: start !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-metric > span {
+  color: var(--text-2) !important;
+  font-size: 8px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+
+.super-dashboard .dashboard-preview-activity-row .activity-metric > strong {
+  color: var(--text) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
