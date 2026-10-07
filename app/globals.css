@@ -14876,3 +14876,50 @@ td select:focus,
 .schedule-page .schedule-point-detail-card .schedule-point-tabs button.active {
   color: #fff !important;
 }
+
+
+/* MOVENT — canonical Cek Jadwal button states */
+.schedule-page .schedule-filter-primary-row button,
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button,
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button {
+  background: #eef2ff !important;
+  color: #111827 !important;
+  border-color: #c7d2fe !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.schedule-page .schedule-filter-primary-row button:hover,
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button:hover,
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button:hover {
+  background: #eef2ff !important;
+  color: #111827 !important;
+  border-color: #a5b4fc !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.schedule-page .schedule-filter-primary-row button.active,
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button.active,
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button.active {
+  background: #4f46e5 !important;
+  color: #fff !important;
+  border-color: #4f46e5 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.schedule-page .schedule-filter-primary-row button.active:hover,
+.schedule-page .schedule-point-detail-card .schedule-point-tabs button.active:hover,
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button.active:hover {
+  background: #4338ca !important;
+  color: #fff !important;
+  border-color: #4338ca !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button.active {
+  border-bottom: 2px solid #4f46e5 !important;
+  border-radius: 8px !important;
+}
