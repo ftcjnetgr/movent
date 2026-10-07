@@ -14906,3 +14906,27 @@ td select:focus,
 .schedule-grid-table .schedule-cell-button {
   font-size: 8px !important;
 }
+
+
+/* MOVENT — final timetable border normalization */
+.schedule-grid-table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+
+.schedule-grid-table thead th,
+.schedule-grid-table tbody th,
+.schedule-grid-table tbody td,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td {
+  border: 1px solid #dbe3ec !important;
+}
+
+.schedule-grid-table .schedule-type-group-row > th,
+.schedule-grid-table .schedule-type-group-row > td,
+.schedule-grid-table .schedule-type-group-total-cell,
+.schedule-grid-table thead th:first-child,
+.schedule-grid-table tbody th:first-child,
+.schedule-grid-table tfoot th:first-child {
+  border: 1px solid #dbe3ec !important;
+}
