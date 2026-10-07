@@ -55,8 +55,8 @@ export default async function AppShell({
     <AppShellClient
       profile={profile}
       alertCounts={{
-        task: alertData.taskAlerts.length,
-        maintenance: alertData.ticketAlerts.length,
+        task: alertData.task,
+        maintenance: alertData.maintenance,
       }}
     >
       {children}
