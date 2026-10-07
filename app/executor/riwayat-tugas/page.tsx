@@ -21,7 +21,7 @@ export default async function ExecutorHistoryPage() {
     let query = admin
       .from("tasks")
       .select(
-        "transaction_id, task_type, status, start_point, destination, assigned_at, accepted_at, driving_at, completed_at, executor_snapshot, fleet_snapshot",
+        "id, transaction_id, task_type, status, start_point, destination, created_at, assigned_at, accepted_at, driving_at, completed_at, executor_snapshot, fleet_snapshot",
       )
       .eq("status", "Completed")
       .order("completed_at", { ascending: false })
@@ -55,7 +55,7 @@ export default async function ExecutorHistoryPage() {
                 <th>Jenis</th>
                 <th>Rute</th>
                 <th>Armada</th>
-                <th>Selesai</th>
+                <th>Mulai</th>\n                <th>Check-in titik</th>\n                <th>Selesai</th>
               </tr>
             </thead>
             <tbody>
@@ -69,12 +69,12 @@ export default async function ExecutorHistoryPage() {
                     {task.start_point} → {task.destination}
                   </td>
                   <td>{task.fleet_snapshot?.plat_number ?? "-"}</td>
-                  <td>{formatDateTime(task.completed_at)}</td>
+                  <td>{formatDateTime(task.driving_at)}</td>\n                  <td>\n                    {(stopsByTask.get(task.id) ?? []).length\n                      ? (stopsByTask.get(task.id) ?? []).map((stop) => (\n                          <div key={stop.sequence_no}>\n                            Titik {stop.sequence_no}: {formatDateTime(stop.checkin_at)}\n                          </div>\n                        ))\n                      : "-"}\n                  </td>\n                  <td>{formatDateTime(task.completed_at)}</td>
                 </tr>
               ))}
               {tasks.length === 0 ? (
                 <tr>
-                  <td colSpan={5}>
+                  <td colSpan={7}>
                     <div className="empty-state">
                       Belum ada tugas yang selesai.
                     </div>
