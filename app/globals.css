@@ -8726,9 +8726,7 @@ td select:focus,
   }
 }
 
-@media (max-width: 480px) {
-  
-}
+
 
 /* FINAL TAB COLOR STANDARD — inactive tabs follow sidebar muted gray */
 .schedule-route-tabs button:not(.active),
@@ -8839,9 +8837,7 @@ td select:focus,
   
 }
 
-@media (max-width: 480px) {
-  
-}
+
 
 /* FINAL STATUS PALETTE — one color + one icon meaning per status */
 .status-badge.status-requested,
