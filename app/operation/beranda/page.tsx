@@ -1,6 +1,7 @@
 import OperationCreationHub from "@/components/operation/creation-hub";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
+import { fetchAllRows } from "@/lib/server/fetch-all";
 
 export default async function OperationBerandaPage() {
   const profile = await getCurrentProfile();
@@ -10,7 +11,7 @@ export default async function OperationBerandaPage() {
     { data: products },
     { data: executors },
     { data: fleets },
-    { data: tasks },
+    tasks,
     { count: requested },
     { count: completed },
   ] = await Promise.all([
@@ -34,16 +35,19 @@ export default async function OperationBerandaPage() {
       .select("plat_number, fleet_type")
       .eq("status", "Active")
       .order("plat_number"),
-    admin
-      .from("tasks")
-      .select(
-        "transaction_id, status, start_point, destination, std, sta, external_executor, external_fleet, sj_number, sj_qty, sj_weight, product, sj_note",
-      )
-      .eq("task_type", "Supply")
-      .eq("fleet_ownership", "TGR")
-      .eq("created_by", profile.id)
-      .eq("status", "Assigned")
-      .order("created_at", { ascending: false }),
+    fetchAllRows((from, to) =>
+      admin
+        .from("tasks")
+        .select(
+          "transaction_id, status, start_point, destination, std, sta, external_executor, external_fleet, sj_number, sj_qty, sj_weight, product, sj_note",
+        )
+        .eq("task_type", "Supply")
+        .eq("fleet_ownership", "TGR")
+        .eq("created_by", profile.id)
+        .eq("status", "Assigned")
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
     admin
       .from("tasks")
       .select("*", { count: "exact", head: true })
@@ -80,7 +84,7 @@ export default async function OperationBerandaPage() {
         <div className="metric-grid">
           <div className="metric-card">
             <span>TGR masih nunggu</span>
-            <strong>{tasks?.length ?? 0}</strong>
+            <strong>{tasks.length}</strong>
           </div>
           <div className="metric-card">
             <span>Jadwal tambahan udah diajuin</span>
