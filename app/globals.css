@@ -14878,3 +14878,11 @@ td select:focus,
 .schedule-grid-table thead th {
   text-align: center !important;
 }
+
+
+/* MOVENT — light purple timetable header and total row */
+.schedule-grid-table thead th,
+.schedule-grid-table tfoot > tr > th,
+.schedule-grid-table tfoot > tr > td {
+  background: #eef2ff !important;
+}
