@@ -260,10 +260,7 @@ export default function TimetableView({
     const map = new Map<string, Task>();
 
     for (const task of liveTasks) {
-      if (
-        !task.schedule_id ||
-        !["Driving", "Completed"].includes(task.status)
-      ) {
+      if (!task.schedule_id || task.status !== "Completed") {
         continue;
       }
 
