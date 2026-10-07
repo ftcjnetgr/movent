@@ -14718,3 +14718,28 @@ td select:focus,
   box-shadow: none !important;
   transform: none !important;
 }
+
+
+/* MOVENT — expanded row totals without pills */
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+}
+
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button:hover,
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button:focus,
+.schedule-grid-table tbody .schedule-total-cell .schedule-total-button:active {
+  background: transparent !important;
+  color: var(--theme-color-dark) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
