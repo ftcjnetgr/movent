@@ -535,7 +535,7 @@ export default function TimetableView({
             }
           >
             {view === "realized"
-              ? `${rowItems.length} | ${realizedCount(rowItems)}`
+              ? `${realizedCount(rowItems)}/${rowItems.length}`
               : rowItems.length}
           </button>
         </td>
@@ -617,7 +617,7 @@ export default function TimetableView({
                             aria-label={`Lihat subtotal ${type} jam ${String(hour).padStart(2, "0")}: ${hourItems.length} terjadwal, ${realizedCount(hourItems)} terealisasi`}
                           >
                             {view === "realized"
-                              ? `${hourItems.length} | ${realizedCount(hourItems)}`
+                              ? `${realizedCount(hourItems)}/${hourItems.length}`
                               : hourItems.length}
                           </button>
                         ) : null}
@@ -636,7 +636,7 @@ export default function TimetableView({
                         aria-label={`Lihat subtotal ${type}: ${groupItems.length} terjadwal, ${realizedCount(groupItems)} terealisasi`}
                       >
                         {view === "realized"
-                          ? `${groupItems.length} | ${realizedCount(groupItems)}`
+                          ? `${realizedCount(groupItems)}/${groupItems.length}`
                           : groupItems.length}
                       </button>
                     </td>
@@ -668,7 +668,7 @@ export default function TimetableView({
                     aria-label={`Lihat total schedule jam ${String(hour).padStart(2, "0")}: ${hourItems.length} terjadwal, ${realizedCount(hourItems)} terealisasi`}
                   >
                     {view === "realized"
-                      ? `${hourItems.length} | ${realizedCount(hourItems)}`
+                      ? `${realizedCount(hourItems)}/${hourItems.length}`
                       : hourItems.length}
                   </button>
                 </td>
@@ -685,7 +685,7 @@ export default function TimetableView({
                   }
                 >
                   {view === "realized"
-                    ? `${items.length} | ${realizedCount(items)}`
+                    ? `${realizedCount(items)}/${items.length}`
                     : items.length}
                 </button>
               </td>
