@@ -288,14 +288,14 @@ export async function getDashboardData(
       return now.getTime() >= alert.targetAt.getTime() - threshold;
     });
 
+  const taskAlerts = [...unassignedAlerts, ...assignedAlerts];
   const taskAlertHubs = [
     ...new Set(
-      alertSchedules
-        .map((schedule) => schedule.schedule_hub_id as string | null)
+      taskAlerts
+        .map((alert) => alert.scheduleHubId)
         .filter((hub): hub is string => Boolean(hub)),
     ),
   ];
-  const taskAlerts = [...unassignedAlerts, ...assignedAlerts];
   const allTicketRows = (ticketings ?? []) as TicketRow[];
   const ticketRows = allTicketRows.filter((ticket) =>
     inRange(ticket.created_at),
