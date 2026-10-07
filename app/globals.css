@@ -6601,7 +6601,7 @@ html {
 }
 
 .schedule-grid-table .schedule-total-cell {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   text-align: center;
   vertical-align: middle;
   border-left: 1px solid #dbe3ec;
@@ -6609,7 +6609,7 @@ html {
 
 .schedule-grid-table tfoot .schedule-total-cell {
   border-top: 1px solid #dbe3ec;
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
 }
 
 .schedule-cell-button,
@@ -6871,7 +6871,7 @@ th {
   color: var(--slate-600);
 }
 .schedule-grid-table thead th {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   color: #4c4f7a !important;
 }
 
@@ -7143,25 +7143,25 @@ td select:focus,
   --schedule-indigo-soft: var(--theme-primary-soft);
 }
 .schedule-grid-table thead th {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   color: #4c4f7a !important;
 }
 .schedule-grid-table .schedule-total-header {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-label {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   color: #4f46a5;
 }
 .schedule-grid-table .schedule-total-cell {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
 }
 .schedule-grid-table tfoot .schedule-total-cell {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
 }
 .schedule-grand-total {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
 }
 .schedule-grand-total .schedule-total-button {
   background: var(--theme-primary);
@@ -7322,7 +7322,7 @@ td select:focus,
   --schedule-indigo-soft: var(--theme-color-soft);
 }
 .schedule-grid-table thead th {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   color: var(--theme-color-dark) !important;
 }
 .schedule-grid-table tbody th {
@@ -7331,13 +7331,13 @@ td select:focus,
 }
 .schedule-grid-table .schedule-total-header,
 .schedule-grid-table .schedule-total-label {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   color: var(--theme-color-dark) !important;
   border-color: var(--theme-color-light) !important;
 }
 .schedule-grid-table .schedule-total-cell,
 .schedule-grid-table tfoot .schedule-total-cell {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
 }
 .schedule-total-button {
   background: var(--theme-color-soft) !important;
@@ -7350,7 +7350,7 @@ td select:focus,
   color: var(--theme-color-dark) !important;
 }
 .schedule-grand-total {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
   border-left-color: var(--theme-color-mid) !important;
 }
 .schedule-grand-total .schedule-total-button {
@@ -14577,7 +14577,7 @@ td select:focus,
 }
 .schedule-grid-table tfoot > tr > th,
 .schedule-grid-table tfoot > tr > td {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
 }
 
 .schedule-grid-table thead th {
@@ -14772,7 +14772,7 @@ td select:focus,
 .schedule-grid-table tbody tr.schedule-type-group-row > th.schedule-type-group-pivot,
 .schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button,
 .schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-value-cell {
-  background: #e7edf5 !important;
+  background: #eef2ff !important;
 }
 
 
