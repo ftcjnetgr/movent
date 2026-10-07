@@ -259,7 +259,8 @@ export async function getDashboardData(
           (["Assigned", "Confirmed"].includes(task.status) && task.std)),
     )
     .map((task) => {
-      const trigger = task.status === "Driving" ? "sta" : "std";
+      const trigger: TaskAlert["trigger"] =
+        task.status === "Driving" ? "sta" : "std";
       const targetAt =
         trigger === "sta"
           ? new Date(task.sta as string)
