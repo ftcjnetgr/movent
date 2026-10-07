@@ -4,70 +4,120 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import { getDashboardData } from "@/lib/server/dashboard";
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const batch = data ?? [];
+    rows.push(...batch);
+
+    if (batch.length < pageSize) break;
+  }
+
+  return rows;
+}
+
 export default async function DispatcherBerandaPage() {
   const profile = await getCurrentProfile();
   const admin = createAdminClient();
   const [
-    { data: locations },
-    { data: schedules },
-    { data: executors },
-    { data: fleets },
-    { data: products },
-    { data: maintenanceLists },
-    { data: tickets },
-    { data: allTickets },
+    locations,
+    schedules,
+    executors,
+    fleets,
+    products,
+    maintenanceLists,
+    tickets,
+    allTickets,
   ] = await Promise.all([
-    admin
-      .from("locations")
-      .select("location")
-      .eq("status", "Active")
-      .order("location"),
-    admin
-      .from("schedules")
-      .select(
-        "schedule_id, route, category, schedule_hub_id, schedule_day, start_point, destination, std, sta, trip",
-      )
-      .eq("status", "Active")
-      .order("schedule_day")
-      .order("std"),
-    admin
-      .from("executors")
-      .select("executor_nik, full_name")
-      .eq("status", "Active")
-      .order("full_name"),
-    admin
-      .from("fleets")
-      .select("plat_number, fleet_type")
-      .eq("status", "Active")
-      .order("plat_number"),
-    admin
-      .from("products")
-      .select("product")
-      .eq("status", "Active")
-      .order("product"),
-    admin
-      .from("maintenance_lists")
-      .select("maintenance_list")
-      .eq("status", "Active")
-      .order("maintenance_list"),
-    admin
-      .from("ticketings")
-      .select(
-        "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note",
-      )
-      .eq("created_by", profile.id)
-      .order("created_at", { ascending: false }),
-    admin
-      .from("ticketings")
-      .select("transaction_id, status, location, fleet_plat_number, created_at")
-      .order("created_at", { ascending: false }),
+    fetchAllRows((from, to) =>
+      admin
+        .from("locations")
+        .select("location")
+        .eq("status", "Active")
+        .order("location")
+        .range(from, to),
+    ),
+    fetchAllRows((from, to) =>
+      admin
+        .from("schedules")
+        .select(
+          "schedule_id, route, category, schedule_hub_id, schedule_day, start_point, destination, std, sta, trip",
+        )
+        .eq("status", "Active")
+        .order("schedule_day")
+        .order("std")
+        .range(from, to),
+    ),
+    fetchAllRows((from, to) =>
+      admin
+        .from("executors")
+        .select("executor_nik, full_name")
+        .eq("status", "Active")
+        .order("full_name")
+        .range(from, to),
+    ),
+    fetchAllRows((from, to) =>
+      admin
+        .from("fleets")
+        .select("plat_number, fleet_type")
+        .eq("status", "Active")
+        .order("plat_number")
+        .range(from, to),
+    ),
+    fetchAllRows((from, to) =>
+      admin
+        .from("products")
+        .select("product")
+        .eq("status", "Active")
+        .order("product")
+        .range(from, to),
+    ),
+    fetchAllRows((from, to) =>
+      admin
+        .from("maintenance_lists")
+        .select("maintenance_list")
+        .eq("status", "Active")
+        .order("maintenance_list")
+        .range(from, to),
+    ),
+    fetchAllRows((from, to) =>
+      admin
+        .from("ticketings")
+        .select(
+          "transaction_id, status, maintenance_list, location, fleet_plat_number, created_at, created_by, cancellation_note",
+        )
+        .eq("created_by", profile.id)
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
+    fetchAllRows((from, to) =>
+      admin
+        .from("ticketings")
+        .select("transaction_id, status, location, fleet_plat_number, created_at")
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
   ]);
-  const { data: dispatcherTasks } = await admin
-    .from("tasks")
-    .select(
-      "transaction_id, task_type, source_type, status, fleet_ownership, created_by, start_point, destination, executor_snapshot, fleet_snapshot, external_executor, external_fleet",
-    )
-    .or(`created_by.eq.${profile.id},fleet_ownership.eq.Non-TGR`);
+
+  const dispatcherTasks = await fetchAllRows((from, to) =>
+    admin
+      .from("tasks")
+      .select(
+        "transaction_id, task_type, source_type, status, fleet_ownership, created_by, start_point, destination, executor_snapshot, fleet_snapshot, external_executor, external_fleet",
+      )
+      .or(`created_by.eq.${profile.id},fleet_ownership.eq.Non-TGR`)
+      .range(from, to),
+  );
 
   const taskStatusCounts = {
     total: dispatcherTasks?.length ?? 0,
@@ -88,19 +138,19 @@ export default async function DispatcherBerandaPage() {
   return (
     <div className="role-page">
       <DispatcherCreationHub
-        locations={(locations ?? []).map((i) => i.location)}
-        schedules={schedules ?? []}
-        executors={executors ?? []}
-        fleets={fleets ?? []}
-        products={(products ?? []).map((i) => i.product)}
-        maintenanceLists={(maintenanceLists ?? []).map(
+        locations={locations.map((i) => i.location)}
+        schedules={schedules}
+        executors={executors}
+        fleets={fleets}
+        products={products.map((i) => i.product)}
+        maintenanceLists={maintenanceLists.map(
           (i) => i.maintenance_list,
         )}
-        tickets={tickets ?? []}
+        tickets={tickets}
       />
 
       <DispatcherSummaryInteractive
-        tasks={(dispatcherTasks ?? []).map((task) => ({
+        tasks={dispatcherTasks.map((task) => ({
           transaction_id: task.transaction_id,
           task_type: task.task_type,
           source_type: task.source_type,
@@ -113,7 +163,7 @@ export default async function DispatcherBerandaPage() {
           external_executor: task.external_executor,
           external_fleet: task.external_fleet,
         }))}
-        tickets={(allTickets ?? [])
+        tickets={allTickets
           .filter((ticket) => {
             const date = new Intl.DateTimeFormat("en-CA", {
               timeZone: "Asia/Jakarta",
