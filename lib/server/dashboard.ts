@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { fetchAllRows } from "@/lib/server/fetch-all";
 import type { AppProfile } from "@/lib/server/profile";
 
 type TaskRow = {
@@ -108,28 +109,6 @@ function canceledFromTimestamp(task: TaskRow) {
   if (task.task_type === "Supply" && task.fleet_ownership === "Non-TGR")
     return task.external_departure_at ?? task.assigned_at;
   return task.driving_at ?? task.accepted_at ?? task.assigned_at;
-}
-
-async function fetchAllRows<T>(
-  fetchPage: (from: number, to: number) => PromiseLike<{
-    data: T[] | null;
-    error: unknown;
-  }>,
-) {
-  const pageSize = 1000;
-  const rows: T[] = [];
-  let from = 0;
-
-  while (true) {
-    const { data, error } = await fetchPage(from, from + pageSize - 1);
-    if (error) throw error;
-    const page = data ?? [];
-    rows.push(...page);
-    if (page.length < pageSize) break;
-    from += pageSize;
-  }
-
-  return rows;
 }
 
 
