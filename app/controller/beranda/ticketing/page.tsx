@@ -56,6 +56,16 @@ export default async function ControllerTicketingDashboardPage({
     new Date(`${to}T00:00:00+07:00`).getTime() + 86400000,
   ).toISOString();
 
+  type MaintenancePerformanceRow = {
+    transaction_id: string;
+    status: string;
+    maintenance_list: string | null;
+    fleet_plat_number: string | null;
+    fleet_location: string | null;
+    created_at: string;
+    completed_at: string | null;
+  };
+
   const [data, ticketResult, performanceResult, maintenanceListResult] = await Promise.all([
     getDashboardData(profile, from, to),
     admin
@@ -67,7 +77,7 @@ export default async function ControllerTicketingDashboardPage({
       .gte("created_at", rangeStart)
       .lt("created_at", rangeEnd)
       .limit(12),
-    fetchAllRows((fromIndex, toIndex) =>
+    fetchAllRows<MaintenancePerformanceRow>((fromIndex, toIndex) =>
       admin
         .from("ticketings")
         .select(
@@ -124,7 +134,7 @@ export default async function ControllerTicketingDashboardPage({
     }).format(new Date(base.getTime() + days * 86400000));
   }
 
-  const performanceRows = performanceResult.data ?? [];
+  const performanceRows = performanceResult;
   const maintenancePerformance = performanceRows.reduce(
     (acc, ticket) => {
       const aging = maintenanceAging.get(ticket.maintenance_list ?? "");
@@ -192,7 +202,7 @@ export default async function ControllerTicketingDashboardPage({
     { onTime: [] as DashboardPreviewItem[], late: [] as DashboardPreviewItem[] },
   );
 
-  const todayActivities = await fetchAllRows((fromIndex, toIndex) =>
+  const todayActivities = await fetchAllRows<{ status: string; created_at: string }>((fromIndex, toIndex) =>
     admin
       .from("ticketings")
       .select("status, created_at")
