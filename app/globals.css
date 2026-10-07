@@ -14862,3 +14862,11 @@ td select:focus,
 .schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button {
   font-weight: 500 !important;
 }
+
+
+/* MOVENT — timetable view tab spacing */
+.schedule-page-heading .alert-view-tabs {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
