@@ -5,6 +5,28 @@ import StatusBadge from "@/components/shared/status-badge";
 import { compareStatus, STATUS_LABELS, STATUS_SUBCOPY, StatusIcon } from "@/components/shared/status-config";
 import DashboardPreviewButton, { type DashboardPreviewItem } from "@/components/controller/dashboard-preview";
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const batch = data ?? [];
+    rows.push(...batch);
+
+    if (batch.length < pageSize) break;
+  }
+
+  return rows;
+}
+
 function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
 }
@@ -146,15 +168,19 @@ export default async function ControllerPenugasanDashboardPage({
           .gte("created_at", rangeStart)
           .lt("created_at", rangeEnd)
           .limit(8),
-        admin
-          .from("tasks")
-          .select(
-            "status, task_type, fleet_ownership, sj_number, odometer_start, odometer_end, accepted_at, driving_at, arrived_at, std, sta, created_at, assigned_by, executor_nik, schedule_id, start_point, destination, executor_snapshot, fleet_snapshot",
-          )
-          .in("assigned_by", dispatcherIds)
-          .not("executor_nik", "is", null)
-          .gte("created_at", rangeStart)
-          .lt("created_at", rangeEnd),
+        fetchAllRows(
+          (from, to) =>
+            admin
+              .from("tasks")
+              .select(
+                "status, task_type, fleet_ownership, sj_number, odometer_start, odometer_end, accepted_at, driving_at, arrived_at, std, sta, created_at, assigned_by, executor_nik, schedule_id, start_point, destination, executor_snapshot, fleet_snapshot",
+              )
+              .in("assigned_by", dispatcherIds)
+              .not("executor_nik", "is", null)
+              .gte("created_at", rangeStart)
+              .lt("created_at", rangeEnd)
+              .range(from, to),
+        ).then((data) => ({ data, error: null })),
       ])
     : [
         { data: [], error: null },
@@ -203,32 +229,48 @@ export default async function ControllerPenugasanDashboardPage({
     arrivalMetrics.onTime,
     arrivalMetrics.total,
   );
-  const [{ count: totalMaintenance }, { data: todaySchedules }] =
-    await Promise.all([
-      admin
-        .from("ticketings")
-        .select("transaction_id", { count: "exact", head: true })
-        .gte("created_at", rangeStart)
-        .lt("created_at", rangeEnd),
+  const [maintenanceResult, todaySchedules] = await Promise.all([
+    admin
+      .from("ticketings")
+      .select("transaction_id", { count: "exact", head: true })
+      .gte("created_at", rangeStart)
+      .lt("created_at", rangeEnd),
+    fetchAllRows<{
+      schedule_id: string;
+      start_point: string | null;
+      destination: string | null;
+      std: string | null;
+      sta: string | null;
+    }>((from, to) =>
       admin
         .from("schedules")
         .select("schedule_id, start_point, destination, std, sta")
         .eq("status", "Active")
         .eq("schedule_day", todayDay)
-        .eq("category", todayScheduleCategory),
-    ]);
+        .eq("category", todayScheduleCategory)
+        .range(from, to),
+    ),
+  ]);
 
-  const todayScheduleIds = (todaySchedules ?? []).map(
+  if (maintenanceResult.error) throw maintenanceResult.error;
+
+  const totalMaintenance = maintenanceResult.count ?? 0;
+  const todayScheduleIds = todaySchedules.map(
     (schedule) => schedule.schedule_id,
   );
 
-  const { data: todayScheduleTasks } = todayScheduleIds.length
-    ? await admin
-        .from("tasks")
-        .select("schedule_id, status, accepted_at, created_at, start_point, destination, driving_at, arrived_at, odometer_start, odometer_end, executor_snapshot, fleet_snapshot")
-        .in("schedule_id", todayScheduleIds)
-        .order("created_at", { ascending: false })
-    : { data: [] };
+  const todayScheduleTasks = todayScheduleIds.length
+    ? await fetchAllRows((from, to) =>
+        admin
+          .from("tasks")
+          .select(
+            "schedule_id, status, accepted_at, created_at, start_point, destination, driving_at, arrived_at, odometer_start, odometer_end, executor_snapshot, fleet_snapshot",
+          )
+          .in("schedule_id", todayScheduleIds)
+          .order("created_at", { ascending: false })
+          .range(from, to),
+      )
+    : [];
 
   const latestTaskBySchedule = new Map<
     string,
@@ -247,7 +289,7 @@ export default async function ControllerPenugasanDashboardPage({
     }
   >();
 
-  for (const task of todayScheduleTasks ?? []) {
+  for (const task of todayScheduleTasks) {
     if (!task.schedule_id || latestTaskBySchedule.has(task.schedule_id)) continue;
     latestTaskBySchedule.set(task.schedule_id, task);
   }
