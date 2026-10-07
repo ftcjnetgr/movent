@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { AppProfile } from "@/lib/server/profile";
 
@@ -142,7 +143,9 @@ type AlertScheduleRow = {
   destination: string | null;
 };
 
-async function getOperationalAlerts(profile: AppProfile) {
+const getOperationalAlerts = cache(async function getOperationalAlerts(
+  profile: AppProfile,
+) {
   const admin = createAdminClient();
   const now = new Date();
   const date = jakartaDate(now);
@@ -297,7 +300,7 @@ async function getOperationalAlerts(profile: AppProfile) {
   }).length;
 
   return { taskAlerts, taskAlertHubs, ticketAlerts, ticketAlertCount };
-}
+});
 
 export async function getAlertCounts(profile: AppProfile) {
   const alerts = await getOperationalAlerts(profile);
