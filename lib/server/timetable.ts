@@ -1,6 +1,28 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { AppProfile } from "@/lib/server/profile";
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const batch = data ?? [];
+    rows.push(...batch);
+
+    if (batch.length < pageSize) break;
+  }
+
+  return rows;
+}
+
 function jakartaNow() {
   const now = new Date();
   const date = new Intl.DateTimeFormat("en-CA", {
@@ -24,44 +46,53 @@ export async function getTimetableData(profile: AppProfile) {
   const admin = createAdminClient();
   const { date, day, startIso, endIso } = jakartaNow();
 
-  const getAllActiveSchedules = async () => {
-    const pageSize = 1000;
-    const rows: any[] = [];
+  const schedulesPromise = fetchAllRows((from, to) =>
+    admin
+      .from("schedules")
+      .select(
+        "schedule_id, trip, schedule_hub_id, route, category, start_point, start_point_type, destination, destination_type, schedule_day, schedule_day_name, std, sta, status",
+      )
+      .eq("status", "Active")
+      .order("schedule_day")
+      .order("std")
+      .order("schedule_id")
+      .range(from, to),
+  );
 
-    for (let from = 0; ; from += pageSize) {
-      const { data, error } = await admin
-        .from("schedules")
-        .select(
-          "schedule_id, trip, schedule_hub_id, route, category, start_point, start_point_type, destination, destination_type, schedule_day, schedule_day_name, std, sta, status",
-        )
-        .eq("status", "Active")
-        .order("schedule_day")
-        .order("std")
-        .order("schedule_id")
-        .range(from, from + pageSize - 1);
-
-      if (error) throw error;
-
-      const batch = data ?? [];
-      rows.push(...batch);
-
-      if (batch.length < pageSize) break;
-    }
-
-    return rows;
+  type TimetableTaskRow = {
+    transaction_id: string;
+    status: string;
+    source_type: string;
+    task_type: string;
+    created_by: string;
+    fleet_ownership: string | null;
+    schedule_id: string | null;
+    start_point: string | null;
+    destination: string | null;
+    std: string | null;
+    sta: string | null;
+    executor_nik: string | null;
+    executor_snapshot: Record<string, unknown> | null;
+    fleet_snapshot: Record<string, unknown> | null;
+    sj_number: string | null;
+    driving_at: string | null;
+    arrived_at: string | null;
   };
 
-  const [schedules, { data: allTasks }] = await Promise.all([
-    getAllActiveSchedules(),
-    admin
-      .from("tasks")
-      .select(
-        "transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, sj_number, driving_at, arrived_at",
-      )
-      .order("std"),
+  const [schedules, allTasks] = await Promise.all([
+    schedulesPromise,
+    fetchAllRows<TimetableTaskRow>((from, to) =>
+      admin
+        .from("tasks")
+        .select(
+          "transaction_id, status, source_type, task_type, created_by, fleet_ownership, schedule_id, start_point, destination, std, sta, executor_nik, executor_snapshot, fleet_snapshot, sj_number, driving_at, arrived_at",
+        )
+        .order("std")
+        .range(from, to),
+    ),
   ]);
 
-  const visibleTasks = (allTasks ?? []).filter(
+  const visibleTasks = allTasks.filter(
     (task) =>
       task.source_type !== "Extra Schedule" || task.status !== "Requested",
   );
