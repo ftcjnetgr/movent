@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentProfile } from "@/lib/server/profile";
 import * as XLSX from "sheetjs_xlsx";
+import { USER_ROLES } from "@/lib/server/user-roles";
 
 type Result = { error?: string; success?: string };
 
@@ -104,18 +105,7 @@ export async function updateUserProfileAction(
 
   if (!id || !username || !email || !nik || !fullName || !role)
     return { error: "Data pengguna wajib lengkap." };
-  if (
-    ![
-      "Controller",
-      "Dispatcher",
-      "Operation",
-      "Executor",
-      "Pickup",
-      "Delivery",
-      "Maintainer",
-      "Super User",
-    ].includes(role)
-  )
+  if (!USER_ROLES.includes(role as (typeof USER_ROLES)[number]))
     return { error: "Role tidak tersedia." };
 
   const admin = createAdminClient();
@@ -155,16 +145,7 @@ export async function updateUserProfileAction(
   return { success: "Data pengguna berhasil disimpan." };
 }
 
-const allowedRoles = [
-  "Controller",
-  "Dispatcher",
-  "Operation",
-  "Executor",
-  "Pickup",
-  "Delivery",
-  "Maintainer",
-  "Super User",
-];
+const allowedRoles = USER_ROLES;
 const allowedStatuses = ["Active", "Locked"];
 
 function fieldText(formData: FormData, key: string) {
