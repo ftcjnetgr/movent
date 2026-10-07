@@ -6,6 +6,7 @@ import { STATUS_LABELS } from "@/components/shared/status-config";
 
 type TaskAlert = {
   kind: "unassigned" | "assigned";
+  trigger: "std" | "sta";
   scheduleId: string;
   transactionId?: string;
   status?: string;
@@ -76,10 +77,21 @@ function maintenanceStatusLabel(status: string) {
   return labels[status] ?? status;
 }
 
+function taskStatusLabel(status: string | undefined) {
+  if (status === "Unassigned") return "Belum ditugasin";
+  return STATUS_LABELS[status as keyof typeof STATUS_LABELS] ?? status ?? "-";
+}
+
+function taskContextLabel(status: string | undefined) {
+  if (status === "Unassigned") return "Schedule ini belum punya penugasan";
+  if (status === "Driving") return "Mendekati atau melewati STA";
+  return "Mendekati atau melewati STD";
+}
+
 function taskDetail(alert: TaskAlert, now: number) {
   const target = new Date(alert.targetAt).getTime();
   const threshold =
-    alert.kind === "unassigned" ? 30 * 60 * 1000 : 10 * 60 * 1000;
+    alert.trigger === "std" ? 30 * 60 * 1000 : 10 * 60 * 1000;
   const countdown = target - now;
   return {
     ...alert,
@@ -87,6 +99,8 @@ function taskDetail(alert: TaskAlert, now: number) {
     destination: alert.destination ?? "-",
     std: formatScheduleTime(alert.std),
     sta: formatScheduleTime(alert.sta),
+    statusLabel: taskStatusLabel(alert.status),
+    contextLabel: taskContextLabel(alert.status),
     label: countdown > 0 ? "Sisa waktu" : "Lewat",
     time: formatDuration(Math.abs(countdown) / 1000),
     late: countdown <= 0,
@@ -331,20 +345,17 @@ export default function DashboardAlertList({
                             <td>
                               <StatusBadge
                                 status={
-                                  item.kind === "unassigned"
+                                  item.status === "Unassigned"
                                     ? "Requested"
-                                    : "Assigned"
+                                    : (item.status as
+                                        | "Assigned"
+                                        | "Confirmed"
+                                        | "Driving")
                                 }
-                                label={
-                                  item.kind === "unassigned"
-                                    ? "Belum ditugasin"
-                                    : "Udah ditugasin"
-                                }
+                                label={item.statusLabel}
                               />
                               <small className="alert-context">
-                                {item.kind === "unassigned"
-                                  ? "Schedule ini belum punya penugasan"
-                                  : "Melewati batas STA"}
+                                {item.contextLabel}
                               </small>
                             </td>
                             <td>{item.driverName ?? "Belum ada driver di sini"}</td>
@@ -611,7 +622,7 @@ export default function DashboardAlertList({
             <div><span>Pengemudi</span><strong>{selectedTask.driverName ?? "-"}</strong></div>
             <div><span>Armada</span><strong>{selectedTask.fleetPlat ?? "-"}</strong></div>
             <div><span>Schedule Hub</span><strong>{selectedTask.scheduleHubId ?? "-"}</strong></div>
-            <div><span>Status</span><strong>{selectedTask.kind === "unassigned" ? "Belum ditugasin" : "Udah ditugasin"}</strong></div>
+            <div><span>Status</span><strong>{selectedTask.statusLabel}</strong></div>
           </div>
 
           <div className={`alert-mobile-modal-time${selectedTask.late ? " is-late" : ""}`}>
