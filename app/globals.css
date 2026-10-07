@@ -14789,3 +14789,14 @@ td select:focus,
 .schedule-grid-table .schedule-type-group-button[aria-expanded="true"] > span {
   color: var(--theme-color-dark) !important;
 }
+
+
+/* MOVENT — light purple timetable header and total row */
+.schedule-grid-table thead th,
+.schedule-grid-table tfoot th,
+.schedule-grid-table tfoot td,
+.schedule-grid-table .schedule-total-header,
+.schedule-grid-table .schedule-total-label,
+.schedule-grid-table .schedule-total-cell {
+  background: #eef2ff !important;
+}
