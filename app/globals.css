@@ -14971,3 +14971,23 @@ td select:focus,
   border-color: #c7d2fe !important;
   box-shadow: none !important;
 }
+
+
+/* MOVENT — timetable pill alignment and lighter group rows */
+.schedule-grid-table .schedule-cell-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+}
+
+.schedule-grid-table tbody tr.schedule-type-group-row,
+.schedule-grid-table tbody tr.schedule-type-group-row > th,
+.schedule-grid-table tbody tr.schedule-type-group-row > td,
+.schedule-grid-table tbody tr.schedule-type-group-row > th.schedule-type-group-pivot,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-value-cell {
+  background: #f1f5f9 !important;
+}
