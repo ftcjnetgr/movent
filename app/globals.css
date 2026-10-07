@@ -15057,8 +15057,8 @@ td select:focus,
 
 /* MOVENT — activity total/ratio columns reserve room for four digits */
 .super-dashboard .dashboard-preview-activity-row {
-  grid-template-columns: 8px minmax(0, 1fr) 52px 52px !important;
-  column-gap: 6px !important;
+  grid-template-columns: 8px minmax(0, 1fr) 70px 70px !important;
+  column-gap: 4px !important;
 }
 
 .super-dashboard .dashboard-preview-activity-row .activity-meta,
