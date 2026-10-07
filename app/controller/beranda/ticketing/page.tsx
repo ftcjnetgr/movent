@@ -5,6 +5,28 @@ import { getDashboardData } from "@/lib/server/dashboard";
 import { compareStatus, STATUS_LABELS, STATUS_SUBCOPY, StatusIcon } from "@/components/shared/status-config";
 import DashboardPreviewButton, { type DashboardPreviewItem } from "@/components/controller/dashboard-preview";
 
+async function fetchAllRows<T>(
+  fetchPage: (from: number, to: number) => PromiseLike<{
+    data: T[] | null;
+    error: unknown;
+  }>,
+) {
+  const pageSize = 1000;
+  const rows: T[] = [];
+
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await fetchPage(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const batch = data ?? [];
+    rows.push(...batch);
+
+    if (batch.length < pageSize) break;
+  }
+
+  return rows;
+}
+
 function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
 }
@@ -66,11 +88,16 @@ export default async function ControllerTicketingDashboardPage({
       .gte("created_at", rangeStart)
       .lt("created_at", rangeEnd)
       .limit(12),
-    admin
-      .from("ticketings")
-      .select("transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at, completed_at")
-      .gte("created_at", rangeStart)
-      .lt("created_at", rangeEnd),
+    fetchAllRows((fromIndex, toIndex) =>
+      admin
+        .from("ticketings")
+        .select(
+          "transaction_id, status, maintenance_list, fleet_plat_number, fleet_location, created_at, completed_at",
+        )
+        .gte("created_at", rangeStart)
+        .lt("created_at", rangeEnd)
+        .range(fromIndex, toIndex),
+    ),
     admin
       .from("maintenance_lists")
       .select("maintenance_list, aging")
@@ -186,13 +213,14 @@ export default async function ControllerTicketingDashboardPage({
     { onTime: [] as DashboardPreviewItem[], late: [] as DashboardPreviewItem[] },
   );
 
-  const { data: todayTickets } = await admin
-    .from("ticketings")
-    .select("status, created_at")
-    .gte("created_at", rangeStart)
-    .lt("created_at", rangeEnd);
-
-  const todayActivities = todayTickets ?? [];
+  const todayActivities = await fetchAllRows((fromIndex, toIndex) =>
+    admin
+      .from("ticketings")
+      .select("status, created_at")
+      .gte("created_at", rangeStart)
+      .lt("created_at", rangeEnd)
+      .range(fromIndex, toIndex),
+  );
   const byHour = Array.from({ length: 24 }, (_, hour) => {
     const rows = todayActivities.filter(
       (ticket) =>
