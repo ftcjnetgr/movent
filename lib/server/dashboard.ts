@@ -111,7 +111,7 @@ function canceledFromTimestamp(task: TaskRow) {
 }
 
 async function fetchAllRows<T>(
-  fetchPage: (from: number, to: number) => Promise<{
+  fetchPage: (from: number, to: number) => PromiseLike<{
     data: T[] | null;
     error: unknown;
   }>,
