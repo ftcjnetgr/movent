@@ -15189,3 +15189,54 @@ td select:focus,
   visibility: visible !important;
   opacity: 1 !important;
 }
+
+
+/* MOVENT — match maintenance accuracy card to STD/STA metric layout */
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row {
+  grid-template-columns: 8px minmax(0, 1fr) 54px 54px !important;
+  grid-template-rows: 16px 18px !important;
+  column-gap: 6px !important;
+  row-gap: 0 !important;
+  align-items: center !important;
+}
+
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-dot {
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+}
+
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row > span:nth-child(2) {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  align-self: center !important;
+  line-height: 1.2 !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-metric {
+  grid-column: auto !important;
+  grid-row: 1 / span 2 !important;
+  grid-template-rows: 16px 18px !important;
+  row-gap: 0 !important;
+  align-self: stretch !important;
+  justify-self: start !important;
+  min-width: 0 !important;
+  display: grid !important;
+  white-space: nowrap !important;
+}
+
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-metric > span {
+  align-self: center !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-metric > strong {
+  align-self: center !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
