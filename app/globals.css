@@ -14850,3 +14850,15 @@ td select:focus,
 .schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-value-cell {
   background: #f1f5f9 !important;
 }
+
+
+/* MOVENT — preselected timetable group text contrast */
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button > span,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button > b {
+  color: var(--theme-color-dark) !important;
+}
+
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button {
+  font-weight: 500 !important;
+}
