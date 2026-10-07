@@ -15085,3 +15085,11 @@ td select:focus,
   text-align: left !important;
   min-width: 0 !important;
 }
+
+
+/* MOVENT — right-align activity metric labels */
+.super-dashboard .maintenance-dashboard-main-grid .dashboard-preview-activity-row .activity-meta,
+.super-dashboard:not(:has(.maintenance-dashboard-main-grid)) .dashboard-preview-activity-row .activity-meta {
+  justify-self: end !important;
+  text-align: right !important;
+}
