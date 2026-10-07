@@ -14923,3 +14923,33 @@ td select:focus,
   border-bottom: 2px solid #4f46e5 !important;
   border-radius: 8px !important;
 }
+
+
+/* MOVENT — Cek Jadwal category and route button appearance */
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button.normal:not(.active) {
+  background: #eef2ff !important;
+  color: #111827 !important;
+  border-color: #c7d2fe !important;
+}
+
+.schedule-page .schedule-filter-category .schedule-category-tabs-inline button.campaign:not(.active) {
+  background: #fff7ed !important;
+  color: #111827 !important;
+  border-color: #fed7aa !important;
+}
+
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button,
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button:not(.active),
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button:hover,
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button.active,
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button.active:hover {
+  background: transparent !important;
+  color: #111827 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.schedule-page .schedule-route-row .schedule-route-tabs-standalone button.active {
+  color: var(--theme-color) !important;
+  border-bottom: 2px solid var(--theme-color) !important;
+}
