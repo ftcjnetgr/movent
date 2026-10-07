@@ -8,7 +8,7 @@ export default async function PickupTugasSayaPage() {
   const admin = createAdminClient();
 
   const { data: activeTask } = await admin
-    .from("tasks")
+    .from("pickup_delivery_activities")
     .select("id, transaction_id, status, fleet_snapshot")
     .eq("executor_nik", profile.username)
     .in("status", ["Confirmed", "Driving"])
@@ -18,9 +18,9 @@ export default async function PickupTugasSayaPage() {
   const stops = activeTask
     ? await fetchAllRows((from, to) =>
         admin
-          .from("task_stops")
+          .from("pickup_delivery_stops")
           .select("id, sequence_no, location, status, checkin_at")
-          .eq("task_id", activeTask.id)
+          .eq("activity_id", activeTask.id)
           .order("sequence_no")
           .range(from, to),
       )
