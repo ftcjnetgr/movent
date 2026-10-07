@@ -15267,3 +15267,17 @@ td select:focus,
   align-self: center !important;
   justify-self: start !important;
 }
+
+
+/* MOVENT — alert tab spacing and badge separation */
+.alert-view-tabs {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+.alert-view-tabs a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
