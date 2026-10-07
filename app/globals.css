@@ -14817,15 +14817,36 @@ td select:focus,
 /* MOVENT — align entire timetable total row */
 .schedule-grid-table tfoot > tr > th,
 .schedule-grid-table tfoot > tr > td {
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
   text-align: center !important;
   vertical-align: middle !important;
+  line-height: 1 !important;
 }
 
 .schedule-grid-table tfoot > tr > th > button,
 .schedule-grid-table tfoot > tr > td > button {
-  display: inline-flex !important;
+  width: 100% !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   vertical-align: middle !important;
   text-align: center !important;
+  line-height: 1 !important;
+}
+
+
+/* MOVENT — lighter timetable group row surfaces */
+.schedule-grid-table tbody tr.schedule-type-group-row,
+.schedule-grid-table tbody tr.schedule-type-group-row > th,
+.schedule-grid-table tbody tr.schedule-type-group-row > td,
+.schedule-grid-table tbody tr.schedule-type-group-row > th.schedule-type-group-pivot,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-button,
+.schedule-grid-table tbody tr.schedule-type-group-row .schedule-type-group-value-cell {
+  background: #f1f5f9 !important;
 }
