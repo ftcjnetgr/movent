@@ -246,7 +246,7 @@ export default async function ControllerPenugasanDashboardPage({
             (_, index) => {
               const scheduleIdChunk = todayScheduleIds.slice(
                 index * 50,
-                index * 50 + 200,
+                index * 50 + 50,
               );
 
               return fetchAllRows((from, to) =>
