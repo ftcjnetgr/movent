@@ -24,13 +24,42 @@ export default async function ExecutorTugasSayaPage() {
     return query;
   };
 
-  const [tasks, productsResult] = await Promise.all([
+  const jakartaParts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const jakartaDate = [
+    jakartaParts.find((item) => item.type === "year")?.value,
+    jakartaParts.find((item) => item.type === "month")?.value,
+    jakartaParts.find((item) => item.type === "day")?.value,
+  ].join("-");
+  const todayStart = new Date(jakartaDate + "T00:00:00+07:00").toISOString();
+  const tomorrowStart = new Date(
+    new Date(jakartaDate + "T00:00:00+07:00").getTime() + 86400000,
+  ).toISOString();
+
+  const [tasks, productsResult, completedTodayResult, todayCountResult] = await Promise.all([
     fetchAllRows(fetchTasksPage),
     admin
       .from("products")
       .select("product")
       .eq("status", "Active")
       .order("product"),
+    admin
+      .from("tasks")
+      .select("id", { count: "exact", head: true })
+      .eq("executor_nik", profile.username)
+      .eq("status", "Completed")
+      .gte("completed_at", todayStart)
+      .lt("completed_at", tomorrowStart),
+    admin
+      .from("tasks")
+      .select("id", { count: "exact", head: true })
+      .eq("executor_nik", profile.username)
+      .gte("created_at", todayStart)
+      .lt("created_at", tomorrowStart),
   ]);
   const products = productsResult.data ?? [];
 
@@ -57,6 +86,8 @@ export default async function ExecutorTugasSayaPage() {
   const activeCount = tasks.length;
   const waitingCount = tasks.filter((task) => task.status === "Assigned").length;
   const drivingCount = tasks.filter((task) => task.status === "Driving").length;
+  const completedTodayCount = completedTodayResult.count ?? 0;
+  const todayCount = todayCountResult.count ?? 0;
 
   return (
     <div className="role-page">
@@ -71,8 +102,8 @@ export default async function ExecutorTugasSayaPage() {
           <div className="metric-card"><span>Tugas Aktif</span><strong>{activeCount}</strong></div>
           <div className="metric-card"><span>Tinggal diterima</span><strong>{waitingCount}</strong></div>
           <div className="metric-card"><span>Lagi jalan</span><strong>{drivingCount}</strong></div>
-          <div className="metric-card"><span>Udah Selesai</span><strong>—</strong></div>
-          <div className="metric-card"><span>Hari Ini</span><strong>{activeCount}</strong></div>
+          <div className="metric-card"><span>Udah Selesai</span><strong>{completedTodayCount}</strong></div>
+          <div className="metric-card"><span>Hari Ini</span><strong>{todayCount}</strong></div>
         </div>
       </section>
       <section className="section-block">
