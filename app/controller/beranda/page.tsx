@@ -119,7 +119,7 @@ export default async function ControllerPenugasanDashboardPage({
     todayParts.find((part) => part.type === "year")?.value ?? now.getFullYear(),
   );
 
-  const twinDateStart = Date.UTC(todayYear, todayMonth - 1, todayMonth);
+  const twinDateStart = Date.UTC(todayYear, todayMonth - 1, 1);
   const twinDateEnd = new Date(twinDateStart);
   twinDateEnd.setUTCDate(twinDateEnd.getUTCDate() + 2);
   const todayKey = Date.UTC(todayYear, todayMonth - 1, todayDate);
@@ -238,32 +238,51 @@ export default async function ControllerPenugasanDashboardPage({
     (schedule) => schedule.schedule_id,
   );
 
-  const todayScheduleTasks = todayScheduleIds.length
-    ? (
-        await Promise.all(
-          Array.from(
-            { length: Math.ceil(todayScheduleIds.length / 50) },
-            (_, index) => {
-              const scheduleIdChunk = todayScheduleIds.slice(
-                index * 50,
-                index * 50 + 50,
-              );
+  const todayScheduleTasks: Array<{
+    schedule_id: string;
+    status: string;
+    accepted_at: string | null;
+    created_at: string;
+    start_point: string | null;
+    destination: string | null;
+    driving_at: string | null;
+    arrived_at: string | null;
+    odometer_start: number | null;
+    odometer_end: number | null;
+    executor_snapshot: Record<string, any> | null;
+    fleet_snapshot: Record<string, any> | null;
+  }> = [];
 
-              return fetchAllRows((from, to) =>
-                admin
-                  .from("tasks")
-                  .select(
-                    "schedule_id, status, accepted_at, created_at, start_point, destination, driving_at, arrived_at, odometer_start, odometer_end, executor_snapshot, fleet_snapshot",
-                  )
-                  .in("schedule_id", scheduleIdChunk)
-                  .order("created_at", { ascending: false })
-                  .range(from, to),
-              );
-            },
-          ),
-        )
-      ).flat()
-    : [];
+  // Jangan menembak seluruh chunk sekaligus. Dengan ribuan schedule,
+  // Promise.all tanpa batas bisa membuat request Supabase meledak dan
+  // menghasilkan error runtime kosong di Vercel.
+  const scheduleChunks = Array.from(
+    { length: Math.ceil(todayScheduleIds.length / 50) },
+    (_, index) => todayScheduleIds.slice(index * 50, index * 50 + 50),
+  );
+
+  const chunkConcurrency = 4;
+  for (let start = 0; start < scheduleChunks.length; start += chunkConcurrency) {
+    const batch = scheduleChunks.slice(start, start + chunkConcurrency);
+    const batchResults = await Promise.all(
+      batch.map((scheduleIdChunk) =>
+        fetchAllRows((from, to) =>
+          admin
+            .from("tasks")
+            .select(
+              "schedule_id, status, accepted_at, created_at, start_point, destination, driving_at, arrived_at, odometer_start, odometer_end, executor_snapshot, fleet_snapshot",
+            )
+            .in("schedule_id", scheduleIdChunk)
+            .order("created_at", { ascending: false })
+            .range(from, to),
+        ),
+      ),
+    );
+
+    for (const rows of batchResults) {
+      todayScheduleTasks.push(...rows);
+    }
+  }
 
   const latestTaskBySchedule = new Map<
     string,
