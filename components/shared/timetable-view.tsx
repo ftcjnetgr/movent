@@ -334,15 +334,6 @@ export default function TimetableView({
     } as CSSProperties;
   }
 
-  const categories = useMemo(() => {
-    const unique = [
-      ...new Set(schedules.map((item) => item.category).filter(Boolean)),
-    ];
-    return unique.sort((a, b) =>
-      a === "Normal" ? -1 : b === "Normal" ? 1 : a.localeCompare(b),
-    );
-  }, [schedules]);
-
   const defaultScheduledSchedules = useMemo(
     () =>
       schedules.filter(
@@ -709,7 +700,7 @@ export default function TimetableView({
                     key={item}
                     type="button"
                     className={`${category === item ? "active" : ""} ${item === "Campaign" ? "campaign" : "normal"}`.trim()}
-                    onClick={() => {}}
+
                   >
                     {item}
                   </button>
