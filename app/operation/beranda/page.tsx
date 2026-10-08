@@ -14,6 +14,7 @@ export default async function OperationBerandaPage() {
     tasks,
     { count: requested },
     { count: completed },
+    { count: driving },
   ] = await Promise.all([
     admin
       .from("locations")
@@ -58,6 +59,10 @@ export default async function OperationBerandaPage() {
       .select("*", { count: "exact", head: true })
       .eq("source_type", "Jadwal Tambahan")
       .eq("status", "Completed"),
+    admin
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "Driving"),
   ]);
 
   return (
@@ -96,7 +101,7 @@ export default async function OperationBerandaPage() {
           </div>
           <div className="metric-card">
             <span>Lagi Jalan</span>
-            <strong>{(tasks?.length ?? 0) + (requested ?? 0)}</strong>
+            <strong>{driving ?? 0}</strong>
           </div>
         </div>
       </section>
