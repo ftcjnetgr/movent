@@ -166,6 +166,13 @@ export default async function ControllerPenugasanDashboardPage({
         { data: [], error: null },
       ];
 
+  if (tasksResult.error) {
+    throw new Error(
+      tasksResult.error.message?.trim() || "Gagal mengambil data penugasan.",
+      { cause: tasksResult.error },
+    );
+  }
+
   const rawTasks = tasksResult.data ?? [];
   const activities = activityResult.data ?? [];
   const tasks = sortByStatusAndTime(rawTasks);
@@ -231,7 +238,13 @@ export default async function ControllerPenugasanDashboardPage({
     ),
   ]);
 
-  if (maintenanceResult.error) throw maintenanceResult.error;
+  if (maintenanceResult.error) {
+    throw new Error(
+      maintenanceResult.error.message?.trim() ||
+        "Gagal mengambil jumlah maintenance.",
+      { cause: maintenanceResult.error },
+    );
+  }
 
   const totalMaintenance = maintenanceResult.count ?? 0;
   const todayScheduleIds = todaySchedules.map(
