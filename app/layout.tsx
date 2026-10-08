@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Poppins } from "next/font/google";
-import SessionActivity from "@/components/auth/session-activity";
 import ToastProvider from "@/components/shared/toast-provider";
 
 const poppins = Poppins({
@@ -26,7 +25,6 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={poppins.className}>
-        <SessionActivity />
         <ToastProvider />
         {children}
       </body>
