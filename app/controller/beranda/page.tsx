@@ -119,7 +119,12 @@ export default async function ControllerPenugasanDashboardPage({
     todayParts.find((part) => part.type === "year")?.value ?? now.getFullYear(),
   );
 
-  const isTwinDateWindow = todayDate <= 3;
+  const twinDateStart = Date.UTC(todayYear, todayMonth - 1, todayMonth);
+  const twinDateEnd = new Date(twinDateStart);
+  twinDateEnd.setUTCDate(twinDateEnd.getUTCDate() + 2);
+  const todayKey = Date.UTC(todayYear, todayMonth - 1, todayDate);
+  const isTwinDateWindow =
+    todayKey >= twinDateStart && todayKey <= twinDateEnd.getTime();
   const todayScheduleCategory = isTwinDateWindow ? "Campaign" : "Normal";
 
   const { data: dispatcherProfiles } = await admin
