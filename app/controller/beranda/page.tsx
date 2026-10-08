@@ -239,16 +239,30 @@ export default async function ControllerPenugasanDashboardPage({
   );
 
   const todayScheduleTasks = todayScheduleIds.length
-    ? await fetchAllRows((from, to) =>
-        admin
-          .from("tasks")
-          .select(
-            "schedule_id, status, accepted_at, created_at, start_point, destination, driving_at, arrived_at, odometer_start, odometer_end, executor_snapshot, fleet_snapshot",
-          )
-          .in("schedule_id", todayScheduleIds)
-          .order("created_at", { ascending: false })
-          .range(from, to),
-      )
+    ? (
+        await Promise.all(
+          Array.from(
+            { length: Math.ceil(todayScheduleIds.length / 200) },
+            (_, index) => {
+              const scheduleIdChunk = todayScheduleIds.slice(
+                index * 200,
+                index * 200 + 200,
+              );
+
+              return fetchAllRows((from, to) =>
+                admin
+                  .from("tasks")
+                  .select(
+                    "schedule_id, status, accepted_at, created_at, start_point, destination, driving_at, arrived_at, odometer_start, odometer_end, executor_snapshot, fleet_snapshot",
+                  )
+                  .in("schedule_id", scheduleIdChunk)
+                  .order("created_at", { ascending: false })
+                  .range(from, to),
+              );
+            },
+          ),
+        )
+      ).flat()
     : [];
 
   const latestTaskBySchedule = new Map<
