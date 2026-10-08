@@ -292,19 +292,18 @@ export async function getAlertCounts(profile: AppProfile) {
   const day =
     ((new Date(date + "T12:00:00+07:00").getUTCDay() + 6) % 7) + 1;
   const dayOfMonth = new Date(date + "T12:00:00+07:00").getUTCDate();
-  const twindateStartDay = new Date(date + "T12:00:00+07:00").getUTCMonth() + 1;
+  const twindateStartDay =
+    new Date(date + "T12:00:00+07:00").getUTCMonth() + 1;
   const allowedCategory =
     dayOfMonth >= twindateStartDay && dayOfMonth <= twindateStartDay + 2
       ? "Campaign"
       : "Normal";
-  const rangeStart = new Date(
-    date + "T00:00:00+07:00",
-  ).toISOString();
+  const rangeStart = new Date(date + "T00:00:00+07:00").toISOString();
   const rangeEnd = new Date(
     new Date(date + "T00:00:00+07:00").getTime() + 86400000,
   ).toISOString();
 
-  const [scheduleRows, taskRows, ticketCountResult] = await Promise.all([
+  const [scheduleRows, ticketCountResult] = await Promise.all([
     fetchAllRows<Pick<AlertScheduleRow, "schedule_id" | "std" | "sta">>(
       (from, to) =>
         admin
@@ -315,25 +314,6 @@ export async function getAlertCounts(profile: AppProfile) {
           .eq("category", allowedCategory)
           .range(from, to),
     ),
-    fetchAllRows<{
-      schedule_id: string | null;
-      status: string;
-      std: string | null;
-      sta: string | null;
-      created_at: string;
-      created_by: string;
-      fleet_ownership: string | null;
-    }>((from, to) =>
-      admin
-        .from("tasks")
-        .select(
-          "schedule_id, status, std, sta, created_at, created_by, fleet_ownership",
-        )
-        .gte("std", rangeStart)
-        .lt("std", rangeEnd)
-        .order("created_at", { ascending: false })
-        .range(from, to),
-    ),
     admin
       .from("ticketings")
       .select("transaction_id", { count: "exact", head: true })
@@ -341,6 +321,43 @@ export async function getAlertCounts(profile: AppProfile) {
   ]);
 
   if (ticketCountResult.error) throw ticketCountResult.error;
+
+  const scheduleIds = scheduleRows.map((schedule) => schedule.schedule_id);
+  const taskRows = scheduleIds.length
+    ? (
+        await Promise.all(
+          Array.from(
+            { length: Math.ceil(scheduleIds.length / 100) },
+            (_, index) => {
+              const chunk = scheduleIds.slice(
+                index * 100,
+                index * 100 + 100,
+              );
+              return fetchAllRows<{
+                schedule_id: string | null;
+                status: string;
+                std: string | null;
+                sta: string | null;
+                created_at: string;
+                created_by: string;
+                fleet_ownership: string | null;
+              }>((from, to) =>
+                admin
+                  .from("tasks")
+                  .select(
+                    "schedule_id, status, std, sta, created_at, created_by, fleet_ownership",
+                  )
+                  .in("schedule_id", chunk)
+                  .gte("std", rangeStart)
+                  .lt("std", rangeEnd)
+                  .order("created_at", { ascending: false })
+                  .range(from, to),
+              );
+            },
+          ),
+        )
+      ).flat()
+    : [];
 
   const scopedTasks =
     profile.role === "Dispatcher"
