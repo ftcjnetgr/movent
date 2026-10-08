@@ -214,20 +214,19 @@ export default function TimetableView({
     "start-point",
   );
   const [route, setRoute] = useState("");
-  const [category, setCategory] = useState(defaultCategory);
+  const category = defaultCategory;
   const [point, setPoint] = useState("");
   const [openScheduleGroups, setOpenScheduleGroups] = useState<string[]>([]);
 
   useEffect(() => {
     setSelectedDay(todayDay);
-    setCategory(defaultCategory);
     setPoint("");
     setOpenScheduleGroups([]);
   }, [todayDay, defaultCategory]);
 
   useEffect(() => {
     setOpenScheduleGroups([]);
-  }, [view, direction, selectedDay, route, category, point]);
+  }, [view, direction, selectedDay, route, point]);
   const [previewSchedules, setPreviewSchedules] = useState<Schedule[]>([]);
   const [previewMode, setPreviewMode] = useState<"schedule" | "realized">(
     "schedule",
@@ -705,12 +704,12 @@ export default function TimetableView({
                 className="schedule-category-tabs-inline"
                 aria-label="Category"
               >
-                {categories.map((item) => (
+                {[category].map((item) => (
                   <button
                     key={item}
                     type="button"
                     className={`${category === item ? "active" : ""} ${item === "Campaign" ? "campaign" : "normal"}`.trim()}
-                    onClick={() => setCategory(item)}
+                    onClick={() => {}}
                   >
                     {item}
                   </button>
