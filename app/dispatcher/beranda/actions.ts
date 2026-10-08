@@ -110,7 +110,7 @@ function scheduleCategoryAllowed(category: string) {
   if (!year || !month || !day) return false;
 
   const todayKey = Date.UTC(year, month - 1, day);
-  const twindateStartKey = Date.UTC(year, month - 1, 1);
+  const twindateStartKey = Date.UTC(year, month - 1, month);
   const twindateEnd = new Date(twindateStartKey);
   twindateEnd.setUTCDate(twindateEnd.getUTCDate() + 2);
   const isTwindateWindow =
