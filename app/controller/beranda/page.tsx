@@ -242,11 +242,11 @@ export default async function ControllerPenugasanDashboardPage({
     ? (
         await Promise.all(
           Array.from(
-            { length: Math.ceil(todayScheduleIds.length / 200) },
+            { length: Math.ceil(todayScheduleIds.length / 50) },
             (_, index) => {
               const scheduleIdChunk = todayScheduleIds.slice(
-                index * 200,
-                index * 200 + 200,
+                index * 50,
+                index * 50 + 200,
               );
 
               return fetchAllRows((from, to) =>
