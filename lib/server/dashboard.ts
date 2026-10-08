@@ -292,7 +292,11 @@ export async function getAlertCounts(profile: AppProfile) {
   const day =
     ((new Date(date + "T12:00:00+07:00").getUTCDay() + 6) % 7) + 1;
   const dayOfMonth = new Date(date + "T12:00:00+07:00").getUTCDate();
-  const allowedCategory = dayOfMonth <= 3 ? "Campaign" : "Normal";
+  const twindateStartDay = new Date(date + "T12:00:00+07:00").getUTCMonth() + 1;
+  const allowedCategory =
+    dayOfMonth >= twindateStartDay && dayOfMonth <= twindateStartDay + 2
+      ? "Campaign"
+      : "Normal";
   const rangeStart = new Date(
     date + "T00:00:00+07:00",
   ).toISOString();
